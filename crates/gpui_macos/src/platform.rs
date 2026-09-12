@@ -3,7 +3,7 @@ use crate::{
     MacWindow, events::key_to_native, ns_string, pasteboard::Pasteboard, renderer,
     set_active_window_cursor_style,
 };
-use anyhow::{Context as _, anyhow};
+use anyhow::{Context as _, Result, anyhow};
 use block2::RcBlock;
 use cocoa::{
     appkit::{
@@ -28,12 +28,12 @@ use core_foundation::{
 use ctor::ctor;
 use dispatch2::DispatchQueue;
 use futures::channel::oneshot;
-use gpui::{
+use gpui_platform_core::{
     ActivityGuard, BackgroundExecutor, ClipboardItem, CursorStyle, ForegroundExecutor,
     MenuCommandId, OsAction, PathPromptOptions, Platform, PlatformDisplay, PlatformKeyboardLayout,
     PlatformKeyboardMapper, PlatformMenu, PlatformMenuItem, PlatformOsMenu, PlatformTextSystem,
-    PlatformWindow, Result, SystemMenuType, Task, ThermalState, WindowAppearance, WindowId,
-    WindowKind, WindowParams, popup::PopupNotSupportedError,
+    PlatformWindow, SystemMenuType, Task, ThermalState, WindowAppearance, WindowId, WindowKind,
+    WindowParams, popup::PopupNotSupportedError,
 };
 use gpui_util::{ResultExt, new_std_command};
 use itertools::Itertools;
@@ -218,7 +218,7 @@ impl MacPlatform {
                     "gpui_macos was compiled without the `font-kit` feature, so no text will be rendered."
                 );
             }
-            Arc::new(gpui::NoopTextSystem::new())
+            Arc::new(gpui_platform_core::NoopTextSystem::new())
         };
 
         let keyboard_layout = MacKeyboardLayout::new();
@@ -446,7 +446,7 @@ impl Platform for MacPlatform {
         self.0.lock().background_executor.clone()
     }
 
-    fn foreground_executor(&self) -> gpui::ForegroundExecutor {
+    fn foreground_executor(&self) -> gpui_platform_core::ForegroundExecutor {
         self.0.lock().foreground_executor.clone()
     }
 
@@ -598,7 +598,7 @@ impl Platform for MacPlatform {
     #[cfg(feature = "screen-capture")]
     fn screen_capture_sources(
         &self,
-    ) -> oneshot::Receiver<Result<Vec<Rc<dyn gpui::ScreenCaptureSource>>>> {
+    ) -> oneshot::Receiver<Result<Vec<Rc<dyn gpui_platform_core::ScreenCaptureSource>>>> {
         crate::screen_capture::get_sources(self.1)
     }
 
@@ -966,7 +966,7 @@ impl Platform for MacPlatform {
         )))
     }
 
-    fn show_system_notification(&self, notification: gpui::SystemNotification) {
+    fn show_system_notification(&self, notification: gpui_platform_core::SystemNotification) {
         let mut state = self.0.lock();
         let executor = state.foreground_executor.clone();
         state.system_notifications.show(&executor, notification);
@@ -980,7 +980,7 @@ impl Platform for MacPlatform {
 
     fn on_system_notification_response(
         &self,
-        callback: Box<dyn FnMut(gpui::SystemNotificationResponse)>,
+        callback: Box<dyn FnMut(gpui_platform_core::SystemNotificationResponse)>,
     ) {
         let mut state = self.0.lock();
         let executor = state.foreground_executor.clone();

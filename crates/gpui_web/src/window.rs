@@ -8,13 +8,13 @@ use crate::viewport::WebViewport;
 use std::sync::Arc;
 use std::{cell::Cell, cell::RefCell, rc::Rc};
 
-use gpui::{
-    AnyWindowHandle, Bounds, Capslock, Decorations, DevicePixels, DispatchEventResult, GpuSpecs,
-    Modifiers, MouseButton, Pixels, PlatformAtlas, PlatformDisplay, PlatformInput,
-    PlatformInputHandler, PlatformWindow, Point, PromptButton, PromptLevel, RequestFrameOptions,
-    ResizeEdge, Scene, Size, TextInputConfiguration, TextInputStateChange, WindowAppearance,
-    WindowBackgroundAppearance, WindowBounds, WindowControlArea, WindowControls, WindowDecorations,
-    WindowId, WindowInsets, WindowParams, WindowVisibility, px,
+use gpui_platform_core::{
+    Bounds, Capslock, Decorations, DevicePixels, DispatchEventResult, GpuSpecs, Modifiers,
+    MouseButton, Pixels, PlatformAtlas, PlatformDisplay, PlatformInput, PlatformInputHandler,
+    PlatformWindow, Point, PromptButton, PromptLevel, RequestFrameOptions, ResizeEdge, Scene, Size,
+    TextInputConfiguration, TextInputStateChange, WindowAppearance, WindowBackgroundAppearance,
+    WindowBounds, WindowControlArea, WindowControls, WindowDecorations, WindowId, WindowInsets,
+    WindowParams, WindowVisibility, px,
 };
 use gpui_wgpu::{WgpuContext, WgpuRenderer, WgpuSurfaceConfig, wgpu};
 use wasm_bindgen::prelude::*;
