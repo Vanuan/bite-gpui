@@ -7,9 +7,9 @@ pub use line_layout::*;
 pub use line_wrapper::*;
 
 use crate::{
-    Bounds, DevicePixels, Font, FontId, FontMetrics, FontRun, Hsla, Pixels, PlatformTextSystem,
-    RenderGlyphParams, Result, SharedString, Size, StrikethroughStyle, TextRenderingMode,
-    UnderlineStyle, font, px,
+    Bounds, DevicePixels, FallbackFontClass, Font, FontId, FontMetrics, FontRun, Hsla, LineLayout,
+    MissingGlyph, MissingGlyphSink, Pixels, PlatformTextSystem, RenderGlyphParams, Result,
+    SharedString, Size, StrikethroughStyle, TextRenderingMode, UnderlineStyle, font, px,
 };
 use anyhow::{Context as _, anyhow};
 use collections::{FxHashMap, FxHashSet};
@@ -36,48 +36,6 @@ pub const SUBPIXEL_VARIANTS_X: u8 = 4;
 pub const SUBPIXEL_VARIANTS_Y: u8 = 1;
 
 const MAX_REPORTED_MISSING_GLYPHS: usize = 1024;
-
-/// The spacing behavior required of a fallback font.
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
-pub enum FallbackFontClass {
-    /// A proportionally spaced fallback font.
-    Proportional,
-    /// A fixed-width fallback font.
-    Monospace,
-}
-
-/// A grapheme cluster that could not be represented by any available font.
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
-pub struct MissingGlyph {
-    grapheme: SharedString,
-    font_class: FallbackFontClass,
-}
-
-impl MissingGlyph {
-    /// Creates a missing-glyph report.
-    pub fn new(grapheme: SharedString, font_class: FallbackFontClass) -> Self {
-        Self {
-            grapheme,
-            font_class,
-        }
-    }
-
-    /// Returns the unresolved grapheme cluster.
-    pub fn grapheme(&self) -> &str {
-        &self.grapheme
-    }
-
-    /// Returns the spacing behavior required of a fallback font.
-    pub fn font_class(&self) -> FallbackFontClass {
-        self.font_class
-    }
-}
-
-/// Accepts missing glyphs detected by a platform text system.
-pub trait MissingGlyphSink: Send + Sync {
-    /// Reports grapheme clusters that exhausted font fallback.
-    fn report(&self, missing_glyphs: Vec<MissingGlyph>);
-}
 
 #[derive(Default)]
 struct MissingGlyphState {
