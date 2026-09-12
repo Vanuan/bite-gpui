@@ -8,7 +8,7 @@ use crate::text_system::WebTextSystem;
 use crate::window::WebWindow;
 use anyhow::Result;
 use futures::channel::oneshot;
-use gpui_platform_core::{
+use gpui_platform::{
     ActivityGuard, BackgroundExecutor, ClipboardEntry, ClipboardItem, ClipboardReadError,
     ClipboardString, CursorStyle, DummyKeyboardMapper, ForegroundExecutor, GestureTuning, Image,
     ImageFormat, MenuCommandId, PathPromptOptions, Platform, PlatformDisplay, PlatformGestures,
