@@ -15,16 +15,6 @@ mod visual_test;
 ))]
 pub mod scap_screen_capture;
 
-#[cfg(all(
-    any(target_os = "windows", target_os = "linux"),
-    feature = "screen-capture"
-))]
-pub(crate) type PlatformScreenCaptureFrame = scap::frame::Frame;
-#[cfg(not(feature = "screen-capture"))]
-pub(crate) type PlatformScreenCaptureFrame = ();
-#[cfg(all(target_os = "macos", feature = "screen-capture"))]
-pub(crate) type PlatformScreenCaptureFrame = core_video::image_buffer::CVImageBuffer;
-
 use crate::{
     Action, ActivityGuard, AnyWindowHandle, App, AppLifecyclePhase, AsyncWindowContext,
     BackgroundExecutor, Bounds, BoundsExt, Capslock, ClipboardItem, ClipboardReadError, CursorStyle,
@@ -35,10 +25,10 @@ use crate::{
     PlatformInputHandler, PlatformInputHandlerDelegate, PlatformKeyboardLayout,
     PlatformKeyboardMapper, PlatformTextSystem, PlatformWindow, Point, Priority, PromptButton,
     PromptLevel, RenderGlyphParams, RenderImage, RenderImageParams, RenderSvgParams,
-    RequestFrameOptions, ResizeEdge, RunnableVariant, Scene, ShapedGlyph, ShapedRun, SharedString,
-    Size, SourceMetadata, SvgRenderer, SystemNotification, SystemNotificationResponse,
-    SystemWindowTab, Task, TextInputConfiguration, TextInputStateChange, TextRenderingMode,
-    ThermalState, TimerResolutionGuard, UTF16Selection, Window, WindowAppearance,
+    RequestFrameOptions, ResizeEdge, RunnableVariant, Scene, ScreenCaptureSource, ShapedGlyph,
+    ShapedRun, SharedString, Size, SourceMetadata, SvgRenderer, SystemNotification,
+    SystemNotificationResponse, SystemWindowTab, Task, TextInputConfiguration, TextInputStateChange,
+    TextRenderingMode, ThermalState, TimerResolutionGuard, UTF16Selection, Window, WindowAppearance,
     WindowBackgroundAppearance, WindowBounds, WindowButtonLayout, WindowControlArea, WindowControls,
     WindowDecorations, WindowId, WindowInsets, WindowParams, hash, point, px, size,
 };
@@ -324,29 +314,6 @@ pub trait Platform: 'static {
     fn keyboard_mapper(&self) -> Rc<dyn PlatformKeyboardMapper>;
     fn on_keyboard_layout_change(&self, callback: Box<dyn FnMut()>);
 }
-
-/// A source of on-screen video content that can be captured.
-pub trait ScreenCaptureSource {
-    /// Returns metadata for this source.
-    fn metadata(&self) -> Result<SourceMetadata>;
-
-    /// Start capture video from this source, invoking the given callback
-    /// with each frame.
-    fn stream(
-        &self,
-        foreground_executor: &ForegroundExecutor,
-        frame_callback: Box<dyn Fn(ScreenCaptureFrame) + Send>,
-    ) -> oneshot::Receiver<Result<Box<dyn ScreenCaptureStream>>>;
-}
-
-/// A video stream captured from a screen.
-pub trait ScreenCaptureStream {
-    /// Returns metadata for this source.
-    fn metadata(&self) -> Result<SourceMetadata>;
-}
-
-/// A frame of video captured from a screen.
-pub struct ScreenCaptureFrame(pub PlatformScreenCaptureFrame);
 
 #[doc(hidden)]
 pub enum TasksIncluded {
