@@ -9,12 +9,6 @@ mod test;
 #[cfg(all(target_os = "macos", any(test, feature = "test-support")))]
 mod visual_test;
 
-#[cfg(all(
-    feature = "screen-capture",
-    any(target_os = "windows", target_os = "linux", target_os = "freebsd",)
-))]
-pub mod scap_screen_capture;
-
 use crate::{
     Action, ActivityGuard, AnyWindowHandle, App, AppLifecyclePhase, AsyncWindowContext,
     BackgroundExecutor, Bounds, BoundsExt, Capslock, ClipboardItem, ClipboardReadError, CursorStyle,
