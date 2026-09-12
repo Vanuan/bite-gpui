@@ -7712,6 +7712,7 @@ dependencies = [
  "chrono",
  "collections",
  "derive_more",
+ "etagere",
  "futures 0.3.34",
  "gpui_shared_string",
  "gpui_types",
