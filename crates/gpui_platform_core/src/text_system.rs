@@ -11,6 +11,12 @@ use std::fmt::{Debug, Display, Formatter};
 use std::hash::{Hash, Hasher};
 use std::sync::Arc;
 
+/// Number of subpixel glyph variants along the X axis.
+pub const SUBPIXEL_VARIANTS_X: u8 = 4;
+
+/// Number of subpixel glyph variants along the Y axis.
+pub const SUBPIXEL_VARIANTS_Y: u8 = 1;
+
 use crate::{FontFallbacks, FontFeatures};
 
 /// An opaque identifier for a specific font.
@@ -694,5 +700,36 @@ impl PlatformTextSystem for NoopTextSystem {
         _font_size: Pixels,
     ) -> TextRenderingMode {
         TextRenderingMode::Grayscale
+    }
+}
+
+/// Maps well-known virtual font names to their concrete equivalents.
+#[allow(unused)]
+pub fn font_name_with_fallbacks<'a>(name: &'a str, system: &'a str) -> &'a str {
+    // Note: the "Zed Plex" fonts were deprecated as we are not allowed to use "Plex"
+    // in a derived font name. They are essentially indistinguishable from IBM Plex/Lilex,
+    // and so retained here for backward compatibility.
+    match name {
+        ".SystemUIFont" => system,
+        ".ZedSans" | "Zed Plex Sans" => "IBM Plex Sans",
+        ".ZedMono" | "Zed Plex Mono" => "Lilex",
+        _ => name,
+    }
+}
+
+/// Like [`font_name_with_fallbacks`] but accepts and returns [`SharedString`] references.
+#[allow(unused)]
+pub fn font_name_with_fallbacks_shared<'a>(
+    name: &'a SharedString,
+    system: &'a SharedString,
+) -> &'a SharedString {
+    // Note: the "Zed Plex" fonts were deprecated as we are not allowed to use "Plex"
+    // in a derived font name. They are essentially indistinguishable from IBM Plex/Lilex,
+    // and so retained here for backward compatibility.
+    match name.as_str() {
+        ".SystemUIFont" => system,
+        ".ZedSans" | "Zed Plex Sans" => const { &SharedString::new_static("IBM Plex Sans") },
+        ".ZedMono" | "Zed Plex Mono" => const { &SharedString::new_static("Lilex") },
+        _ => name,
     }
 }
