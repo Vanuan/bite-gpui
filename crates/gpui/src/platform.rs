@@ -47,8 +47,8 @@ use crate::{
     Size, SourceMetadata, SvgRenderer, SystemNotification, SystemNotificationResponse,
     SystemWindowTab, Task, TextInputConfiguration, TextInputStateChange, TextRenderingMode,
     ThermalState, TimerResolutionGuard, Window, WindowAppearance, WindowBackgroundAppearance,
-    WindowButtonLayout, WindowControlArea, WindowControls, WindowDecorations, WindowInsets, hash,
-    point, px, size,
+    WindowButtonLayout, WindowControlArea, WindowControls, WindowDecorations, WindowId,
+    WindowInsets, hash, point, px, size,
 };
 use anyhow::{Context as _, Result};
 use futures::channel::oneshot;
@@ -169,8 +169,8 @@ pub trait Platform: 'static {
 
     fn displays(&self) -> Vec<Rc<dyn PlatformDisplay>>;
     fn primary_display(&self) -> Option<Rc<dyn PlatformDisplay>>;
-    fn active_window(&self) -> Option<AnyWindowHandle>;
-    fn window_stack(&self) -> Option<Vec<AnyWindowHandle>> {
+    fn active_window(&self) -> Option<WindowId>;
+    fn window_stack(&self) -> Option<Vec<WindowId>> {
         None
     }
 
@@ -192,7 +192,7 @@ pub trait Platform: 'static {
 
     fn open_window(
         &self,
-        handle: AnyWindowHandle,
+        handle: WindowId,
         options: WindowParams,
     ) -> anyhow::Result<Box<dyn PlatformWindow>>;
 

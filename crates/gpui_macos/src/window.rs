@@ -29,8 +29,8 @@ use gpui::{
     ModifiersChangedEvent, MouseButton, MouseDownEvent, MouseMoveEvent, MouseUpEvent, Pixels,
     PlatformAtlas, PlatformDisplay, PlatformInput, PlatformInputHandler, PlatformWindow, Point,
     PromptButton, PromptLevel, RequestFrameOptions, SharedString, Size, SystemWindowTab,
-    WindowAppearance, WindowBackgroundAppearance, WindowBounds, WindowControlArea, WindowKind,
-    WindowParams, WindowVisibility, point, px, size,
+    WindowAppearance, WindowBackgroundAppearance, WindowBounds, WindowControlArea, WindowId,
+    WindowKind, WindowParams, WindowVisibility, point, px, size,
 };
 #[cfg(any(test, feature = "test-support"))]
 use image::RgbaImage;
@@ -650,7 +650,7 @@ unsafe fn apply_simple_fullscreen_plan(
 }
 
 struct MacWindowState {
-    handle: AnyWindowHandle,
+    handle: WindowId,
     foreground_executor: ForegroundExecutor,
     background_executor: BackgroundExecutor,
     native_window: id,
@@ -950,7 +950,7 @@ pub(crate) struct MacWindow(Arc<Mutex<MacWindowState>>, MainThreadMarker);
 
 impl MacWindow {
     pub fn open(
-        handle: AnyWindowHandle,
+        handle: WindowId,
         WindowParams {
             bounds,
             titlebar,
@@ -1299,7 +1299,7 @@ impl MacWindow {
         }
     }
 
-    pub fn active_window() -> Option<AnyWindowHandle> {
+    pub fn active_window() -> Option<WindowId> {
         unsafe {
             let app = NSApplication::sharedApplication(nil);
             let main_window: id = msg_send![app, mainWindow];
@@ -1316,7 +1316,7 @@ impl MacWindow {
         }
     }
 
-    pub fn ordered_windows() -> Vec<AnyWindowHandle> {
+    pub fn ordered_windows() -> Vec<WindowId> {
         unsafe {
             let app = NSApplication::sharedApplication(nil);
             let windows: id = msg_send![app, orderedWindows];

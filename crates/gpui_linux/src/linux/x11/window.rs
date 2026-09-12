@@ -7,8 +7,8 @@ use gpui::{
     Pixels, PlatformAtlas, PlatformDisplay, PlatformInput, PlatformInputHandler, PlatformWindow,
     Point, PromptButton, PromptLevel, RequestFrameOptions, ResizeEdge, ScaledPixels, Scene, Size,
     Tiling, WindowAppearance, WindowBackgroundAppearance, WindowBounds, WindowControlArea,
-    WindowDecorations, WindowKind, WindowParams, WindowVisibility, popup::PopupNotSupportedError,
-    px,
+    WindowDecorations, WindowId, WindowKind, WindowParams, WindowVisibility,
+    popup::PopupNotSupportedError, px,
 };
 use gpui_wgpu::{CompositorGpuHint, WgpuRenderer, WgpuSurfaceConfig};
 
@@ -288,7 +288,7 @@ pub struct X11WindowState {
     client_side_decorations_supported: bool,
     decorations: WindowDecorations,
     edge_constraints: Option<EdgeConstraints>,
-    pub handle: AnyWindowHandle,
+    pub handle: WindowId,
     last_insets: [u32; 4],
     accesskit_adapter: Option<accesskit_unix::Adapter>,
 }
@@ -449,7 +449,7 @@ pub(crate) fn handle_connection_error(err: ConnectionError) -> anyhow::Error {
 
 impl X11WindowState {
     pub fn new(
-        handle: AnyWindowHandle,
+        handle: WindowId,
         client: X11ClientStatePtr,
         executor: ForegroundExecutor,
         gpu_context: gpui_wgpu::GpuContext,
@@ -919,7 +919,7 @@ enum WmHintPropertyState {
 
 impl X11Window {
     pub fn new(
-        handle: AnyWindowHandle,
+        handle: WindowId,
         client: X11ClientStatePtr,
         executor: ForegroundExecutor,
         gpu_context: gpui_wgpu::GpuContext,

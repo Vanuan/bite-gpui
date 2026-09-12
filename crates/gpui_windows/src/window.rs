@@ -97,7 +97,7 @@ pub(crate) struct WindowsWindowInner {
     drop_target_helper: IDropTargetHelper,
     pub(crate) state: WindowsWindowState,
     system_settings: WindowsSystemSettings,
-    pub(crate) handle: AnyWindowHandle,
+    pub(crate) handle: WindowId,
     pub(crate) hide_title_bar: bool,
     pub(crate) is_movable: bool,
     pub(crate) is_resizable: bool,
@@ -409,7 +409,7 @@ pub(crate) struct Callbacks {
 
 struct WindowCreateContext {
     inner: Option<Result<Rc<WindowsWindowInner>>>,
-    handle: AnyWindowHandle,
+    handle: WindowId,
     hide_title_bar: bool,
     display: WindowsDisplay,
     is_movable: bool,
@@ -433,7 +433,7 @@ struct WindowCreateContext {
 
 impl WindowsWindow {
     pub(crate) fn new(
-        handle: AnyWindowHandle,
+        handle: WindowId,
         params: WindowParams,
         creation_info: WindowCreationInfo,
     ) -> Result<Self> {
