@@ -7709,6 +7709,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "async-task",
+ "bitflags 2.13.1",
  "chrono",
  "collections",
  "derive_more",
@@ -7717,6 +7718,7 @@ dependencies = [
  "gpui_shared_string",
  "gpui_types",
  "gpui_util",
+ "image",
  "log",
  "num_cpus",
  "parking",
@@ -7728,6 +7730,7 @@ dependencies = [
  "slotmap",
  "smallvec",
  "strum 0.28.0",
+ "thiserror 2.0.17",
  "uuid",
  "waker-fn",
 ]
