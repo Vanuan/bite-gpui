@@ -7502,6 +7502,7 @@ dependencies = [
  "futures 0.3.34",
  "futures-concurrency",
  "getrandom 0.3.4",
+ "gpui_backend",
  "gpui_linux",
  "gpui_macos",
  "gpui_macros",
@@ -7578,6 +7579,7 @@ dependencies = [
  "etagere",
  "foreign-types 0.5.0",
  "gpui",
+ "gpui_backend",
  "gpui_platform",
  "image",
  "log",
@@ -7585,6 +7587,17 @@ dependencies = [
  "objc",
  "objc2 0.6.3",
  "parking_lot",
+]
+
+[[package]]
+name = "gpui_backend"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "etagere",
+ "gpui_types",
+ "schemars 1.0.4",
+ "serde",
 ]
 
 [[package]]
@@ -7604,6 +7617,7 @@ dependencies = [
  "filedescriptor",
  "futures 0.3.34",
  "gpui",
+ "gpui_backend",
  "gpui_platform",
  "gpui_types",
  "gpui_util",
@@ -7656,6 +7670,7 @@ dependencies = [
  "futures 0.3.34",
  "gpui",
  "gpui_apple",
+ "gpui_backend",
  "gpui_platform",
  "gpui_util",
  "image",
@@ -7706,6 +7721,7 @@ dependencies = [
  "derive_more",
  "etagere",
  "futures 0.3.34",
+ "gpui_backend",
  "gpui_shared_string",
  "gpui_types",
  "gpui_util",
@@ -7782,6 +7798,7 @@ dependencies = [
  "anyhow",
  "console_error_panic_hook",
  "futures 0.3.34",
+ "gpui_backend",
  "gpui_platform",
  "gpui_wgpu",
  "http_client",
@@ -7813,6 +7830,7 @@ dependencies = [
  "criterion",
  "etagere",
  "gpui",
+ "gpui_backend",
  "gpui_platform",
  "gpui_util",
  "itertools 0.14.0",
@@ -7842,6 +7860,7 @@ dependencies = [
  "dunce",
  "etagere",
  "futures 0.3.34",
+ "gpui_backend",
  "gpui_platform",
  "gpui_util",
  "image",

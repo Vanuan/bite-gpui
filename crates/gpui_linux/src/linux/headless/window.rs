@@ -14,6 +14,7 @@ use collections::HashMap;
 use parking_lot::Mutex;
 use uuid::Uuid;
 
+use gpui_backend::{AtlasTextureId, AtlasTile, Scene, TileId};
 use gpui_platform::{
     AtlasKey, AtlasTextureId, AtlasTile, Bounds, Capslock, DevicePixels, DispatchEventResult,
     DisplayId, GpuSpecs, Modifiers, Pixels, PlatformAtlas, PlatformDisplay, PlatformInput,
