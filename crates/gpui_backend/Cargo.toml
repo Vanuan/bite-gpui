@@ -26,9 +26,23 @@ etagere.workspace = true
 gpui_shared_string.workspace = true
 gpui_types.workspace = true
 image.workspace = true
+itertools.workspace = true
 log.workspace = true
+parking_lot.workspace = true
 schemars.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+smallvec.workspace = true
 stacksafe = { workspace = true, optional = true }
 taffy = "=0.13.0"
+
+[dev-dependencies]
+futures.workspace = true
+rand.workspace = true
+
+[target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dependencies]
+# Workspace inheritance would re-enable defaults, including blocking channel synchronization.
+async-channel = { version = "2.5.0", default-features = false }
+
+[target.'cfg(not(all(target_arch = "wasm32", target_os = "unknown")))'.dependencies]
+async-channel.workspace = true
