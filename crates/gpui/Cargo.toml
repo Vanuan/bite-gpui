@@ -37,6 +37,7 @@ platform = [
 test-support = [
     "leak-detection",
     "collections/test-support",
+    "gpui_backend/test-support",
     "gpui_platform/test-support",
     "gpui_types/test-support",
     "http_client/test-support",
@@ -181,6 +182,7 @@ windows = { workspace = true, features = ["Win32_Foundation", "Win32_System_Powe
 backtrace.workspace = true
 collections = { workspace = true, features = ["test-support"] }
 env_logger.workspace = true
+gpui_backend = { workspace = true, features = ["test-support"] }
 gpui_platform = { workspace = true, features = ["test-support"] }
 gpui_util = { workspace = true }
 lyon = { version = "1.0", features = ["extra"] }
