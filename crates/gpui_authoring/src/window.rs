@@ -1278,6 +1278,9 @@ pub(crate) struct WindowHostCore {
     pub(crate) appearance_observers: SubscriberSet<(), AnyObserver>,
     pub(crate) button_layout_observers: SubscriberSet<(), AnyObserver>,
     active: Rc<Cell<bool>>,
+    visibility: WindowVisibility,
+    pub(crate) visibility_observers:
+        SubscriberSet<(), Box<dyn FnMut(WindowVisibility, &mut Window, &mut App) -> bool>>,
     hovered: Rc<Cell<bool>>,
     pub(crate) needs_present: Rc<Cell<bool>>,
     /// Tracks recent input event timestamps to determine if input is arriving at a high rate.
@@ -2044,6 +2047,22 @@ impl WindowHost {
             }
         }));
         invalidator.set_platform_waker(platform_window.frame_waker());
+        platform_window.on_visual_viewport_changed(Box::new({
+            let mut cx = cx.to_async();
+            move || {
+                handle
+                    .update(&mut cx, |_, window, _| window.refresh())
+                    .log_err();
+            }
+        }));
+        platform_window.on_insets_changed(Box::new({
+            let mut cx = cx.to_async();
+            move |_| {
+                handle
+                    .update(&mut cx, |_, window, _| window.refresh())
+                    .log_err();
+            }
+        }));
         platform_window.on_resize(Box::new({
             let mut cx = cx.to_async();
             move |_, _| {
@@ -2220,88 +2239,101 @@ impl WindowHost {
 
         platform_window.map_window().unwrap();
 
-        Ok(Window {
-            handle,
-            invalidator,
-            removed: false,
-            platform_window,
-            display_id,
-            is_resizable,
-            is_minimizable,
-            sprite_atlas,
-            text_system,
-            text_rendering_mode: cx.text_rendering_mode.clone(),
-            rem_size: px(16.),
-            rem_size_override_stack: SmallVec::new(),
-            viewport_size: content_size,
-            layout_session: Rc::new(FrameSession::new(cx.new_layout_engine())),
-            inspector_element_id: None,
-            root: None,
-            element_id_stack: SmallVec::default(),
-            text_style_stack: Vec::new(),
-            rendered_entity_stack: Vec::new(),
-            element_offset_stack: Vec::new(),
-            content_mask_stack: Vec::new(),
-            element_opacity: 1.0,
-            requested_autoscroll: None,
-            last_text_input_configuration: None,
-            focused_text_input_active: false,
-            rendered_frame: Frame::new(DispatchTree::new(cx.keymap.clone(), cx.actions.clone())),
-            next_frame: Frame::new(DispatchTree::new(cx.keymap.clone(), cx.actions.clone())),
-            next_frame_callbacks,
-            next_hitbox_id: HitboxId(0),
-            next_tooltip_id: TooltipId::default(),
-            tooltip_bounds: None,
-            dirty_views: FxHashSet::default(),
-            focus_listeners: SubscriberSet::new(),
-            focus_lost_listeners: SubscriberSet::new(),
-            focus_lost_path: SmallVec::new(),
-            default_prevented: true,
-            mouse_position,
-            mouse_hit_test: HitTest::default(),
-            modifiers,
-            capslock,
-            scale_factor,
-            bounds_observers: SubscriberSet::new(),
-            appearance,
-            appearance_observers: SubscriberSet::new(),
-            button_layout_observers: SubscriberSet::new(),
-            active,
-            hovered,
-            needs_present,
-            input_rate_tracker,
-            #[cfg(feature = "profiler")]
-            window_profiler: profiler::WindowProfiler::new(handle.window_id())?,
-            last_input_modality: InputModality::Mouse,
-            touch_gestures: TouchGestureRecognizer::new(
-                cx.platform
-                    .gestures()
-                    .map_or_else(GestureTuning::default, |gestures| gestures.tuning()),
-            ),
-            touch_prediction_enabled: true,
-            long_press_timer: None,
-            long_press_capture: None,
-            refreshing: false,
-            activation_observers: SubscriberSet::new(),
-            focus: None,
-            focus_enabled: true,
-            focus_generation: 0,
-            pending_input: None,
-            pending_modifier: ModifierState::default(),
-            pending_input_observers: SubscriberSet::new(),
-            prompt: None,
-            client_inset: None,
-            image_cache_stack: Vec::new(),
-            captured_hitbox: None,
-            #[cfg(any(feature = "inspector", debug_assertions))]
-            inspector: None,
-            #[cfg(feature = "profiler")]
-            debug_frame_overlay: crate::debug_overlay::DebugFrameOverlay::new(),
-            a11y: A11y::new(
-                a11y_active_flag,
-                accessibility_force_disabled,
-                initial_window_title,
-            ),
+        Ok(WindowHost {
+            core: WindowHostCore {
+                handle,
+                invalidator,
+                frame_pipeline: Rc::new(RefCell::new(cx.new_frame_pipeline(handle.window_id()))),
+                removed: false,
+                metrics,
+                platform_window,
+                display_id,
+                is_resizable,
+                is_minimizable,
+                sprite_atlas,
+                text_system,
+                text_rendering_mode: cx.text_rendering_mode.clone(),
+                rem_size: px(16.),
+                viewport_size: content_size,
+                root: None,
+                last_text_input_configuration: None,
+                focused_text_input_active: false,
+                next_frame_callbacks,
+                focus_listeners: SubscriberSet::new(),
+                focus_lost_listeners: SubscriberSet::new(),
+                default_prevented: true,
+                mouse_position,
+                mouse_hit_test: HitTest::default(),
+                modifiers,
+                capslock,
+                scale_factor,
+                bounds_observers: SubscriberSet::new(),
+                appearance,
+                appearance_observers: SubscriberSet::new(),
+                button_layout_observers: SubscriberSet::new(),
+                active,
+                visibility,
+                visibility_observers: SubscriberSet::new(),
+                hovered,
+                needs_present,
+                input_rate_tracker,
+                #[cfg(feature = "profiler")]
+                window_profiler: profiler::WindowProfiler::new(handle.window_id())?,
+                last_input_modality: InputModality::Mouse,
+                touch_gestures: TouchGestureRecognizer::new(
+                    cx.platform
+                        .gestures()
+                        .map_or_else(GestureTuning::default, |gestures| gestures.tuning()),
+                ),
+                touch_prediction_enabled: true,
+                long_press_timer: None,
+                long_press_capture: None,
+                refreshing: false,
+                activation_observers: SubscriberSet::new(),
+                focus: None,
+                focus_enabled: true,
+                focus_generation: 0,
+                pending_input: None,
+                pending_modifier: ModifierState::default(),
+                pending_input_observers: SubscriberSet::new(),
+                prompt: None,
+                client_inset: None,
+                captured_hitbox: None,
+                #[cfg(any(feature = "inspector", debug_assertions))]
+                inspector: None,
+                #[cfg(feature = "profiler")]
+                debug_frame_overlay: crate::debug_overlay::DebugFrameOverlay::new(),
+                a11y: A11y::new(
+                    a11y_active_flag,
+                    accessibility_force_disabled,
+                    initial_window_title,
+                ),
+            },
+            frame_state: WindowFrameState {
+                rem_size_override_stack: SmallVec::new(),
+                layout_session: Rc::new(FrameSession::new(cx.new_layout_engine())),
+                inspector_element_id: None,
+                dirty_views: FxHashSet::default(),
+                focus_lost_path: SmallVec::new(),
+                element_id_stack: SmallVec::default(),
+                text_style_stack: Vec::new(),
+                rendered_entity_stack: Vec::new(),
+                element_offset_stack: Vec::new(),
+                element_opacity: 1.0,
+                content_mask_stack: Vec::new(),
+                requested_autoscroll: None,
+                image_cache_stack: Vec::new(),
+                rendered_frame: Frame::new(DispatchTree::new(
+                    cx.keymap.clone(),
+                    cx.actions.clone(),
+                )),
+                next_frame: Frame::new(DispatchTree::new(cx.keymap.clone(), cx.actions.clone())),
+                next_hitbox_id: HitboxId(0),
+                next_tooltip_id: TooltipId::default(),
+                tooltip_bounds: None,
+                #[cfg(debug_assertions)]
+                frame_phase: FramePhase::Idle,
+            },
         })
     }
 }
@@ -3647,13 +3679,9 @@ impl Window<'_> {
     }
 
     /// Presents the most recently drawn frame if it hasn't been presented yet.
-    ///
-    /// Benchmarks drive drawing synchronously rather than through a platform
-    /// frame-request loop, so they call this after each measured update to
-    /// submit the frame like production presentation would.
-    #[cfg(any(feature = "bench-support", all(test, feature = "profiler")))]
-    pub fn present_if_needed(&mut self) {
-        if self.needs_present.get() {
+    #[cfg(all(test, feature = "profiler"))]
+    pub(crate) fn present_if_needed(&mut self) {
+        if self.core.needs_present.get() {
             self.present();
         }
     }
@@ -8866,6 +8894,17 @@ mod tests {
         observed_drops: Rc<RefCell<Vec<PathBuf>>>,
     }
 
+    struct FileDropExitView(Rc<Cell<usize>>);
+
+    impl Render for FileDropExitView {
+        fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
+            div().size_full().on_file_drop_exit({
+                let observed_file_drop_exit = self.0.clone();
+                move |_, _, _| observed_file_drop_exit.set(observed_file_drop_exit.get() + 1)
+            })
+        }
+    }
+
     impl Render for FileDragView {
         fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
             div()
@@ -8983,10 +9022,24 @@ mod tests {
             Some(&outside_position)
         );
 
-        let destination: AnyWindowHandle = cx.add_window(|_, _| EmptyView).into();
+        let first_destination_exit_count = Rc::new(Cell::new(0));
+        let first_destination: AnyWindowHandle = cx
+            .add_window({
+                let first_destination_exit_count = first_destination_exit_count.clone();
+                move |_, _| FileDropExitView(first_destination_exit_count)
+            })
+            .into();
+        let second_destination_exit_count = Rc::new(Cell::new(0));
+        let second_destination: AnyWindowHandle = cx
+            .add_window({
+                let second_destination_exit_count = second_destination_exit_count.clone();
+                move |_, _| FileDropExitView(second_destination_exit_count)
+            })
+            .into();
         let reentry_position = point(px(30.), px(30.));
         let external_paths = || ExternalPaths([successful_path.clone()].into_iter().collect());
-        let update_result = cx.update_window(destination, |_, window, cx| {
+        let update_result = cx.update_window(first_destination, |_, window, cx| {
+            window.draw(cx).clear(cx);
             window.dispatch_event(
                 FileDropEvent::Entered {
                     position: reentry_position,
@@ -9002,10 +9055,48 @@ mod tests {
             );
             window.dispatch_event(FileDropEvent::Exited.to_platform_input(), cx);
             assert!(cx.active_drag.is_none());
+            assert_eq!(first_destination_exit_count.get(), 1);
+            assert_eq!(second_destination_exit_count.get(), 0);
         });
         assert!(
             update_result.is_ok(),
-            "failed to handle drag in destination window: {update_result:?}"
+            "failed to handle drag in first destination window: {update_result:?}"
+        );
+
+        let update_result = cx.update_window(second_destination, |_, window, cx| {
+            window.draw(cx).clear(cx);
+            window.dispatch_event(
+                PlatformInput::KeyDown(KeyDownEvent {
+                    keystroke: Keystroke::parse("down").expect("valid keystroke"),
+                    is_held: false,
+                    prefer_character_input: false,
+                }),
+                cx,
+            );
+            window.dispatch_event(
+                FileDropEvent::Entered {
+                    position: reentry_position,
+                    paths: external_paths(),
+                }
+                .to_platform_input(),
+                cx,
+            );
+            assert!(
+                cx.active_drag
+                    .as_ref()
+                    .is_some_and(|drag| drag.value.downcast_ref::<ExternalPaths>().is_some())
+            );
+            assert_eq!(first_destination_exit_count.get(), 1);
+            assert_eq!(second_destination_exit_count.get(), 0);
+
+            window.dispatch_event(FileDropEvent::Exited.to_platform_input(), cx);
+            assert!(cx.active_drag.is_none());
+            assert_eq!(first_destination_exit_count.get(), 1);
+            assert_eq!(second_destination_exit_count.get(), 1);
+        });
+        assert!(
+            update_result.is_ok(),
+            "failed to handle drag in second destination window: {update_result:?}"
         );
 
         let update_result = cx.update_window(successful.window, |_, window, cx| {

@@ -26,7 +26,8 @@ pub use actions::{ActionStatistics, ActionTiming, take_action_stats};
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "profiler")]
-use crate::{Action, App, SharedString, TasksIncluded, WindowId};
+use crate::{Action, App, WindowId};
+use crate::{SharedString, TasksIncluded};
 
 #[cfg(feature = "profiler")]
 #[doc(hidden)]

@@ -133,3 +133,7 @@ x11-clipboard = { version = "0.9.3", optional = true }
 
 [package.metadata.cargo-shear]
 ignored = ["bitflags", "scap", "x11-clipboard"]
+
+
+[dev-dependencies]
+gpui = { workspace = true, features = ["test-support"] }

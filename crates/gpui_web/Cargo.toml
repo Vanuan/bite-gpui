@@ -91,3 +91,15 @@ web-sys = { version = "0.3", features = [
 
 [package.metadata.cargo-shear]
 ignored = ["scheduler"]
+
+
+[dependencies]
+smallvec.workspace = true
+unicode-properties = "=0.1.3"
+unicode-script = "0.5.7"
+unicode-segmentation = "1.10"
+
+[dev-dependencies]
+anyhow.workspace = true
+gpui.workspace = true
+smallvec.workspace = true

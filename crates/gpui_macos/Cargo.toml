@@ -23,6 +23,7 @@ screen-capture = ["gpui_platform/screen-capture"]
 gpui_engine.workspace = true
 gpui_platform.workspace = true
 
+objc2-screen-capture-kit.workspace = true
 [target.'cfg(target_os = "macos")'.dependencies]
 accesskit.workspace = true
 accesskit_macos.workspace = true

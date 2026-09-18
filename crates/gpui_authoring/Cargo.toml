@@ -104,6 +104,8 @@ util_macros.workspace = true
 web-time.workspace = true
 ztracing.workspace = true
 
+chrono.workspace = true
+ttf-parser = "0.25"
 [target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dependencies]
 # Workspace inheritance would re-enable defaults, including blocking channel synchronization.
 async-channel = { version = "2.5.0", default-features = false }
