@@ -63,6 +63,8 @@ pub(crate) struct WebWindowInner {
 pub struct WebWindow {
     inner: Rc<WebWindowInner>,
     display: Rc<dyn PlatformDisplay>,
+    lifecycle: Rc<Cell<WebWindowLifecycle>>,
+    active_window: Rc<RefCell<Option<WindowId>>>,
     _raf_closure: Closure<dyn FnMut()>,
     _resize_observer: Option<web_sys::ResizeObserver>,
     _resize_observer_closure: Closure<dyn FnMut(js_sys::Array)>,
@@ -136,6 +138,26 @@ impl WebWindow {
             height: DevicePixels(0),
         };
 
+    #[allow(clippy::too_many_arguments)]
+    pub(crate) fn new(
+        _handle: WindowId,
+        _params: WindowParams,
+        context: &WgpuContext,
+        canvas: web_sys::HtmlCanvasElement,
+        surface: wgpu::Surface<'static>,
+        browser_window: web_sys::Window,
+        lifecycle: Rc<Cell<WebWindowLifecycle>>,
+        active_window: Rc<RefCell<Option<WindowId>>>,
+    ) -> anyhow::Result<Self> {
+        let document = browser_window
+            .document()
+            .ok_or_else(|| anyhow::anyhow!("No `document` found on window"))?;
+        let body = document
+            .body()
+            .ok_or_else(|| anyhow::anyhow!("No `body` found on document"))?;
+        let dpr = browser_window.device_pixel_ratio() as f32;
+        let max_texture_dimension = context.device.limits().max_texture_dimension_2d;
+        let has_device_pixel_support = check_device_pixel_support();
         let renderer_config = WgpuSurfaceConfig {
             size: device_size,
             transparent: false,

@@ -362,6 +362,115 @@ pub struct DragState {
     data_offer: Option<wl_data_offer::WlDataOffer>,
     window: Option<WaylandWindowStatePtr>,
     position: Point<Pixels>,
+    uri_read_generation: u64,
+}
+
+impl<DataOffer, Window> DragState<DataOffer, Window> {
+    fn begin_uri_read(&mut self) -> u64 {
+        self.invalidate_uri_read();
+        self.uri_read_generation
+    }
+
+    fn invalidate_uri_read(&mut self) {
+        self.uri_read_generation = self.uri_read_generation.wrapping_add(1);
+    }
+
+    fn is_uri_read_current(&self, generation: u64) -> bool {
+        self.uri_read_generation == generation
+    }
+}
+
+trait FileDragDataOffer {
+    fn finish(&self);
+    fn destroy(&self);
+}
+
+impl FileDragDataOffer for wl_data_offer::WlDataOffer {
+    fn finish(&self) {
+        wl_data_offer::WlDataOffer::finish(self);
+    }
+
+    fn destroy(&self) {
+        wl_data_offer::WlDataOffer::destroy(self);
+    }
+}
+
+impl<DataOffer, Window> DragState<DataOffer, Window>
+where
+    DataOffer: FileDragDataOffer + Clone,
+    Window: Clone,
+{
+    fn handle_leave(&mut self) -> Option<(Window, PlatformInput)> {
+        self.invalidate_uri_read();
+        let window = self.window.clone()?;
+        let data_offer = self.data_offer.clone()?;
+        data_offer.destroy();
+        self.data_offer = None;
+        self.window = None;
+        Some((window, PlatformInput::FileDrop(FileDropEvent::Exited {})))
+    }
+
+    fn handle_drop(&mut self) -> Option<(Window, PlatformInput)> {
+        self.invalidate_uri_read();
+        let window = self.window.clone()?;
+        let data_offer = self.data_offer.clone()?;
+        data_offer.finish();
+        data_offer.destroy();
+        self.data_offer = None;
+        self.window = None;
+        Some((
+            window,
+            PlatformInput::FileDrop(FileDropEvent::Submit {
+                position: self.position,
+            }),
+        ))
+    }
+
+    fn complete_uri_read(
+        &mut self,
+        generation: u64,
+        data_offer: DataOffer,
+        window: Window,
+        position: Point<Pixels>,
+        paths: gpui_platform::ExternalPaths,
+    ) -> Option<(Window, PlatformInput)> {
+        if !self.is_uri_read_current(generation) {
+            data_offer.destroy();
+            return None;
+        }
+
+        self.data_offer = Some(data_offer);
+        self.window = Some(window.clone());
+        self.position = position;
+        Some((
+            window,
+            PlatformInput::FileDrop(FileDropEvent::Entered { position, paths }),
+        ))
+    }
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum DataSourceKind {
+    Clipboard,
+    Drag,
+}
+
+pub(crate) struct ExternalDrag {
+    source: wl_data_source::WlDataSource,
+    bytes: Vec<u8>,
+    window: WaylandWindowStatePtr,
+}
+
+fn file_uri_list(paths: &FileDragPaths) -> String {
+    paths
+        .entries()
+        .iter()
+        .filter_map(|(path, _)| Url::from_file_path(path).ok())
+        .fold(String::new(), |mut list, url| {
+            list.push_str(url.as_str());
+            list.push_str("\r\n");
+            list
+        })
 }
 
 pub struct ClickState {
@@ -897,8 +1006,9 @@ impl LinuxClient for WaylandClient {
     #[cfg(feature = "screen-capture")]
     fn screen_capture_sources(
         &self,
-    ) -> futures::channel::oneshot::Receiver<anyhow::Result<Vec<Rc<dyn gpui::ScreenCaptureSource>>>>
-    {
+    ) -> futures::channel::oneshot::Receiver<
+        anyhow::Result<Vec<Rc<dyn gpui_platform::ScreenCaptureSource>>>,
+    > {
         // TODO: Get screen capture working on wayland. Be sure to try window resizing as that may
         // be tricky.
         //
@@ -914,7 +1024,7 @@ impl LinuxClient for WaylandClient {
 
     fn open_window(
         &self,
-        handle: AnyWindowHandle,
+        handle: WindowId,
         params: WindowParams,
     ) -> anyhow::Result<Box<dyn PlatformWindow>> {
         let mut state = self.0.borrow_mut();
@@ -1082,7 +1192,7 @@ impl LinuxClient for WaylandClient {
             .log_err();
     }
 
-    fn write_to_primary(&self, item: gpui::ClipboardItem) {
+    fn write_to_primary(&self, item: gpui_platform::ClipboardItem) {
         let mut state = self.0.borrow_mut();
         let (Some(primary_selection_manager), Some(primary_selection)) = (
             state.globals.primary_selection_manager.clone(),
@@ -1107,7 +1217,7 @@ impl LinuxClient for WaylandClient {
         }
     }
 
-    fn write_to_clipboard(&self, item: gpui::ClipboardItem) {
+    fn write_to_clipboard(&self, item: gpui_platform::ClipboardItem) {
         let mut state = self.0.borrow_mut();
         let (Some(data_device_manager), Some(data_device)) = (
             state.globals.data_device_manager.clone(),
@@ -1132,15 +1242,15 @@ impl LinuxClient for WaylandClient {
         }
     }
 
-    fn read_from_primary(&self) -> Option<gpui::ClipboardItem> {
+    fn read_from_primary(&self) -> Option<gpui_platform::ClipboardItem> {
         self.0.borrow_mut().clipboard.read_primary()
     }
 
-    fn read_from_clipboard(&self) -> Option<gpui::ClipboardItem> {
+    fn read_from_clipboard(&self) -> Option<gpui_platform::ClipboardItem> {
         self.0.borrow_mut().clipboard.read()
     }
 
-    fn active_window(&self) -> Option<AnyWindowHandle> {
+    fn active_window(&self) -> Option<WindowId> {
         self.0
             .borrow_mut()
             .keyboard_focused_window
@@ -1148,7 +1258,7 @@ impl LinuxClient for WaylandClient {
             .map(|window| window.handle())
     }
 
-    fn window_stack(&self) -> Option<Vec<AnyWindowHandle>> {
+    fn window_stack(&self) -> Option<Vec<WindowId>> {
         None
     }
 
@@ -2314,7 +2424,7 @@ impl Dispatch<zwp_pointer_gesture_pinch_v1::ZwpPointerGesturePinchV1, ()>
         _: &Connection,
         _: &QueueHandle<Self>,
     ) {
-        use gpui::PinchEvent;
+        use gpui_platform::PinchEvent;
 
         let client = this.get_client();
         let mut state = client.borrow_mut();
@@ -2513,11 +2623,6 @@ impl Dispatch<wl_data_device::WlDataDevice, ()> for WaylandClientStatePtr {
                                 data_offer.destroy();
                                 return;
                             }
-
-                            let input = PlatformInput::FileDrop(FileDropEvent::Entered {
-                                position,
-                                paths: gpui::ExternalPaths(paths),
-                            });
 
                             let client = this.get_client();
                             let mut state = client.borrow_mut();

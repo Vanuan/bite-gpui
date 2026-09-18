@@ -2,7 +2,7 @@ use crate::{App, SharedString, SharedUri};
 use futures::{Future, TryFutureExt};
 
 use std::fmt::Debug;
-use std::hash::{BuildHasher, Hash};
+use std::hash::Hash;
 use std::marker::PhantomData;
 use std::path::{Path, PathBuf};
 use std::sync::Arc;

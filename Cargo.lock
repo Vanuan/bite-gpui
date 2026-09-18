@@ -3667,7 +3667,6 @@ dependencies = [
  "env_logger 0.11.8",
  "fs",
  "gpui",
- "gpui_platform",
  "language",
  "log",
  "node_runtime",
@@ -5603,7 +5602,6 @@ dependencies = [
  "futures 0.3.32",
  "gaoya",
  "gpui",
- "gpui_platform",
  "gpui_tokio",
  "http_client",
  "indoc",
@@ -5835,7 +5833,6 @@ dependencies = [
  "anyhow",
  "editor",
  "gpui",
- "gpui_platform",
  "language",
  "multi_buffer",
  "project",
@@ -6205,7 +6202,6 @@ dependencies = [
  "fs",
  "futures 0.3.32",
  "gpui",
- "gpui_platform",
  "gpui_tokio",
  "language",
  "language_extension",
@@ -6962,7 +6958,6 @@ version = "0.1.0"
 dependencies = [
  "fs",
  "gpui",
- "gpui_platform",
 ]
 
 [[package]]
@@ -7809,12 +7804,15 @@ dependencies = [
  "futures 0.3.32",
  "futures-concurrency",
  "getrandom 0.3.4",
+ "gpui_linux",
+ "gpui_macos",
  "gpui_macros",
  "gpui_platform",
  "gpui_shared_string",
  "gpui_types",
  "gpui_util",
  "gpui_web",
+ "gpui_windows",
  "hdrhistogram",
  "heapless",
  "http_client",
@@ -7872,6 +7870,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "gpui_apple"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "block",
+ "cbindgen",
+ "cocoa 0.26.0",
+ "collections",
+ "core-foundation 0.10.0",
+ "core-video",
+ "derive_more",
+ "etagere",
+ "foreign-types 0.5.0",
+ "gpui",
+ "gpui_platform",
+ "image",
+ "log",
+ "metal",
+ "objc",
+ "objc2 0.6.3",
+ "parking_lot",
+]
+
+[[package]]
 name = "gpui_linux"
 version = "0.1.0"
 dependencies = [
@@ -7888,6 +7910,7 @@ dependencies = [
  "filedescriptor",
  "futures 0.3.32",
  "gpui",
+ "gpui_platform",
  "gpui_types",
  "gpui_util",
  "gpui_wgpu",
@@ -7948,6 +7971,8 @@ dependencies = [
  "foreign-types 0.5.0",
  "futures 0.3.32",
  "gpui",
+ "gpui_apple",
+ "gpui_platform",
  "gpui_util",
  "image",
  "itertools 0.14.0",
@@ -7986,12 +8011,39 @@ dependencies = [
 name = "gpui_platform"
 version = "0.1.0"
 dependencies = [
- "console_error_panic_hook",
- "gpui",
- "gpui_linux",
- "gpui_macos",
- "gpui_web",
- "gpui_windows",
+ "accesskit",
+ "anyhow",
+ "async-task",
+ "bitflags 2.13.1",
+ "chrono",
+ "collections",
+ "core-video",
+ "derive_more",
+ "etagere",
+ "futures 0.3.34",
+ "gpui_shared_string",
+ "gpui_types",
+ "gpui_util",
+ "image",
+ "log",
+ "num_cpus",
+ "parking",
+ "parking_lot",
+ "rand 0.9.4",
+ "raw-window-handle",
+ "scheduler",
+ "schemars 1.0.4",
+ "seahash",
+ "serde",
+ "serde_json",
+ "slotmap",
+ "smallvec",
+ "strum 0.28.0",
+ "thiserror 2.0.17",
+ "uuid",
+ "waker-fn",
+ "windows 0.62.2",
+ "zed-scap",
 ]
 
 [[package]]
@@ -8071,6 +8123,7 @@ dependencies = [
  "criterion",
  "etagere",
  "gpui",
+ "gpui_platform",
  "gpui_util",
  "itertools 0.14.0",
  "js-sys",
@@ -10404,7 +10457,6 @@ dependencies = [
  "cpal",
  "futures 0.3.32",
  "gpui",
- "gpui_platform",
  "gpui_tokio",
  "http_client_tls",
  "image",
@@ -14235,7 +14287,6 @@ dependencies = [
  "client",
  "futures 0.3.32",
  "gpui",
- "gpui_platform",
  "http_client",
  "language",
  "node_runtime",
@@ -15354,7 +15405,6 @@ dependencies = [
  "git",
  "git_hosting_providers",
  "gpui",
- "gpui_platform",
  "gpui_tokio",
  "http_client",
  "image",
@@ -22833,7 +22883,7 @@ name = "worktree_benchmarks"
 version = "0.1.0"
 dependencies = [
  "fs",
- "gpui_platform",
+ "gpui",
  "settings",
  "worktree",
 ]
@@ -23293,7 +23343,6 @@ dependencies = [
  "git_ui",
  "go_to_line",
  "gpui",
- "gpui_platform",
  "gpui_tokio",
  "hdrhistogram",
  "http_client",

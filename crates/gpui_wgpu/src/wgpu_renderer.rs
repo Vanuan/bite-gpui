@@ -1823,9 +1823,9 @@ impl WgpuRenderer {
         };
 
         let config = WgpuSurfaceConfig {
-            size: gpui::Size {
-                width: gpui::DevicePixels(self.surface_config.width as i32),
-                height: gpui::DevicePixels(self.surface_config.height as i32),
+            size: gpui_platform::Size {
+                width: gpui_platform::DevicePixels(self.surface_config.width as i32),
+                height: gpui_platform::DevicePixels(self.surface_config.height as i32),
             },
             transparent: self.surface_config.alpha_mode != wgpu::CompositeAlphaMode::Opaque,
             preferred_present_mode: Some(self.surface_config.present_mode),
@@ -1909,5 +1909,51 @@ impl RenderingParameters {
             grayscale_enhanced_contrast,
             subpixel_enhanced_contrast,
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use gpui_platform::{
+        MonochromeSprite, PolychromeSprite, Quad, Shadow, SubpixelSprite, Underline,
+    };
+
+    #[test]
+    fn webgl_shader_is_valid_wgsl_without_storage_buffers() {
+        assert!(!WEBGL_SHADERS.contains("var<storage"));
+        validate_wgsl(WEBGL_SHADERS, naga::valid::Capabilities::empty());
+    }
+
+    #[test]
+    fn storage_buffer_shader_is_valid_wgsl() {
+        validate_wgsl(STORAGE_BUFFER_SHADERS, naga::valid::Capabilities::empty());
+    }
+
+    #[test]
+    fn subpixel_shader_is_valid_wgsl() {
+        validate_wgsl(
+            SUBPIXEL_SHADERS,
+            naga::valid::Capabilities::DUAL_SOURCE_BLENDING,
+        );
+    }
+
+    fn validate_wgsl(source: &str, capabilities: naga::valid::Capabilities) {
+        let module = naga::front::wgsl::parse_str(source).expect("shader should parse");
+        naga::valid::Validator::new(naga::valid::ValidationFlags::all(), capabilities)
+            .validate(&module)
+            .expect("shader should validate");
+    }
+
+    #[test]
+    fn webgl_record_sizes_match_shader_word_strides() {
+        assert_eq!(std::mem::size_of::<Quad>(), 40 * 4);
+        assert_eq!(std::mem::size_of::<Shadow>(), 28 * 4);
+        assert_eq!(std::mem::size_of::<PathRasterizationVertex>(), 26 * 4);
+        assert_eq!(std::mem::size_of::<PathSprite>(), 4 * 4);
+        assert_eq!(std::mem::size_of::<Underline>(), 16 * 4);
+        assert_eq!(std::mem::size_of::<MonochromeSprite>(), 28 * 4);
+        assert_eq!(std::mem::size_of::<SubpixelSprite>(), 28 * 4);
+        assert_eq!(std::mem::size_of::<PolychromeSprite>(), 24 * 4);
     }
 }

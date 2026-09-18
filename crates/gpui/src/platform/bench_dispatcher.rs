@@ -12,6 +12,18 @@ use crate::{
     queue::{PriorityQueueReceiver, PriorityQueueSender},
 };
 
+/// Access to the concrete [`ThreadedDispatcher`] behind a [`PlatformDispatcher`].
+pub trait PlatformDispatcherExt {
+    /// Returns this dispatcher as a [`ThreadedDispatcher`], if it is one.
+    fn as_threaded(&self) -> Option<&ThreadedDispatcher>;
+}
+
+impl PlatformDispatcherExt for dyn PlatformDispatcher {
+    fn as_threaded(&self) -> Option<&ThreadedDispatcher> {
+        (self as &dyn std::any::Any).downcast_ref::<ThreadedDispatcher>()
+    }
+}
+
 const MIN_THREADS: usize = 2;
 
 /// A multithreaded [`PlatformDispatcher`] for benchmarks.
@@ -375,10 +387,6 @@ impl PlatformDispatcher for BenchDispatcher {
             .name("BenchRealtime".to_owned())
             .spawn(f)
             .expect("failed to spawn benchmark realtime thread");
-    }
-
-    fn as_bench(&self) -> Option<&BenchDispatcher> {
-        Some(self)
     }
 }
 
