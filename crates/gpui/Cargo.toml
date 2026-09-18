@@ -1,13 +1,14 @@
 [package]
-name = "gpui_runtime"
+name = "gpui"
 version = "0.2.2"
 edition.workspace = true
-publish.workspace = true
-license = "Apache-2.0"
 authors = ["Nathan Sobo <nathan@zed.dev>"]
-description = "Zed's declarative UI authoring layer"
+description = "Zed's GPU-accelerated UI framework"
 repository = "https://github.com/zed-industries/zed"
+publish = true
+license = "Apache-2.0"
 homepage = "https://gpui.rs"
+readme = "README.md"
 keywords = ["desktop", "gui", "immediate"]
 categories = ["gui"]
 
@@ -16,22 +17,38 @@ categories = ["gui"]
 workspace = true
 
 [features]
-default = []
-# Test-only APIs: deterministic dispatchers, `TestAppContext`, and the
-# renderer readback paths the engine gates behind the same feature.
-test-support = [
-    "leak-detection",
-    "collections/test-support",
-    "gpui_types/test-support",
-    "gpui_engine/test-support",
-    "gpui_engine_default/test-support",
-    "gpui_platform/test-support",
-    "http_client/test-support",
-    "proptest",
+# The platform bundle: pulls in the backend for the target OS, hosts the
+# `application()`, `headless()`, and `current_platform()` entrypoints, and turns
+# on the windowing and text features a desktop build needs.
+#
+# `default-features = false` drops it, leaving a headless gpui with no platform
+# dependencies compiled.
+default = ["platform"]
+platform = [
+    "dep:gpui_linux",
+    "dep:gpui_macos",
+    "dep:gpui_windows",
+    "dep:gpui_web",
+    "font-kit",
+    "wayland",
+    "x11",
+    "windows-manifest",
 ]
-bench = ["test-support", "dep:criterion", "dep:hdrhistogram"]
-inspector = ["gpui_macros/inspector"]
-leak-detection = ["backtrace"]
+test-support = [
+    "gpui_runtime/test-support",
+    "gpui_macos?/test-support",
+    "gpui_windows?/test-support",
+    "wayland",
+    "x11",
+]
+bench-support = [
+    "gpui_runtime/bench-support",
+    "gpui_macos?/bench-support",
+]
+# Preserve the published feature name while consumers migrate to `bench-support`.
+bench = ["bench-support"]
+inspector = ["gpui_runtime/inspector"]
+leak-detection = ["gpui_runtime/leak-detection"]
 wayland = ["gpui_platform/wayland", "gpui_linux?/wayland"]
 x11 = [
     "scap?/x11",
@@ -46,104 +63,52 @@ screen-capture = [
     "gpui_windows?/screen-capture",
 ]
 windows-manifest = ["dep:embed-resource"]
-input-latency-histogram = ["dep:hdrhistogram"]
-profiler = []
+profiler = ["gpui_runtime/profiler"]
+stacker = ["gpui_runtime/stacker"]
+font-kit = ["dep:font-kit", "gpui_macos?/font-kit"]
 
 [lib]
-path = "src/gpui_runtime.rs"
+path = "src/gpui.rs"
 doctest = false
 
 [dependencies]
-accesskit.workspace = true
-anyhow.workspace = true
-async-task.workspace = true
-backtrace = { workspace = true, optional = true }
-bitflags.workspace = true
-collections.workspace = true
-criterion = { workspace = true, optional = true }
-ctor.workspace = true
-derive_more.workspace = true
-etagere.workspace = true
-futures.workspace = true
-futures-concurrency.workspace = true
-gpui_engine.workspace = true
-gpui_engine_default.workspace = true
-gpui_macros.workspace = true
+gpui_runtime.workspace = true
 gpui_platform.workspace = true
-gpui_shared_string.workspace = true
-gpui_types = { workspace = true, features = ["lyon"] }
-gpui_util.workspace = true
-hdrhistogram = { workspace = true, optional = true }
-heapless.workspace = true
-http_client.workspace = true
-image.workspace = true
-inventory.workspace = true
-itertools.workspace = true
-log.workspace = true
-lyon = "1.0"
-num_cpus = "1.13"
-parking = "2.0.0"
-parking_lot.workspace = true
-pin-project = "1.1.10"
-pollster.workspace = true
-postage.workspace = true
-proptest = { workspace = true, optional = true }
-profiling.workspace = true
-rand.workspace = true
-raw-window-handle.workspace = true
-refineable.workspace = true
-regex.workspace = true
-resvg.workspace = true
-scheduler.workspace = true
-schemars.workspace = true
-seahash = "4.1"
-serde.workspace = true
-serde_json.workspace = true
-slotmap.workspace = true
-smallvec.workspace = true
-async-channel.workspace = true
-stacksafe.workspace = true
-strum.workspace = true
-sum_tree.workspace = true
-thiserror.workspace = true
-tracing.workspace = true
-ttf-parser = "0.25"
-url.workspace = true
-usvg.workspace = true
-uuid.workspace = true
-util_macros.workspace = true
-waker-fn = "1.2.0"
-web-time.workspace = true
-ztracing.workspace = true
-chrono.workspace = true
 
+futures = { workspace = true }
 [target.'cfg(target_family = "wasm")'.dependencies]
-console_error_panic_hook.workspace = true
-getrandom = { version = "0.3.4", features = ["wasm_js"] }
-uuid = { workspace = true, features = ["js"] }
+gpui_web = { workspace = true, optional = true }
+
+[target.'cfg(any(target_os = "linux", target_os = "freebsd"))'.dependencies]
+gpui_linux = { workspace = true, optional = true }
 
 [target.'cfg(target_os = "macos")'.dependencies]
-block.workspace = true
-cocoa.workspace = true
-cocoa-foundation.workspace = true
-core-foundation.workspace = true
-core-foundation-sys.workspace = true
-core-graphics.workspace = true
-core-video.workspace = true
+gpui_macos = { workspace = true, optional = true }
+# WARNING: If you change this, you must also publish a new version of zed-font-kit to crates.io
+font-kit = { git = "https://github.com/zed-industries/font-kit", rev = "94b0f28166665e8fd2f53ff6d268a14955c82269", package = "zed-font-kit", version = "0.14.1-zed", optional = true }
+
+[target.'cfg(any(target_os = "linux", target_os = "freebsd", target_os = "windows"))'.dependencies]
+scap = { workspace = true, optional = true }
 
 [target.'cfg(target_os = "windows")'.dependencies]
-windows = { workspace = true, features = ["Win32_Foundation", "Win32_System_Power"] }
+gpui_windows = { workspace = true, optional = true }
+
 
 [dev-dependencies]
+anyhow.workspace = true
 backtrace.workspace = true
 collections = { workspace = true, features = ["test-support"] }
 env_logger.workspace = true
-gpui_engine_default = { workspace = true, features = ["test-support"] }
+gpui_macros.workspace = true
 gpui_platform = { workspace = true, features = ["test-support"] }
 gpui_util = { workspace = true }
+log.workspace = true
 lyon = { version = "1.0", features = ["extra"] }
 rand.workspace = true
 scheduler = { workspace = true, features = ["test-support"] }
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
 unicode-segmentation.workspace = true
 
 [target.'cfg(not(target_family = "wasm"))'.dev-dependencies]
@@ -153,19 +118,19 @@ reqwest_client = { workspace = true, features = ["test-support"] }
 
 [target.'cfg(target_family = "wasm")'.dev-dependencies]
 wasm-bindgen = { workspace = true }
-gpui_web.workspace = true
+web-sys = { version = "0.3", features = ["console"] }
 
 [build-dependencies]
 embed-resource = { version = "3.0", optional = true }
 
 [target.'cfg(target_os = "macos")'.build-dependencies]
-bindgen = "0.71"
-cbindgen.workspace = true
+bindgen = "0.72"
 
-
-
-
-
+[package.metadata.cargo-shear]
+ignored = [
+    "bindgen",
+    "font-kit",
+]
 
 [[example]]
 name = "hello_world"

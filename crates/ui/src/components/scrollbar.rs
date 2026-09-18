@@ -1114,7 +1114,6 @@ impl<T: ScrollableHandle> Element for ScrollbarElement<T> {
     fn request_layout(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (LayoutId, Self::RequestLayoutState) {
@@ -1131,7 +1130,6 @@ impl<T: ScrollableHandle> Element for ScrollbarElement<T> {
     fn prepaint(
         &mut self,
         id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -1307,7 +1305,6 @@ impl<T: ScrollableHandle> Element for ScrollbarElement<T> {
     fn paint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         Bounds { origin, size }: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         prepaint_state: &mut Self::PrepaintState,
