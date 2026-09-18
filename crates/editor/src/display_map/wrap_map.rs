@@ -75,6 +75,61 @@ impl TransformSummary {
 #[derive(Copy, Clone, Debug, Default, Eq, Ord, PartialOrd, PartialEq)]
 pub struct WrapPoint(pub Point);
 
+struct LineFragmentBuilder {
+    text_system: Arc<dyn TextSystem>,
+    font_id: FontId,
+    font_size: Pixels,
+    cached_replacement_widths: HashMap<char, Pixels>,
+}
+
+impl LineFragmentBuilder {
+    fn new(text_system: Arc<dyn TextSystem>, font: &Font, font_size: Pixels) -> Self {
+        let font_id = text_system.resolve_font(font);
+        Self {
+            text_system,
+            font_id,
+            font_size,
+            cached_replacement_widths: HashMap::default(),
+        }
+    }
+
+    fn push_fragments<'a>(&mut self, fragments: &mut Vec<gpui::LineFragment<'a>>, text: &'a str) {
+        let mut prefix_start = 0;
+        for (offset, ch) in text.char_indices() {
+            if !is_invisible(ch) {
+                continue;
+            }
+            let ch_end = offset + ch.len_utf8();
+            if !is_standalone_grapheme(text, offset, ch_end) {
+                continue;
+            }
+            let Some(width) = self.replacement_width(ch) else {
+                continue;
+            };
+            if prefix_start < offset {
+                fragments.push(gpui::LineFragment::text(&text[prefix_start..offset]));
+            }
+            fragments.push(gpui::LineFragment::element(width, ch_end - offset));
+            prefix_start = ch_end;
+        }
+        if prefix_start < text.len() || text.is_empty() {
+            fragments.push(gpui::LineFragment::text(&text[prefix_start..]));
+        }
+    }
+
+    fn replacement_width(&mut self, ch: char) -> Option<Pixels> {
+        let replacement_char = replacement(ch)?;
+        let width = *self
+            .cached_replacement_widths
+            .entry(replacement_char)
+            .or_insert_with(|| {
+                self.text_system
+                    .layout_width(self.font_id, self.font_size, replacement_char)
+            });
+        Some(width)
+    }
+}
+
 pub struct WrapChunks<'a> {
     input_chunks: tab_map::TabChunks<'a>,
     input_chunk: Chunk<'a>,
