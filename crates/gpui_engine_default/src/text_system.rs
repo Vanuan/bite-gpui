@@ -4,14 +4,12 @@
 //! metric, raster-bounds, and line-wrapper pools. It has no knowledge of
 //! windows; the facade's window-scoped layer drives it.
 
-use crate::{
-    Font, FontId, FontMetrics, FontRun, LineWrapper, MissingGlyph, MissingGlyphSink,
-    PlatformTextSystem, RenderGlyphParams, TextRenderingMode, font,
-};
+use crate::LineWrapper;
 use anyhow::{Context as _, Result, anyhow};
 use collections::{FxHashMap, FxHashSet};
 use core::fmt;
 use derive_more::{Add, Deref, FromStr, Sub};
+use gpui_engine::{Font, FontId, FontMetrics, FontRun, MissingGlyph, MissingGlyphSink, PlatformTextSystem, RenderGlyphParams, TextRenderingMode, font};
 use gpui_types::{Bounds, DevicePixels, Hsla, Pixels, Size, px};
 use itertools::Itertools;
 use parking_lot::{Mutex, RwLock, RwLockUpgradableReadGuard};
