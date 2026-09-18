@@ -306,7 +306,7 @@ impl Element for Img {
                     match self.source.use_data(
                         self.image_cache
                             .clone()
-                            .or_else(|| window.image_cache_stack.last().cloned()),
+                            .or_else(|| window.frame_state.image_cache_stack.last().cloned()),
                         window,
                         cx,
                     ) {
@@ -471,7 +471,7 @@ impl Element for Img {
                 if let Some(Ok(data)) = source.use_data(
                     self.image_cache
                         .clone()
-                        .or_else(|| window.image_cache_stack.last().cloned()),
+                        .or_else(|| window.frame_state.image_cache_stack.last().cloned()),
                     window,
                     cx,
                 ) {
@@ -846,6 +846,7 @@ mod tests {
         });
         let full_tile_bounds = window.update(|window, _| {
             window
+                .frame_state
                 .rendered_frame
                 .scene
                 .polychrome_sprites
@@ -864,6 +865,7 @@ mod tests {
 
         let (rendered_bounds, rendered_tile_bounds, scale_factor) = window.update(|window, _| {
             let sprite = window
+                .frame_state
                 .rendered_frame
                 .scene
                 .polychrome_sprites
@@ -890,6 +892,45 @@ mod tests {
     }
 
     #[gpui::test]
+    fn explicit_aspect_ratio_is_not_overridden_by_intrinsic_ratio(cx: &mut TestAppContext) {
+        let window = cx.add_empty_window();
+
+        // A portrait image in a square container
+        window.draw(point(px(0.), px(0.)), size(px(100.), px(100.)), |_, _| {
+            div()
+                .size(px(100.))
+                .overflow_hidden()
+                .child(
+                    img(ImageSource::Render(test_image_with_size(100, 200)))
+                        .size_full()
+                        .aspect_square()
+                        .object_fit(ObjectFit::Contain),
+                )
+                .into_any_element()
+        });
+
+        let (rendered_bounds, scale_factor) = window.update(|window, _| {
+            let sprite = window
+                .frame_state
+                .rendered_frame
+                .scene
+                .polychrome_sprites
+                .last()
+                .expect("contained image should paint a sprite");
+            (sprite.bounds, window.scale_factor())
+        });
+
+        // The element stays 100x100, so the image is letterboxed horizontally
+        assert_eq!(
+            rendered_bounds,
+            Bounds {
+                origin: point(px(25.).scale(scale_factor), px(0.).scale(scale_factor)),
+                size: size(px(50.).scale(scale_factor), px(100.).scale(scale_factor)),
+            }
+        );
+    }
+
+    #[gpui::test]
     fn image_object_fit_cover_clamps_corner_radii_to_visible_bounds(cx: &mut TestAppContext) {
         let window = cx.add_empty_window();
         window.draw(point(px(0.), px(0.)), size(px(100.), px(100.)), |_, _| {
@@ -903,6 +944,7 @@ mod tests {
         let (corner_radius, expected_corner_radius) = window.update(|window, _| {
             (
                 window
+                    .frame_state
                     .rendered_frame
                     .scene
                     .polychrome_sprites
