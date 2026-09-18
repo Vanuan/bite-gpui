@@ -1,9 +1,4 @@
-use crate::{
-    Bounds, Capslock, Context, Empty, ExternalPaths, FileDropEvent, IntoElement, KeyDownEvent,
-    KeyUpEvent, Keystroke, LongPressEvent, Modifiers, ModifiersChangedEvent, MouseButton,
-    MouseDownEvent, MouseExitEvent, MouseMoveEvent, MousePressureEvent, MouseUpEvent, PinchEvent,
-    Pixels, PlatformInput, Point, Render, ScrollWheelEvent, TouchEvent, Window, point, seal::Sealed,
-};
+use crate::{Bounds, Context, Empty, ExternalPaths, FileDropEvent, IntoElement, KeyDownEvent, KeyUpEvent, Modifiers, ModifiersChangedEvent, MouseButton, MouseDownEvent, MouseExitEvent, MouseMoveEvent, MousePressureEvent, MouseUpEvent, PinchEvent, Pixels, PlatformInput, Point, Render, ScrollWheelEvent, TouchEvent, Window, seal::Sealed};
 use std::fmt::Debug;
 
 /// An event from a platform input source.
