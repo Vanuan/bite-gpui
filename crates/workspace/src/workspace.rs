@@ -8648,6 +8648,7 @@ impl Workspace {
                         .cycle()
                         .skip_while(|window| window.window_id() != current_window_id)
                         .nth(1)
+                        .copied()
                 },
             );
 
@@ -8672,6 +8673,7 @@ impl Workspace {
                         .cycle()
                         .skip_while(|window| window.window_id() != current_window_id)
                         .nth(1)
+                        .copied()
                 },
             );
 
