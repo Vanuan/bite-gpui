@@ -205,7 +205,7 @@ impl MacPlatform {
                     "gpui_macos was compiled without the `font-kit` feature, so no text will be rendered."
                 );
             }
-            Arc::new(gpui_backend::NoopTextSystem::new())
+            Arc::new(gpui_engine::NoopTextSystem::new())
         };
 
         let keyboard_layout = MacKeyboardLayout::new();

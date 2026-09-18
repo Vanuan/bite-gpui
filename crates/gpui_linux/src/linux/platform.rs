@@ -149,7 +149,7 @@ impl LinuxCommon {
         #[cfg(any(feature = "wayland", feature = "x11"))]
         let text_system = Arc::new(crate::linux::CosmicTextSystem::new("IBM Plex Sans"));
         #[cfg(not(any(feature = "wayland", feature = "x11")))]
-        let text_system = Arc::new(gpui_backend::NoopTextSystem::new());
+        let text_system = Arc::new(gpui_engine::NoopTextSystem::new());
 
         let callbacks = PlatformHandlers::default();
 
