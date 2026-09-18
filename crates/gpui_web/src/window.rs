@@ -1,5 +1,5 @@
 use crate::display::WebDisplay;
-use crate::{events::{ClickState, EventListenerHandle, TouchIds, WebEventListeners, is_mac_platform}, ime_mirror::ImeMirror, platform::WebWindowLifecycle, viewport::WebViewport};
+use crate::{EventListenerHandle, TouchIds, WebEventListeners, events::{ClickState, ime_mirror::ImeMirror, is_mac_platform}, platform::WebWindowLifecycle, viewport::WebViewport};
 use std::{cell::Cell, cell::RefCell, rc::Rc, sync::Arc};
 
 use gpui::{
@@ -9,7 +9,9 @@ use gpui::{
     ResizeEdge, Scene, Size, WindowAppearance, WindowBackgroundAppearance, WindowBounds,
     WindowControlArea, WindowControls, WindowDecorations, WindowParams, px,
 };
-use gpui_wgpu::{WgpuContext, WgpuRenderer, WgpuSurfaceConfig};
+use gpui_engine::SceneRenderer;
+use gpui_platform::{Bounds, Capslock, Decorations, DevicePixels, DispatchEventResult, GpuSpecs, Modifiers, MouseButton, Pixels, PlatformDisplay, PlatformInput, PlatformInputHandler, PlatformWindow, Point, PromptButton, PromptLevel, RequestFrameOptions, ResizeEdge, Size, TextInputConfiguration, TextInputStateChange, WindowAppearance, WindowBackgroundAppearance, WindowBounds, WindowControlArea, WindowControls, WindowDecorations, WindowId, WindowInsets, WindowParams, WindowVisibility, px};
+use gpui_wgpu::{WgpuContext, WgpuRenderer, WgpuSurfaceConfig, wgpu};
 use wasm_bindgen::prelude::*;
 
 #[derive(Default)]
