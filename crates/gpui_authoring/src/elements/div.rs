@@ -2199,7 +2199,7 @@ impl Interactivity {
         f: impl FnOnce(Style, &mut Window, &mut App) -> LayoutId,
     ) -> LayoutId {
         #[cfg(any(feature = "inspector", debug_assertions))]
-        window.with_current_inspector_state(
+        let _ = window.with_current_inspector_state(
             cx,
             |inspector_state: &mut Option<DivInspectorState>, _window| {
                 if let Some(inspector_state) = inspector_state {
@@ -2294,7 +2294,7 @@ impl Interactivity {
         self.content_size = content_size;
 
         #[cfg(any(feature = "inspector", debug_assertions))]
-        window.with_current_inspector_state(
+        let _ = window.with_current_inspector_state(
             cx,
             |inspector_state: &mut Option<DivInspectorState>, _window| {
                 if let Some(inspector_state) = inspector_state {

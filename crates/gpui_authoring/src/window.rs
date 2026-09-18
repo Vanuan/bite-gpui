@@ -2381,18 +2381,19 @@ impl Window<'_> {
     }
 
     pub(crate) fn refresh_visibility(&mut self, cx: &mut App) {
-        let visibility = self.platform_window.visibility();
-        if self.visibility != visibility {
-            self.visibility = visibility;
+        let visibility = self.core.platform_window.visibility();
+        if self.core.visibility != visibility {
+            self.core.visibility = visibility;
             #[cfg(feature = "profiler")]
-            profiler::journal::record_window_visibility(self.handle.window_id(), visibility);
-            self.visibility_observers
+            profiler::journal::record_window_visibility(self.core.handle.window_id(), visibility);
+            self.core
+                .visibility_observers
                 .clone()
                 .retain(&(), |callback| callback(visibility, self, cx));
         }
         #[cfg(feature = "profiler")]
-        if self.invalidator.is_dirty() || self.needs_present.get() {
-            profiler::journal::record_frame_pending(self.handle.window_id(), Instant::now());
+        if self.core.invalidator.is_dirty() || self.core.needs_present.get() {
+            profiler::journal::record_frame_pending(self.core.handle.window_id(), Instant::now());
         }
     }
 
@@ -3000,7 +3001,7 @@ impl Window<'_> {
     /// Returns the underlines in the most recently rendered frame's scene.
     #[cfg(any(test, feature = "test-support"))]
     pub fn painted_underlines(&self) -> Vec<Underline> {
-        self.rendered_frame.scene.underlines.clone()
+        self.frame_state.rendered_frame.scene.underlines.clone()
     }
 
     /// Set the content size of the window.
@@ -3345,10 +3346,10 @@ impl Window<'_> {
         style: &UnderlineStyle,
         exclusions: &[Range<ScaledPixels>],
     ) {
-        self.invalidator.debug_assert_paint();
+        self.core.invalidator.debug_assert_paint();
         let underline = self.underline(origin, width, style);
         if exclusions.is_empty() {
-            self.next_frame.scene.insert_primitive(underline);
+            self.frame_state.next_frame.scene.insert_primitive(underline);
             return;
         }
 
@@ -3366,13 +3367,13 @@ impl Window<'_> {
             })
             .collect::<SmallVec<[_; 4]>>();
         if exclusions.is_empty() {
-            self.next_frame.scene.insert_primitive(underline);
+            self.frame_state.next_frame.scene.insert_primitive(underline);
             return;
         }
         exclusions.sort_unstable_by_key(|span| span.start);
 
         let mut paint_span = |start, end| {
-            self.next_frame.scene.insert_primitive(Underline {
+            self.frame_state.next_frame.scene.insert_primitive(Underline {
                 content_mask: ContentMask {
                     bounds: Bounds::from_corners(
                         point(start, bounds.top()),
@@ -7445,10 +7446,10 @@ impl Window<'_> {
         self.core.inspector = match self.core.inspector {
             None => Some(cx.new(|_| Inspector::new())),
             Some(_) => {
-                self.rendered_frame.next_inspector_instance_ids = FxHashMap::default();
-                self.rendered_frame.inspector_hitboxes = FxHashMap::default();
-                self.next_frame.next_inspector_instance_ids = FxHashMap::default();
-                self.next_frame.inspector_hitboxes = FxHashMap::default();
+                self.frame_state.rendered_frame.next_inspector_instance_ids = FxHashMap::default();
+                self.frame_state.rendered_frame.inspector_hitboxes = FxHashMap::default();
+                self.frame_state.next_frame.next_inspector_instance_ids = FxHashMap::default();
+                self.frame_state.next_frame.inspector_hitboxes = FxHashMap::default();
                 None
             }
         };
@@ -7503,7 +7504,7 @@ impl Window<'_> {
 
     #[cfg(any(feature = "inspector", debug_assertions))]
     pub(crate) fn inspector_enabled(&self) -> bool {
-        self.inspector.is_some()
+        self.core.inspector.is_some()
     }
 
     /// Executes the provided function with mutable access to the inspector state
@@ -7516,7 +7517,7 @@ impl Window<'_> {
         &mut self,
         cx: &mut App,
         f: impl FnOnce(&mut Option<T>, &mut Self) -> R,
-    ) -> R {
+    ) -> Option<R> {
         let inspector_id = self.frame_state.inspector_element_id.clone();
         self.with_inspector_state(inspector_id.as_ref(), cx, f)
     }
