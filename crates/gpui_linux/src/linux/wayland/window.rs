@@ -3,7 +3,6 @@ use std::{
     ffi::c_void,
     ptr::NonNull,
     rc::Rc,
-    sync::Arc,
 };
 
 use collections::{FxHashMap, HashMap};
@@ -1708,7 +1707,12 @@ impl PlatformWindow for WaylandWindow {
         self.0.callbacks.borrow_mut().button_layout_changed = Some(callback);
     }
 
-    fn draw(&self, scene: &Scene) {
+    fn with_renderer(&mut self, f: &mut dyn FnMut(&mut dyn SceneRenderer)) {
+        let mut state = self.borrow_mut();
+        f(&mut state.renderer);
+    }
+
+    fn present(&mut self, f: &mut dyn FnMut(&mut dyn SceneRenderer) -> bool) {
         let mut state = self.borrow_mut();
 
         if state.renderer.device_lost() {
@@ -1750,11 +1754,6 @@ impl PlatformWindow for WaylandWindow {
         }
 
         state.renderer_presented = false;
-    }
-
-    fn sprite_atlas(&self) -> Arc<dyn PlatformAtlas> {
-        let state = self.borrow();
-        state.renderer.sprite_atlas().clone()
     }
 
     fn show_window_menu(&self, position: Point<Pixels>) {

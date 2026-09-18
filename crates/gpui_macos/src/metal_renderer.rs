@@ -1768,6 +1768,7 @@ pub struct SurfaceBounds {
 #[cfg(any(test, feature = "test-support"))]
 pub struct MetalHeadlessRenderer {
     renderer: MetalRenderer,
+    viewport_size: Size<DevicePixels>,
 }
 
 #[cfg(any(test, feature = "test-support"))]
@@ -1775,7 +1776,10 @@ impl MetalHeadlessRenderer {
     pub fn new() -> Self {
         let instance_buffer_pool = Arc::new(Mutex::new(InstanceBufferPool::default()));
         let renderer = MetalRenderer::new_headless(instance_buffer_pool);
-        Self { renderer }
+        Self {
+            renderer,
+            viewport_size: Size::default(),
+        }
     }
 }
 
@@ -1793,7 +1797,7 @@ impl gpui::PlatformHeadlessRenderer for MetalHeadlessRenderer {
         self.renderer.render_scene(scene, size)
     }
 
-    fn sprite_atlas(&self) -> Arc<dyn gpui_platform::PlatformAtlas> {
+    fn sprite_atlas(&self) -> Arc<dyn PlatformAtlas> {
         self.renderer.sprite_atlas().clone()
     }
 }

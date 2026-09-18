@@ -30,6 +30,7 @@ use windows::{
 
 use crate::direct_manipulation::DirectManipulationHandler;
 use crate::*;
+use gpui_backend::SceneRenderer;
 use gpui_platform::*;
 
 pub(crate) struct WindowsWindow(pub Rc<WindowsWindowInner>);
@@ -989,12 +990,9 @@ impl PlatformWindow for WindowsWindow {
             .set(Some(callback));
     }
 
-    fn draw(&self, scene: &Scene) {
-        self.state
-            .renderer
-            .borrow_mut()
-            .draw(scene, self.state.background_appearance.get())
-            .log_err();
+    fn with_renderer(&mut self, f: &mut dyn FnMut(&mut dyn SceneRenderer)) {
+        let mut renderer = self.state.renderer.borrow_mut();
+        f(&mut *renderer);
     }
 
     fn sprite_atlas(&self) -> Arc<dyn PlatformAtlas> {

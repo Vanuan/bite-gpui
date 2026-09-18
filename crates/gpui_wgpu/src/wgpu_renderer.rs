@@ -5,6 +5,7 @@ use gpui::{
     PolychromeSprite, PrimitiveBatch, Quad, ScaledPixels, Scene, Shadow, Size, SubpixelSprite,
     Underline, get_gamma_correction_ratios,
 };
+use gpui_platform::{Background, Bounds, DevicePixels, GpuSpecs, Point, ScaledPixels, Size};
 use log::warn;
 #[cfg(not(target_family = "wasm"))]
 use raw_window_handle::{HasDisplayHandle, HasWindowHandle};
@@ -1915,9 +1916,8 @@ impl RenderingParameters {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui_platform::{
-        MonochromeSprite, PolychromeSprite, Quad, Shadow, SubpixelSprite, Underline,
-    };
+    use gpui_backend::{MonochromeSprite, PolychromeSprite, Quad, SubpixelSprite, Underline};
+    use gpui_platform::Shadow;
 
     #[test]
     fn webgl_shader_is_valid_wgsl_without_storage_buffers() {
@@ -1955,5 +1955,15 @@ mod tests {
         assert_eq!(std::mem::size_of::<MonochromeSprite>(), 28 * 4);
         assert_eq!(std::mem::size_of::<SubpixelSprite>(), 28 * 4);
         assert_eq!(std::mem::size_of::<PolychromeSprite>(), 24 * 4);
+    }
+}
+
+impl SceneRenderer for WgpuRenderer {
+    fn draw(&mut self, scene: &Scene) -> bool {
+        WgpuRenderer::draw(self, scene)
+    }
+
+    fn sprite_atlas(&self) -> Arc<dyn PlatformAtlas> {
+        self.sprite_atlas().clone()
     }
 }
