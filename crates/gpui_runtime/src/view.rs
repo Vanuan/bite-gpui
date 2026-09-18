@@ -161,6 +161,7 @@ mod any_view {
         // attribute nodes to the view that produced them.
         #[cfg(debug_assertions)]
         window
+            .core
             .a11y
             .view_type_names
             .insert(view.entity_id(), std::any::type_name::<V>());
@@ -385,8 +386,8 @@ impl<V: View> Element for ViewElement<V> {
                             && element_state.cache_key.bounds == bounds
                             && element_state.cache_key.content_mask == content_mask
                             && element_state.cache_key.text_style == text_style
-                            && !window.dirty_views.contains(&entity_id)
-                            && !window.refreshing
+                            && !window.frame_state.dirty_views.contains(&entity_id)
+                            && !window.core.refreshing
                         {
                             let prepaint_start = window.prepaint_index();
                             window.reuse_prepaint(element_state.prepaint_range.clone());
@@ -398,7 +399,7 @@ impl<V: View> Element for ViewElement<V> {
                             return (None, element_state);
                         }
 
-                        let refreshing = mem::replace(&mut window.refreshing, true);
+                        let refreshing = mem::replace(&mut window.core.refreshing, true);
                         let prepaint_start = window.prepaint_index();
                         let (mut element, accessed_entities) = cx.detect_accessed_entities(|cx| {
                             let mut element = self
@@ -413,7 +414,7 @@ impl<V: View> Element for ViewElement<V> {
                         });
 
                         let prepaint_end = window.prepaint_index();
-                        window.refreshing = refreshing;
+                        window.core.refreshing = refreshing;
 
                         (
                             Some(element),
@@ -501,4 +502,55 @@ impl Render for EmptyView {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
         Empty
     }
+}
+
+#[inline(never)]
+fn paint_view(
+    entity_id: EntityId,
+    cached: bool,
+    global_id: Option<&GlobalElementId>,
+    element: &mut Option<AnyElement>,
+    window: &mut Window,
+    cx: &mut App,
+) {
+    window.with_rendered_view(entity_id, |window| {
+        let caching_disabled = window.is_inspector_picking(cx);
+        if cached && !caching_disabled {
+            window.with_element_state::<ViewElementState, _>(
+                global_id.unwrap(),
+                |element_state, window| {
+                    let mut element_state = element_state.unwrap();
+
+                    let paint_start = window.paint_index();
+
+                    if let Some(element) = element {
+                        let refreshing = mem::replace(&mut window.core.refreshing, true);
+                        element.paint(window, cx);
+                        window.core.refreshing = refreshing;
+                    } else {
+                        window.reuse_paint(element_state.paint_range.clone());
+                    }
+
+                    let paint_end = window.paint_index();
+                    element_state.paint_range = paint_start..paint_end;
+
+                    ((), element_state)
+                },
+            )
+        } else {
+            element.as_mut().unwrap().paint(window, cx);
+        }
+    });
+}
+
+#[inline(never)]
+fn paint_component(
+    name: &'static str,
+    element: &mut Option<AnyElement>,
+    window: &mut Window,
+    cx: &mut App,
+) {
+    window.with_id(ElementId::Name(name.into()), |window| {
+        element.as_mut().unwrap().paint(window, cx);
+    });
 }

@@ -2202,27 +2202,29 @@ impl Interactivity {
         if let Some(focus_handle) = self.tracked_focus_handle.as_ref() {
             window.set_focus_handle(focus_handle, cx);
 
-            if window.a11y.is_active() {
+            if window.core.a11y.is_active() {
                 if let Some(global_id) = global_id {
                     let node_id = global_id.accesskit_node_id();
-                    window.a11y.set_focusable(node_id, focus_handle.id);
+                    window.core.a11y.set_focusable(node_id, focus_handle.id);
                     if focus_handle.is_focused(window) {
-                        window.a11y.set_focus(node_id);
+                        window.core.a11y.set_focus(node_id);
                     }
                 } else if focus_handle.is_focused(window) {
                     // Focusable, but with no element id it can't have an
                     // accessibility node, so screen readers fall back to the
                     // whole window.
                     window
+                        .core
                         .a11y
                         .note_focus_without_node(focus_handle.id, "it has no element id");
                 }
             }
         }
 
-        if self.report_active_descendant_focus && window.a11y.is_active() {
+        if self.report_active_descendant_focus && window.core.a11y.is_active() {
             if let Some(global_id) = global_id {
                 window
+                    .core
                     .a11y
                     .set_active_descendant(global_id.accesskit_node_id());
             }
@@ -2388,6 +2390,7 @@ impl Interactivity {
                 #[cfg(any(feature = "test-support", test))]
                 if let Some(debug_selector) = &self.debug_selector {
                     window
+                        .frame_state
                         .next_frame
                         .debug_bounds
                         .insert(debug_selector.clone(), bounds);
@@ -2420,7 +2423,11 @@ impl Interactivity {
                                         // every item, and `focus_next` from a container would jump
                                         // to the first item in the whole window instead of its own.
                                         if let Some(focus_handle) = &self.tracked_focus_handle {
-                                            window.next_frame.tab_stops.insert(focus_handle);
+                                            window
+                                                .frame_state
+                                                .next_frame
+                                                .tab_stops
+                                                .insert(focus_handle);
                                         }
                                         if let Some(hitbox) = hitbox {
                                             #[cfg(debug_assertions)]
@@ -2460,7 +2467,7 @@ impl Interactivity {
 
                                         self.paint_keyboard_listeners(window, cx);
 
-                                        if window.a11y.is_active() {
+                                        if window.core.a11y.is_active() {
                                             if let Some(global_id) = global_id {
                                                 if !self.a11y_action_listeners.is_empty() {
                                                     let node_id = global_id.accesskit_node_id();
@@ -2884,7 +2891,7 @@ impl Interactivity {
                                     || stroke.key.eq("space"))
                                     && !stroke.modifiers.modified();
                                 *pending_keyboard_down.borrow_mut() =
-                                    is_activation_key.then_some(window.focus_generation);
+                                    is_activation_key.then_some(window.core.focus_generation);
                             }
                         }
                     });
@@ -2909,7 +2916,7 @@ impl Interactivity {
                                 {
                                     let pending =
                                         std::mem::take(&mut *pending_keyboard_down.borrow_mut());
-                                    if pending != Some(window.focus_generation) {
+                                    if pending != Some(window.core.focus_generation) {
                                         return;
                                     }
 
@@ -5121,5 +5128,91 @@ mod tests {
             .unwrap();
 
         assert_eq!(focused, Some(item_b.id));
+    }
+
+    #[gpui::test]
+    fn test_fractional_padding_does_not_make_a_fitting_container_scrollable(
+        cx: &mut TestAppContext,
+    ) {
+        struct PaddedContainer {
+            scroll_handle: ScrollHandle,
+        }
+
+        impl Render for PaddedContainer {
+            fn render(
+                &mut self,
+                _window: &mut Window,
+                _cx: &mut Context<Self>,
+            ) -> impl IntoElement {
+                // 4.25px of padding snaps to 4px in layout, so a 42px child
+                // fits the 50px box exactly.
+                div().size_full().child(
+                    div()
+                        .id("container")
+                        .h(px(50.))
+                        .w(px(100.))
+                        .py(px(4.25))
+                        .overflow_y_scroll()
+                        .track_scroll(&self.scroll_handle)
+                        .child(div().w_full().h(px(42.))),
+                )
+            }
+        }
+
+        let scroll_handle = ScrollHandle::new();
+        let window: AnyWindowHandle = cx
+            .add_window({
+                let scroll_handle = scroll_handle.clone();
+                move |_, _| PaddedContainer { scroll_handle }
+            })
+            .into();
+        cx.update_window(window, |_, window, cx| window.draw(cx).clear(cx))
+            .unwrap();
+
+        assert_eq!(scroll_handle.max_offset().y, px(0.));
+    }
+
+    struct ContentSizedGrid;
+
+    impl Render for ContentSizedGrid {
+        fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
+            let widths = [px(100.), px(200.), px(50.)];
+            div().size_full().child(
+                div()
+                    .w_full()
+                    .grid()
+                    .grid_cols_max_content(widths.len() as u16)
+                    .children(widths.into_iter().enumerate().map(|(index, width)| {
+                        div()
+                            .debug_selector(move || format!("cell-{index}"))
+                            .w(width)
+                            .h(px(10.))
+                    })),
+            )
+        }
+    }
+
+    #[gpui::test]
+    fn grid_cols_max_content_sizes_columns_to_their_content(cx: &mut TestAppContext) {
+        let window = cx.add_window(|_, _| ContentSizedGrid);
+        cx.update_window(window.into(), |_, window, cx| window.draw(cx).clear(cx))
+            .unwrap();
+
+        let mut bounds = |selector: &'static str| {
+            cx.update_window(window.into(), |_, window, _| {
+                window
+                    .frame_state
+                    .rendered_frame
+                    .debug_bounds
+                    .get(selector)
+                    .copied()
+            })
+            .unwrap()
+            .unwrap_or_else(|| panic!("{selector} was not rendered"))
+        };
+
+        assert_eq!(bounds("cell-0").origin.x, px(0.));
+        assert_eq!(bounds("cell-1").origin.x, px(100.));
+        assert_eq!(bounds("cell-2").origin.x, px(300.));
     }
 }
