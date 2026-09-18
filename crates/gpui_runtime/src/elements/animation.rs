@@ -3,7 +3,7 @@ use std::{rc::Rc, time::Duration};
 
 use crate::{
     AnyElement, App, Element, ElementId, GlobalElementId, InspectorElementId, IntoElement,
-    ParentElement, Window,
+    ParentElement, SpringAnimation, SpringConfig, SpringPlayback, SpringState, SpringTarget, Window,
 };
 
 pub use easing::*;
@@ -142,6 +142,146 @@ impl<E: IntoElement + 'static> IntoElement for AnimationElement<E> {
 struct AnimationState {
     start: Instant,
     animation_ix: usize,
+    /// Whether a throttled re-render (see [`Animation::with_max_fps`]) is
+    /// already scheduled, so overlapping renders don't stack extra timers.
+    delayed_frame_pending: Rc<Cell<bool>>,
+}
+
+struct SpringElementState {
+    spring: SpringState,
+    target: f32,
+    config: SpringConfig,
+    initial: f32,
+    playback: SpringPlayback,
+    updated_at: Instant,
+}
+
+impl<E: IntoElement + 'static> Element for SpringAnimationElement<E> {
+    type RequestLayoutState = AnyElement;
+    type PrepaintState = ();
+
+    fn id(&self) -> Option<ElementId> {
+        Some(self.id.clone())
+    }
+
+    fn source_location(&self) -> Option<&'static core::panic::Location<'static>> {
+        None
+    }
+
+    fn request_layout(
+        &mut self,
+        global_id: Option<&GlobalElementId>,
+        window: &mut Window,
+        cx: &mut App,
+    ) -> (crate::LayoutId, Self::RequestLayoutState) {
+        window.with_element_state(global_id.unwrap(), |state, window| {
+            let now = Instant::now();
+            let initial = self.initial.unwrap_or(self.target);
+            let mut state = state.unwrap_or_else(|| SpringElementState {
+                spring: SpringState {
+                    position: initial,
+                    velocity: 0.0,
+                },
+                target: self.target,
+                config: self.config,
+                initial,
+                playback: self.playback,
+                updated_at: now,
+            });
+
+            let elapsed = now.duration_since(state.updated_at).as_secs_f32();
+            match state.playback {
+                SpringPlayback::Running => {
+                    state.spring = state.config.step(state.spring, state.target, elapsed);
+                }
+                SpringPlayback::Paused
+                | SpringPlayback::Stopped
+                | SpringPlayback::Completed
+                | SpringPlayback::Cancelled => {}
+            }
+
+            state.config = self.config;
+            state.target = self.target;
+
+            let done = match self.playback {
+                SpringPlayback::Running => {
+                    if cx.reduce_motion() {
+                        state.spring = SpringState {
+                            position: state.target,
+                            velocity: 0.0,
+                        };
+                        true
+                    } else {
+                        let done =
+                            state
+                                .config
+                                .is_settled(state.spring, state.target, self.epsilon);
+                        if done {
+                            state.spring = SpringState {
+                                position: state.target,
+                                velocity: 0.0,
+                            };
+                        }
+                        done
+                    }
+                }
+                SpringPlayback::Paused => true,
+                SpringPlayback::Stopped => {
+                    state.spring.velocity = 0.0;
+                    true
+                }
+                SpringPlayback::Completed => {
+                    state.spring = SpringState {
+                        position: state.target,
+                        velocity: 0.0,
+                    };
+                    true
+                }
+                SpringPlayback::Cancelled => {
+                    state.spring = SpringState {
+                        position: state.initial,
+                        velocity: 0.0,
+                    };
+                    true
+                }
+            };
+            state.playback = self.playback;
+            state.updated_at = now;
+
+            let element = self.element.take().expect("should only be called once");
+            let animator = self.animator.take().expect("should only be called once");
+            let mut element = animator(element, state.spring.position).into_any_element();
+
+            if !done {
+                window.request_animation_frame();
+            }
+
+            ((element.request_layout(window, cx), element), state)
+        })
+    }
+
+    fn prepaint(
+        &mut self,
+        _id: Option<&GlobalElementId>,
+        _bounds: crate::Bounds<crate::Pixels>,
+        element: &mut Self::RequestLayoutState,
+        window: &mut Window,
+        cx: &mut App,
+    ) -> Self::PrepaintState {
+        element.prepaint(window, cx);
+    }
+
+    fn paint(
+        &mut self,
+        _id: Option<&GlobalElementId>,
+        _bounds: crate::Bounds<crate::Pixels>,
+        element: &mut Self::RequestLayoutState,
+        _: &mut Self::PrepaintState,
+        window: &mut Window,
+        cx: &mut App,
+    ) {
+        element.paint(window, cx);
+    }
 }
 
 impl<E: IntoElement + 'static> Element for AnimationElement<E> {
@@ -159,7 +299,6 @@ impl<E: IntoElement + 'static> Element for AnimationElement<E> {
     fn request_layout(
         &mut self,
         global_id: Option<&GlobalElementId>,
-        _inspector_id: Option<&InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (crate::LayoutId, Self::RequestLayoutState) {
@@ -226,7 +365,6 @@ impl<E: IntoElement + 'static> Element for AnimationElement<E> {
     fn prepaint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&InspectorElementId>,
         _bounds: crate::Bounds<crate::Pixels>,
         element: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -238,7 +376,6 @@ impl<E: IntoElement + 'static> Element for AnimationElement<E> {
     fn paint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&InspectorElementId>,
         _bounds: crate::Bounds<crate::Pixels>,
         element: &mut Self::RequestLayoutState,
         _: &mut Self::PrepaintState,
