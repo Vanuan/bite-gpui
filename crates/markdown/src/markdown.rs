@@ -2469,7 +2469,6 @@ impl Element for MarkdownElement {
     fn request_layout(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -3218,7 +3217,6 @@ impl Element for MarkdownElement {
     fn prepaint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         bounds: Bounds<Pixels>,
         rendered_markdown: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -3237,7 +3235,6 @@ impl Element for MarkdownElement {
     fn paint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         rendered_markdown: &mut Self::RequestLayoutState,
         hitbox: &mut Self::PrepaintState,
@@ -4138,7 +4135,6 @@ impl Element for HighlightedLine {
     fn request_layout(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -4148,7 +4144,6 @@ impl Element for HighlightedLine {
     fn prepaint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -4160,7 +4155,6 @@ impl Element for HighlightedLine {
     fn paint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         _prepaint: &mut Self::PrepaintState,
@@ -4862,46 +4856,35 @@ mod tests {
         fn request_layout(
             &mut self,
             id: Option<&GlobalElementId>,
-            inspector_id: Option<&gpui::InspectorElementId>,
             window: &mut Window,
             cx: &mut App,
         ) -> (gpui::LayoutId, Self::RequestLayoutState) {
-            self.markdown_element
-                .request_layout(id, inspector_id, window, cx)
+            self.markdown_element.request_layout(id, window, cx)
         }
 
         fn prepaint(
             &mut self,
             id: Option<&GlobalElementId>,
-            inspector_id: Option<&gpui::InspectorElementId>,
             bounds: Bounds<Pixels>,
             rendered_markdown: &mut Self::RequestLayoutState,
             window: &mut Window,
             cx: &mut App,
         ) -> Self::PrepaintState {
             self.markdown_element
-                .prepaint(id, inspector_id, bounds, rendered_markdown, window, cx)
+                .prepaint(id, bounds, rendered_markdown, window, cx)
         }
 
         fn paint(
             &mut self,
             id: Option<&GlobalElementId>,
-            inspector_id: Option<&gpui::InspectorElementId>,
             bounds: Bounds<Pixels>,
             rendered_markdown: &mut Self::RequestLayoutState,
             hitbox: &mut Self::PrepaintState,
             window: &mut Window,
             cx: &mut App,
         ) {
-            self.markdown_element.paint(
-                id,
-                inspector_id,
-                bounds,
-                rendered_markdown,
-                hitbox,
-                window,
-                cx,
-            );
+            self.markdown_element
+                .paint(id, bounds, rendered_markdown, hitbox, window, cx);
             *self.rendered_text.borrow_mut() = Some(rendered_markdown.text.clone());
         }
     }
