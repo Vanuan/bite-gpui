@@ -12,11 +12,7 @@ mod test;
 #[cfg(all(target_os = "macos", any(test, feature = "test-support")))]
 mod visual_test;
 
-use crate::{
-    Action, App, AsyncWindowContext, Bounds, BoundsExt, ClipboardItem, Image, ImageFormat, ImageSource, MissingGlyphSink, Pixels, PlatformAtlas, PlatformDisplay, PlatformGestures, PlatformInputHandler, PlatformInputHandlerDelegate, PlatformKeyboardLayout,
-    PlatformKeyboardMapper, PlatformTextSystem, PlatformWindow,
-    Point, RenderImage, ScreenCaptureSource, Size, SvgRenderer, TextInputConfiguration, UTF16Selection, Window, WindowBounds,
-};
+use crate::{App, AsyncWindowContext, Bounds, BoundsExt, ClipboardItem, Image, ImageFormat, ImageSource, Pixels, PlatformInputHandler, PlatformInputHandlerDelegate, Point, RenderImage, Size, SvgRenderer, TextInputConfiguration, UTF16Selection, Window, WindowBounds};
 use anyhow::{Context as _, Result};
 use image::codecs::gif::GifDecoder;
 use image::{AnimationDecoder as _, DynamicImage, Frame};
