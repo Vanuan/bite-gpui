@@ -585,7 +585,7 @@ unsafe fn apply_simple_fullscreen_plan(
 }
 
 struct MacWindowState {
-    handle: AnyWindowHandle,
+    handle: WindowId,
     foreground_executor: ForegroundExecutor,
     background_executor: BackgroundExecutor,
     native_window: id,
@@ -597,7 +597,7 @@ struct MacWindowState {
     frame_source: Option<WindowFrameSource>,
     renderer: renderer::Renderer,
     request_frame_callback: Option<Box<dyn FnMut(RequestFrameOptions)>>,
-    event_callback: Option<Box<dyn FnMut(PlatformInput) -> gpui::DispatchEventResult>>,
+    event_callback: Option<Box<dyn FnMut(PlatformInput) -> gpui_platform::DispatchEventResult>>,
     activate_callback: Option<Box<dyn FnMut(bool)>>,
     resize_callback: Option<Box<dyn FnMut(Size<Pixels>, f32)>>,
     moved_callback: Option<Box<dyn FnMut()>>,
@@ -832,7 +832,7 @@ impl MacWindowState {
         let mut window_frame = unsafe { NSWindow::frame(self.native_window) };
         let screen = unsafe { NSWindow::screen(self.native_window) };
         if screen == nil {
-            return Bounds::new(point(px(0.), px(0.)), gpui::DEFAULT_WINDOW_SIZE);
+            return Bounds::new(point(px(0.), px(0.)), gpui_platform::DEFAULT_WINDOW_SIZE);
         }
         let screen_frame = unsafe { NSScreen::frame(screen) };
 
@@ -877,7 +877,7 @@ pub(crate) struct MacWindow(Arc<Mutex<MacWindowState>>);
 
 impl MacWindow {
     pub fn open(
-        handle: AnyWindowHandle,
+        handle: WindowId,
         WindowParams {
             bounds,
             titlebar,
@@ -1228,7 +1228,7 @@ impl MacWindow {
         }
     }
 
-    pub fn active_window() -> Option<AnyWindowHandle> {
+    pub fn active_window() -> Option<WindowId> {
         unsafe {
             let app = NSApplication::sharedApplication(nil);
             let main_window: id = msg_send![app, mainWindow];
@@ -1245,7 +1245,7 @@ impl MacWindow {
         }
     }
 
-    pub fn ordered_windows() -> Vec<AnyWindowHandle> {
+    pub fn ordered_windows() -> Vec<WindowId> {
         unsafe {
             let app = NSApplication::sharedApplication(nil);
             let windows: id = msg_send![app, orderedWindows];
@@ -1809,7 +1809,10 @@ impl PlatformWindow for MacWindow {
         self.0.as_ref().lock().request_frame_callback = Some(callback);
     }
 
-    fn on_input(&self, callback: Box<dyn FnMut(PlatformInput) -> gpui::DispatchEventResult>) {
+    fn on_input(
+        &self,
+        callback: Box<dyn FnMut(PlatformInput) -> gpui_platform::DispatchEventResult>,
+    ) {
         self.0.as_ref().lock().event_callback = Some(callback);
     }
 
@@ -1898,7 +1901,7 @@ impl PlatformWindow for MacWindow {
         self.0.as_ref().lock().toggle_tab_bar_callback = Some(callback);
     }
 
-    fn draw(&self, scene: &gpui::Scene) {
+    fn draw(&self, scene: &gpui_platform::Scene) {
         let mut this = self.0.lock();
         this.renderer.draw(scene);
     }
@@ -1907,7 +1910,7 @@ impl PlatformWindow for MacWindow {
         self.0.lock().renderer.sprite_atlas().clone()
     }
 
-    fn gpu_specs(&self) -> Option<gpui::GpuSpecs> {
+    fn gpu_specs(&self) -> Option<gpui_platform::GpuSpecs> {
         None
     }
 
@@ -2135,12 +2138,12 @@ impl PlatformWindow for MacWindow {
     }
 
     #[cfg(any(test, feature = "test-support"))]
-    fn render_to_image(&self, scene: &gpui::Scene) -> Result<RgbaImage> {
+    fn render_to_image(&self, scene: &gpui_platform::Scene) -> Result<RgbaImage> {
         let mut this = self.0.lock();
         this.renderer.render_to_image(scene)
     }
 
-    fn a11y_init(&self, callbacks: gpui::A11yCallbacks) {
+    fn a11y_init(&self, callbacks: gpui_platform::A11yCallbacks) {
         let mut lock = self.0.lock();
 
         let activation_handler = A11yActivationHandler {

@@ -17,7 +17,7 @@ tracy = ["ztracing/tracy"]
 track-project-leak = ["gpui/leak-detection"]
 test-support = [
     "gpui/test-support",
-    "gpui_platform/screen-capture",
+    "gpui/screen-capture",
     "dep:image",
     "workspace/test-support",
     "project/test-support",
@@ -30,8 +30,7 @@ test-support = [
 ]
 visual-tests = [
     "gpui/test-support",
-    "gpui_platform/screen-capture",
-    "gpui_platform/test-support",
+    "gpui/screen-capture",
     "dep:image",
     "dep:tempfile",
     "dep:action_log",

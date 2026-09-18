@@ -252,6 +252,215 @@ impl ShapedLine {
     }
 }
 
+/// Incrementally splits a [`ShapedLine`] at increasing UTF-8 byte boundaries.
+///
+/// Each piece preserves the original glyphs and decorations, rebased as in
+/// [`ShapedLine::split_at`]. Byte-ordered glyphs are advanced in linear time,
+/// copying each glyph and byte at most once; visually reordered glyphs fall
+/// back to the existing split operation.
+pub struct ShapedLineCursor<'a> {
+    line: &'a ShapedLine,
+    /// Bidirectional shaping can put glyphs out of byte order.
+    unordered_remainder: Option<ShapedLine>,
+    byte_index: usize,
+    run_index: usize,
+    glyph_index: usize,
+    decoration_index: usize,
+    decoration_offset: u32,
+    x_offset: Pixels,
+}
+
+impl<'a> ShapedLineCursor<'a> {
+    /// Takes the bytes since the previous boundary.
+    ///
+    /// Panics if the boundary precedes the previous one, exceeds the line's
+    /// length, or falls inside a UTF-8 character.
+    pub fn take_until(&mut self, byte_index: usize) -> ShapedLine {
+        assert!(
+            byte_index >= self.byte_index,
+            "split boundary moved backwards"
+        );
+        assert!(
+            byte_index <= self.line.len(),
+            "split boundary exceeds line length"
+        );
+        assert!(
+            self.line.text.is_char_boundary(byte_index),
+            "split boundary is not a UTF-8 character boundary"
+        );
+        let previous_index = self.byte_index;
+        let previous_x = self.x_offset;
+        if let Some(remainder) = &mut self.unordered_remainder {
+            let (piece, rest) = remainder.split_at(byte_index - previous_index);
+            *remainder = rest;
+            self.byte_index = byte_index;
+            self.x_offset = self.line.layout.x_for_index(byte_index);
+            return piece;
+        }
+        let mut runs = Vec::new();
+        let mut next_x = self.line.layout.width;
+        while let Some(run) = self.line.layout.runs.get(self.run_index) {
+            let start = self.glyph_index;
+            while let Some(glyph) = run.glyphs.get(self.glyph_index) {
+                if glyph.index >= byte_index {
+                    break;
+                }
+                self.glyph_index += 1;
+            }
+            let end = self.glyph_index;
+            if start < end {
+                runs.push(crate::ShapedRun {
+                    font_id: run.font_id,
+                    glyphs: run.glyphs[start..end]
+                        .iter()
+                        .map(|glyph| crate::ShapedGlyph {
+                            id: glyph.id,
+                            position: point(glyph.position.x - previous_x, glyph.position.y),
+                            index: glyph.index - previous_index,
+                            is_emoji: glyph.is_emoji,
+                        })
+                        .collect(),
+                });
+            }
+            if let Some(glyph) = run.glyphs.get(self.glyph_index) {
+                next_x = glyph.position.x;
+                break;
+            }
+            self.run_index += 1;
+            self.glyph_index = 0;
+        }
+        let mut decorations = SmallVec::new();
+        while let Some(decoration) = self.line.decoration_runs.get(self.decoration_index)
+            && (self.decoration_offset < byte_index as u32
+                || (decoration.len == 0 && self.decoration_offset == byte_index as u32))
+        {
+            let end = self.decoration_offset + decoration.len;
+            let start = self.decoration_offset.max(previous_index as u32);
+            let len = end.min(byte_index as u32) - start;
+            if len > 0 || decoration.len == 0 {
+                decorations.push(DecorationRun {
+                    len,
+                    color: decoration.color,
+                    background_color: decoration.background_color,
+                    underline: decoration.underline,
+                    strikethrough: decoration.strikethrough,
+                });
+            }
+            if end <= byte_index as u32 {
+                self.decoration_index += 1;
+                self.decoration_offset = end;
+            } else {
+                break;
+            }
+        }
+        self.byte_index = byte_index;
+        self.x_offset = next_x;
+        ShapedLine {
+            layout: Arc::new(LineLayout {
+                font_size: self.line.layout.font_size,
+                width: next_x - previous_x,
+                ascent: self.line.layout.ascent,
+                descent: self.line.layout.descent,
+                runs,
+                len: byte_index - previous_index,
+            }),
+            text: SharedString::new(&self.line.text[previous_index..byte_index]),
+            decoration_runs: decorations,
+        }
+    }
+
+    /// Returns the original line's x position at the current boundary.
+    pub fn x_offset(&self) -> Pixels {
+        self.x_offset
+    }
+}
+
+/// Extension methods for painting a bare [`LineLayout`].
+///
+/// These live in `gpui` rather than `gpui_platform` because they need
+/// [`Window`] and [`App`].
+pub trait LineLayoutExt {
+    /// Paint this layout to the window, using the given decoration runs to color
+    /// glyphs and draw underlines and strikethroughs.
+    ///
+    /// This is a lower-level alternative to [`ShapedLine::paint`] for callers that
+    /// hold a bare layout and track decorations themselves.
+    fn paint(
+        &self,
+        origin: Point<Pixels>,
+        line_height: Pixels,
+        align: TextAlign,
+        align_width: Option<Pixels>,
+        decoration_runs: &[DecorationRun],
+        window: &mut Window,
+        cx: &mut App,
+    ) -> Result<()>;
+
+    /// Paint the background of this layout to the window, using the given
+    /// decoration runs to determine background colors.
+    ///
+    /// This is a lower-level alternative to [`ShapedLine::paint_background`] for
+    /// callers that hold a bare layout and track decorations themselves.
+    fn paint_background(
+        &self,
+        origin: Point<Pixels>,
+        line_height: Pixels,
+        align: TextAlign,
+        align_width: Option<Pixels>,
+        decoration_runs: &[DecorationRun],
+        window: &mut Window,
+        cx: &mut App,
+    ) -> Result<()>;
+}
+
+impl LineLayoutExt for LineLayout {
+    fn paint(
+        &self,
+        origin: Point<Pixels>,
+        line_height: Pixels,
+        align: TextAlign,
+        align_width: Option<Pixels>,
+        decoration_runs: &[DecorationRun],
+        window: &mut Window,
+        cx: &mut App,
+    ) -> Result<()> {
+        paint_line(
+            origin,
+            self,
+            line_height,
+            align,
+            align_width,
+            decoration_runs,
+            &[],
+            window,
+            cx,
+        )
+    }
+
+    fn paint_background(
+        &self,
+        origin: Point<Pixels>,
+        line_height: Pixels,
+        align: TextAlign,
+        align_width: Option<Pixels>,
+        decoration_runs: &[DecorationRun],
+        window: &mut Window,
+        cx: &mut App,
+    ) -> Result<()> {
+        paint_line_background(
+            origin,
+            self,
+            line_height,
+            align,
+            align_width,
+            decoration_runs,
+            &[],
+            window,
+            cx,
+        )
+    }
+}
+
 /// A line of text that has been shaped, decorated, and wrapped by the text layout system.
 #[derive(Default, Debug, Deref, DerefMut)]
 pub struct WrappedLine {

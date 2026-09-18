@@ -17,7 +17,7 @@ test-support = ["gpui/test-support"]
 runtime_shaders = []
 
 [dependencies]
-gpui.workspace = true
+gpui_platform.workspace = true
 
 [target.'cfg(target_os = "macos")'.dependencies]
 anyhow.workspace = true
