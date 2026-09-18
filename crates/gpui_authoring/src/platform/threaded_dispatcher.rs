@@ -284,7 +284,7 @@ impl ThreadedDispatcher {
     /// drains — deferred work that re-queues itself (idle sweeps, pollers)
     /// must not extend a benchmark's measured interval past the completion it
     /// awaits.
-    #[cfg(test)]
+#[cfg(any(test, feature = "bench-support"))]
     pub(crate) fn run_until<R>(&self, ready: impl FnMut() -> Option<R>) -> R {
         self.run_until_with_frames(ready, || false)
     }

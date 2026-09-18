@@ -3678,7 +3678,7 @@ impl Window<'_> {
     }
 
     /// Presents the most recently drawn frame if it hasn't been presented yet.
-    #[cfg(all(test, feature = "profiler"))]
+#[cfg(any(test, feature = "bench-support"))]
     pub(crate) fn present_if_needed(&mut self) {
         if self.core.needs_present.get() {
             self.present();
