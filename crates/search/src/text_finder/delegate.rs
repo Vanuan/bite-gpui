@@ -170,7 +170,7 @@ fn multibuffer_ranges_to_search_matches<'a>(
 async fn stream_plunder_to_picker(
     project_search_view: Entity<ProjectSearchView>,
     cancel_flag: Arc<AtomicBool>,
-    picker: gpui::WeakEntity<Picker<Delegate>>,
+    picker: gpui_runtime::WeakEntity<Picker<Delegate>>,
     cx: &mut AsyncApp,
 ) {
     let chunk_size = 1000;
@@ -257,7 +257,7 @@ impl InProgressSearch {
 impl Delegate {
     pub fn hook_up_any_ongoing_search(
         &mut self,
-        picker: gpui::WeakEntity<Picker<Delegate>>,
+        picker: gpui_runtime::WeakEntity<Picker<Delegate>>,
         cx: &App,
     ) {
         let cancel_flag = Arc::clone(&self.cancel_flag);
@@ -786,7 +786,7 @@ impl PickerDelegate for Delegate {
         _window: &mut Window,
         _cx: &mut Context<Picker<Self>>,
     ) -> Vec<picker::PickerAction> {
-        use gpui::Action as _;
+        use gpui_runtime::Action as _;
         vec![
             picker::PickerAction::header("Split…"),
             picker::PickerAction::button(
@@ -1121,7 +1121,7 @@ impl Delegate {
                                                 !is_collapsed,
                                             )
                                             .tooltip(move |_window, cx| {
-                                                let (label, action): (_, &dyn gpui::Action) =
+                                                let (label, action): (_, &dyn gpui_runtime::Action) =
                                                     if is_collapsed {
                                                         ("Unfold", &Unfold)
                                                     } else {
@@ -1227,7 +1227,7 @@ enum ImportedMatches {
 async fn stream_results_to_picker(
     cancel_flag: Arc<AtomicBool>,
     text_finder_turning_into_project_search: Arc<AtomicBool>,
-    picker: gpui::WeakEntity<Picker<Delegate>>,
+    picker: gpui_runtime::WeakEntity<Picker<Delegate>>,
     search_results: SearchResults<SearchResult>,
     imported_matches: ImportedMatches,
     cx: &mut AsyncApp,
@@ -1422,7 +1422,7 @@ fn render_matched_line(search_match: &SearchMatch, cx: &App) -> StyledText {
         search_match_style,
     );
 
-    let highlights = gpui::combine_highlights(syntax_highlights, [match_highlight]);
+    let highlights = gpui_runtime::combine_highlights(syntax_highlights, [match_highlight]);
 
     StyledText::new(line_text.to_string()).with_default_highlights(&text_style, highlights)
 }
@@ -1526,7 +1526,7 @@ mod tests {
         Project::test(fs, [path!("/dir").as_ref()], cx).await
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_finder_caps_matches_on_long_line(cx: &mut TestAppContext) {
         use workspace::MultiWorkspace;
 
@@ -1572,7 +1572,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_builds_one_match_per_occurrence(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1608,8 +1608,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_matched_line_window_is_bounded(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_matched_line_window_is_bounded(cx: &mut gpui_runtime::TestAppContext) {
         let long_line = "abcdefghij".repeat(1_000_000);
         let buffer = cx.new(|cx| language::Buffer::local(long_line, cx));
         buffer.read_with(cx, |buffer, _| {

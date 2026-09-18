@@ -2059,7 +2059,7 @@ impl FakeLanguageServer {
     where
         T: 'static + request::Request,
         T::Params: 'static + Send,
-        F: 'static + Send + FnMut(T::Params, gpui::AsyncApp) -> Fut,
+        F: 'static + Send + FnMut(T::Params, gpui_runtime::AsyncApp) -> Fut,
         Fut: 'static + Future<Output = Result<T::Result>>,
     {
         let (responded_tx, responded_rx) = futures::channel::mpsc::unbounded();
@@ -2092,7 +2092,7 @@ impl FakeLanguageServer {
     where
         T: 'static + notification::Notification,
         T::Params: 'static + Send,
-        F: 'static + Send + FnMut(T::Params, gpui::AsyncApp),
+        F: 'static + Send + FnMut(T::Params, gpui_runtime::AsyncApp),
     {
         let (handled_tx, handled_rx) = futures::channel::mpsc::unbounded();
         self.server.remove_notification_handler::<T>();
@@ -2153,7 +2153,7 @@ impl FakeLanguageServer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use std::str::FromStr;
 
     #[ctor::ctor(unsafe)]
@@ -2161,7 +2161,7 @@ mod tests {
         zlog::init_test();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_fake(cx: &mut TestAppContext) {
         cx.update(|cx| {
             release_channel::init(semver::Version::new(0, 0, 0), cx);
@@ -2247,7 +2247,7 @@ mod tests {
         fake.receive_notification::<notification::Exit>().await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_subscription_leaks_handlers_after_server_drop(cx: &mut TestAppContext) {
         cx.update(|cx| {
             release_channel::init(semver::Version::new(0, 0, 0), cx);
@@ -2316,7 +2316,7 @@ mod tests {
         assert!(retained_payload_handle.upgrade().is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_unit_params_request_with_empty_object_params(cx: &mut TestAppContext) {
         cx.update(|cx| {
             release_channel::init(semver::Version::new(0, 0, 0), cx);
@@ -2361,7 +2361,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_unit_result_response_with_empty_object(cx: &mut TestAppContext) {
         cx.update(|cx| {
             release_channel::init(semver::Version::new(0, 0, 0), cx);
@@ -2396,7 +2396,7 @@ mod tests {
         assert_eq!(response.into_response().unwrap(), ());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_deserialize_string_digit_id() {
         let json = r#"{"jsonrpc":"2.0","id":"2","method":"workspace/configuration","params":{"items":[{"scopeUri":"file:///Users/mph/Devel/personal/hello-scala/","section":"metals"}]}}"#;
         let notification = serde_json::from_str::<NotificationOrRequest>(json)
@@ -2405,7 +2405,7 @@ mod tests {
         assert_eq!(notification.id, Some(expected_id));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_deserialize_string_id() {
         let json = r#"{"jsonrpc":"2.0","id":"anythingAtAll","method":"workspace/configuration","params":{"items":[{"scopeUri":"file:///Users/mph/Devel/personal/hello-scala/","section":"metals"}]}}"#;
         let notification = serde_json::from_str::<NotificationOrRequest>(json)
@@ -2414,7 +2414,7 @@ mod tests {
         assert_eq!(notification.id, Some(expected_id));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_deserialize_int_id() {
         let json = r#"{"jsonrpc":"2.0","id":2,"method":"workspace/configuration","params":{"items":[{"scopeUri":"file:///Users/mph/Devel/personal/hello-scala/","section":"metals"}]}}"#;
         let notification = serde_json::from_str::<NotificationOrRequest>(json)
@@ -2475,7 +2475,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_default_initialize_params(cx: &mut TestAppContext) {
         cx.update(|cx| {
             release_channel::init(semver::Version::new(0, 0, 0), cx);

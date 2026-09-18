@@ -681,11 +681,11 @@ fn get_language(editor: WeakEntity<Editor>, cx: &mut App) -> Option<Arc<Language
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::App;
+    use gpui_runtime::App;
     use indoc::indoc;
     use language::{Buffer, Language, LanguageConfig, LanguageRegistry};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_snippet_ranges(cx: &mut App) {
         // Create a test language
         let test_language = Arc::new(Language::new(
@@ -751,7 +751,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_jupytext_snippet_ranges(cx: &mut App) {
         // Create a test language
         let test_language = Arc::new(Language::new(
@@ -829,7 +829,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_markdown_code_blocks(cx: &mut App) {
         use crate::kernels::LocalKernelSpecification;
         use jupyter_protocol::JupyterKernelspec;
@@ -1010,7 +1010,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_skip_blank_lines_to_next_cell(cx: &mut App) {
         let test_language = Arc::new(Language::new(
             LanguageConfig {

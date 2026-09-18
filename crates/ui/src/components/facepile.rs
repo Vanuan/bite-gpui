@@ -19,7 +19,7 @@ use super::Avatar;
 /// A default, horizontal facepile.
 ///
 /// ```
-/// use gpui::IntoElement;
+/// use gpui_runtime::IntoElement;
 /// use ui::{Avatar, Facepile, EXAMPLE_FACES};
 ///
 /// let facepile = Facepile::new(

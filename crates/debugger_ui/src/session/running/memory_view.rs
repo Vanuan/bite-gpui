@@ -141,7 +141,7 @@ impl ViewState {
 }
 
 impl ScrollableHandle for ViewStateHandle {
-    fn max_offset(&self) -> gpui::Point<Pixels> {
+    fn max_offset(&self) -> gpui_types::Point<Pixels> {
         self.0.borrow().scroll_handle.max_offset()
     }
 
@@ -153,7 +153,7 @@ impl ScrollableHandle for ViewStateHandle {
         self.0.borrow().scroll_handle.offset()
     }
 
-    fn viewport(&self) -> gpui::Bounds<Pixels> {
+    fn viewport(&self) -> gpui_types::Bounds<Pixels> {
         self.0.borrow().scroll_handle.viewport()
     }
 }
@@ -370,7 +370,7 @@ impl MemoryView {
         )
         .style(ui::DropdownStyle::Outlined)
         .handle(self.width_picker_handle.clone())
-        .attach(gpui::Anchor::BottomLeft)
+        .attach(gpui_types::Anchor::BottomLeft)
     }
 
     fn page_down(&mut self, _: &menu::SelectLast, _: &mut Window, cx: &mut Context<Self>) {
@@ -693,7 +693,7 @@ static WIDTHS: [ViewWidth; 7] = [
 fn render_single_memory_view_line(
     memory: &[MemoryCell],
     ix: u64,
-    weak: gpui::WeakEntity<MemoryView>,
+    weak: gpui_runtime::WeakEntity<MemoryView>,
     cx: &mut App,
 ) -> AnyElement {
     let Ok(view_state) = weak.update(cx, |this, _| this.view_state().clone()) else {
@@ -913,7 +913,7 @@ impl Render for MemoryView {
                         deferred(
                             anchored()
                                 .position(*position)
-                                .anchor(gpui::Anchor::TopLeft)
+                                .anchor(gpui_types::Anchor::TopLeft)
                                 .child(menu.clone()),
                         )
                         .with_priority(1)

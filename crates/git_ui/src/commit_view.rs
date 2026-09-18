@@ -643,7 +643,7 @@ impl CommitView {
     fn render_commit_avatar(
         &self,
         sha: &SharedString,
-        size: impl Into<gpui::AbsoluteLength>,
+        size: impl Into<gpui_types::AbsoluteLength>,
         window: &mut Window,
         cx: &mut App,
     ) -> AnyElement {
@@ -1233,7 +1233,7 @@ impl Item for CommitView {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<SplittableEditor>() {
@@ -1252,7 +1252,7 @@ impl Item for CommitView {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.editor.read(cx).for_each_project_item(cx, f)
     }

@@ -1,4 +1,4 @@
-use gpui::StyledText;
+use gpui_runtime::StyledText;
 use language::HighlightId;
 
 use super::*;

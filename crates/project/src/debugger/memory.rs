@@ -15,7 +15,7 @@
 
 use std::{collections::BTreeMap, ops::RangeInclusive, sync::Arc};
 
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use smallvec::SmallVec;
 
 const PAGE_SIZE: u64 = 4096;

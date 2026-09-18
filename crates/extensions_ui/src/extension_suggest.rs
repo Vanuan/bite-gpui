@@ -452,7 +452,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_language_suggestion_for_supported_language(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -465,7 +465,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_language_suggestion_when_language_is_detected_after_editor(
         cx: &mut TestAppContext,
     ) {
@@ -497,7 +497,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_suggestion_for_buffer_without_active_editor(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -516,7 +516,7 @@ mod tests {
         assert_eq!(notification_ids(&workspace, cx), Vec::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_language_suggestion_for_unsupported_language(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -526,7 +526,7 @@ mod tests {
         assert_eq!(notification_ids(&workspace, cx), Vec::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_suggestion_after_dismissal(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(|cx| dismiss_suggestion(EMMET_EXTENSION_ID, cx));
@@ -538,7 +538,7 @@ mod tests {
         assert_eq!(notification_ids(&workspace, cx), Vec::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dismissal_applies_to_already_open_workspace(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -560,7 +560,7 @@ mod tests {
         assert_eq!(notification_ids(&workspace, cx), Vec::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_suggestion_when_installed(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         install_emmet_on_disk(&app_state, cx).await;
@@ -571,7 +571,7 @@ mod tests {
         assert_eq!(notification_ids(&workspace, cx), Vec::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dont_show_again_dismisses_card_in_all_workspaces(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -594,7 +594,7 @@ mod tests {
         assert_eq!(notification_ids(&other_workspace, cx), Vec::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_visible_suggestion_survives_unrelated_extension_install(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -610,7 +610,7 @@ mod tests {
         assert_eq!(still_shown[0].entity_id(), shown[0].entity_id());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_visible_suggestion_is_dismissed_when_extension_gets_installed(
         cx: &mut TestAppContext,
     ) {
@@ -628,7 +628,7 @@ mod tests {
         assert_eq!(notification_ids(&workspace, cx), Vec::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggestion_returns_after_uninstall(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         install_emmet_on_disk(&app_state, cx).await;
@@ -670,7 +670,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_suggestion_while_install_is_pending(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -701,7 +701,7 @@ mod tests {
         assert_eq!(notification_ids(&workspace, cx), Vec::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggestion_returns_after_failed_install(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(|cx| {
@@ -726,7 +726,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggestion_returns_after_uninstall_through_store(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         install_emmet_on_disk(&app_state, cx).await;
@@ -753,7 +753,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_suggestion_when_auto_install_is_enabled(cx: &mut TestAppContext) {
         assert_eq!(
             suggestions_with_auto_install_setting(true, cx).await,
@@ -761,7 +761,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggestion_when_auto_install_is_disabled(cx: &mut TestAppContext) {
         assert_eq!(
             suggestions_with_auto_install_setting(false, cx).await,
@@ -769,7 +769,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_visible_suggestion_is_not_rebuilt_by_next_candidate(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -785,7 +785,7 @@ mod tests {
         assert_eq!(still_shown[0].entity_id(), shown[0].entity_id());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_closed_suggestion_returns_for_next_candidate(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -810,7 +810,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggestion_for_item_added_to_inactive_pane(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -852,7 +852,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_suggestion_for_unknown_language(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;
@@ -865,7 +865,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_suggestion_for_untitled_buffer_saved_as_unknown_language(
         cx: &mut TestAppContext,
     ) {
@@ -900,7 +900,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_file_suggestion_while_language_is_loading(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let (workspace, cx) = open_test_workspace(&app_state, cx).await;

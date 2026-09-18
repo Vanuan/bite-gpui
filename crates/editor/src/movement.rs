@@ -1041,8 +1041,8 @@ mod tests {
         NextEnd,
     }
 
-    #[gpui::test]
-    fn test_word_movement(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_word_movement(cx: &mut gpui_runtime::App) {
         init_test(cx);
 
         let cases = [
@@ -1158,11 +1158,11 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_previous_subword_start(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_previous_subword_start(cx: &mut gpui_runtime::App) {
         init_test(cx);
 
-        fn assert(marked_text: &str, cx: &mut gpui::App) {
+        fn assert(marked_text: &str, cx: &mut gpui_runtime::App) {
             let (snapshot, display_points) = marked_display_snapshot(marked_text, cx);
             assert_eq!(
                 previous_subword_start(&snapshot, display_points[1]),
@@ -1193,13 +1193,13 @@ mod tests {
         assert(" abˇ——ˇcd", cx);
     }
 
-    #[gpui::test]
-    fn test_find_preceding_boundary(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_find_preceding_boundary(cx: &mut gpui_runtime::App) {
         init_test(cx);
 
         fn assert(
             marked_text: &str,
-            cx: &mut gpui::App,
+            cx: &mut gpui_runtime::App,
             is_boundary: &mut dyn FnMut(char, char) -> bool,
         ) {
             let (snapshot, display_points) = marked_display_snapshot(marked_text, cx);
@@ -1231,8 +1231,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    fn test_find_preceding_boundary_with_inlays(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_find_preceding_boundary_with_inlays(cx: &mut gpui_runtime::App) {
         init_test(cx);
 
         let input_text = "abcdefghijklmnopqrstuvwxys";
@@ -1304,11 +1304,11 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_next_subword_end(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_next_subword_end(cx: &mut gpui_runtime::App) {
         init_test(cx);
 
-        fn assert(marked_text: &str, cx: &mut gpui::App) {
+        fn assert(marked_text: &str, cx: &mut gpui_runtime::App) {
             let (snapshot, display_points) = marked_display_snapshot(marked_text, cx);
             assert_eq!(
                 next_subword_end(&snapshot, display_points[0]),
@@ -1338,13 +1338,13 @@ mod tests {
         assert(" abˇ——ˇcd", cx);
     }
 
-    #[gpui::test]
-    fn test_find_boundary(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_find_boundary(cx: &mut gpui_runtime::App) {
         init_test(cx);
 
         fn assert(
             marked_text: &str,
-            cx: &mut gpui::App,
+            cx: &mut gpui_runtime::App,
             is_boundary: &mut dyn FnMut(char, char) -> bool,
         ) {
             let (snapshot, display_points) = marked_display_snapshot(marked_text, cx);
@@ -1376,8 +1376,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_move_up_and_down_with_excerpts(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_move_up_and_down_with_excerpts(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| {
             init_test(cx);
         });
@@ -1549,8 +1549,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    fn test_word_movement_over_folds(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_word_movement_over_folds(cx: &mut gpui_runtime::App) {
         use crate::display_map::Crease;
 
         init_test(cx);
@@ -1639,7 +1639,7 @@ mod tests {
         );
     }
 
-    fn init_test(cx: &mut gpui::App) {
+    fn init_test(cx: &mut gpui_runtime::App) {
         let settings_store = SettingsStore::test(cx);
         cx.set_global(settings_store);
         theme_settings::init(theme::LoadThemes::JustBase, cx);

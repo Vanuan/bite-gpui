@@ -1,7 +1,7 @@
 //! # zlog_settings
 use collections::HashMap;
 
-use gpui::App;
+use gpui_runtime::App;
 use settings::{RegisterSetting, Settings, SettingsStore};
 
 pub fn init(cx: &mut App) {

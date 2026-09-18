@@ -336,7 +336,7 @@ fn resolve_absolute_path(
 mod tests {
     use super::*;
     use fs::Fs as _;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::{FakeFs, Project};
     use serde_json::json;
     use settings::SettingsStore;
@@ -357,7 +357,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_directory_allows_global_skill_directory(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -415,7 +415,7 @@ mod tests {
         assert!(fs.is_dir(&created_path).await);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_directory_rejects_other_global_paths(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -458,7 +458,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_directory_symlink_escape_requests_authorization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -521,7 +521,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_directory_symlink_escape_denied(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -574,7 +574,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_directory_symlink_escape_confirm_requires_single_approval(
         cx: &mut TestAppContext,
     ) {
@@ -652,7 +652,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_directory_symlink_escape_honors_deny_policy(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -720,7 +720,7 @@ mod tests {
     /// Out-of-project creation goes through the sandbox write-grant prompt and,
     /// on approval, creates the *specific* new directory (not its broad parent).
     #[cfg(any(target_os = "linux", target_os = "macos"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_directory_out_of_project_creates_and_grants(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -780,7 +780,7 @@ mod tests {
     /// Denying the grant removes the directory we eagerly created, leaving no
     /// trace on the filesystem.
     #[cfg(any(target_os = "linux", target_os = "macos"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_directory_out_of_project_denied_cleans_up(cx: &mut TestAppContext) {
         init_test(cx);
 

@@ -27,7 +27,7 @@
 
 use agent_settings::{AgentSettings, SandboxPermissions};
 use feature_flags::{FeatureFlagAppExt as _, SandboxingFeatureFlag};
-use gpui::App;
+use gpui_runtime::App;
 use http_proxy::HostPattern;
 use project::Project;
 use sandbox::{HostFilesystemLocation, SandboxFsPolicy, SandboxNetPolicy, SandboxPolicy};

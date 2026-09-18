@@ -1,6 +1,6 @@
 use client::{ParticipantIndex, User, proto};
 use collections::HashMap;
-use gpui::WeakEntity;
+use gpui_runtime::WeakEntity;
 use livekit_client::AudioStream;
 use project::Project;
 use std::sync::Arc;

@@ -261,7 +261,7 @@ impl Peer {
     pub fn add_test_connection(
         self: &Arc<Self>,
         connection: Connection,
-        executor: gpui::BackgroundExecutor,
+        executor: gpui_platform::BackgroundExecutor,
     ) -> (
         ConnectionId,
         impl Future<Output = anyhow::Result<()>> + Send + use<>,
@@ -746,13 +746,13 @@ impl Serialize for Peer {
 mod tests {
     use super::*;
     use async_tungstenite::tungstenite::Message as WebSocketMessage;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     fn init_logger() {
         zlog::init_test();
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     async fn test_request_response(cx: &mut TestAppContext) {
         init_logger();
 
@@ -850,7 +850,7 @@ mod tests {
         }
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     async fn test_order_of_response_and_incoming(cx: &mut TestAppContext) {
         let executor = cx.executor();
         let server = Peer::new(0);
@@ -948,7 +948,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     async fn test_dropping_request_before_completion(cx: &mut TestAppContext) {
         let executor = cx.executor();
         let server = Peer::new(0);
@@ -1060,7 +1060,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     async fn test_request_stream(cx: &mut TestAppContext) {
         init_logger();
 
@@ -1128,7 +1128,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_request_stream_send_failure_cleans_up_response_channel(cx: &mut TestAppContext) {
         init_logger();
 
@@ -1157,7 +1157,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     async fn test_request_stream_terminates_on_error(cx: &mut TestAppContext) {
         init_logger();
 
@@ -1227,7 +1227,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     async fn test_dropping_stream_request_before_completion(cx: &mut TestAppContext) {
         init_logger();
 
@@ -1322,7 +1322,7 @@ mod tests {
         drop(server_task);
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     async fn test_disconnect(cx: &mut TestAppContext) {
         let executor = cx.executor();
 
@@ -1360,7 +1360,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     async fn test_io_error(cx: &mut TestAppContext) {
         let executor = cx.executor();
         let (client_conn, mut server_conn, _kill) = Connection::in_memory(executor.clone());

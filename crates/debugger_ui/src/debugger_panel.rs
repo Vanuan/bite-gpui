@@ -620,7 +620,7 @@ impl DebugPanel {
     ) -> Option<Div> {
         let active_session = self.active_session.clone();
         let focus_handle = self.focus_handle.clone();
-        let is_side = self.position(window, cx).axis() == gpui::Axis::Horizontal;
+        let is_side = self.position(window, cx).axis() == gpui_types::Axis::Horizontal;
         let div = if is_side { v_flex() } else { h_flex() };
 
         let new_session_button = || {
@@ -1773,7 +1773,7 @@ impl Render for DebugPanel {
                     deferred(
                         anchored()
                             .position(*position)
-                            .anchor(gpui::Anchor::TopLeft)
+                            .anchor(gpui_types::Anchor::TopLeft)
                             .child(menu.clone()),
                     )
                     .with_priority(1)

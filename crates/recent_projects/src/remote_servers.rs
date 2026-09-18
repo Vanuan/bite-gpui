@@ -555,7 +555,7 @@ impl ProjectPicker {
     }
 }
 
-impl gpui::Render for ProjectPicker {
+impl gpui_runtime::Render for ProjectPicker {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         v_flex()
             .child(match &self.data {
@@ -3149,7 +3149,7 @@ mod filter_tests {
 #[cfg(test)]
 mod create_host_tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     fn init_test(cx: &mut TestAppContext) -> Arc<AppState> {
         cx.update(|cx| {
@@ -3160,7 +3160,7 @@ mod create_host_tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_host_from_ssh_config_returns_new_connection_index(
         cx: &mut TestAppContext,
     ) {

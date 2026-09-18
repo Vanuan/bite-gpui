@@ -317,7 +317,7 @@ mod tests {
     use crate::{Buffer, rust_lang};
     use gpui::{AppContext as _, TestAppContext};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_body_range_hangs_when_outline_range_is_inside_leaf_node(cx: &mut TestAppContext) {
         let text = "fn main() { let completion = 1; }";
         let buffer = cx.new(|cx| Buffer::local(text, cx).with_language(rust_lang(), cx));
@@ -342,7 +342,7 @@ mod tests {
         assert_eq!(item.body_range(&snapshot), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_entries_with_no_names(cx: &mut TestAppContext) {
         let outline = Outline::new(vec![
             OutlineItem {
@@ -430,8 +430,8 @@ mod tests {
     #[test]
     fn test_highlight_ranges_from_text() {
         let language = rust_lang();
-        let keyword = HighlightStyle::color(gpui::Hsla::from(gpui::rgba(0x100000ff)));
-        let type_style = HighlightStyle::color(gpui::Hsla::from(gpui::rgba(0x200000ff)));
+        let keyword = HighlightStyle::color(gpui_types::Hsla::from(gpui_types::rgba(0x100000ff)));
+        let type_style = HighlightStyle::color(gpui_types::Hsla::from(gpui_types::rgba(0x200000ff)));
         let theme = SyntaxTheme::new([
             ("keyword".to_string(), keyword),
             ("type".to_string(), type_style),

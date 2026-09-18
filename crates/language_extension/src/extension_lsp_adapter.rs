@@ -122,7 +122,7 @@ impl ExtensionLanguageServerProxy for LanguageServerRegistryProxy {
 
     fn update_language_server_status(
         &self,
-        source: Option<gpui::EntityId>,
+        source: Option<gpui_runtime::EntityId>,
         language_server_id: LanguageServerName,
         status: BinaryStatus,
     ) {

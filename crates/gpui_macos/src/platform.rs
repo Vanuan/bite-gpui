@@ -517,7 +517,7 @@ impl Platform for MacPlatform {
         self.0.lock().background_executor.clone()
     }
 
-    fn foreground_executor(&self) -> gpui::ForegroundExecutor {
+    fn foreground_executor(&self) -> gpui_platform::ForegroundExecutor {
         self.0.lock().foreground_executor.clone()
     }
 

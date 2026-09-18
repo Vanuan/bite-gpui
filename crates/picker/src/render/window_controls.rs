@@ -102,10 +102,10 @@ pub(crate) trait Side: Copy + 'static {
     /// Places and sizes the grab strip along this side's edge.
     fn position(
         &self,
-        div: gpui::Stateful<Div>,
+        div: gpui_runtime::Stateful<Div>,
         shape: PositionAndShape,
         window: &Window,
-    ) -> gpui::Stateful<Div>;
+    ) -> gpui_runtime::Stateful<Div>;
     fn current_position_and_shape(
         &self,
         shape_before: PositionAndShape,
@@ -129,10 +129,10 @@ impl Side for Left {
     }
     fn position(
         &self,
-        div: gpui::Stateful<Div>,
+        div: gpui_runtime::Stateful<Div>,
         _: PositionAndShape,
         window: &Window,
-    ) -> gpui::Stateful<Div> {
+    ) -> gpui_runtime::Stateful<Div> {
         div.top_0()
             .bottom(Self::corner_clearance(window))
             .w(Self::handle_width(window))
@@ -168,10 +168,10 @@ impl Side for Right {
     }
     fn position(
         &self,
-        div: gpui::Stateful<Div>,
+        div: gpui_runtime::Stateful<Div>,
         _: PositionAndShape,
         window: &Window,
-    ) -> gpui::Stateful<Div> {
+    ) -> gpui_runtime::Stateful<Div> {
         div.top_0()
             .bottom(Self::corner_clearance(window))
             .w(Self::handle_width(window))
@@ -218,10 +218,10 @@ impl Side for Middle {
 
     fn position(
         &self,
-        div: gpui::Stateful<Div>,
+        div: gpui_runtime::Stateful<Div>,
         shape: PositionAndShape,
         window: &Window,
-    ) -> gpui::Stateful<Div> {
+    ) -> gpui_runtime::Stateful<Div> {
         match self.0 {
             Layout::Hidden => {
                 unreachable!("This resize handle is not drawn when the preview is hidden")
@@ -276,10 +276,10 @@ impl Side for Bottom {
     }
     fn position(
         &self,
-        div: gpui::Stateful<Div>,
+        div: gpui_runtime::Stateful<Div>,
         _: PositionAndShape,
         window: &Window,
-    ) -> gpui::Stateful<Div> {
+    ) -> gpui_runtime::Stateful<Div> {
         div.left(Self::corner_clearance(window))
             .right(Self::corner_clearance(window))
             .h(Self::handle_width(window))
@@ -318,10 +318,10 @@ impl Side for LeftCorner {
     }
     fn position(
         &self,
-        div: gpui::Stateful<Div>,
+        div: gpui_runtime::Stateful<Div>,
         _: PositionAndShape,
         window: &Window,
-    ) -> gpui::Stateful<Div> {
+    ) -> gpui_runtime::Stateful<Div> {
         div.w(Self::handle_width(window))
             .h(Self::handle_width(window))
             .left(-Self::handle_offset(window))
@@ -365,10 +365,10 @@ impl Side for RightCorner {
     }
     fn position(
         &self,
-        div: gpui::Stateful<Div>,
+        div: gpui_runtime::Stateful<Div>,
         _: PositionAndShape,
         window: &Window,
-    ) -> gpui::Stateful<Div> {
+    ) -> gpui_runtime::Stateful<Div> {
         div.w(Self::handle_width(window))
             .h(Self::handle_width(window))
             .right(-Self::handle_offset(window))

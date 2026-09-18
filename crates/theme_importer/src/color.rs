@@ -1,10 +1,10 @@
 use anyhow::Result;
-use gpui::Hsla;
+use gpui_types::Hsla;
 use palette::FromColor;
 
 #[allow(unused)]
 pub(crate) fn try_parse_color(color: &str) -> Result<Hsla> {
-    let rgba = gpui::Rgba::try_from(color)?;
+    let rgba = gpui_types::Rgba::try_from(color)?;
     let rgba = palette::rgb::Srgba::from_components((rgba.r, rgba.g, rgba.b, rgba.a));
     let hsla = palette::Hsla::from_color(rgba);
 
@@ -44,7 +44,7 @@ mod tests {
     pub fn test_serialize_color_with_palette() {
         let color = "#b4637aff";
 
-        let rgba = gpui::Rgba::try_from(color).unwrap();
+        let rgba = gpui_types::Rgba::try_from(color).unwrap();
         let rgba = palette::rgb::Srgba::from_components((rgba.r, rgba.g, rgba.b, rgba.a));
         let hsla = palette::Hsla::from_color(rgba);
 

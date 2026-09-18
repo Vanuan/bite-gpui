@@ -61,7 +61,7 @@ impl Default for CodeLensState {
 pub(super) fn try_handle_client_command(
     action: &CodeAction,
     editor: &mut Editor,
-    workspace: &gpui::Entity<workspace::Workspace>,
+    workspace: &gpui_runtime::Entity<workspace::Workspace>,
     window: &mut Window,
     cx: &mut Context<Editor>,
 ) -> bool {
@@ -99,7 +99,7 @@ fn schedule_task(
     task_template: task::TaskTemplate,
     action: &CodeAction,
     editor: &mut Editor,
-    workspace: &gpui::Entity<workspace::Workspace>,
+    workspace: &gpui_runtime::Entity<workspace::Workspace>,
     window: &mut Window,
     cx: &mut Context<Editor>,
 ) -> bool {
@@ -719,7 +719,7 @@ mod tests {
 
     use collections::HashSet;
     use futures::StreamExt;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use indoc::indoc;
     use settings::CodeLens;
     use util::path;
@@ -734,7 +734,7 @@ mod tests {
         test::editor_lsp_test_context::EditorLspTestContext,
     };
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_blocks(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {
@@ -808,7 +808,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_refresh_requeries_open_document(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {
@@ -892,7 +892,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_dynamic_registration_requeries_open_document(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {
@@ -975,7 +975,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_blocks_kept_across_refresh(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {
@@ -1079,7 +1079,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_blocks_kept_when_only_resolve_fills_titles(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {
@@ -1194,7 +1194,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_placeholder_block_before_resolve(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {
@@ -1277,7 +1277,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_placeholder_kept_when_resolve_yields_empty_title(
         cx: &mut TestAppContext,
     ) {
@@ -1340,7 +1340,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_same_range_lenses_resolve_independently(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {
@@ -1438,7 +1438,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_placeholder_kept_when_resolve_yields_no_command(
         cx: &mut TestAppContext,
     ) {
@@ -1495,7 +1495,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_disabled_by_default(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1531,7 +1531,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_toggling(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {
@@ -1601,7 +1601,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_resolve(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {
@@ -1679,7 +1679,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_code_lens_resolve_only_visible(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_editor_settings(cx, &|settings| {

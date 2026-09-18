@@ -306,8 +306,8 @@ mod test {
         test::{NeovimBackedTestContext, VimTestContext},
     };
 
-    #[gpui::test]
-    async fn test_enter_and_exit_replace_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_enter_and_exit_replace_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.simulate_keystrokes("shift-r");
         assert_eq!(cx.mode(), Mode::Replace);
@@ -315,9 +315,9 @@ mod test {
         assert_eq!(cx.mode(), Mode::Normal);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     #[cfg(not(any(target_os = "linux", target_os = "freebsd")))]
-    async fn test_replace_mode(cx: &mut gpui::TestAppContext) {
+    async fn test_replace_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         // test normal replace
@@ -399,8 +399,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_replace_mode_with_counts(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_mode_with_counts(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello\n").await;
@@ -413,8 +413,8 @@ mod test {
         cx.shared_state().await.assert_eq("abcabcabˇc\n");
     }
 
-    #[gpui::test]
-    async fn test_replace_mode_repeat(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_mode_repeat(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello world\n").await;
@@ -423,8 +423,8 @@ mod test {
         cx.shared_state().await.assert_eq("---lo --ˇ-ld\n");
     }
 
-    #[gpui::test]
-    async fn test_replace_mode_undo(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_mode_undo(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         const UNDO_REPLACE_EXAMPLES: &[&str] = &[
@@ -463,8 +463,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_replace_multicursor(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_multicursor(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇabcˇabcabc", Mode::Normal);
         cx.simulate_keystrokes("shift-r 1 2 3 4");
@@ -474,8 +474,8 @@ mod test {
         cx.assert_state("ˇabˇcabcabc", Mode::Replace);
     }
 
-    #[gpui::test]
-    async fn test_replace_undo(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_undo(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇaaaa", Mode::Normal);
@@ -483,8 +483,8 @@ mod test {
         cx.assert_state("ˇaaaa", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_exchange_separate_range(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_exchange_separate_range(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇhello world", Mode::Normal);
@@ -492,8 +492,8 @@ mod test {
         cx.assert_state("world ˇhello", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_exchange_complete_overlap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_exchange_complete_overlap(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇhello world", Mode::Normal);
@@ -507,8 +507,8 @@ mod test {
         cx.assert_state("ˇhello", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_exchange_partial_overlap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_exchange_partial_overlap(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇhello world", Mode::Normal);
@@ -516,8 +516,8 @@ mod test {
         cx.assert_state("hello ˇworld", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_clear_exchange_clears_operator(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_clear_exchange_clears_operator(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇirrelevant", Mode::Normal);
@@ -526,8 +526,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_clear_exchange(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_clear_exchange(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇhello world", Mode::Normal);
@@ -539,8 +539,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_paste_replace(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_replace(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(indoc! {"ˇ123"}, Mode::Replace);

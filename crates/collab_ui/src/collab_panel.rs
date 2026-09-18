@@ -3921,7 +3921,7 @@ impl Render for CollabPanel {
                 deferred(
                     anchored()
                         .position(*position)
-                        .anchor(gpui::Anchor::TopLeft)
+                        .anchor(gpui_types::Anchor::TopLeft)
                         .child(menu.clone()),
                 )
                 .with_priority(1)
@@ -3991,7 +3991,7 @@ impl Panel for CollabPanel {
         Some("Collab Panel")
     }
 
-    fn toggle_action(&self) -> Box<dyn gpui::Action> {
+    fn toggle_action(&self) -> Box<dyn gpui_runtime::Action> {
         Box::new(ToggleFocus)
     }
 
@@ -4015,7 +4015,7 @@ impl Panel for CollabPanel {
 }
 
 impl Focusable for CollabPanel {
-    fn focus_handle(&self, _cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _cx: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }

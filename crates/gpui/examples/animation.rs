@@ -12,7 +12,7 @@ use gpui::{
     Transformation, Window, WindowBounds, WindowOptions, bounce, div, ease_in_out, percentage,
     prelude::*, px, relative, rgba, size, svg,
 };
-use gpui_platform::application;
+use gpui::application;
 
 struct Assets {}
 
@@ -340,7 +340,7 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }
 
@@ -350,7 +350,7 @@ mod tests {
 
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn clicking_spring_position_changes_the_target(cx: &mut TestAppContext) {
         let (view, cx) = cx.add_window_view(|_, _| AnimationExample {
             spring_phase: 0,

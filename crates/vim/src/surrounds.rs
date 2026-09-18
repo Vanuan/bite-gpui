@@ -659,7 +659,7 @@ pub fn bracket_pair_for_str_helix(text: &str) -> BracketPair {
 
 #[cfg(test)]
 mod test {
-    use gpui::KeyBinding;
+    use gpui_runtime::KeyBinding;
     use indoc::indoc;
 
     use crate::{
@@ -669,8 +669,8 @@ mod test {
         test::VimTestContext,
     };
 
-    #[gpui::test]
-    async fn test_add_surrounds(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_add_surrounds(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // test add surrounds with around
@@ -851,8 +851,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_add_surrounds_visual(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_add_surrounds_visual(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.update(|_, cx| {
@@ -968,8 +968,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_delete_surrounds(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_surrounds(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // test delete surround
@@ -1132,8 +1132,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_change_surrounds(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_surrounds(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -1323,8 +1323,8 @@ mod test {
         cx.assert_state(indoc! {"I'm ˇ{ good }"}, Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_change_surrounds_any_brackets(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_surrounds_any_brackets(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Update keybindings so that using `csb` triggers Vim's `AnyBrackets`
@@ -1374,8 +1374,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_change_surrounds_mini_brackets(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_surrounds_mini_brackets(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Update keybindings so that using `csb` triggers Vim's `MiniBrackets` action.
@@ -1424,8 +1424,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_change_surrounds_any_quotes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_surrounds_any_quotes(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Update keybindings so that using `csq` triggers Vim's `AnyQuotes` action.
@@ -1450,8 +1450,8 @@ mod test {
         cx.assert_state(indoc! {"ˇ`  str  `"}, Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_change_surrounds_mini_quotes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_surrounds_mini_quotes(cx: &mut gpui_runtime::TestAppContext) {
         // NOTE: needs TypeScript test cx to recognize single/backquotes
         let mut cx = VimTestContext::new_typescript(cx).await;
 
@@ -1478,8 +1478,8 @@ mod test {
 
     // The following test cases all follow tpope/vim-surround's behaviour
     // and are more focused on how whitespace is handled.
-    #[gpui::test]
-    async fn test_change_surrounds_vim(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_surrounds_vim(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Changing quote to quote should never change the surrounding
@@ -1536,8 +1536,8 @@ mod test {
         cx.assert_state(indoc! {"ˇ[  a  ]"}, Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_surrounds(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_surrounds(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -1584,8 +1584,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_surround_aliases(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_surround_aliases(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // add aliases

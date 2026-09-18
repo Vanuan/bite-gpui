@@ -1316,7 +1316,7 @@ impl SshSocket {
     async fn new(
         options: SshConnectionOptions,
         password: askpass::EncryptedPassword,
-        executor: gpui::BackgroundExecutor,
+        executor: gpui_platform::BackgroundExecutor,
     ) -> Result<Self> {
         let mut envs = HashMap::default();
         let get_password =

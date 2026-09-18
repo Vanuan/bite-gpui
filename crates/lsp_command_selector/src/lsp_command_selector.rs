@@ -484,7 +484,7 @@ mod tests {
     use util::{path, rel_path::rel_path};
     use workspace::{AppState, MultiWorkspace, OpenOptions, OpenVisible};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_executing_commands_from_the_picker(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         let SelectorTest {
@@ -582,7 +582,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_error_is_shown_in_the_picker_footer(cx: &mut TestAppContext) {
         let SelectorTest {
             workspace,
@@ -634,7 +634,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_action_is_not_registered_without_commands(cx: &mut TestAppContext) {
         let SelectorTest {
             workspace, mut cx, ..
@@ -658,7 +658,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_action_is_not_registered_for_unrelated_buffers(cx: &mut TestAppContext) {
         let SelectorTest {
             workspace, mut cx, ..
@@ -700,7 +700,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_commands_are_scoped_to_the_servers_of_the_buffer_worktree(
         cx: &mut TestAppContext,
     ) {
@@ -799,7 +799,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_commands_of_reused_servers_for_buffers_outside_the_project(
         cx: &mut TestAppContext,
     ) {
@@ -865,7 +865,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggling_arguments_focus(cx: &mut TestAppContext) {
         let SelectorTest {
             workspace, mut cx, ..
@@ -914,7 +914,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tab_keystroke_toggles_arguments_focus(cx: &mut TestAppContext) {
         let SelectorTest {
             workspace, mut cx, ..
@@ -963,7 +963,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_plain_text_arguments_are_sent_as_a_single_string(cx: &mut TestAppContext) {
         let SelectorTest {
             workspace,

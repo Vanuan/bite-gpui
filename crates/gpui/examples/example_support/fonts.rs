@@ -1,7 +1,7 @@
 #[cfg(target_family = "wasm")]
 use std::borrow::Cow;
 
-use gpui::App;
+use gpui_runtime::App;
 
 #[cfg(target_family = "wasm")]
 pub fn load_fonts(cx: &App) -> bool {

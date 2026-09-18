@@ -1,6 +1,6 @@
 use anyhow::{Context as _, Result};
 use flate2::read::GzDecoder;
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use http_client::{AsyncBody, HttpClient, Method, Request};
 use indoc::indoc;
 use serde::Deserialize;

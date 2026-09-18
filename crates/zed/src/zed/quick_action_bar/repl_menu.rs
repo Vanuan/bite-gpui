@@ -1,5 +1,5 @@
-use gpui::ElementId;
-use gpui::TaskExt;
+use gpui_runtime::ElementId;
+use gpui_platform::TaskExt;
 use gpui::{AnyElement, Entity};
 use picker::Picker;
 use repl::{

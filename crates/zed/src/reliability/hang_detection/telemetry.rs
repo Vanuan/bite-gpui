@@ -1,6 +1,6 @@
 use std::time::{Duration, Instant};
 
-use gpui::profiler::hang::{HangTrigger, SerializedHangIncident};
+use gpui_runtime::profiler::hang::{HangTrigger, SerializedHangIncident};
 
 /// Cap on incidents per telemetry event. When more accrue between sends, the
 /// ones with the largest stalls are kept and the incident counts still cover

@@ -1031,9 +1031,9 @@ mod tests {
         assert_generated_session_id(&value);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stream_completion_sends_session_header_without_thread_id(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let captured_header = Arc::new(Mutex::new(None));
         let http_client = FakeHttpClient::create({

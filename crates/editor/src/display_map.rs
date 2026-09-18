@@ -978,7 +978,7 @@ impl DisplayMap {
                 FoldPlaceholder {
                     render: Arc::new({
                         let collapsed_text = collapsed_text.clone();
-                        move |fold_id, _fold_range, cx: &mut gpui::App| {
+                        move |fold_id, _fold_range, cx: &mut gpui_runtime::App| {
                             use gpui::{Element as _, ParentElement as _};
                             FoldPlaceholder::fold_element(fold_id, cx)
                                 .child(collapsed_text.clone())
@@ -1371,7 +1371,7 @@ impl DisplayMap {
         }
     }
 
-    pub fn is_rewrapping(&self, cx: &gpui::App) -> bool {
+    pub fn is_rewrapping(&self, cx: &gpui_runtime::App) -> bool {
         self.wrap_map.read(cx).is_rewrapping()
     }
 
@@ -2418,7 +2418,7 @@ impl DisplaySnapshot {
     pub fn all_text_highlight_ranges(
         &self,
         f: &dyn Fn(&HighlightKey) -> bool,
-    ) -> Vec<(gpui::Hsla, Range<Point>)> {
+    ) -> Vec<(gpui_types::Hsla, Range<Point>)> {
         use itertools::Itertools;
 
         self.text_highlights
@@ -2716,8 +2716,8 @@ pub mod tests {
     use unindent::Unindent as _;
     use util::test::{marked_text_ranges, sample_text};
 
-    #[gpui::test(iterations = 100)]
-    async fn test_random_display_map(cx: &mut gpui::TestAppContext, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    async fn test_random_display_map(cx: &mut gpui_runtime::TestAppContext, mut rng: StdRng) {
         cx.background_executor.set_block_on_ticks(0..=50);
         let operations = env::var("OPERATIONS")
             .map(|i| i.parse().expect("invalid `OPERATIONS` variable"))
@@ -2988,8 +2988,8 @@ pub mod tests {
         }
     }
 
-    #[gpui::test(retries = 5)]
-    async fn test_soft_wraps(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test(retries = 5)]
+    async fn test_soft_wraps(cx: &mut gpui_runtime::TestAppContext) {
         cx.background_executor
             .set_block_on_ticks(usize::MAX..=usize::MAX);
         cx.update(|cx| {
@@ -3111,8 +3111,8 @@ pub mod tests {
         });
     }
 
-    #[gpui::test]
-    fn test_text_chunks(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_text_chunks(cx: &mut gpui_runtime::App) {
         init_test(cx, &|_| {});
 
         let text = sample_text(6, 6, 'a');
@@ -3172,8 +3172,8 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_inlays_with_newlines_after_blocks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_inlays_with_newlines_after_blocks(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| init_test(cx, &|_| {}));
 
         let buffer = cx.new(|cx| Buffer::local("a", cx));
@@ -3236,8 +3236,8 @@ pub mod tests {
         map.update(cx, |m, cx| assert_eq!(m.snapshot(cx).text(), "\n\n\nab"));
     }
 
-    #[gpui::test]
-    async fn test_chunks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_chunks(cx: &mut gpui_runtime::TestAppContext) {
         let text = r#"
             fn outer() {}
 
@@ -3338,8 +3338,8 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_chunks_with_syntax_highlighting_across_blocks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_chunks_with_syntax_highlighting_across_blocks(cx: &mut gpui_runtime::TestAppContext) {
         cx.background_executor
             .set_block_on_ticks(usize::MAX..=usize::MAX);
 
@@ -3449,8 +3449,8 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_chunks_with_diagnostics_across_blocks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_chunks_with_diagnostics_across_blocks(cx: &mut gpui_runtime::TestAppContext) {
         cx.background_executor
             .set_block_on_ticks(usize::MAX..=usize::MAX);
 
@@ -3577,8 +3577,8 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_point_translation_with_replace_blocks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_point_translation_with_replace_blocks(cx: &mut gpui_runtime::TestAppContext) {
         cx.background_executor
             .set_block_on_ticks(usize::MAX..=usize::MAX);
 
@@ -3682,8 +3682,8 @@ pub mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_chunks_with_soft_wrapping(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_chunks_with_soft_wrapping(cx: &mut gpui_runtime::TestAppContext) {
         cx.background_executor
             .set_block_on_ticks(usize::MAX..=usize::MAX);
 
@@ -3779,8 +3779,8 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_chunks_with_text_highlights(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_chunks_with_text_highlights(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| init_test(cx, &|_| {}));
 
         let theme =
@@ -3867,11 +3867,11 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_clip_point(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_clip_point(cx: &mut gpui_runtime::App) {
         init_test(cx, &|_| {});
 
-        fn assert(text: &str, shift_right: bool, bias: Bias, cx: &mut gpui::App) {
+        fn assert(text: &str, shift_right: bool, bias: Bias, cx: &mut gpui_runtime::App) {
             let (unmarked_snapshot, mut markers) = marked_display_snapshot(text, cx);
 
             match bias {
@@ -3917,11 +3917,11 @@ pub mod tests {
         assert("   ˇˇ\t", false, Right, cx);
     }
 
-    #[gpui::test]
-    fn test_clip_at_line_ends(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_clip_at_line_ends(cx: &mut gpui_runtime::App) {
         init_test(cx, &|_| {});
 
-        fn assert(text: &str, cx: &mut gpui::App) {
+        fn assert(text: &str, cx: &mut gpui_runtime::App) {
             let (mut unmarked_snapshot, markers) = marked_display_snapshot(text, cx);
             unmarked_snapshot.clip_at_line_ends = true;
             assert_eq!(
@@ -3936,8 +3936,8 @@ pub mod tests {
         assert("aˇαˇ", cx);
     }
 
-    #[gpui::test]
-    fn test_creases(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_creases(cx: &mut gpui_runtime::App) {
         init_test(cx, &|_| {});
 
         let text = "aaa\nbbb\nccc\nddd\neee\nfff\nggg\nhhh\niii\njjj\nkkk\nlll";
@@ -3973,8 +3973,8 @@ pub mod tests {
         });
     }
 
-    #[gpui::test]
-    fn test_tabs_with_multibyte_chars(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_tabs_with_multibyte_chars(cx: &mut gpui_runtime::App) {
         init_test(cx, &|_| {});
 
         let text = "✅\t\tα\nβ\t\n🏀β\t\tγ";
@@ -4051,8 +4051,8 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_max_point(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_max_point(cx: &mut gpui_runtime::App) {
         init_test(cx, &|_| {});
 
         let buffer = MultiBuffer::build_simple("aaa\n\t\tbbb", cx);
@@ -4165,9 +4165,9 @@ pub mod tests {
     /// On pre-fix code this fails in the display map layers' internal
     /// checks; in production builds, where those checks don't run, the same
     /// corruption propagated to the stale header instead.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_removing_buffer_removes_header_after_diff_base_changes(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         cx.update(|cx| init_test(cx, &|_| {}));
 
@@ -4175,7 +4175,7 @@ pub mod tests {
             multibuffer: &Entity<MultiBuffer>,
             path: u64,
             buffer: &Entity<Buffer>,
-            cx: &mut gpui::TestAppContext,
+            cx: &mut gpui_runtime::TestAppContext,
         ) {
             multibuffer.update(cx, |multibuffer, cx| {
                 let max_point = buffer.read(cx).max_point();
@@ -4194,7 +4194,7 @@ pub mod tests {
             diff: &Entity<buffer_diff::BufferDiff>,
             buffer: &Entity<Buffer>,
             base_text: &str,
-            cx: &mut gpui::TestAppContext,
+            cx: &mut gpui_runtime::TestAppContext,
         ) {
             let snapshot = buffer.read_with(cx, |buffer, _| buffer.text_snapshot());
             diff.update(cx, |diff, cx| {
@@ -4205,7 +4205,7 @@ pub mod tests {
         }
 
         #[track_caller]
-        fn assert_headers(display_map: &Entity<DisplayMap>, cx: &mut gpui::TestAppContext) {
+        fn assert_headers(display_map: &Entity<DisplayMap>, cx: &mut gpui_runtime::TestAppContext) {
             cx.run_until_parked();
             let snapshot = display_map.update(cx, |display_map, cx| display_map.snapshot(cx));
             assert_headers_resolve(&snapshot);
@@ -4322,8 +4322,8 @@ pub mod tests {
         });
     }
 
-    #[gpui::test]
-    fn test_isomorphic_display_point_ranges_for_buffer_range(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_isomorphic_display_point_ranges_for_buffer_range(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| init_test(cx, &|_| {}));
 
         let buffer = cx.new(|cx| Buffer::local("let x = 5;\n", cx));
@@ -4502,8 +4502,8 @@ pub mod tests {
     /// 2. Then called snapshot() which synced and published edits
     /// 3. InlayMap was created with the post-sync snapshot
     /// 4. But the subscription captured the sync edits, leading to double-application
-    #[gpui::test]
-    fn test_display_map_subscription_ordering(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_display_map_subscription_ordering(cx: &mut gpui_runtime::App) {
         init_test(cx, &|_| {});
 
         // Create a buffer with some initial text

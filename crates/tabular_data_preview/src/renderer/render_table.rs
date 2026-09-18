@@ -112,7 +112,7 @@ impl TabularDataPreviewPane {
         this: &TabularDataPreviewPane,
         cols: usize,
         display_row: DisplayRow,
-        row_identifier_text_color: gpui::Hsla,
+        row_identifier_text_color: gpui_types::Hsla,
         row_height: Pixels,
         cx: &Context<TabularDataPreviewPane>,
     ) -> Option<UncheckedTableRow<AnyElement>> {

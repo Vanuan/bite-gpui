@@ -114,7 +114,7 @@ impl StackFrameList {
                 _ => {}
             });
 
-        let list_state = ListState::new(0, gpui::ListAlignment::Top, px(1000.));
+        let list_state = ListState::new(0, gpui_runtime::ListAlignment::Top, px(1000.));
 
         let list_filter = workspace
             .read_with(cx, |workspace, _| workspace.database_id())
@@ -961,7 +961,7 @@ impl Render for StackFrameList {
 }
 
 impl Focusable for StackFrameList {
-    fn focus_handle(&self, _: &gpui::App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &gpui_runtime::App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }

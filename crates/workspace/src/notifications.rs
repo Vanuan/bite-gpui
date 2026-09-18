@@ -268,7 +268,7 @@ pub struct LanguageServerPrompt {
 }
 
 impl Focusable for LanguageServerPrompt {
-    fn focus_handle(&self, _cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _cx: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -1708,14 +1708,14 @@ where
 #[cfg(test)]
 mod tests {
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::{LanguageServerPromptRequest, Project};
 
     use crate::tests::init_test;
 
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_auto_dismiss_with_notifications_from_multiple_language_servers(
         cx: &mut TestAppContext,
     ) {
@@ -1771,7 +1771,7 @@ mod tests {
         assert_eq!(count_notifications(&workspace, cx), 0);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_auto_dismiss_with_multiple_notifications_from_single_language_server(
         cx: &mut TestAppContext,
     ) {
@@ -1822,7 +1822,7 @@ mod tests {
         assert_eq!(count_notifications(&workspace, cx), 0);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_auto_dismiss_turned_off(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1864,7 +1864,7 @@ mod tests {
         assert_eq!(count_notifications(&workspace, cx), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_auto_dismiss_with_custom_duration(cx: &mut TestAppContext) {
         init_test(cx);
 

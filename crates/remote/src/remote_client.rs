@@ -1150,8 +1150,8 @@ impl RemoteClient {
     /// ```
     #[cfg(any(test, feature = "test-support"))]
     pub fn fake_server(
-        client_cx: &mut gpui::TestAppContext,
-        server_cx: &mut gpui::TestAppContext,
+        client_cx: &mut gpui_runtime::TestAppContext,
+        server_cx: &mut gpui_runtime::TestAppContext,
     ) -> (RemoteConnectionOptions, AnyProtoClient, ConnectGuard) {
         use crate::transport::mock::MockConnection;
         let (opts, server_client, connect_guard) = MockConnection::new(client_cx, server_cx);
@@ -1165,8 +1165,8 @@ impl RemoteClient {
     #[cfg(any(test, feature = "test-support"))]
     pub fn fake_server_with_opts(
         opts: &RemoteConnectionOptions,
-        client_cx: &mut gpui::TestAppContext,
-        server_cx: &mut gpui::TestAppContext,
+        client_cx: &mut gpui_runtime::TestAppContext,
+        server_cx: &mut gpui_runtime::TestAppContext,
     ) -> (AnyProtoClient, ConnectGuard) {
         use crate::transport::mock::MockConnection;
         let mock_opts = match opts {
@@ -1184,7 +1184,7 @@ impl RemoteClient {
     #[cfg(any(test, feature = "test-support"))]
     pub async fn connect_mock(
         opts: RemoteConnectionOptions,
-        client_cx: &mut gpui::TestAppContext,
+        client_cx: &mut gpui_runtime::TestAppContext,
     ) -> Entity<Self> {
         assert!(matches!(opts, RemoteConnectionOptions::Mock(..)));
         use crate::transport::mock::MockDelegate;
@@ -1387,7 +1387,7 @@ impl RemoteConnectionOptions {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use rpc::{ErrorCodeExt, proto::ErrorCode};
 
     #[test]
@@ -1443,7 +1443,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_channel_client_request_stream_terminates_on_error(cx: &mut TestAppContext) {
         let (incoming_tx, incoming_rx) = mpsc::unbounded::<Envelope>();
         let (outgoing_tx, mut outgoing_rx) = mpsc::unbounded::<Envelope>();
@@ -1496,7 +1496,7 @@ mod tests {
         assert_eq!(client.stream_response_channels.lock().len(), 0);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_channel_client_dropping_stream_request_before_response_cleans_up_channel(
         cx: &mut TestAppContext,
     ) {
@@ -1527,7 +1527,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_channel_client_dropping_stream_request_before_completion(
         cx: &mut TestAppContext,
     ) {
@@ -1607,7 +1607,7 @@ impl From<crate::transport::mock::MockConnectionOptions> for RemoteConnectionOpt
 
 #[cfg(target_os = "windows")]
 /// Open a wsl path (\\wsl.localhost\<distro>\path)
-#[derive(Debug, Clone, PartialEq, Eq, gpui::Action)]
+#[derive(Debug, Clone, PartialEq, Eq, gpui_runtime::Action)]
 #[action(namespace = workspace, no_json, no_register)]
 pub struct OpenWslPath {
     pub distro: WslConnectionOptions,

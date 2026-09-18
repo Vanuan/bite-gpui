@@ -103,7 +103,7 @@ mod tests {
     use super::*;
     use gpui::{TestAppContext, http_client::FakeHttpClient};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn fetch_models_from_server_filters_to_fim_capable_models(_cx: &mut TestAppContext) {
         let http_client = FakeHttpClient::create(|_request| async move {
             Ok(http_client::Response::builder().status(200).body(

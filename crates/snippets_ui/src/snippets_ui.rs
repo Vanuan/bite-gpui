@@ -122,7 +122,7 @@ impl ModalView for ScopeSelector {}
 impl EventEmitter<DismissEvent> for ScopeSelector {}
 
 impl Focusable for ScopeSelector {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.picker.focus_handle(cx)
     }
 }

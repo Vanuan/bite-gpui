@@ -33,9 +33,9 @@ use futures::{
     select_biased,
 };
 use git::repository::FileHistoryChangedFileSets;
-use gpui::BackgroundExecutor;
-use gpui::TaskExt;
-use gpui::http_client::Url;
+use gpui_platform::BackgroundExecutor;
+use gpui_platform::TaskExt;
+use gpui_runtime::http_client::Url;
 use gpui::{
     App, AsyncApp, Context, Entity, EntityId, Global, SharedString, Task, WeakEntity, actions,
     http_client::{self, AsyncBody, Method},
@@ -360,7 +360,7 @@ struct ProjectState {
     next_last_event_seq: u64,
     recently_viewed_files: VecDeque<RecentFile>,
     recently_opened_files: VecDeque<RecentFile>,
-    registered_buffers: HashMap<gpui::EntityId, RegisteredBuffer>,
+    registered_buffers: HashMap<gpui_runtime::EntityId, RegisteredBuffer>,
     file_contexts: HashMap<ProjectPath, WeakEntity<StoredFileContext>>,
     current_prediction: Option<CurrentEditPrediction>,
     last_edit_source: Option<BufferEditSource>,
@@ -372,7 +372,7 @@ struct ProjectState {
     cancelled_predictions: HashSet<usize>,
     context: Entity<RelatedExcerptStore>,
     license_detection_watchers: HashMap<WorktreeId, Rc<LicenseDetectionWatcher>>,
-    _subscriptions: [gpui::Subscription; 2],
+    _subscriptions: [gpui_runtime::Subscription; 2],
     copilot: Option<Entity<Copilot>>,
 }
 
@@ -679,7 +679,7 @@ struct RegisteredBuffer {
     file: Option<Arc<dyn File>>,
     snapshot: TextBufferSnapshot,
     last_position: Option<Anchor>,
-    _subscriptions: [gpui::Subscription; 2],
+    _subscriptions: [gpui_runtime::Subscription; 2],
 }
 
 #[derive(Clone)]

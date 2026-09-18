@@ -1,6 +1,6 @@
 #![allow(missing_docs)]
 
-use gpui::Hsla;
+use gpui_types::Hsla;
 use refineable::Refineable;
 
 use crate::{blue, grass, neutral, red, yellow};

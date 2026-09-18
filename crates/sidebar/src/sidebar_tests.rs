@@ -119,7 +119,7 @@ fn assert_project_header_has_threads(
     sidebar: &Entity<Sidebar>,
     project_name: &str,
     expected_has_threads: bool,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) {
     sidebar.read_with(cx, |sidebar, _cx| {
         let has_threads = sidebar.contents.entries.iter().find_map(|entry| {
@@ -228,7 +228,7 @@ async fn init_test_project(
     project::Project::test(fs, [worktree_path.as_ref()], cx).await
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspace_menu_uses_bare_repository_worktree_name(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -274,7 +274,7 @@ async fn test_workspace_menu_uses_bare_repository_worktree_name(cx: &mut TestApp
 
 fn setup_sidebar(
     multi_workspace: &Entity<MultiWorkspace>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) -> Entity<Sidebar> {
     let sidebar = setup_sidebar_closed(multi_workspace, cx);
     multi_workspace.update_in(cx, |mw, window, cx| {
@@ -286,7 +286,7 @@ fn setup_sidebar(
 
 fn setup_sidebar_closed(
     multi_workspace: &Entity<MultiWorkspace>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) -> Entity<Sidebar> {
     let multi_workspace = multi_workspace.clone();
     let sidebar =
@@ -312,7 +312,7 @@ fn set_threads_sidebar_default_width(width: f32, cx: &mut App) {
 async fn save_n_test_threads(
     count: u32,
     project: &Entity<project::Project>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) {
     for i in 0..count {
         save_thread_metadata(
@@ -348,7 +348,7 @@ async fn save_named_thread_metadata(
     session_id: &str,
     title: &str,
     project: &Entity<project::Project>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) {
     save_thread_metadata(
         acp::SessionId::new(Arc::from(session_id)),
@@ -556,7 +556,7 @@ fn save_draft_metadata_with_main_paths(
     thread_id
 }
 
-fn focus_sidebar(sidebar: &Entity<Sidebar>, cx: &mut gpui::VisualTestContext) {
+fn focus_sidebar(sidebar: &Entity<Sidebar>, cx: &mut gpui_runtime::VisualTestContext) {
     sidebar.update_in(cx, |_, window, cx| {
         cx.focus_self(window);
     });
@@ -567,7 +567,7 @@ fn enter_renamed_title(
     sidebar: &Entity<Sidebar>,
     target: RenameTarget,
     renamed_title: &str,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) {
     sidebar.read_with(cx, |sidebar, _cx| {
         assert_eq!(sidebar.rename_target, Some(target));
@@ -588,7 +588,7 @@ fn request_test_tool_authorization(
     thread: &Entity<AcpThread>,
     tool_call_id: &str,
     option_id: &str,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) {
     let tool_call_id = acp::ToolCallId::new(tool_call_id);
     let label = format!("Tool {tool_call_id}");
@@ -638,7 +638,7 @@ fn format_linked_worktree_chips(worktrees: &[ThreadItemWorktreeInfo]) -> String 
 
 fn visible_entries_as_strings(
     sidebar: &Entity<Sidebar>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) -> Vec<String> {
     sidebar.read_with(cx, |sidebar, cx| {
         sidebar
@@ -695,7 +695,7 @@ fn visible_entries_as_strings(
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thread_metadata_update_preserves_sticky_header_measurements(cx: &mut TestAppContext) {
     let (fs, project_a) = init_multi_project_test(&["/project-a", "/project-b"], cx).await;
     let (multi_workspace, cx) =
@@ -723,7 +723,7 @@ async fn test_thread_metadata_update_preserves_sticky_header_measurements(cx: &m
 
     cx.draw(
         gpui::point(px(0.), px(0.)),
-        gpui::size(px(400.), px(240.)),
+        gpui_backend::size(px(400.), px(240.)),
         |_, _| sidebar.clone().into_any_element(),
     );
     cx.run_until_parked();
@@ -737,7 +737,7 @@ async fn test_thread_metadata_update_preserves_sticky_header_measurements(cx: &m
     });
 
     sidebar.update_in(cx, |sidebar, _window, cx| {
-        sidebar.list_state.scroll_to(gpui::ListOffset {
+        sidebar.list_state.scroll_to(gpui_runtime::ListOffset {
             item_ix: next_header_ix - 1,
             offset_in_item: px(24.),
         });
@@ -745,7 +745,7 @@ async fn test_thread_metadata_update_preserves_sticky_header_measurements(cx: &m
     });
     cx.draw(
         gpui::point(px(0.), px(0.)),
-        gpui::size(px(400.), px(240.)),
+        gpui_backend::size(px(400.), px(240.)),
         |_, _| sidebar.clone().into_any_element(),
     );
     cx.run_until_parked();
@@ -776,7 +776,7 @@ async fn test_thread_metadata_update_preserves_sticky_header_measurements(cx: &m
     assert_eq!(bounds_before, bounds_after);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thread_status_update_does_not_reset_list_measurements(cx: &mut TestAppContext) {
     // When a thread's status changes (e.g. Running -> Completed after sending a message), the
     // shape sequence is unchanged, so `update_entries` should not reset the underlying
@@ -809,7 +809,7 @@ async fn test_thread_status_update_does_not_reset_list_measurements(cx: &mut Tes
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collapse_changes_entry_shape(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -842,7 +842,7 @@ async fn test_collapse_changes_entry_shape(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_serialization_round_trip(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -882,7 +882,7 @@ async fn test_serialization_round_trip(cx: &mut TestAppContext) {
     assert_eq!(width1, px(420.0));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_width_reset_returns_configured_default(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     cx.update(|cx| set_threads_sidebar_default_width(360.0, cx));
@@ -914,7 +914,7 @@ async fn test_width_reset_returns_configured_default(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_width_follows_settings_until_manually_resized(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -957,7 +957,7 @@ async fn test_width_follows_settings_until_manually_resized(cx: &mut TestAppCont
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_restored_width_preserves_legacy_resizes(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1003,7 +1003,7 @@ async fn test_restored_width_preserves_legacy_resizes(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_configured_width_is_clamped_into_range(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     cx.update(|cx| set_threads_sidebar_default_width(5000.0, cx));
@@ -1040,7 +1040,7 @@ async fn test_configured_width_is_clamped_into_range(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_only_a_user_chosen_width_is_persisted(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     cx.update(|cx| set_threads_sidebar_default_width(360.0, cx));
@@ -1105,7 +1105,7 @@ async fn test_only_a_user_chosen_width_is_persisted(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_restore_serialized_archive_view_does_not_panic(cx: &mut TestAppContext) {
     // A regression test to ensure that restoring a serialized archive view does not panic.
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
@@ -1139,7 +1139,7 @@ async fn test_restore_serialized_archive_view_does_not_panic(cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_entities_released_on_window_close(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1160,7 +1160,7 @@ async fn test_entities_released_on_window_close(cx: &mut TestAppContext) {
     weak_workspace.assert_released();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_single_workspace_no_threads(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1173,7 +1173,7 @@ async fn test_single_workspace_no_threads(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_single_workspace_with_saved_threads(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1215,7 +1215,7 @@ async fn test_single_workspace_with_saved_threads(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspace_lifecycle(cx: &mut TestAppContext) {
     let project = init_test_project("/project-a", cx).await;
     let (multi_workspace, cx) =
@@ -1262,7 +1262,7 @@ async fn test_workspace_lifecycle(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collapse_and_expand_group(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1315,7 +1315,7 @@ async fn test_collapse_and_expand_group(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collapse_state_survives_worktree_key_change(cx: &mut TestAppContext) {
     // When a worktree is added to a project, the project group key changes.
     // The sidebar's collapsed/expanded state is keyed by ProjectGroupKey, so
@@ -1366,7 +1366,7 @@ async fn test_collapse_state_survives_worktree_key_change(cx: &mut TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_neighboring_activatable_entry_stays_within_project(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1440,7 +1440,7 @@ async fn test_neighboring_activatable_entry_stays_within_project(cx: &mut TestAp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_visible_entries_as_strings(cx: &mut TestAppContext) {
     use workspace::ProjectGroup;
 
@@ -1670,7 +1670,7 @@ async fn test_visible_entries_as_strings(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_keyboard_select_next_and_previous(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1729,7 +1729,7 @@ async fn test_keyboard_select_next_and_previous(cx: &mut TestAppContext) {
     assert_eq!(sidebar.read_with(cx, |s, _| s.selection), None);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_keyboard_select_first_and_last(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1751,7 +1751,7 @@ async fn test_keyboard_select_first_and_last(cx: &mut TestAppContext) {
     assert_eq!(sidebar.read_with(cx, |s, _| s.selection), Some(0));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_keyboard_focus_in_does_not_set_selection(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1783,7 +1783,7 @@ async fn test_keyboard_focus_in_does_not_set_selection(cx: &mut TestAppContext) 
     assert_eq!(sidebar.read_with(cx, |s, _| s.selection), Some(0));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_keyboard_confirm_on_project_header_toggles_collapse(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1835,7 +1835,7 @@ async fn test_keyboard_confirm_on_project_header_toggles_collapse(cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_keyboard_expand_and_collapse_selected_entry(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1890,7 +1890,7 @@ async fn test_keyboard_expand_and_collapse_selected_entry(cx: &mut TestAppContex
     assert_eq!(sidebar.read_with(cx, |s, _| s.selection), Some(1));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_keyboard_collapse_from_child_selects_parent(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -1930,7 +1930,7 @@ async fn test_keyboard_collapse_from_child_selects_parent(cx: &mut TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_keyboard_navigation_on_empty_list(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/empty-project", cx).await;
     let (multi_workspace, cx) =
@@ -1964,7 +1964,7 @@ async fn test_keyboard_navigation_on_empty_list(cx: &mut TestAppContext) {
     assert_eq!(sidebar.read_with(cx, |s, _| s.selection), Some(0));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_new_entry_noops_without_open_project(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2001,7 +2001,7 @@ async fn test_new_entry_noops_without_open_project(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_selection_clamps_after_entry_removal(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -2056,7 +2056,7 @@ async fn init_test_project_with_agent_panel(
 
 fn add_agent_panel(
     workspace: &Entity<Workspace>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) -> Entity<AgentPanel> {
     workspace.update_in(cx, |workspace, window, cx| {
         let panel = cx.new(|cx| AgentPanel::test_new(workspace, window, cx));
@@ -2067,7 +2067,7 @@ fn add_agent_panel(
 
 fn setup_sidebar_with_agent_panel(
     multi_workspace: &Entity<MultiWorkspace>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) -> (Entity<Sidebar>, Entity<AgentPanel>) {
     let sidebar = setup_sidebar(multi_workspace, cx);
     let workspace = multi_workspace.read_with(cx, |mw, _cx| mw.workspace().clone());
@@ -2075,7 +2075,7 @@ fn setup_sidebar_with_agent_panel(
     (sidebar, panel)
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_agent_panel_terminals_appear_in_sidebar_and_search(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -2139,7 +2139,7 @@ async fn test_agent_panel_terminals_appear_in_sidebar_and_search(cx: &mut TestAp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_closing_last_agent_panel_terminal_restores_empty_header(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -2208,7 +2208,7 @@ async fn test_closing_last_agent_panel_terminal_restores_empty_header(cx: &mut T
     assert_project_header_has_threads(&sidebar, "my-project", true, cx);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_agent_panel_terminal_metadata_remains_visible_after_panel_is_removed(
     cx: &mut TestAppContext,
 ) {
@@ -2248,7 +2248,7 @@ async fn test_agent_panel_terminal_metadata_remains_visible_after_panel_is_remov
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_metadata_is_deduped_across_project_groups(cx: &mut TestAppContext) {
     agent_ui::test_support::init_test(cx);
     cx.update(|cx| {
@@ -2329,7 +2329,7 @@ async fn test_terminal_metadata_is_deduped_across_project_groups(cx: &mut TestAp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_agent_panel_terminal_shows_project_and_linked_worktree(cx: &mut TestAppContext) {
     agent_ui::test_support::init_test(cx);
     cx.update(|cx| {
@@ -2394,7 +2394,7 @@ async fn test_agent_panel_terminal_shows_project_and_linked_worktree(cx: &mut Te
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_close_event_on_archived_linked_worktree_removes_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -2593,7 +2593,7 @@ async fn test_terminal_close_event_on_archived_linked_worktree_removes_workspace
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_close_event_deletes_empty_draft_when_linked_worktree_has_no_archive_root(
     cx: &mut TestAppContext,
 ) {
@@ -2700,7 +2700,7 @@ async fn test_terminal_close_event_deletes_empty_draft_when_linked_worktree_has_
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_close_event_keeps_linked_worktree_workspace_with_live_editor_draft(
     cx: &mut TestAppContext,
 ) {
@@ -2887,7 +2887,7 @@ async fn test_terminal_close_event_keeps_linked_worktree_workspace_with_live_edi
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_selected_draft_archives_linked_worktree_after_last_draft(
     cx: &mut TestAppContext,
 ) {
@@ -3114,7 +3114,7 @@ async fn test_archive_selected_draft_archives_linked_worktree_after_last_draft(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_selected_draft_archives_closed_linked_worktree(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3273,7 +3273,7 @@ async fn test_archive_selected_draft_archives_closed_linked_worktree(cx: &mut Te
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_close_event_closes_sidebar_terminal(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -3316,7 +3316,7 @@ async fn test_terminal_close_event_closes_sidebar_terminal(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_close_event_activates_neighbor(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -3356,7 +3356,7 @@ async fn test_terminal_close_event_activates_neighbor(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_agent_panel_terminal_notifications_update_sidebar(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -3408,7 +3408,7 @@ async fn test_agent_panel_terminal_notifications_update_sidebar(cx: &mut TestApp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thread_switcher_can_activate_agent_panel_terminal(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -3482,7 +3482,7 @@ async fn test_thread_switcher_can_activate_agent_panel_terminal(cx: &mut TestApp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thread_switcher_includes_terminal_metadata_for_open_project_group(
     cx: &mut TestAppContext,
 ) {
@@ -3562,7 +3562,7 @@ async fn test_thread_switcher_includes_terminal_metadata_for_open_project_group(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thread_switcher_preserves_closed_terminal_linked_worktree_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -3706,7 +3706,7 @@ async fn test_thread_switcher_preserves_closed_terminal_linked_worktree_workspac
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_selected_terminal_archives_closed_linked_worktree(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3881,7 +3881,7 @@ async fn test_archive_selected_terminal_archives_closed_linked_worktree(cx: &mut
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_selected_thread_archives_closed_linked_worktree(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -4049,7 +4049,7 @@ async fn test_archive_selected_thread_archives_closed_linked_worktree(cx: &mut T
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_selected_thread_deletes_empty_draft_when_linked_worktree_has_no_archive_root(
     cx: &mut TestAppContext,
 ) {
@@ -4170,7 +4170,7 @@ async fn test_archive_selected_thread_deletes_empty_draft_when_linked_worktree_h
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_selected_thread_closes_selected_agent_panel_terminal(
     cx: &mut TestAppContext,
 ) {
@@ -4218,7 +4218,7 @@ async fn test_archive_selected_thread_closes_selected_agent_panel_terminal(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_closing_active_agent_panel_terminal_activates_neighbor(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -4273,7 +4273,7 @@ async fn test_closing_active_agent_panel_terminal_activates_neighbor(cx: &mut Te
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_parallel_threads_shown_with_live_status(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -4322,7 +4322,7 @@ async fn test_parallel_threads_shown_with_live_status(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_permission_request_marks_parent_sidebar_thread_waiting(
     cx: &mut TestAppContext,
 ) {
@@ -4378,7 +4378,7 @@ async fn test_subagent_permission_request_marks_parent_sidebar_thread_waiting(
     assert_eq!(parent_status, AgentThreadStatus::WaitingForConfirmation);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_background_thread_completion_triggers_notification(cx: &mut TestAppContext) {
     let project_a = init_test_project_with_agent_panel("/project-a", cx).await;
     let (multi_workspace, cx) =
@@ -4435,7 +4435,7 @@ async fn test_background_thread_completion_triggers_notification(cx: &mut TestAp
     );
 }
 
-fn type_in_search(sidebar: &Entity<Sidebar>, query: &str, cx: &mut gpui::VisualTestContext) {
+fn type_in_search(sidebar: &Entity<Sidebar>, query: &str, cx: &mut gpui_runtime::VisualTestContext) {
     sidebar.update_in(cx, |sidebar, window, cx| {
         window.focus(&sidebar.filter_editor.focus_handle(cx), cx);
         sidebar.filter_editor.update(cx, |editor, cx| {
@@ -4445,7 +4445,7 @@ fn type_in_search(sidebar: &Entity<Sidebar>, query: &str, cx: &mut gpui::VisualT
     cx.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_search_narrows_visible_threads_to_matches(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -4500,7 +4500,7 @@ async fn test_search_narrows_visible_threads_to_matches(cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_search_matches_regardless_of_case(cx: &mut TestAppContext) {
     // Scenario: A user remembers a thread title but not the exact casing.
     // Search should match case-insensitively so they can still find it.
@@ -4543,7 +4543,7 @@ async fn test_search_matches_regardless_of_case(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_escape_from_search_focuses_first_thread(cx: &mut TestAppContext) {
     // Scenario: A user searches, finds what they need, then presses Escape
     // in the search field to hand keyboard control back to the thread list.
@@ -4616,7 +4616,7 @@ async fn test_escape_from_search_focuses_first_thread(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_search_only_shows_workspace_headers_with_matches(cx: &mut TestAppContext) {
     let project_a = init_test_project("/project-a", cx).await;
     let (multi_workspace, cx) =
@@ -4706,7 +4706,7 @@ async fn test_search_only_shows_workspace_headers_with_matches(cx: &mut TestAppC
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_search_matches_workspace_name(cx: &mut TestAppContext) {
     let project_a = init_test_project("/alpha-project", cx).await;
     let (multi_workspace, cx) =
@@ -4821,7 +4821,7 @@ async fn test_search_matches_workspace_name(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_search_finds_threads_inside_collapsed_groups(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -4868,7 +4868,7 @@ async fn test_search_finds_threads_inside_collapsed_groups(cx: &mut TestAppConte
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_search_then_keyboard_navigate_and_confirm(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -4932,7 +4932,7 @@ async fn test_search_then_keyboard_navigate_and_confirm(cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_confirm_on_historical_thread_activates_workspace(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -5000,7 +5000,7 @@ async fn test_confirm_on_historical_thread_activates_workspace(cx: &mut TestAppC
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_confirm_on_historical_thread_preserves_historical_timestamp_and_order(
     cx: &mut TestAppContext,
 ) {
@@ -5095,7 +5095,7 @@ async fn test_confirm_on_historical_thread_preserves_historical_timestamp_and_or
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_confirm_on_historical_thread_in_new_project_group_opens_real_thread(
     cx: &mut TestAppContext,
 ) {
@@ -5236,7 +5236,7 @@ async fn test_confirm_on_historical_thread_in_new_project_group_opens_real_threa
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_click_clears_selection_and_focus_in_restores_it(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -5306,7 +5306,7 @@ async fn test_click_clears_selection_and_focus_in_restores_it(cx: &mut TestAppCo
     assert_eq!(sidebar.read_with(cx, |sidebar, _| sidebar.selection), None);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thread_title_update_propagates_to_sidebar(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -5360,7 +5360,7 @@ async fn test_thread_title_update_propagates_to_sidebar(cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rename_thread_from_sidebar_updates_title_override(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -5489,7 +5489,7 @@ async fn test_rename_thread_from_sidebar_updates_title_override(cx: &mut TestApp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rename_selected_thread_action_renames_selected_thread(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -5540,7 +5540,7 @@ async fn test_rename_selected_thread_action_renames_selected_thread(cx: &mut Tes
     assert_eq!(metadata.title_override.as_deref(), Some(renamed_title));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rename_selected_thread_action_renames_terminal(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -5606,7 +5606,7 @@ async fn test_rename_selected_thread_action_renames_terminal(cx: &mut TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_focused_thread_tracks_user_intent(cx: &mut TestAppContext) {
     let project_a = init_test_project_with_agent_panel("/project-a", cx).await;
     let (multi_workspace, cx) =
@@ -5818,7 +5818,7 @@ async fn test_focused_thread_tracks_user_intent(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_new_thread_button_works_after_adding_folder(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/project-a", cx).await;
     let fs = cx.update(|cx| <dyn fs::Fs>::global(cx));
@@ -5913,7 +5913,7 @@ async fn test_new_thread_button_works_after_adding_folder(cx: &mut TestAppContex
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_draft_title_updates_from_editor_text(cx: &mut TestAppContext) {
     // When the user types into a draft, the parked draft entry's title in
     // the sidebar should reflect the editor's text — both while the
@@ -5945,7 +5945,7 @@ async fn test_draft_title_updates_from_editor_text(cx: &mut TestAppContext) {
     });
     cx.run_until_parked();
 
-    let draft_title = |sidebar: &Entity<Sidebar>, cx: &mut gpui::VisualTestContext| {
+    let draft_title = |sidebar: &Entity<Sidebar>, cx: &mut gpui_runtime::VisualTestContext| {
         sidebar.read_with(cx, |sidebar, _cx| {
             sidebar
                 .contents
@@ -5994,7 +5994,7 @@ async fn test_draft_title_updates_from_editor_text(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thread_switcher_includes_parked_draft(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -6046,7 +6046,7 @@ async fn test_thread_switcher_includes_parked_draft(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_plus_button_reuses_empty_draft(cx: &mut TestAppContext) {
     // Clicking `+` when an empty draft is already active should focus it
     // instead of creating and parking a new one.
@@ -6108,7 +6108,7 @@ async fn test_plus_button_reuses_empty_draft(cx: &mut TestAppContext) {
     assert_eq!(draft_rows[0].metadata.thread_id, first_id);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_plus_button_parks_nonempty_draft(cx: &mut TestAppContext) {
     // Clicking `+` while the current draft has content should park the
     // current draft (surface it as a sidebar row) and create a new empty
@@ -6227,7 +6227,7 @@ async fn test_plus_button_parks_nonempty_draft(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remove_draft_deletes_metadata_row(cx: &mut TestAppContext) {
     // The close-draft button deletes the metadata row and the kvp draft prompt,
     // and the draft disappears from the sidebar.
@@ -6293,7 +6293,7 @@ async fn test_remove_draft_deletes_metadata_row(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sending_message_from_draft_promotes_in_place(cx: &mut TestAppContext) {
     // Sending a message from a draft should keep the same ThreadId, set the
     // session_id on its metadata row, and clear the `draft_thread` pointer.
@@ -6346,7 +6346,7 @@ async fn test_sending_message_from_draft_promotes_in_place(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cmd_n_shows_new_thread_entry(cx: &mut TestAppContext) {
     // When the user presses Cmd-N (NewThread action) while viewing a
     // non-empty thread, the panel should switch to the draft thread and
@@ -6412,7 +6412,7 @@ async fn test_cmd_n_shows_new_thread_entry(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cmd_n_shows_new_thread_entry_in_absorbed_worktree(cx: &mut TestAppContext) {
     // When the active workspace is an absorbed git worktree, cmd-n
     // should activate the draft thread in the panel and the sidebar
@@ -6540,7 +6540,7 @@ async fn test_cmd_n_shows_new_thread_entry_in_absorbed_worktree(cx: &mut TestApp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_only_actively_viewed_empty_draft_is_visible_in_sidebar(cx: &mut TestAppContext) {
     // The sidebar surfaces an empty-draft placeholder row only for the
     // draft that the *active workspace's panel* is currently viewing.
@@ -6644,7 +6644,7 @@ async fn test_only_actively_viewed_empty_draft_is_visible_in_sidebar(cx: &mut Te
     // creation flows can leave behind orphan ephemeral metadata that's
     // also hidden by the filter.
     let empty_draft_rows =
-        |sidebar: &Entity<Sidebar>, cx: &mut gpui::VisualTestContext| -> Vec<ThreadId> {
+        |sidebar: &Entity<Sidebar>, cx: &mut gpui_runtime::VisualTestContext| -> Vec<ThreadId> {
             sidebar.read_with(cx, |sidebar, _| {
                 sidebar
                     .contents
@@ -6660,7 +6660,7 @@ async fn test_only_actively_viewed_empty_draft_is_visible_in_sidebar(cx: &mut Te
             })
         };
     let active_panel_draft_id =
-        |panel: &Entity<AgentPanel>, cx: &mut gpui::VisualTestContext| -> Option<ThreadId> {
+        |panel: &Entity<AgentPanel>, cx: &mut gpui_runtime::VisualTestContext| -> Option<ThreadId> {
             panel.read_with(cx, |panel, cx| {
                 panel
                     .active_thread_id(cx)
@@ -6744,7 +6744,7 @@ async fn init_test_project_with_git(
     (project, fs)
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_search_matches_worktree_name(cx: &mut TestAppContext) {
     let (project, fs) = init_test_project_with_git("/project", cx).await;
 
@@ -6794,7 +6794,7 @@ async fn test_search_matches_worktree_name(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_git_worktree_added_live_updates_sidebar(cx: &mut TestAppContext) {
     let (project, fs) = init_test_project_with_git("/project", cx).await;
 
@@ -6859,7 +6859,7 @@ async fn test_git_worktree_added_live_updates_sidebar(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_two_worktree_workspaces_absorbed_when_main_added(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -6973,7 +6973,7 @@ async fn test_two_worktree_workspaces_absorbed_when_main_added(cx: &mut TestAppC
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_threadless_workspace_shows_new_thread_with_worktree_chip(cx: &mut TestAppContext) {
     // When a group has two workspaces — one with threads and one
     // without — the threadless workspace should appear as a
@@ -7046,7 +7046,7 @@ async fn test_threadless_workspace_shows_new_thread_with_worktree_chip(cx: &mut 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multi_worktree_thread_shows_multiple_chips(cx: &mut TestAppContext) {
     // A thread created in a workspace with roots from different git
     // worktrees should show a chip for each distinct worktree name.
@@ -7126,7 +7126,7 @@ async fn test_multi_worktree_thread_shows_multiple_chips(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_same_named_worktree_chips_are_deduplicated(cx: &mut TestAppContext) {
     // When a thread's roots span multiple repos but share the same
     // worktree name (e.g. both in "olivetti"), only one chip should
@@ -7201,7 +7201,7 @@ async fn test_same_named_worktree_chips_are_deduplicated(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_absorbed_worktree_running_thread_shows_live_status(cx: &mut TestAppContext) {
     // When a worktree workspace is absorbed under the main repo, a
     // running thread in the worktree's agent panel should still show
@@ -7303,7 +7303,7 @@ async fn test_absorbed_worktree_running_thread_shows_live_status(cx: &mut TestAp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_absorbed_worktree_completion_triggers_notification(cx: &mut TestAppContext) {
     agent_ui::test_support::init_test(cx);
     cx.update(|cx| {
@@ -7395,7 +7395,7 @@ async fn test_absorbed_worktree_completion_triggers_notification(cx: &mut TestAp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clicking_worktree_thread_opens_workspace_when_none_exists(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -7490,7 +7490,7 @@ async fn test_clicking_worktree_thread_opens_workspace_when_none_exists(cx: &mut
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clicking_worktree_thread_does_not_briefly_render_as_separate_project(
     cx: &mut TestAppContext,
 ) {
@@ -7638,7 +7638,7 @@ async fn test_clicking_worktree_thread_does_not_briefly_render_as_separate_proje
     sidebar.update(cx, assert_sidebar_state);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clicking_absorbed_worktree_thread_activates_worktree_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -7782,7 +7782,7 @@ async fn test_clicking_absorbed_worktree_thread_activates_worktree_workspace(
 // ultimately about the sidebar's tolerance for any stale row whose
 // folder paths correspond to an open workspace's roots, regardless
 // of how that row came to be in the store.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sidebar_keeps_multi_root_thread_with_stale_main_paths(cx: &mut TestAppContext) {
     agent_ui::test_support::init_test(cx);
     cx.update(|cx| {
@@ -7922,7 +7922,7 @@ async fn test_sidebar_keeps_multi_root_thread_with_stale_main_paths(cx: &mut Tes
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_activate_archived_thread_with_saved_paths_activates_matching_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -7997,7 +7997,7 @@ async fn test_activate_archived_thread_with_saved_paths_activates_matching_works
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_activate_archived_thread_cwd_fallback_with_matching_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -8067,7 +8067,7 @@ async fn test_activate_archived_thread_cwd_fallback_with_matching_workspace(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_activate_archived_thread_no_paths_no_cwd_uses_active_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -8133,7 +8133,7 @@ async fn test_activate_archived_thread_no_paths_no_cwd_uses_active_workspace(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_activate_archived_thread_saved_paths_opens_new_workspace(cx: &mut TestAppContext) {
     // Thread has saved metadata pointing to a path with no open workspace.
     // Expected: opens a new workspace for that path.
@@ -8191,7 +8191,7 @@ async fn test_activate_archived_thread_saved_paths_opens_new_workspace(cx: &mut 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_activate_archived_thread_reuses_workspace_in_another_window(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -8212,10 +8212,10 @@ async fn test_activate_archived_thread_reuses_workspace_in_another_window(cx: &m
     let multi_workspace_a_entity = multi_workspace_a.root(cx).unwrap();
     let multi_workspace_b_entity = multi_workspace_b.root(cx).unwrap();
 
-    let cx_b = &mut gpui::VisualTestContext::from_window(multi_workspace_b.into(), cx);
+    let cx_b = &mut gpui_runtime::VisualTestContext::from_window(multi_workspace_b.into(), cx);
     let _sidebar_b = setup_sidebar(&multi_workspace_b_entity, cx_b);
 
-    let cx_a = &mut gpui::VisualTestContext::from_window(multi_workspace_a.into(), cx);
+    let cx_a = &mut gpui_runtime::VisualTestContext::from_window(multi_workspace_a.into(), cx);
     let sidebar = setup_sidebar(&multi_workspace_a_entity, cx_a);
 
     let session_id = acp::SessionId::new(Arc::from("archived-cross-window"));
@@ -8269,7 +8269,7 @@ async fn test_activate_archived_thread_reuses_workspace_in_another_window(cx: &m
         });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_activate_archived_thread_reuses_workspace_in_another_window_with_target_sidebar(
     cx: &mut TestAppContext,
 ) {
@@ -8292,10 +8292,10 @@ async fn test_activate_archived_thread_reuses_workspace_in_another_window_with_t
     let multi_workspace_a_entity = multi_workspace_a.root(cx).unwrap();
     let multi_workspace_b_entity = multi_workspace_b.root(cx).unwrap();
 
-    let cx_a = &mut gpui::VisualTestContext::from_window(multi_workspace_a.into(), cx);
+    let cx_a = &mut gpui_runtime::VisualTestContext::from_window(multi_workspace_a.into(), cx);
     let sidebar_a = setup_sidebar(&multi_workspace_a_entity, cx_a);
 
-    let cx_b = &mut gpui::VisualTestContext::from_window(multi_workspace_b.into(), cx);
+    let cx_b = &mut gpui_runtime::VisualTestContext::from_window(multi_workspace_b.into(), cx);
     let sidebar_b = setup_sidebar(&multi_workspace_b_entity, cx_b);
     let workspace_b = multi_workspace_b_entity.read_with(cx_b, |mw, _| mw.workspace().clone());
     let _panel_b = add_agent_panel(&workspace_b, cx_b);
@@ -8356,7 +8356,7 @@ async fn test_activate_archived_thread_reuses_workspace_in_another_window_with_t
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_activate_archived_thread_prefers_current_window_for_matching_paths(
     cx: &mut TestAppContext,
 ) {
@@ -8377,10 +8377,10 @@ async fn test_activate_archived_thread_prefers_current_window_for_matching_paths
     let multi_workspace_a_entity = multi_workspace_a.root(cx).unwrap();
     let multi_workspace_b_entity = multi_workspace_b.root(cx).unwrap();
 
-    let cx_b = &mut gpui::VisualTestContext::from_window(multi_workspace_b.into(), cx);
+    let cx_b = &mut gpui_runtime::VisualTestContext::from_window(multi_workspace_b.into(), cx);
     let _sidebar_b = setup_sidebar(&multi_workspace_b_entity, cx_b);
 
-    let cx_a = &mut gpui::VisualTestContext::from_window(multi_workspace_a.into(), cx);
+    let cx_a = &mut gpui_runtime::VisualTestContext::from_window(multi_workspace_a.into(), cx);
     let sidebar_a = setup_sidebar(&multi_workspace_a_entity, cx_a);
 
     let session_id = acp::SessionId::new(Arc::from("archived-current-window"));
@@ -8433,7 +8433,7 @@ async fn test_activate_archived_thread_prefers_current_window_for_matching_paths
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_thread_uses_next_threads_own_workspace(cx: &mut TestAppContext) {
     // Regression test: archive_thread previously always loaded the next thread
     // through group_workspace (the main workspace's ProjectHeader), even when
@@ -8597,7 +8597,7 @@ async fn test_archive_thread_uses_next_threads_own_workspace(cx: &mut TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_last_worktree_thread_removes_workspace(cx: &mut TestAppContext) {
     // When the last non-archived thread for a linked worktree is archived,
     // the linked worktree workspace should be removed from the multi-workspace.
@@ -8812,7 +8812,7 @@ async fn test_archive_last_worktree_thread_removes_workspace(cx: &mut TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_restore_worktree_when_branch_has_moved(cx: &mut TestAppContext) {
     // restore_worktree_via_git should succeed when the branch has moved
     // to a different SHA since archival. The worktree stays in detached
@@ -8927,7 +8927,7 @@ async fn test_restore_worktree_when_branch_has_moved(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_restore_worktree_when_branch_has_not_moved(cx: &mut TestAppContext) {
     // restore_worktree_via_git should succeed when the branch still
     // points at the same SHA as at archive time.
@@ -9024,7 +9024,7 @@ async fn test_restore_worktree_when_branch_has_not_moved(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_restore_worktree_when_branch_does_not_exist(cx: &mut TestAppContext) {
     // restore_worktree_via_git should succeed when the branch no longer
     // exists (e.g. it was deleted while the thread was archived). The
@@ -9125,7 +9125,7 @@ async fn test_restore_worktree_when_branch_does_not_exist(cx: &mut TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_restore_worktree_thread_uses_main_repo_project_group_key(cx: &mut TestAppContext) {
     // Activating an archived linked worktree thread whose directory has
     // been deleted should reuse the existing main repo workspace, not
@@ -9271,7 +9271,7 @@ async fn test_restore_worktree_thread_uses_main_repo_project_group_key(cx: &mut 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_last_worktree_thread_not_blocked_by_remote_thread_at_same_path(
     cx: &mut TestAppContext,
 ) {
@@ -9440,7 +9440,7 @@ async fn test_archive_last_worktree_thread_not_blocked_by_remote_thread_at_same_
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_worktree_threads_not_duplicated_across_groups(cx: &mut TestAppContext) {
     // When a multi-root workspace (e.g. [/other, /project]) shares a
     // repo with a single-root workspace (e.g. [/project]), linked
@@ -9553,7 +9553,7 @@ fn thread_id_for(session_id: &acp::SessionId, cx: &mut TestAppContext) -> Thread
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thread_switcher_ordering(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -9561,7 +9561,7 @@ async fn test_thread_switcher_ordering(cx: &mut TestAppContext) {
     let (sidebar, panel) = setup_sidebar_with_agent_panel(&multi_workspace, cx);
 
     let switcher_ids =
-        |sidebar: &Entity<Sidebar>, cx: &mut gpui::VisualTestContext| -> Vec<ThreadId> {
+        |sidebar: &Entity<Sidebar>, cx: &mut gpui_runtime::VisualTestContext| -> Vec<ThreadId> {
             sidebar.read_with(cx, |sidebar, cx| {
                 let switcher = sidebar
                     .thread_switcher
@@ -9577,7 +9577,7 @@ async fn test_thread_switcher_ordering(cx: &mut TestAppContext) {
         };
 
     let switcher_selected_id =
-        |sidebar: &Entity<Sidebar>, cx: &mut gpui::VisualTestContext| -> ThreadId {
+        |sidebar: &Entity<Sidebar>, cx: &mut gpui_runtime::VisualTestContext| -> ThreadId {
             sidebar.read_with(cx, |sidebar, cx| {
                 let switcher = sidebar
                     .thread_switcher
@@ -9879,7 +9879,7 @@ async fn test_thread_switcher_ordering(cx: &mut TestAppContext) {
     cx.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_thread_keeps_metadata_but_hides_from_sidebar(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -9933,7 +9933,7 @@ async fn test_archive_thread_keeps_metadata_but_hides_from_sidebar(cx: &mut Test
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_thread_drops_retained_conversation_view(cx: &mut TestAppContext) {
     let project = init_test_project_with_agent_panel("/project-a", cx).await;
     let (multi_workspace, cx) =
@@ -9972,7 +9972,7 @@ async fn test_archive_thread_drops_retained_conversation_view(cx: &mut TestAppCo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_thread_active_entry_management(cx: &mut TestAppContext) {
     // Tests two archive scenarios:
     // 1. Archiving a thread in a non-active workspace leaves active_entry
@@ -10077,7 +10077,7 @@ async fn test_archive_thread_active_entry_management(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unarchive_only_shows_restored_thread(cx: &mut TestAppContext) {
     // Full flow: create a thread, archive it (removing the workspace),
     // then unarchive. Only the restored thread should appear — no
@@ -10147,7 +10147,7 @@ async fn test_unarchive_only_shows_restored_thread(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unarchive_first_thread_in_group_does_not_create_spurious_draft(
     cx: &mut TestAppContext,
 ) {
@@ -10246,7 +10246,7 @@ async fn test_unarchive_first_thread_in_group_does_not_create_spurious_draft(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unarchive_into_new_workspace_does_not_create_duplicate_real_thread(
     cx: &mut TestAppContext,
 ) {
@@ -10389,7 +10389,7 @@ async fn test_unarchive_into_new_workspace_does_not_create_duplicate_real_thread
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unarchive_into_existing_workspace_replaces_draft(cx: &mut TestAppContext) {
     // When a workspace already exists with an empty draft and a thread
     // is unarchived into it, the draft should be replaced — not kept
@@ -10460,7 +10460,7 @@ async fn test_unarchive_into_existing_workspace_replaces_draft(cx: &mut TestAppC
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unarchive_into_inactive_existing_workspace_does_not_leave_active_draft(
     cx: &mut TestAppContext,
 ) {
@@ -10591,7 +10591,7 @@ async fn test_unarchive_into_inactive_existing_workspace_does_not_leave_active_d
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unarchive_after_removing_parent_project_group_restores_real_thread(
     cx: &mut TestAppContext,
 ) {
@@ -10734,7 +10734,7 @@ async fn test_unarchive_after_removing_parent_project_group_restores_real_thread
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unarchive_does_not_create_duplicate_real_thread_metadata(cx: &mut TestAppContext) {
     agent_ui::test_support::init_test(cx);
     cx.update(|cx| {
@@ -10833,7 +10833,7 @@ async fn test_unarchive_does_not_create_duplicate_real_thread_metadata(cx: &mut 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_switch_to_workspace_with_archived_thread_shows_no_active_entry(
     cx: &mut TestAppContext,
 ) {
@@ -10908,7 +10908,7 @@ async fn test_switch_to_workspace_with_archived_thread_shows_no_active_entry(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archived_threads_excluded_from_sidebar_entries(cx: &mut TestAppContext) {
     let project = init_test_project("/my-project", cx).await;
     let (multi_workspace, cx) =
@@ -10980,7 +10980,7 @@ async fn test_archived_threads_excluded_from_sidebar_entries(cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_last_thread_on_linked_worktree_does_not_create_new_thread_on_worktree(
     cx: &mut TestAppContext,
 ) {
@@ -11154,7 +11154,7 @@ async fn test_archive_last_thread_on_linked_worktree_does_not_create_new_thread_
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_last_thread_on_linked_worktree_with_no_siblings_leaves_group_empty(
     cx: &mut TestAppContext,
 ) {
@@ -11277,7 +11277,7 @@ async fn test_archive_last_thread_on_linked_worktree_with_no_siblings_leaves_gro
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unarchive_linked_worktree_thread_into_project_group_shows_only_restored_real_thread(
     cx: &mut TestAppContext,
 ) {
@@ -11458,7 +11458,7 @@ async fn test_unarchive_linked_worktree_thread_into_project_group_shows_only_res
     assert_no_extra_rows(&entries_after_extra_turns);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_thread_on_linked_worktree_selects_sibling_thread(cx: &mut TestAppContext) {
     // When a linked worktree thread is archived but the group has other
     // threads (e.g. on the main project), archive_thread should select
@@ -11599,7 +11599,7 @@ async fn test_archive_thread_on_linked_worktree_selects_sibling_thread(cx: &mut 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_worktree_workspace_shows_main_worktree_threads(cx: &mut TestAppContext) {
     // When only a linked worktree workspace is open (not the main repo),
     // threads saved against the main repo should still appear in the sidebar.
@@ -11713,7 +11713,7 @@ async fn add_test_project(
     path: &str,
     fs: &Arc<FakeFs>,
     multi_workspace: &Entity<MultiWorkspace>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) -> Entity<Workspace> {
     let project = project::Project::test(fs.clone() as Arc<dyn fs::Fs>, [path.as_ref()], cx).await;
     let workspace = multi_workspace.update_in(cx, |mw, window, cx| {
@@ -11723,7 +11723,7 @@ async fn add_test_project(
     workspace
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspace_lifecycle_retains_projects_when_sidebar_is_closed(cx: &mut TestAppContext) {
     let (fs, project_a) =
         init_multi_project_test(&["/project-a", "/project-b", "/project-c"], cx).await;
@@ -11756,7 +11756,7 @@ async fn test_workspace_lifecycle_retains_projects_when_sidebar_is_closed(cx: &m
     assert!(multi_workspace.read_with(cx, |mw, _| mw.workspaces().any(|w| w == &workspace_b)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspaces_remain_retained_after_sidebar_closes(cx: &mut TestAppContext) {
     let (fs, project_a) = init_multi_project_test(
         &["/project-a", "/project-b", "/project-c", "/project-d"],
@@ -11808,7 +11808,7 @@ async fn test_workspaces_remain_retained_after_sidebar_closes(cx: &mut TestAppCo
     assert!(multi_workspace.read_with(cx, |mw, _| mw.workspaces().any(|w| w == &workspace_c)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sidebar_opening_keeps_existing_retained_workspaces(cx: &mut TestAppContext) {
     let (fs, project_a) =
         init_multi_project_test(&["/project-a", "/project-b", "/project-c"], cx).await;
@@ -11847,7 +11847,7 @@ async fn test_sidebar_opening_keeps_existing_retained_workspaces(cx: &mut TestAp
     assert!(multi_workspace.read_with(cx, |mw, _| mw.workspace() == &workspace_c));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_legacy_thread_with_canonical_path_opens_main_repo_workspace(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -11967,7 +11967,7 @@ async fn test_legacy_thread_with_canonical_path_opens_main_repo_workspace(cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_worktree_workspace_reachable_after_adding_unrelated_project(
     cx: &mut TestAppContext,
 ) {
@@ -11987,7 +11987,7 @@ async fn test_linked_worktree_workspace_reachable_after_adding_unrelated_project
         cx.observe_new(
             |workspace: &mut Workspace,
              window: Option<&mut Window>,
-             cx: &mut gpui::Context<Workspace>| {
+             cx: &mut gpui_runtime::Context<Workspace>| {
                 if let Some(window) = window {
                     let panel = cx.new(|cx| AgentPanel::test_new(workspace, window, cx));
                     workspace.add_panel(panel, window, cx);
@@ -12104,8 +12104,8 @@ async fn test_linked_worktree_workspace_reachable_after_adding_unrelated_project
     let (all_ids, reachable_ids) = sidebar.read_with(cx, |sidebar, cx| {
         let mw = multi_workspace.read(cx);
 
-        let all: HashSet<gpui::EntityId> = mw.workspaces().map(|ws| ws.entity_id()).collect();
-        let reachable: HashSet<gpui::EntityId> = sidebar
+        let all: HashSet<gpui_runtime::EntityId> = mw.workspaces().map(|ws| ws.entity_id()).collect();
+        let reachable: HashSet<gpui_runtime::EntityId> = sidebar
             .contents
             .entries
             .iter()
@@ -12127,7 +12127,7 @@ async fn test_linked_worktree_workspace_reachable_after_adding_unrelated_project
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_startup_failed_restoration_shows_no_draft(cx: &mut TestAppContext) {
     // Empty project groups no longer auto-create drafts via reconciliation.
     // A fresh startup with no restorable thread should show only the header.
@@ -12146,7 +12146,7 @@ async fn test_startup_failed_restoration_shows_no_draft(cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_startup_successful_restoration_no_spurious_draft(cx: &mut TestAppContext) {
     // Rule 5: When the app starts and the AgentPanel successfully loads
     // a thread, no spurious draft should appear.
@@ -12176,7 +12176,7 @@ async fn test_startup_successful_restoration_no_spurious_draft(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_project_header_click_restores_last_viewed(cx: &mut TestAppContext) {
     // Rule 9: Clicking a project header should restore whatever the
     // user was last looking at in that group, not create new drafts
@@ -12280,7 +12280,7 @@ async fn test_project_header_click_restores_last_viewed(cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_activating_workspace_with_draft_does_not_create_extras(cx: &mut TestAppContext) {
     // When a workspace has a draft (from the panel's load fallback)
     // and the user activates it (e.g. by clicking the placeholder or
@@ -12318,7 +12318,7 @@ async fn test_activating_workspace_with_draft_does_not_create_extras(cx: &mut Te
     cx.run_until_parked();
 
     // Count project-b's drafts.
-    let count_b_drafts = |cx: &mut gpui::VisualTestContext| {
+    let count_b_drafts = |cx: &mut gpui_runtime::VisualTestContext| {
         let entries = visible_entries_as_strings(&sidebar, cx);
         entries
             .iter()
@@ -12355,7 +12355,7 @@ async fn test_activating_workspace_with_draft_does_not_create_extras(cx: &mut Te
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_non_archive_thread_paths_migrate_on_worktree_add_and_remove(cx: &mut TestAppContext) {
     // Historical threads (not open in any agent panel) should have their
     // worktree paths updated when a folder is added to or removed from the
@@ -12485,7 +12485,7 @@ async fn test_non_archive_thread_paths_migrate_on_worktree_add_and_remove(cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_worktree_add_only_regroups_threads_for_changed_workspace(cx: &mut TestAppContext) {
     // When two workspaces share the same project group (same main path)
     // but have different folder paths (main repo vs linked worktree),
@@ -12640,7 +12640,7 @@ async fn test_worktree_add_only_regroups_threads_for_changed_workspace(cx: &mut 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_worktree_workspace_reachable_after_adding_worktree_to_project(
     cx: &mut TestAppContext,
 ) {
@@ -12730,14 +12730,14 @@ async fn test_linked_worktree_workspace_reachable_after_adding_worktree_to_proje
     });
     sidebar.read_with(cx, |sidebar, cx| {
         let multi_workspace = multi_workspace.read(cx);
-        let reachable: std::collections::HashSet<gpui::EntityId> = sidebar
+        let reachable: std::collections::HashSet<gpui_runtime::EntityId> = sidebar
             .contents
             .entries
             .iter()
             .flat_map(|entry| entry.reachable_workspaces(multi_workspace, cx))
             .map(|ws| ws.entity_id())
             .collect();
-        let all: std::collections::HashSet<gpui::EntityId> =
+        let all: std::collections::HashSet<gpui_runtime::EntityId> =
             mw_workspaces.iter().copied().collect();
         let unreachable = &all - &reachable;
         assert!(
@@ -12889,7 +12889,7 @@ mod property_test {
         state: &mut TestState,
         path_list: PathList,
         main_worktree_paths: PathList,
-        cx: &mut gpui::VisualTestContext,
+        cx: &mut gpui_runtime::VisualTestContext,
     ) {
         let session_id = state.next_metadata_only_thread_id();
         let title: SharedString = format!("Thread {}", session_id).into();
@@ -12920,7 +12920,7 @@ mod property_test {
         state: &mut TestState,
         multi_workspace: &Entity<MultiWorkspace>,
         sidebar: &Entity<Sidebar>,
-        cx: &mut gpui::VisualTestContext,
+        cx: &mut gpui_runtime::VisualTestContext,
     ) {
         match operation {
             Operation::SaveThread {
@@ -13227,7 +13227,7 @@ mod property_test {
         }
     }
 
-    fn update_sidebar(sidebar: &Entity<Sidebar>, cx: &mut gpui::VisualTestContext) {
+    fn update_sidebar(sidebar: &Entity<Sidebar>, cx: &mut gpui_runtime::VisualTestContext) {
         sidebar.update_in(cx, |sidebar, _window, cx| {
             if let Some(mw) = sidebar.multi_workspace.upgrade() {
                 mw.update(cx, |mw, _cx| mw.test_expand_all_groups());
@@ -13565,7 +13565,7 @@ mod property_test {
 
         let multi_workspace = multi_workspace.read(cx);
 
-        let reachable_workspaces: HashSet<gpui::EntityId> = sidebar
+        let reachable_workspaces: HashSet<gpui_runtime::EntityId> = sidebar
             .contents
             .entries
             .iter()
@@ -13573,7 +13573,7 @@ mod property_test {
             .map(|ws| ws.entity_id())
             .collect();
 
-        let all_workspace_ids: HashSet<gpui::EntityId> = multi_workspace
+        let all_workspace_ids: HashSet<gpui_runtime::EntityId> = multi_workspace
             .workspaces()
             .map(|ws| ws.entity_id())
             .collect();
@@ -13635,7 +13635,7 @@ mod property_test {
             cx.observe_new(
                 |workspace: &mut Workspace,
                  window: Option<&mut Window>,
-                 cx: &mut gpui::Context<Workspace>| {
+                 cx: &mut gpui_runtime::Context<Workspace>| {
                     if let Some(window) = window {
                         let panel = cx.new(|cx| AgentPanel::test_new(workspace, window, cx));
                         workspace.add_panel(panel, window, cx);
@@ -13691,7 +13691,7 @@ mod property_test {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_integration_does_not_briefly_render_as_separate_project(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -13995,7 +13995,7 @@ async fn test_remote_project_integration_does_not_briefly_render_as_separate_pro
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_removes_worktree_even_when_workspace_paths_diverge(cx: &mut TestAppContext) {
     // When the thread's folder_paths don't exactly match any workspace's
     // root paths (e.g. because a folder was added to the workspace after
@@ -14157,7 +14157,7 @@ async fn test_archive_removes_worktree_even_when_workspace_paths_diverge(cx: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_archive_mixed_workspace_closes_only_archived_worktree_items(cx: &mut TestAppContext) {
     // When a workspace contains both a worktree being archived and other
     // worktrees that should remain, only the editor items referencing the
@@ -14387,7 +14387,7 @@ async fn test_archive_mixed_workspace_closes_only_archived_worktree_items(cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_discard_mixed_workspace_draft_closes_only_archived_worktree_items(
     cx: &mut TestAppContext,
 ) {
@@ -14657,7 +14657,7 @@ fn test_worktree_info_missing_branch_returns_none() {
     assert_eq!(infos[0].worktree_name, Some(SharedString::from("myapp")));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_archive_thread_with_active_connection(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -14858,7 +14858,7 @@ async fn test_remote_archive_thread_with_active_connection(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_linked_worktree_workspace_to_remove_uses_remote_connection(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -15016,7 +15016,7 @@ async fn test_remote_linked_worktree_workspace_to_remove_uses_remote_connection(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_archive_thread_with_disconnected_remote(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -15127,7 +15127,7 @@ async fn test_remote_archive_thread_with_disconnected_remote(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collab_guest_move_thread_paths_is_noop(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -15198,7 +15198,7 @@ async fn test_collab_guest_move_thread_paths_is_noop(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cmd_click_project_header_returns_to_last_active_linked_worktree_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -15388,7 +15388,7 @@ fn test_split_leading_icon_char() {
     assert_eq!(positions, vec![0, 1]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_or_create_workspace_returns_the_created_remote_workspace(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,

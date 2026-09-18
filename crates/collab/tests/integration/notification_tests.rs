@@ -8,7 +8,7 @@ use rpc::{Notification, proto};
 
 use crate::TestServer;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_notifications(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,

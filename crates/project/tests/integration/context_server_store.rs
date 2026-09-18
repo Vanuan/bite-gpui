@@ -18,7 +18,7 @@ use std::sync::Arc;
 use std::{cell::RefCell, path::PathBuf, rc::Rc};
 use util::path;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_server_status(cx: &mut TestAppContext) {
     const SERVER_1_ID: &str = "mcp-1";
     const SERVER_2_ID: &str = "mcp-2";
@@ -92,7 +92,7 @@ async fn test_context_server_status(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_server_status_events(cx: &mut TestAppContext) {
     const SERVER_1_ID: &str = "mcp-1";
     const SERVER_2_ID: &str = "mcp-2";
@@ -148,7 +148,7 @@ async fn test_context_server_status_events(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test(iterations = 25)]
+#[gpui_runtime::test(iterations = 25)]
 async fn test_context_server_concurrent_starts(cx: &mut TestAppContext) {
     const SERVER_1_ID: &str = "mcp-1";
 
@@ -204,7 +204,7 @@ async fn test_context_server_concurrent_starts(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_server_maintain_servers_loop(cx: &mut TestAppContext) {
     const SERVER_1_ID: &str = "mcp-1";
     const SERVER_2_ID: &str = "mcp-2";
@@ -447,7 +447,7 @@ async fn test_context_server_maintain_servers_loop(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_server_enabled_disabled(cx: &mut TestAppContext) {
     const SERVER_1_ID: &str = "mcp-1";
 
@@ -554,7 +554,7 @@ async fn test_context_server_enabled_disabled(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_server_respects_disable_ai(cx: &mut TestAppContext) {
     const SERVER_1_ID: &str = "mcp-1";
 
@@ -664,7 +664,7 @@ async fn test_context_server_respects_disable_ai(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_server_loaded_when_first_worktree_added(cx: &mut TestAppContext) {
     const SERVER_ID: &str = "mcp-1";
     let server_id = ContextServerId(SERVER_ID.into());
@@ -724,7 +724,7 @@ async fn test_context_server_loaded_when_first_worktree_added(cx: &mut TestAppCo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_stdio_server_restarts_when_project_root_becomes_available(cx: &mut TestAppContext) {
     const SERVER_ID: &str = "mcp-1";
     let server_id = ContextServerId(SERVER_ID.into());
@@ -816,7 +816,7 @@ async fn test_stdio_server_restarts_when_project_root_becomes_available(cx: &mut
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_server_ids_includes_disabled_servers(cx: &mut TestAppContext) {
     const ENABLED_SERVER_ID: &str = "enabled-server";
     const DISABLED_SERVER_ID: &str = "disabled-server";
@@ -918,7 +918,7 @@ fn set_context_server_configuration(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_context_server(cx: &mut TestAppContext) {
     const SERVER_ID: &str = "remote-server";
     let server_id = ContextServerId(SERVER_ID.into());
@@ -983,7 +983,7 @@ async fn test_remote_context_server(cx: &mut TestAppContext) {
 // `WWW-Authenticate` on a later request such as `tools/list` / `tools/call`.
 // That post-initialize 401 must initiate the OAuth flow instead of surfacing as
 // an opaque request failure while the server stays "Running".
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_http_server_authenticates_on_post_init_401(cx: &mut TestAppContext) {
     use context_server::transport::TransportError;
 
@@ -1065,7 +1065,7 @@ async fn test_http_server_authenticates_on_post_init_401(cx: &mut TestAppContext
 // here): the send fails with no request in flight to carry a typed error back,
 // and the client is dead by the time anything notices. Watching the transport
 // shutdown must still move the server into `AuthRequired`.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_http_server_authenticates_on_notification_401(cx: &mut TestAppContext) {
     const SERVER_ID: &str = "auth-server";
     let server_id = ContextServerId(SERVER_ID.into());
@@ -1109,7 +1109,7 @@ async fn test_http_server_authenticates_on_notification_401(cx: &mut TestAppCont
 // A transport failure that is not an authentication challenge must not touch
 // the server's state: no spurious auth flow, and (as before the transport
 // watch existed) the server stays `Running`.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_http_server_ignores_non_auth_transport_failure(cx: &mut TestAppContext) {
     const SERVER_ID: &str = "flaky-server";
     let server_id = ContextServerId(SERVER_ID.into());
@@ -1170,7 +1170,7 @@ async fn test_http_server_ignores_non_auth_transport_failure(cx: &mut TestAppCon
 // challenge is read from the transport slot rather than the returned error, so
 // the 401 is recognized even if another error (e.g. the request timeout) wins
 // the race to become the reported startup failure.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_http_server_authenticates_on_initialize_401(cx: &mut TestAppContext) {
     const SERVER_ID: &str = "auth-server";
     let server_id = ContextServerId(SERVER_ID.into());
@@ -1207,7 +1207,7 @@ async fn test_http_server_authenticates_on_initialize_401(cx: &mut TestAppContex
 // so a challenge recorded by a previous client generation must not leak into
 // the next one: after a successful restart, a non-auth transport failure must
 // not trip a spurious auth flow on the stale challenge.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_http_server_restart_clears_stale_auth_challenge(cx: &mut TestAppContext) {
     use std::sync::atomic::{AtomicBool, Ordering};
 
@@ -1412,7 +1412,7 @@ impl Drop for ServerEvents {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_server_global_timeout(cx: &mut TestAppContext) {
     cx.update(|cx| {
         let settings_store = SettingsStore::test(cx);
@@ -1456,7 +1456,7 @@ async fn test_context_server_global_timeout(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_server_per_server_timeout_override(cx: &mut TestAppContext) {
     const SERVER_ID: &str = "test-server";
 
@@ -1516,7 +1516,7 @@ async fn test_context_server_per_server_timeout_override(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_server_stdio_timeout(cx: &mut TestAppContext) {
     let (_fs, project) = setup_context_server_test(cx, json!({"code.rs": ""}), vec![]).await;
 
@@ -1553,7 +1553,7 @@ async fn test_context_server_stdio_timeout(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multi_worktree_context_server_settings(cx: &mut TestAppContext) {
     const SERVER_A: &str = "server-from-project-a";
     const SERVER_B: &str = "server-from-project-b";
@@ -1655,7 +1655,7 @@ async fn test_multi_worktree_context_server_settings(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multi_worktree_duplicate_server_first_wins(cx: &mut TestAppContext) {
     const SHARED_SERVER: &str = "shared-server";
 
@@ -1723,7 +1723,7 @@ async fn test_multi_worktree_duplicate_server_first_wins(cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_is_server_enabled(cx: &mut TestAppContext) {
     // We'll be setting up 4 different servers in order to test the following
     // scenarios:

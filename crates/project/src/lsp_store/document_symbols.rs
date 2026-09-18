@@ -413,7 +413,7 @@ fn enriched_symbol_text(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use language::lsp_to_symbol_kind;
     use text::{OffsetRangeExt, Point, Unclipped};
 
@@ -442,7 +442,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_flatten_document_symbols(cx: &mut TestAppContext) {
         let buffer = cx.new(|cx| {
             Buffer::local(
@@ -548,7 +548,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_empty_symbols(cx: &mut TestAppContext) {
         let buffer = cx.new(|cx| Buffer::local("", cx));
         let snapshot = buffer.read_with(cx, |buffer, _| buffer.snapshot());
@@ -559,7 +559,7 @@ mod tests {
         assert!(items.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_newlines_collapsed_in_name(cx: &mut TestAppContext) {
         let buffer = cx.new(|cx| Buffer::local("x = 1\ny = 2\n", cx));
 

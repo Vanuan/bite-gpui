@@ -498,9 +498,9 @@ impl Render for SystemWindowTabs {
 impl Render for DraggedWindowTab {
     fn render(
         &mut self,
-        _window: &mut gpui::Window,
-        cx: &mut gpui::Context<Self>,
-    ) -> impl gpui::IntoElement {
+        _window: &mut gpui_runtime::Window,
+        cx: &mut gpui_runtime::Context<Self>,
+    ) -> impl gpui_runtime::IntoElement {
         let ui_font = ThemeSettings::get_global(cx).ui_font.clone();
         let label = Label::new(self.title.clone())
             .size(LabelSize::Small)

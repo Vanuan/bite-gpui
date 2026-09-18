@@ -2,7 +2,7 @@ use adapters::latest_github_release;
 use anyhow::Context as _;
 use collections::HashMap;
 use dap::{StartDebuggingRequestArguments, adapters::DebugTaskDefinition};
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use serde_json::Value;
 use std::{path::PathBuf, sync::OnceLock};
 use task::DebugRequest;

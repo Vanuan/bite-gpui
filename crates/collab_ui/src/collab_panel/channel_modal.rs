@@ -125,7 +125,7 @@ impl EventEmitter<DismissEvent> for ChannelModal {}
 impl ModalView for ChannelModal {}
 
 impl Focusable for ChannelModal {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.picker.focus_handle(cx)
     }
 }
@@ -447,7 +447,7 @@ impl PickerDelegate for ChannelModalDelegate {
                                     Some(
                                         deferred(
                                             anchored()
-                                                .anchor(gpui::Anchor::TopRight)
+                                                .anchor(gpui_types::Anchor::TopRight)
                                                 .child(menu.clone()),
                                         )
                                         .with_priority(1),

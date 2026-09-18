@@ -752,7 +752,7 @@ mod tests {
     use super::*;
 
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::Project;
     use prompt_store;
     use release_channel;
@@ -773,7 +773,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_mentions_disabled(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -796,7 +796,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_selection_mentions_supported_for_paste(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -884,7 +884,7 @@ pub(crate) async fn insert_images_as_context(
     editor: Entity<Editor>,
     mention_set: Entity<MentionSet>,
     workspace: WeakEntity<Workspace>,
-    cx: &mut gpui::AsyncWindowContext,
+    cx: &mut gpui_runtime::AsyncWindowContext,
 ) {
     if images.is_empty() {
         return;
@@ -1433,10 +1433,10 @@ impl Render for ImageHover {
             div()
                 .p_1p5()
                 .elevation_2(cx)
-                .child(gpui::img(image).h_auto().max_w_96().rounded_sm())
+                .child(gpui_runtime::img(image).h_auto().max_w_96().rounded_sm())
                 .into_any_element()
         } else {
-            gpui::Empty.into_any_element()
+            gpui_runtime::Empty.into_any_element()
         }
     }
 }

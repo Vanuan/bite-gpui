@@ -402,7 +402,7 @@ mod tests {
     use std::path::Path;
 
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::WorktreeId;
     use rand::Rng as _;
     use serde_json::json;
@@ -739,7 +739,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_watcher_single_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -764,7 +764,7 @@ mod tests {
         assert!(!watcher.is_project_open_source());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_watcher_updates_on_changes(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -821,7 +821,7 @@ mod tests {
         assert!(!watcher.is_project_open_source());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_watcher_initially_opensource_and_then_deleted(cx: &mut TestAppContext) {
         init_test(cx);
 

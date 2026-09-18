@@ -809,7 +809,7 @@ mod tests {
         time::Duration,
     };
 
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use indoc::indoc;
 
     use crate::{
@@ -878,7 +878,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_snippet_location_is_kept(cx: &mut TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let extension_path = Path::new("/extension");
@@ -916,7 +916,7 @@ mod tests {
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_automatic_snippet_location_is_relative(cx: &mut TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let extension_path = Path::new("/extension");

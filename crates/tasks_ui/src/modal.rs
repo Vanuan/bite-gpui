@@ -208,7 +208,7 @@ impl Render for TasksModal {
         &mut self,
         _window: &mut Window,
         _: &mut Context<Self>,
-    ) -> impl gpui::prelude::IntoElement {
+    ) -> impl gpui_runtime::prelude::IntoElement {
         v_flex()
             .key_context("TasksModal")
             .child(self.picker.clone())
@@ -224,7 +224,7 @@ impl EventEmitter<ShowAttachModal> for TasksModal {}
 impl EventEmitter<ShowAttachModal> for Picker<TasksModalDelegate> {}
 
 impl Focusable for TasksModal {
-    fn focus_handle(&self, cx: &gpui::App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &gpui_runtime::App) -> gpui_runtime::FocusHandle {
         self.picker.read(cx).focus_handle(cx)
     }
 }
@@ -635,7 +635,7 @@ impl PickerDelegate for TasksModalDelegate {
         &self,
         window: &mut Window,
         cx: &mut Context<Picker<Self>>,
-    ) -> Option<gpui::AnyElement> {
+    ) -> Option<gpui_runtime::AnyElement> {
         let is_recent_selected = self.divider_index >= Some(self.selected_index);
         let current_modifiers = window.modifiers();
         let left_button = if self
@@ -752,7 +752,7 @@ mod tests {
 
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawn_tasks_modal_query_reuse(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -925,7 +925,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_basic_context_for_simple_files(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -1039,7 +1039,7 @@ mod tests {
         cx.executor().run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_empty_lsp_task_response_keeps_language_tasks_in_modal(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -1114,7 +1114,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_language_task_filtering(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());

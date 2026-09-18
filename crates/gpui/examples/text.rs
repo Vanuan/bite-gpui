@@ -14,7 +14,7 @@ use gpui::{
     TextStyle, TitlebarOptions, Window, WindowBounds, WindowOptions, bounds, colors::DefaultColors,
     div, point, prelude::*, px, relative, rgb, size,
 };
-use gpui_platform::application;
+use gpui::application;
 use std::iter;
 
 #[derive(Clone, Debug)]
@@ -427,6 +427,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

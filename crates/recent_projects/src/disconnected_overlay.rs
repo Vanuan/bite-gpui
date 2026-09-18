@@ -23,7 +23,7 @@ pub struct DisconnectedOverlay {
 
 impl EventEmitter<DismissEvent> for DisconnectedOverlay {}
 impl Focusable for DisconnectedOverlay {
-    fn focus_handle(&self, _cx: &gpui::App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _cx: &gpui_runtime::App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }

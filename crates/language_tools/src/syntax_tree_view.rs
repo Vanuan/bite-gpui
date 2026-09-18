@@ -104,13 +104,13 @@ pub struct SyntaxTreeView {
 
 pub struct SyntaxTreeToolbarItemView {
     tree_view: Option<Entity<SyntaxTreeView>>,
-    subscription: Option<gpui::Subscription>,
+    subscription: Option<gpui_runtime::Subscription>,
 }
 
 struct EditorState {
     editor: Entity<Editor>,
     active_buffer: Option<BufferState>,
-    _subscription: gpui::Subscription,
+    _subscription: gpui_runtime::Subscription,
 }
 
 impl EditorState {
@@ -560,7 +560,7 @@ impl Render for SyntaxTreeView {
 impl EventEmitter<()> for SyntaxTreeView {}
 
 impl Focusable for SyntaxTreeView {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }

@@ -360,7 +360,7 @@ mod tests {
         dirty_before_spawn: Arc<Mutex<Option<bool>>>,
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_schedule_resolved_task_save_all(cx: &mut TestAppContext) {
         let (fixture, cx) = create_fixture(cx, SaveStrategy::All).await;
         fixture.workspace.update_in(cx, |workspace, window, cx| {
@@ -378,7 +378,7 @@ mod tests {
         assert!(cx.read(|cx| !fixture.item.read(cx).is_dirty));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_schedule_resolved_task_save_current(cx: &mut TestAppContext) {
         let (fixture, cx) = create_fixture(cx, SaveStrategy::Current).await;
         // Add a second inactive dirty item
@@ -401,7 +401,7 @@ mod tests {
         assert!(cx.read(|cx| inactive.read(cx).is_dirty));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_schedule_resolved_task_save_none(cx: &mut TestAppContext) {
         let (fixture, cx) = create_fixture(cx, SaveStrategy::None).await;
         fixture.workspace.update_in(cx, |workspace, window, cx| {
@@ -419,7 +419,7 @@ mod tests {
         assert!(cx.read(|cx| fixture.item.read(cx).is_dirty));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_schedule_resolved_task_with_completion_reports_success(cx: &mut TestAppContext) {
         let (fixture, cx) = create_fixture(cx, SaveStrategy::None).await;
         let task_result = Arc::new(Mutex::new(None));
@@ -446,7 +446,7 @@ mod tests {
     async fn create_fixture(
         cx: &mut TestAppContext,
         save_strategy: SaveStrategy,
-    ) -> (Fixture, &mut gpui::VisualTestContext) {
+    ) -> (Fixture, &mut gpui_runtime::VisualTestContext) {
         cx.update(|cx| {
             let settings_store = settings::SettingsStore::test(cx);
             cx.set_global(settings_store);
@@ -493,7 +493,7 @@ mod tests {
         workspace: &Entity<Workspace>,
         name: &str,
         active: bool,
-        cx: &mut gpui::VisualTestContext,
+        cx: &mut gpui_runtime::VisualTestContext,
     ) -> Entity<TestItem> {
         let item = cx.new(|cx| {
             TestItem::new(cx)
@@ -507,7 +507,7 @@ mod tests {
         item
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_for_task_all(cx: &mut TestAppContext) {
         let (fixture, cx) = create_fixture(cx, SaveStrategy::All).await;
         let workspace = fixture.workspace.downgrade();
@@ -527,7 +527,7 @@ mod tests {
         assert!(cx.read(|cx| !fixture.item.read(cx).is_dirty));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_for_task_none(cx: &mut TestAppContext) {
         let (fixture, cx) = create_fixture(cx, SaveStrategy::None).await;
         let workspace = fixture.workspace.downgrade();
@@ -547,7 +547,7 @@ mod tests {
         assert!(cx.read(|cx| fixture.item.read(cx).is_dirty));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_for_task_current(cx: &mut TestAppContext) {
         let (fixture, cx) = create_fixture(cx, SaveStrategy::Current).await;
         let inactive = add_test_item(&fixture.workspace, "file2.txt", false, cx);

@@ -198,7 +198,7 @@ mod test {
     use std::{path::PathBuf, sync::Arc};
 
     use fs::{FakeFs, Fs};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use http_client::{FakeHttpClient, anyhow};
     use serde::Deserialize;
 
@@ -260,7 +260,7 @@ mod test {
         "repository"
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_deserialized_response(_cx: &mut TestAppContext) {
         let client = FakeHttpClient::create(|_request| async move {
             Ok(http_client::Response::builder()
@@ -275,7 +275,7 @@ mod test {
         assert_eq!(response.unwrap().token, "thisisatoken".to_string())
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_oci_token() {
         let client = FakeHttpClient::create(|request| async move {
             let host = request.uri().host();
@@ -308,7 +308,7 @@ mod test {
         assert_eq!(response.unwrap().token, "thisisatoken".to_string());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_latest_manifests() {
         let client = FakeHttpClient::create(|request| async move {
             let host = request.uri().host();
@@ -364,7 +364,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_oci_blob() {
         #[derive(Debug, Deserialize)]
         struct DeserializableTestStruct {
@@ -407,7 +407,7 @@ mod test {
         assert_eq!(response.foo, "bar".to_string());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_download_oci_tarball(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         let fs: Arc<dyn Fs> = FakeFs::new(cx.executor());

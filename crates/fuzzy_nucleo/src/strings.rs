@@ -292,7 +292,7 @@ fn length_penalty_for(s: &str, length_penalty: LengthPenalty) -> f64 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::BackgroundExecutor;
+    use gpui_platform::BackgroundExecutor;
 
     fn candidates(strings: &[&str]) -> Vec<StringMatchCandidate> {
         strings
@@ -302,7 +302,7 @@ mod tests {
             .collect()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_basic_match(executor: BackgroundExecutor) {
         let cs = candidates(&["hello", "world", "help"]);
         let cancel = AtomicBool::new(false);
@@ -322,7 +322,7 @@ mod tests {
         assert!(!matched.contains(&"world"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multi_word_query(executor: BackgroundExecutor) {
         let cs = candidates(&[
             "src/lib/parser.rs",
@@ -344,7 +344,7 @@ mod tests {
         assert_eq!(results[0].string, "src/lib/parser.rs");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_empty_query_returns_all(executor: BackgroundExecutor) {
         let cs = candidates(&["alpha", "beta", "gamma"]);
         let cancel = AtomicBool::new(false);
@@ -362,7 +362,7 @@ mod tests {
         assert!(results.iter().all(|m| m.score == 0.0));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_whitespace_only_query_returns_all(executor: BackgroundExecutor) {
         let cs = candidates(&["alpha", "beta", "gamma"]);
         let cancel = AtomicBool::new(false);
@@ -379,7 +379,7 @@ mod tests {
         assert_eq!(results.len(), 3);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_empty_candidates(executor: BackgroundExecutor) {
         let cs: Vec<StringMatchCandidate> = vec![];
         let cancel = AtomicBool::new(false);
@@ -396,7 +396,7 @@ mod tests {
         assert!(results.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancellation(executor: BackgroundExecutor) {
         let cs = candidates(&["hello", "world"]);
         let cancel = AtomicBool::new(true);
@@ -413,7 +413,7 @@ mod tests {
         assert!(results.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_max_results_limit(executor: BackgroundExecutor) {
         let cs = candidates(&["ab", "abc", "abcd", "abcde"]);
         let cancel = AtomicBool::new(false);
@@ -430,7 +430,7 @@ mod tests {
         assert_eq!(results.len(), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scoring_order(executor: BackgroundExecutor) {
         let cs = candidates(&[
             "some_very_long_variable_name_fuzzy",
@@ -477,7 +477,7 @@ mod tests {
         assert!(greater, "penalize length not affecting long candidates");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_utf8_positions(executor: BackgroundExecutor) {
         let cs = candidates(&["café"]);
         let cancel = AtomicBool::new(false);
@@ -499,7 +499,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_smart_case(executor: BackgroundExecutor) {
         let cs = candidates(&["FooBar", "foobar", "FOOBAR"]);
         let cancel = AtomicBool::new(false);
@@ -534,7 +534,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_smart_case_does_not_flip_order_when_length_penalty_on(
         executor: BackgroundExecutor,
     ) {
@@ -572,7 +572,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_char_bag_prefilter(executor: BackgroundExecutor) {
         let cs = candidates(&["abcdef", "abc", "def", "aabbcc"]);
         let cancel = AtomicBool::new(false);
@@ -624,7 +624,7 @@ mod tests {
         assert_eq!(results.len(), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_empty_query_respects_max_results(executor: BackgroundExecutor) {
         let cs = candidates(&["alpha", "beta", "gamma", "delta"]);
         let cancel = AtomicBool::new(false);
@@ -641,7 +641,7 @@ mod tests {
         assert_eq!(results.len(), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multi_word_with_nonmatching_word(executor: BackgroundExecutor) {
         let cs = candidates(&["src/parser.rs", "src/main.rs"]);
         let cancel = AtomicBool::new(false);
@@ -661,7 +661,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_segment_size_not_divisible_by_cpus(executor: BackgroundExecutor) {
         executor.set_num_cpus(4);
         let cs = candidates(&["alpha", "beta", "gamma", "delta", "epsilon"]);
@@ -682,7 +682,7 @@ mod tests {
         assert!(matched.contains(&"delta"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_segment_size_with_many_cpus_few_candidates(executor: BackgroundExecutor) {
         executor.set_num_cpus(16);
         let cs = candidates(&["one", "two", "three"]);
@@ -702,7 +702,7 @@ mod tests {
         assert!(matched.contains(&"two"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_segment_size_single_candidate(executor: BackgroundExecutor) {
         executor.set_num_cpus(8);
         let cs = candidates(&["lonely"]);
@@ -721,7 +721,7 @@ mod tests {
         assert_eq!(results[0].string.as_ref(), "lonely");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_segment_size_candidates_equal_cpus(executor: BackgroundExecutor) {
         executor.set_num_cpus(4);
         let cs = candidates(&["aaa", "bbb", "ccc", "ddd"]);
@@ -740,7 +740,7 @@ mod tests {
         assert_eq!(results[0].string.as_ref(), "aaa");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_segment_size_candidates_one_more_than_cpus(executor: BackgroundExecutor) {
         executor.set_num_cpus(3);
         let cs = candidates(&["ant", "ape", "dog", "axe"]);

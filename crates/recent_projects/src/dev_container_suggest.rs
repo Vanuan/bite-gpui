@@ -38,7 +38,7 @@ fn project_devcontainer_key(project_path: &str) -> String {
 /// same repository. Falls back to the worktree path when it isn't part of a Git
 /// repository.
 fn dismiss_path_for_worktree(
-    project: &gpui::Entity<Project>,
+    project: &gpui_runtime::Entity<Project>,
     worktree_abs_path: &Path,
     cx: &App,
 ) -> String {
@@ -73,7 +73,7 @@ pub fn suggest_on_worktree_updated(
     workspace: &mut Workspace,
     worktree_id: WorktreeId,
     updated_entries: &UpdatedEntriesSet,
-    project: &gpui::Entity<Project>,
+    project: &gpui_runtime::Entity<Project>,
     window: &mut Window,
     cx: &mut Context<Workspace>,
 ) {

@@ -97,7 +97,7 @@ impl Editor {
     pub fn toggle_semantic_highlights(
         &mut self,
         _: &ToggleSemanticHighlights,
-        _window: &mut gpui::Window,
+        _window: &mut gpui_runtime::Window,
         cx: &mut Context<Self>,
     ) {
         self.semantic_token_state.toggle_enabled();
@@ -543,7 +543,7 @@ mod tests {
 
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn lsp_semantic_tokens_full_capability(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -621,7 +621,7 @@ mod tests {
         assert_eq!(full_counter.load(atomic::Ordering::Acquire), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn lsp_semantic_tokens_dynamic_registration_requeries_open_document(
         cx: &mut TestAppContext,
     ) {
@@ -722,7 +722,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn lsp_semantic_tokens_full_none_result_id(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -798,7 +798,7 @@ mod tests {
         assert_eq!(full_counter.load(atomic::Ordering::Acquire), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn lsp_semantic_tokens_delta(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -894,7 +894,7 @@ mod tests {
         assert_eq!(delta_counter.load(atomic::Ordering::Acquire), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn lsp_semantic_tokens_multiserver_full(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1115,9 +1115,9 @@ mod tests {
         assert_eq!(full_counter_toml_2.load(atomic::Ordering::Acquire), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn lsp_semantic_tokens_multiserver_precedence(cx: &mut TestAppContext) {
-        use gpui::Rgba;
+        use gpui_types::Rgba;
 
         init_test(cx, |_| {});
 
@@ -1394,7 +1394,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn lsp_semantic_tokens_multibuffer_part(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1692,7 +1692,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn lsp_semantic_tokens_singleton_opened_from_multibuffer(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1967,7 +1967,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_semantic_tokens_rules_changes_restyle_tokens(cx: &mut TestAppContext) {
         use gpui::{Hsla, Rgba, UpdateGlobal as _};
         use settings::{GlobalLspSettingsContent, SemanticTokenRule};
@@ -2088,7 +2088,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_theme_override_changes_restyle_semantic_tokens(cx: &mut TestAppContext) {
         use collections::IndexMap;
         use gpui::{Hsla, Rgba, UpdateGlobal as _};
@@ -2253,7 +2253,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_per_theme_overrides_restyle_semantic_tokens(cx: &mut TestAppContext) {
         use collections::IndexMap;
         use gpui::{Hsla, Rgba, UpdateGlobal as _};
@@ -2366,7 +2366,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stopping_language_server_clears_semantic_tokens(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -2444,7 +2444,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_disabling_semantic_tokens_setting_clears_highlights(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -2525,7 +2525,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_semantic_token_disabling_with_empty_rule(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_language_settings(cx, &|s| {
@@ -2603,7 +2603,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_semantic_token_broad_rule_disables_specific_token(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         update_test_language_settings(cx, &|s| {
@@ -2684,11 +2684,11 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_semantic_token_specific_rule_does_not_disable_broad_token(
         cx: &mut TestAppContext,
     ) {
-        use gpui::UpdateGlobal as _;
+        use gpui_runtime::UpdateGlobal as _;
         use settings::{GlobalLspSettingsContent, SemanticTokenRule};
 
         init_test(cx, |_| {});
@@ -2775,7 +2775,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diagnostics_visible_when_semantic_token_set_to_full(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -2887,7 +2887,7 @@ mod tests {
                 |(text, severity, style): &(
                     String,
                     Option<lsp::DiagnosticSeverity>,
-                    Option<gpui::HighlightStyle>
+                    Option<gpui_runtime::HighlightStyle>
                 )| {
                     text == "main"
                         && *severity == Some(lsp::DiagnosticSeverity::ERROR)

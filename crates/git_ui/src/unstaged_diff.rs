@@ -51,7 +51,7 @@ impl DiffHunkRenderer for UnstagedDiffHunkRenderer {
             .git
             .show_stage_restore_buttons
         {
-            return gpui::Empty.into_any_element();
+            return gpui_runtime::Empty.into_any_element();
         }
         let hunk_range_for_restore = hunk_range.clone();
         let hunk_range = hunk_range.start..hunk_range.start;
@@ -365,7 +365,7 @@ impl Item for UnstagedDiff {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.diff.read(cx).for_each_project_item(cx, f);
     }
@@ -452,7 +452,7 @@ impl Item for UnstagedDiff {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<DiffMultibuffer>() {

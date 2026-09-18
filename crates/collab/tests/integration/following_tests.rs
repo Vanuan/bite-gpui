@@ -25,7 +25,7 @@ use workspace::{
 
 use super::TestClient;
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_basic_following(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -467,7 +467,7 @@ async fn test_basic_following(
     // #[cfg(all(not(target_os = "macos"), not(target_os = "windows")))]
     {
         use collab::rpc::RECONNECT_TIMEOUT;
-        use gpui::TestScreenCaptureSource;
+        use gpui_runtime::TestScreenCaptureSource;
         use workspace::{
             dock::{DockPosition, test::TestPanel},
             item::test::TestItem,
@@ -586,7 +586,7 @@ async fn test_basic_following(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_following_tab_order(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -718,7 +718,7 @@ async fn test_following_tab_order(
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_peers_following_each_other(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let executor = cx_a.executor();
     let mut server = TestServer::start(executor.clone()).await;
@@ -1253,7 +1253,7 @@ async fn test_peers_following_each_other(cx_a: &mut TestAppContext, cx_b: &mut T
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_auto_unfollowing(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     // 2 clients connect to a server.
     let executor = cx_a.executor();
@@ -1414,7 +1414,7 @@ async fn test_auto_unfollowing(cx_a: &mut TestAppContext, cx_b: &mut TestAppCont
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_peers_simultaneously_following_each_other(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -1472,7 +1472,7 @@ async fn test_peers_simultaneously_following_each_other(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_following_across_workspaces(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     // a and b join a channel/call
     // a shares project 1
@@ -1680,7 +1680,7 @@ async fn test_following_across_workspaces(cx_a: &mut TestAppContext, cx_b: &mut 
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_following_stops_on_unshare(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let (_server, client_a, client_b, channel_id) = TestServer::start2(cx_a, cx_b).await;
 
@@ -1748,7 +1748,7 @@ async fn test_following_stops_on_unshare(cx_a: &mut TestAppContext, cx_b: &mut T
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_following_into_excluded_file(
     mut cx_a: &mut TestAppContext,
     mut cx_b: &mut TestAppContext,
@@ -1970,7 +1970,7 @@ fn pane_summaries(workspace: &Entity<Workspace>, cx: &mut VisualTestContext) -> 
     })
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_following_to_channel_notes_without_a_shared_project(
     deterministic: BackgroundExecutor,
     mut cx_a: &mut TestAppContext,
@@ -2598,7 +2598,7 @@ async fn test_active_multi_workspace_determines_follower_view(
     executor.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_following_after_replacement(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let (_server, client_a, client_b, channel) = TestServer::start2(cx_a, cx_b).await;
 
@@ -2688,7 +2688,7 @@ async fn test_following_after_replacement(cx_a: &mut TestAppContext, cx_b: &mut 
     assert_eq!(positions, new_positions);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_following_to_channel_notes_other_workspace(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -2750,7 +2750,7 @@ async fn test_following_to_channel_notes_other_workspace(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_following_while_deactivated(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let (_server, client_a, client_b, channel) = TestServer::start2(cx_a, cx_b).await;
 
@@ -2819,7 +2819,7 @@ async fn test_following_while_deactivated(cx_a: &mut TestAppContext, cx_b: &mut 
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_following_with_multibuffer_excerpts_at_unobserved_lamport(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,

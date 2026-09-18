@@ -20,7 +20,7 @@ use unindent::Unindent as _;
 use util::{path, rel_path::rel_path};
 use workspace::Item;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_initial_stack_frames_and_go_to_stack_frame(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -179,7 +179,7 @@ async fn test_fetch_initial_stack_frames_and_go_to_stack_frame(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_stack_frame(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     cx.executor().allow_parking();
     init_test(cx);
@@ -420,7 +420,7 @@ async fn test_select_stack_frame(executor: BackgroundExecutor, cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collapsed_entries(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -749,7 +749,7 @@ async fn test_collapsed_entries(executor: BackgroundExecutor, cx: &mut TestAppCo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_stack_frame_filter(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1092,7 +1092,7 @@ async fn test_stack_frame_filter(executor: BackgroundExecutor, cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_stack_frame_filter_persistence(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,

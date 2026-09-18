@@ -81,7 +81,7 @@ pub struct AgentRegistryPage {
     installed_statuses: HashMap<String, RegistryInstallStatus>,
     query_editor: Entity<Editor>,
     filter: RegistryFilter,
-    _subscriptions: Vec<gpui::Subscription>,
+    _subscriptions: Vec<gpui_runtime::Subscription>,
 }
 
 impl AgentRegistryPage {
@@ -692,7 +692,7 @@ impl Render for AgentRegistryPage {
 impl EventEmitter<ItemEvent> for AgentRegistryPage {}
 
 impl Focusable for AgentRegistryPage {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.query_editor.read(cx).focus_handle(cx)
     }
 }

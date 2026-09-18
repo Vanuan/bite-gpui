@@ -77,7 +77,7 @@ fn language_model_image_from_dynamic_image(
         || image_size.height.0 > ANTHROPIC_SIZE_LIMIT as i32
     {
         let new_bounds = ObjectFit::ScaleDown.get_bounds(
-            gpui::Bounds {
+            gpui_types::Bounds {
                 origin: point(px(0.0), px(0.0)),
                 size: size(px(ANTHROPIC_SIZE_LIMIT), px(ANTHROPIC_SIZE_LIMIT)),
             },
@@ -174,7 +174,7 @@ pub fn gpui_size_to_image_size(size: Size<DevicePixels>) -> ImageSize {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     fn base64_to_png_bytes(base64: &str) -> Vec<u8> {
         base64::engine::general_purpose::STANDARD
@@ -204,7 +204,7 @@ mod tests {
         buf.into_inner()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_from_image_downscales_to_default_5mb_limit(cx: &mut TestAppContext) {
         let raw_png = make_noisy_png_bytes(4096, 4096);
         assert!(

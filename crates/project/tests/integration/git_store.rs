@@ -268,7 +268,7 @@ mod conflict_set_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conflict_updates(executor: BackgroundExecutor, cx: &mut TestAppContext) {
         zlog::init_test();
         cx.update(|cx| {
@@ -365,7 +365,7 @@ mod conflict_set_tests {
         assert_eq!(update.new_range, 0..0);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conflict_updates_without_merge_head(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,
@@ -466,7 +466,7 @@ mod conflict_set_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conflict_updates_with_delayed_merge_head_conflicts(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,
@@ -644,7 +644,7 @@ mod git_traversal {
     use git::status::{
         FileStatus, GitSummary, StatusCode, TrackedSummary, UnmergedStatus, UnmergedStatusCode,
     };
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::GitTraversal;
 
     use serde_json::json;
@@ -669,7 +669,7 @@ mod git_traversal {
         ..GitSummary::UNCHANGED
     };
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_traversal_with_one_repo(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -745,7 +745,7 @@ mod git_traversal {
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_traversal_with_nested_repos(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -873,7 +873,7 @@ mod git_traversal {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_traversal_simple(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -979,7 +979,7 @@ mod git_traversal {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_traversal_with_repos_under_project(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -1076,7 +1076,7 @@ mod git_traversal {
         );
     }
 
-    fn init_test(cx: &mut gpui::TestAppContext) {
+    fn init_test(cx: &mut gpui_runtime::TestAppContext) {
         zlog::init_test();
 
         cx.update(|cx| {
@@ -1085,7 +1085,7 @@ mod git_traversal {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bump_mtime_of_git_repo_workdir(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1188,14 +1188,14 @@ mod git_traversal {
 
 mod git_worktrees {
     use fs::{FakeFs, Fs};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::worktrees_directory_for_repo;
     use serde_json::json;
     use settings::SettingsStore;
     use std::path::{Path, PathBuf};
     use util::{path, paths::PathStyle};
 
-    fn init_test(cx: &mut gpui::TestAppContext) {
+    fn init_test(cx: &mut gpui_runtime::TestAppContext) {
         zlog::init_test();
 
         cx.update(|cx| {
@@ -1263,7 +1263,7 @@ mod git_worktrees {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_worktree_paths_use_bare_repository_identity(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -1312,7 +1312,7 @@ mod git_worktrees {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_worktrees_list_and_create(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -1413,7 +1413,7 @@ mod git_worktrees {
         assert_eq!(worktree_2.sha.as_ref(), "fake-sha");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_worktree_removes_managed_parent_directories(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -1475,7 +1475,7 @@ mod git_worktrees {
         assert!(Fs::is_dir(fs.as_ref(), &worktree_base).await);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_worktree_uses_bare_repository_identity_for_managed_parent_directories(
         cx: &mut TestAppContext,
     ) {
@@ -1562,7 +1562,7 @@ mod git_worktrees {
 mod trust_tests {
     use collections::HashSet;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::trusted_worktrees::*;
 
     use serde_json::json;
@@ -1580,7 +1580,7 @@ mod trust_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_repository_defaults_to_untrusted_without_trust_system(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -1609,7 +1609,7 @@ mod trust_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multiple_repos_trust_with_single_worktree(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -1677,7 +1677,7 @@ mod trust_tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_repository_trust_restrict_trust_cycle(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -1766,7 +1766,7 @@ mod trust_tests {
 
 mod resolve_worktree_tests {
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use path::PathStyle;
     use project::{
         git_store::resolve_git_worktree_to_main_repo, linked_worktree_short_name,
@@ -1775,7 +1775,7 @@ mod resolve_worktree_tests {
     use serde_json::json;
     use std::path::{Path, PathBuf};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_git_worktree_to_main_repo(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         // Set up a main repo with a worktree entry
@@ -1809,7 +1809,7 @@ mod resolve_worktree_tests {
         assert_eq!(result, Some(PathBuf::from("/main-repo")));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_git_worktree_normal_repo_returns_none(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1825,7 +1825,7 @@ mod resolve_worktree_tests {
         assert_eq!(result, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_git_worktree_bare_repo_identity_path(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1854,7 +1854,7 @@ mod resolve_worktree_tests {
         assert_eq!(result, Some(PathBuf::from("/monty")));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_git_worktree_no_git_returns_none(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1869,7 +1869,7 @@ mod resolve_worktree_tests {
         assert_eq!(result, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_git_worktree_nonexistent_returns_none(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
 
@@ -1962,7 +1962,7 @@ mod repository_activation_tests {
 
     use crate::{Project, ProjectPath};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deep_repositories_park_in_unmanaged_root(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project) = build_project(
@@ -2003,7 +2003,7 @@ mod repository_activation_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_managed_root_never_parks(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project) = build_project(
@@ -2028,7 +2028,7 @@ mod repository_activation_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_parked_repository_activates_on_buffer_open(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project) = build_project(
@@ -2077,7 +2077,7 @@ mod repository_activation_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_parked_repository_activates_on_save_as(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project) = build_project(
@@ -2120,7 +2120,7 @@ mod repository_activation_tests {
         assert_repositories(&project, cx, &[path!("/root/a/repo")], &[]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_buffer_open_beyond_scan_horizon_activates_repository(cx: &mut TestAppContext) {
         init_test(cx);
         set_file_scan_depth(cx, 2);
@@ -2179,7 +2179,7 @@ mod repository_activation_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_settings_disable_parking(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project) = build_project(
@@ -2218,7 +2218,7 @@ mod repository_activation_tests {
         assert_repositories(&project, cx, &[path!("/root/a/repo")], &[]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_buffer_prevents_parking_late_discovered_repository(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, project) = build_project(
@@ -2249,7 +2249,7 @@ mod repository_activation_tests {
         assert_repositories(&project, cx, &[path!("/root/nested/repo")], &[]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_parked_repository_dropped_when_dot_git_removed(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, project) = build_project(
@@ -2281,7 +2281,7 @@ mod repository_activation_tests {
         assert_repositories(&project, cx, &[], &[]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_repository_shared_between_two_worktrees(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project) = build_project(
@@ -2337,7 +2337,7 @@ mod repository_activation_tests {
         assert_repositories(&project, cx, &[path!("/root/nested/repo")], &[]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_nested_repository_inside_active_repository_not_parked(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project) = build_project(
@@ -2364,7 +2364,7 @@ mod repository_activation_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_active_repository_survives_file_scan_depth_tightening(cx: &mut TestAppContext) {
         init_test(cx);
         set_file_scan_depth(cx, 0);
@@ -2393,7 +2393,7 @@ mod repository_activation_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_buffer_survives_file_scan_depth_tightening(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project) = build_project(
@@ -2439,7 +2439,7 @@ mod repository_activation_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_init_at_root_activates_parked_repositories(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, project) = build_project(

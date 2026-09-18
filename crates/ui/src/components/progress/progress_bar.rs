@@ -1,5 +1,5 @@
 use documented::Documented;
-use gpui::Hsla;
+use gpui_types::Hsla;
 
 use crate::components::Label;
 use crate::prelude::*;
@@ -71,7 +71,7 @@ impl RenderOnce for ProgressBar {
             .p_0p5()
             .rounded_full()
             .bg(self.bg_color)
-            .shadow(vec![gpui::BoxShadow::new(
+            .shadow(vec![gpui_runtime::BoxShadow::new(
                 px(0.),
                 px(1.),
                 gpui::black().opacity(0.08),

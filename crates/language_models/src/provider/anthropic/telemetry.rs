@@ -1,6 +1,6 @@
 use anthropic::ANTHROPIC_API_URL;
 use anyhow::{Context as _, anyhow};
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use http_client::{AsyncBody, HttpClient, Method, Request as HttpRequest};
 use language_model::{ANTHROPIC_PROVIDER_ID, LanguageModel};
 use std::env;
@@ -54,7 +54,7 @@ impl AnthropicEventType {
 pub fn report_anthropic_event(
     model: &Arc<dyn LanguageModel>,
     event: AnthropicEventData,
-    cx: &gpui::App,
+    cx: &gpui_runtime::App,
 ) {
     let reporter = AnthropicEventReporter::new(model, cx);
     reporter.report(event);
@@ -69,7 +69,7 @@ pub struct AnthropicEventReporter {
 }
 
 impl AnthropicEventReporter {
-    pub fn new(model: &Arc<dyn LanguageModel>, cx: &gpui::App) -> Self {
+    pub fn new(model: &Arc<dyn LanguageModel>, cx: &gpui_runtime::App) -> Self {
         Self {
             http_client: cx.http_client(),
             executor: cx.background_executor().clone(),

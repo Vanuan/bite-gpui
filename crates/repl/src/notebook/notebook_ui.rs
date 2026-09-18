@@ -207,7 +207,7 @@ impl NotebookEditor {
         let cell_count = cell_order.len();
 
         let this = cx.entity();
-        let cell_list = ListState::new(cell_count, gpui::ListAlignment::Top, px(1000.));
+        let cell_list = ListState::new(cell_count, gpui_runtime::ListAlignment::Top, px(1000.));
 
         let mut editor = Self {
             project,
@@ -1849,7 +1849,7 @@ impl Item for NotebookEditor {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         f(self.notebook_item.entity_id(), self.notebook_item.read(cx))
     }
@@ -1984,7 +1984,7 @@ impl Item for NotebookEditor {
                 this.original_cell_order = cell_order;
                 this.cell_map = cell_map;
                 this.cell_list =
-                    ListState::new(this.cell_order.len(), gpui::ListAlignment::Top, px(1000.));
+                    ListState::new(this.cell_order.len(), gpui_runtime::ListAlignment::Top, px(1000.));
                 cx.notify();
             })?;
 
@@ -2054,7 +2054,7 @@ impl KernelSession for NotebookEditor {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::{FakeFs, Project, ProjectItem as _};
     use serde_json::json;
     use settings::SettingsStore;
@@ -2089,7 +2089,7 @@ mod tests {
     /// When the configured interpreter doesn't exist (e.g. Python isn't installed),
     /// running a cell must not leave it stuck in the executing state. It should
     /// instead surface the kernel launch error as an error output on the cell.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_run_cell_with_missing_interpreter_shows_error(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);
@@ -2222,7 +2222,7 @@ mod tests {
     /// Opening a notebook as a single file (its own worktree) leaves the
     /// worktree-relative path empty, so only the absolute path carries the
     /// `.ipynb` extension. `try_open` must still recognize it as a notebook.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_single_file_notebook(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);
@@ -2276,7 +2276,7 @@ mod tests {
     /// Notebooks must be saved through the project rather than through the
     /// client's own filesystem, otherwise a remote notebook's path is resolved
     /// against the local machine and the save fails.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_goes_through_the_project(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);

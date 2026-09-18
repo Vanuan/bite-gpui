@@ -14,7 +14,7 @@ use rpc::{
 };
 use std::sync::Arc;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_core_channels(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -333,7 +333,7 @@ fn assert_members_eq(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_joining_channel_ancestor_member(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -366,7 +366,7 @@ async fn test_joining_channel_ancestor_member(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_room(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -589,7 +589,7 @@ async fn test_channel_room(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rejoining_channel_after_stale_connection_cleanup_connects_livekit(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -678,7 +678,7 @@ async fn test_rejoining_channel_after_stale_connection_cleanup_connects_livekit(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_jumping(executor: BackgroundExecutor, cx_a: &mut TestAppContext) {
     let mut server = TestServer::start(executor.clone()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -730,7 +730,7 @@ async fn test_channel_jumping(executor: BackgroundExecutor, cx_a: &mut TestAppCo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_permissions_update_while_invited(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -798,7 +798,7 @@ async fn test_permissions_update_while_invited(
     assert_channels(client_b.channel_store(), cx_b, &[]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_rename(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -846,7 +846,7 @@ async fn test_channel_rename(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_call_from_channel(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -928,7 +928,7 @@ async fn test_call_from_channel(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_lost_channel_creation(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1032,7 +1032,7 @@ async fn test_lost_channel_creation(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_link_notifications(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1190,7 +1190,7 @@ async fn test_channel_link_notifications(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_membership_notifications(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1282,7 +1282,7 @@ async fn test_channel_membership_notifications(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_guest_access(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1352,7 +1352,7 @@ async fn test_guest_access(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_invite_access(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1413,7 +1413,7 @@ async fn test_invite_access(
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_leave_channel(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let (_server, _client_a, client_b, channel_id) = TestServer::start2(cx_a, cx_b).await;
 
@@ -1435,7 +1435,7 @@ async fn test_leave_channel(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_moving(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,

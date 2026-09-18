@@ -302,7 +302,7 @@ impl Item for FileDiffView {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else {
@@ -317,7 +317,7 @@ impl Item for FileDiffView {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.editor.for_each_project_item(cx, f)
     }
@@ -398,8 +398,8 @@ impl Render for FileDiffView {
 mod tests {
     use super::*;
     use editor::test::editor_test_context::assert_state_with_diff;
-    use gpui::BorrowAppContext;
-    use gpui::TestAppContext;
+    use gpui_runtime::BorrowAppContext;
+    use gpui_runtime::TestAppContext;
     use language::{Language, LanguageConfig};
     use project::{FakeFs, Fs, Project};
     use settings::{DiffViewStyle, SettingsStore};
@@ -421,7 +421,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diff_view(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -563,7 +563,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_split_diff_view_highlights_base_text_after_language_load(
         cx: &mut TestAppContext,
     ) {
@@ -642,7 +642,7 @@ mod tests {
         assert_eq!(lhs_language, Some("Rust".into()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_changes_in_diff_view(cx: &mut TestAppContext) {
         init_test(cx);
 

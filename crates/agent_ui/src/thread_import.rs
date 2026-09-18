@@ -795,7 +795,7 @@ async fn collect_all_sessions(
     agent_id: AgentId,
     remote_connection: Option<RemoteConnectionOptions>,
     list: std::rc::Rc<dyn acp_thread::AgentSessionList>,
-    cx: &mut gpui::AsyncApp,
+    cx: &mut gpui_runtime::AsyncApp,
 ) -> anyhow::Result<SessionByAgent> {
     let mut sessions = Vec::new();
     let mut cursor: Option<String> = None;
@@ -989,7 +989,7 @@ mod tests {
     use super::*;
     use acp_thread::AgentSessionInfo;
     use chrono::Utc;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use std::path::Path;
     use workspace::PathList;
 
@@ -1307,7 +1307,7 @@ mod tests {
         (channels.next().unwrap(), channels.next().unwrap())
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_import_threads_from_other_channels(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1334,7 +1334,7 @@ mod tests {
         let workspace_entity = multi_workspace
             .read_with(cx, |mw, _cx| mw.workspace().clone())
             .unwrap();
-        let mut vcx = gpui::VisualTestContext::from_window(multi_workspace.into(), cx);
+        let mut vcx = gpui_runtime::VisualTestContext::from_window(multi_workspace.into(), cx);
 
         workspace_entity.update_in(&mut vcx, |_workspace, _window, cx| {
             import_threads_from_other_channels_in(database_dir, cx);
@@ -1370,7 +1370,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_import_skips_already_existing_threads(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1407,7 +1407,7 @@ mod tests {
         let workspace_entity = multi_workspace
             .read_with(cx, |mw, _cx| mw.workspace().clone())
             .unwrap();
-        let mut vcx = gpui::VisualTestContext::from_window(multi_workspace.into(), cx);
+        let mut vcx = gpui_runtime::VisualTestContext::from_window(multi_workspace.into(), cx);
 
         workspace_entity.update_in(&mut vcx, |_workspace, _window, cx| {
             import_threads_from_other_channels_in(database_dir, cx);

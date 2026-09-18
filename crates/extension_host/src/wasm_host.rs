@@ -545,7 +545,7 @@ pub struct WasmState {
     ctx: WasiCtx,
     pub host: Arc<WasmHost>,
     pub(crate) capability_granter: CapabilityGranter,
-    pub(crate) language_server_status_source: Option<gpui::EntityId>,
+    pub(crate) language_server_status_source: Option<gpui_runtime::EntityId>,
 }
 
 type MainThreadCall = Box<dyn Send + for<'a> FnOnce(&'a mut AsyncApp) -> LocalBoxFuture<'a, ()>>;
@@ -1038,7 +1038,7 @@ mod tests {
     use super::*;
     use extension::ExtensionHostProxy;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use http_client::FakeHttpClient;
     use node_runtime::NodeRuntime;
     use serde_json::json;
@@ -1054,7 +1054,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_writeable_path_rejects_escape_attempts(cx: &mut TestAppContext) {
         init_test(cx);
 

@@ -16,8 +16,8 @@ use crate::{
     render::window_controls::{Bottom, Left, LeftCorner, Middle, Right, RightCorner},
 };
 use crate::{persistence, preview};
-use gpui::Action as _;
-use gpui::Focusable as _;
+use gpui_runtime::Action as _;
+use gpui_runtime::Focusable as _;
 use std::sync::Arc;
 use ui::{Divider, Tooltip, prelude::*};
 use ui_input::ErasedEditor;
@@ -98,7 +98,7 @@ impl<D: PickerDelegate> Picker<D> {
         editor: &Arc<dyn ErasedEditor>,
         window: &mut Window,
         cx: &mut Context<Self>,
-    ) -> gpui::Div {
+    ) -> gpui_runtime::Div {
         if let Some(custom) = self.delegate.render_editor(editor, window, cx) {
             return custom;
         }

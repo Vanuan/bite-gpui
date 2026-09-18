@@ -147,7 +147,7 @@ pub(crate) async fn read_default_devcontainer_configuration(
 /// Finds all available devcontainer configurations in the project.
 ///
 /// See [`find_configs_in_snapshot`] for the locations that are scanned.
-pub fn find_devcontainer_configs(workspace: &Workspace, cx: &gpui::App) -> Vec<DevContainerConfig> {
+pub fn find_devcontainer_configs(workspace: &Workspace, cx: &gpui_runtime::App) -> Vec<DevContainerConfig> {
     let project = workspace.project().read(cx);
 
     let worktree = project
@@ -490,7 +490,7 @@ mod tests {
 
     use crate::devcontainer_api::{DevContainerConfig, find_configs_in_snapshot};
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::Project;
     use serde_json::json;
     use settings::SettingsStore;
@@ -503,7 +503,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_configs_root_devcontainer_json(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -531,7 +531,7 @@ mod tests {
         assert_eq!(configs[0].config_path, PathBuf::from(".devcontainer.json"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_configs_default_devcontainer_dir(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -560,7 +560,7 @@ mod tests {
         assert_eq!(configs[0], DevContainerConfig::default_config());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_configs_dir_and_root_both_included(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -591,7 +591,7 @@ mod tests {
         assert_eq!(configs[1], DevContainerConfig::root_config());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_configs_subfolder_configs(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -627,7 +627,7 @@ mod tests {
         assert!(names.contains(&"rust"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_configs_default_and_subfolder(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -660,7 +660,7 @@ mod tests {
         assert_eq!(configs[1].name, "gpu");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_configs_no_devcontainer(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -688,7 +688,7 @@ mod tests {
         assert!(configs.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_configs_root_json_and_subfolder_configs(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -726,7 +726,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_configs_empty_devcontainer_dir_falls_back_to_root(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());

@@ -16,7 +16,7 @@ pub use undo_reject_toast::*;
 
 /// Returns the appropriate [`DocumentationSide`] for documentation asides
 /// in the agent panel, based on the current dock position.
-pub fn documentation_aside_side(cx: &gpui::App) -> ui::DocumentationSide {
+pub fn documentation_aside_side(cx: &gpui_runtime::App) -> ui::DocumentationSide {
     use agent_settings::AgentSettings;
     use settings::Settings;
     use ui::DocumentationSide;

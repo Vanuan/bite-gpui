@@ -153,7 +153,7 @@ impl Editor {
     pub(crate) fn update_hovered_link(
         &mut self,
         point_for_position: PointForPosition,
-        mouse_position: Option<gpui::Point<Pixels>>,
+        mouse_position: Option<gpui_types::Point<Pixels>>,
         snapshot: &EditorSnapshot,
         modifiers: Modifiers,
         window: &mut Window,
@@ -1124,8 +1124,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_hover_type_links(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_type_links(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -1205,8 +1205,8 @@ mod tests {
         "});
     }
 
-    #[gpui::test]
-    async fn test_hover_link_after_multibuffer_path_changes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_link_after_multibuffer_path_changes(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(Default::default(), cx).await;
@@ -1270,8 +1270,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_go_to_definition_link_dedup(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_go_to_definition_link_dedup(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -1336,8 +1336,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_go_to_definition_link_dedup_no_link(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_go_to_definition_link_dedup_no_link(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -1396,8 +1396,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_hover_links(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_links(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -1695,8 +1695,8 @@ mod tests {
         cx.background_executor.run_until_parked();
     }
 
-    #[gpui::test]
-    async fn test_inlay_hover_links(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_inlay_hover_links(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 enabled: Some(true),
@@ -1919,8 +1919,8 @@ mod tests {
             "});
     }
 
-    #[gpui::test]
-    async fn test_urls(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_urls(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -1953,8 +1953,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_hover_preconditions(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_preconditions(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2006,8 +2006,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_urls_at_beginning_of_buffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_urls_at_beginning_of_buffer(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2032,8 +2032,8 @@ mod tests {
         assert_eq!(cx.opened_url(), Some("https://zed.dev/releases".into()));
     }
 
-    #[gpui::test]
-    async fn test_urls_at_end_of_buffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_urls_at_end_of_buffer(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2154,8 +2154,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_surrounding_filename(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_surrounding_filename(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2238,8 +2238,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_hover_filenames(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_filenames(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2406,8 +2406,8 @@ Sentence ending file2.rs.
         });
     }
 
-    #[gpui::test]
-    async fn test_hover_filename_with_row_column(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_filename_with_row_column(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2484,8 +2484,8 @@ Sentence ending file2.rs.
         });
     }
 
-    #[gpui::test]
-    async fn test_hover_filename_with_row_only(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_filename_with_row_only(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2544,8 +2544,8 @@ Sentence ending file2.rs.
         });
     }
 
-    #[gpui::test]
-    async fn test_hover_filename_with_non_numeric_suffix(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_filename_with_non_numeric_suffix(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2601,8 +2601,8 @@ Sentence ending file2.rs.
         });
     }
 
-    #[gpui::test]
-    async fn test_hover_markdown_link_with_row_column(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_markdown_link_with_row_column(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2678,8 +2678,8 @@ Sentence ending file2.rs.
         });
     }
 
-    #[gpui::test]
-    async fn test_hover_directories(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_directories(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2722,8 +2722,8 @@ Sentence ending file2.rs.
         cx.update_workspace(|workspace, _, cx| assert_eq!(workspace.items(cx).count(), 1));
     }
 
-    #[gpui::test]
-    async fn test_hover_unicode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_unicode(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -2760,8 +2760,8 @@ Sentence ending file2.rs.
         cx.update_workspace(|workspace, _, cx| assert_eq!(workspace.items(cx).count(), 1));
     }
 
-    #[gpui::test]
-    async fn test_pressure_links(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_pressure_links(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -2833,8 +2833,8 @@ Sentence ending file2.rs.
                 "});
     }
 
-    #[gpui::test]
-    async fn test_document_links(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_document_links(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -2912,8 +2912,8 @@ Sentence ending file2.rs.
         );
     }
 
-    #[gpui::test]
-    async fn test_document_links_take_priority_over_url_detection(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_document_links_take_priority_over_url_detection(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -2981,8 +2981,8 @@ Sentence ending file2.rs.
         );
     }
 
-    #[gpui::test]
-    async fn test_cmd_hover_aggregates_document_link_and_definition(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_cmd_hover_aggregates_document_link_and_definition(cx: &mut gpui_runtime::TestAppContext) {
         // VSCode behavior: when a position carries multiple link sources
         // (LSP document link, go-to-definition, ...), cmd-click should reveal
         // every applicable target. We assert this by inspecting the
@@ -3090,8 +3090,8 @@ Sentence ending file2.rs.
         "});
     }
 
-    #[gpui::test]
-    async fn test_document_link_tooltip_popover(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_document_link_tooltip_popover(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -3182,8 +3182,8 @@ Sentence ending file2.rs.
         });
     }
 
-    #[gpui::test]
-    async fn test_document_link_resolve_on_hover(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_document_link_resolve_on_hover(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -3269,14 +3269,14 @@ Sentence ending file2.rs.
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_document_link_tooltip_respects_hover_popover_enabled(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 
         cx.update(|cx| {
-            use gpui::BorrowAppContext as _;
+            use gpui_runtime::BorrowAppContext as _;
             cx.update_global::<settings::SettingsStore, _>(|settings, cx| {
                 settings.update_user_settings(cx, |settings| {
                     settings.editor.hover_popover_enabled = Some(false);

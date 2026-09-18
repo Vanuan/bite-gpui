@@ -133,8 +133,8 @@ fn test_case_sensitive_pattern_items() {
     );
 }
 
-#[gpui::test]
-async fn test_multiline_regex_crlf(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multiline_regex_crlf(cx: &mut gpui_runtime::TestAppContext) {
     let search_query = SearchQuery::regex(
         "^hello$\r?\n",
         false,
@@ -157,8 +157,8 @@ async fn test_multiline_regex_crlf(cx: &mut gpui::TestAppContext) {
     assert_eq!(results, vec![0..7, 14..21]);
 }
 
-#[gpui::test]
-async fn test_multiline_regex(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multiline_regex(cx: &mut gpui_runtime::TestAppContext) {
     let search_query = SearchQuery::regex(
         "^hello$\n",
         false,
@@ -181,7 +181,7 @@ async fn test_multiline_regex(cx: &mut gpui::TestAppContext) {
     assert_eq!(results, vec![0..6, 12..18]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn regex_with_eol_detects_lines() {
     let re = SearchQuery::regex(
         "Bool$",
@@ -203,7 +203,7 @@ async fn regex_with_eol_detects_lines() {
     assert!(result.is_some());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn multi_line_regex_detects_matches() {
     let re = SearchQuery::regex(
         "Bool$\nbool",

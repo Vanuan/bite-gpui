@@ -954,7 +954,7 @@ mod tests {
     };
     use agent_client_protocol::schema::v1 as acp;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_compaction_markdowns_include_summary_and_error(cx: &mut App) {
         let summary = cx.new(|cx| Markdown::new("summary match".into(), None, None, cx));
         let unsupported =

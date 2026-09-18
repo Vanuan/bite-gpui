@@ -361,7 +361,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_separates_files_and_dirs(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -465,7 +465,7 @@ mod tests {
         assert!(output.contains(&platform_paths("project/tests/integration_test.rs")));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_empty_directory(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -497,7 +497,7 @@ mod tests {
         assert_eq!(output, "project/empty_dir is empty.\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_error_cases(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -544,7 +544,7 @@ mod tests {
         assert!(output.unwrap_err().contains("is not a directory"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_security(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -684,7 +684,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_with_multiple_worktree_settings(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -866,7 +866,7 @@ mod tests {
         assert!(output.unwrap_err().contains("Cannot list directory"),);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_symlink_escape_requests_authorization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -932,7 +932,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_symlink_escape_denied(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -987,7 +987,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_symlink_escape_private_path_no_authorization(
         cx: &mut TestAppContext,
     ) {
@@ -1063,7 +1063,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_no_authorization_for_normal_paths(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1109,7 +1109,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_directory_intra_project_symlink_no_authorization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1164,7 +1164,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_global_skill_directory(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1221,7 +1221,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_outside_skills_dir_still_rejected(cx: &mut TestAppContext) {
         init_test(cx);
 

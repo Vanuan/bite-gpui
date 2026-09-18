@@ -10,7 +10,7 @@ use gpui::{
     SharedString, UniformListScrollHandle, Window, WindowBounds, WindowOptions, canvas, div, point,
     prelude::*, px, rgb, size, uniform_list,
 };
-use gpui_platform::application;
+use gpui::application;
 
 const TOTAL_ITEMS: usize = 10000;
 const SCROLLBAR_THUMB_WIDTH: Pixels = px(8.);
@@ -127,7 +127,7 @@ impl Quote {
         (self.last_done - self.prev_close) / self.prev_close * 100.0
     }
 
-    fn change_color(&self) -> gpui::Hsla {
+    fn change_color(&self) -> gpui_types::Hsla {
         if self.change() > 0.0 {
             gpui::green()
         } else {
@@ -150,7 +150,7 @@ impl TableRow {
         Self { ix, quote }
     }
 
-    fn render_cell(&self, key: &str, width: Pixels, color: gpui::Hsla) -> impl IntoElement {
+    fn render_cell(&self, key: &str, width: Pixels, color: gpui_types::Hsla) -> impl IntoElement {
         div()
             .whitespace_nowrap()
             .truncate()
@@ -489,6 +489,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

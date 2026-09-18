@@ -966,7 +966,7 @@ impl ContextProvider for RustContextProvider {
         location: ContextLocation<'_>,
         project_env: Option<HashMap<String, String>>,
         _: Arc<dyn LanguageToolchainStore>,
-        cx: &mut gpui::App,
+        cx: &mut gpui_runtime::App,
     ) -> Task<Result<TaskVariables>> {
         let local_abs_path = location
             .file_location
@@ -1482,7 +1482,7 @@ mod tests {
     use theme::SyntaxTheme;
     use util::path;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_process_rust_diagnostics() {
         let markdown_message = lsp::MarkupContent {
             kind: lsp::MarkupKind::Markdown,
@@ -1556,7 +1556,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rust_label_for_completion() {
         let adapter = Arc::new(RustLspAdapter);
         let language = language("rust", tree_sitter_rust::LANGUAGE.into());
@@ -2032,7 +2032,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rust_label_for_symbol() {
         let adapter = Arc::new(RustLspAdapter);
         let language = language("rust", tree_sitter_rust::LANGUAGE.into());
@@ -2123,7 +2123,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rust_autoindent(cx: &mut TestAppContext) {
         // cx.executor().set_block_on_ticks(usize::MAX..=usize::MAX);
         cx.update(|cx| {

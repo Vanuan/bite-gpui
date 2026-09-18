@@ -16,7 +16,7 @@ mod tests {
     use std::num::NonZeroU32;
     use unindent::Unindent;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cpp_autoindent_switch_case(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -80,7 +80,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cpp_autoindent_access_specifier(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -130,7 +130,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cpp_autoindent_access_specifier_next_line(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -182,7 +182,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cpp_autoindent_nested_class_access_specifiers(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -242,7 +242,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cpp_autoindent_consecutive_access_specifiers(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -292,7 +292,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cpp_autoindent_indented_access_specifiers(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -344,7 +344,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cpp_autoindent_access_specifier_with_method_bodies(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -406,7 +406,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cpp_autoindent_basic(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -436,7 +436,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cpp_autoindent_if_else(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);

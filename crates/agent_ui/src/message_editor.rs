@@ -316,7 +316,7 @@ async fn resolve_pasted_context_items(
     project_is_local: bool,
     supports_images: bool,
     entries: Vec<ClipboardEntry>,
-    cx: &mut gpui::AsyncWindowContext,
+    cx: &mut gpui_runtime::AsyncWindowContext,
 ) -> (Vec<ResolvedPastedContextItem>, Vec<Entity<Worktree>>) {
     let mut items = Vec::new();
     let mut added_worktrees = Vec::new();
@@ -384,7 +384,7 @@ fn insert_project_path_as_context(
     mention_set: Entity<MentionSet>,
     workspace: WeakEntity<Workspace>,
     supports_images: bool,
-    cx: &mut gpui::AsyncWindowContext,
+    cx: &mut gpui_runtime::AsyncWindowContext,
 ) -> Option<Task<()>> {
     let workspace = workspace.upgrade()?;
 
@@ -412,7 +412,7 @@ async fn insert_resolved_pasted_context_items(
     mention_set: Entity<MentionSet>,
     workspace: WeakEntity<Workspace>,
     supports_images: bool,
-    cx: &mut gpui::AsyncWindowContext,
+    cx: &mut gpui_runtime::AsyncWindowContext,
 ) {
     let mut path_mention_tasks = Vec::new();
 
@@ -2530,7 +2530,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_at_mention_removal(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2616,8 +2616,8 @@ mod tests {
         pretty_assertions::assert_matches!(content.as_slice(), [acp::ContentBlock::Text { .. }]);
     }
 
-    #[gpui::test]
-    async fn test_slash_command_validation(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_slash_command_validation(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -2775,7 +2775,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_completion_provider_commands(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2947,7 +2947,7 @@ mod tests {
     /// slash-command popup, and confirming one must emit
     /// `MessageEditorEvent::LocalCommandInvoked` (so `ThreadView` can run the
     /// corresponding action) without leaving the `/keyword` in the editor.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_local_commands_complete_and_emit_event(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3061,7 +3061,7 @@ mod tests {
     /// (see `NativeAgent::ensure_skills_scan_started`); without the
     /// event the trigger never runs and lazily-discovered skills never
     /// appear in autocomplete.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_slash_autocomplete_emits_opened_event(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3150,7 +3150,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_context_completion_provider_mentions(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3700,7 +3700,7 @@ mod tests {
             .collect::<Vec<_>>()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_large_file_mention_fallback(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3815,7 +3815,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_insert_thread_summary(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(LanguageModelRegistry::test);
@@ -3886,7 +3886,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_insert_thread_summary_skipped_for_external_agents(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(LanguageModelRegistry::test);
@@ -3939,7 +3939,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_mode_hidden_when_disabled(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3995,7 +3995,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_mode_visible_when_enabled(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4051,7 +4051,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_whitespace_trimming(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4100,7 +4100,7 @@ mod tests {
         assert_eq!(content, vec!["してhello world".into()]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_editor_respects_embedded_context_capability(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4215,7 +4215,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_autoscroll_after_insert_selections(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4328,7 +4328,7 @@ mod tests {
                 editor.change_selections(Default::default(), window, cx, |selections| {
                     selections.select_ranges([Point::new(90, 0)..Point::new(90, 0)]);
                 });
-                editor.set_scroll_position(gpui::Point::new(0., 0.), window, cx);
+                editor.set_scroll_position(gpui_types::Point::new(0., 0.), window, cx);
             });
         });
 
@@ -4376,7 +4376,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_insert_context_with_multibyte_characters(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4454,7 +4454,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_paste_mention_link_with_multiple_selections(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4549,7 +4549,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copy_with_selection_mentions_serializes_links(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4815,7 +4815,7 @@ mod tests {
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_serialized_copy_text_selection_covers_only_mention(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4845,7 +4845,7 @@ mod tests {
         assert_eq!(copied, Some(fixture.first_uri.as_link().to_string()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_serialized_copy_text_returns_none_when_mentions_outside_selection(
         cx: &mut TestAppContext,
     ) {
@@ -4879,7 +4879,7 @@ mod tests {
         assert_eq!(copied, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_draft_content_blocks_snapshot_preserves_selection_mentions(
         cx: &mut TestAppContext,
     ) {
@@ -4929,7 +4929,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cut_with_selection_mentions_serializes_and_removes(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4968,7 +4968,7 @@ mod tests {
         assert_eq!(remaining_text, "");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cut_with_empty_cursor_on_mention_line_removes_whole_line(
         cx: &mut TestAppContext,
     ) {
@@ -5006,7 +5006,7 @@ mod tests {
         assert_eq!(remaining_text, "selection looks fine");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_serialized_cut_text_returns_none_when_mentions_outside_selection(
         cx: &mut TestAppContext,
     ) {
@@ -5040,7 +5040,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_paste_mention_link_with_completion_trigger_does_not_panic(
         cx: &mut TestAppContext,
     ) {
@@ -5118,7 +5118,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_paste_external_file_path_inserts_file_mention(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, editor, mut cx) =
@@ -5153,7 +5153,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_paste_external_directory_path_inserts_directory_mention(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, editor, mut cx) = setup_paste_test_message_editor(
@@ -5194,7 +5194,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_paste_external_file_path_inserts_at_cursor(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, editor, mut cx) =
@@ -5227,7 +5227,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dragged_file_path_inserts_at_cursor(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, editor, mut cx) =
@@ -5269,7 +5269,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dragged_file_paths_insert_in_order_at_cursor(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, editor, mut cx) = setup_paste_test_message_editor(
@@ -5309,7 +5309,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_paste_mixed_external_image_without_extension_and_file_path(
         cx: &mut TestAppContext,
     ) {
@@ -5552,7 +5552,7 @@ mod tests {
         (message_editor, cx)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_message_plain_text(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, cx) = setup_message_editor(cx).await;
@@ -5572,7 +5572,7 @@ mod tests {
         assert!(!message_editor.update(cx, |editor, cx| editor.is_empty(cx)));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_message_normalizes_crlf_before_mention(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, cx) = setup_message_editor(cx).await;
@@ -5599,7 +5599,7 @@ mod tests {
         assert_eq!(mention_uris.len(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_message_replaces_existing_content(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, cx) = setup_message_editor(cx).await;
@@ -5633,7 +5633,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_append_message_to_empty_editor(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, cx) = setup_message_editor(cx).await;
@@ -5656,7 +5656,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_append_message_to_non_empty_editor(cx: &mut TestAppContext) {
         init_test(cx);
         let (message_editor, cx) = setup_message_editor(cx).await;
@@ -5691,7 +5691,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_append_message_preserves_mention_offset(cx: &mut TestAppContext) {
         init_test(cx);
 

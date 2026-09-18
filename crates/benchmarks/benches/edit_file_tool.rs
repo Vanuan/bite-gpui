@@ -273,10 +273,10 @@ async fn setup_editor_and_tool(cx: &mut TestAppContext, file_text: String) -> Ha
     // Lay out and paint a real frame so the editor establishes a viewport (this
     // is what makes the viewport-gated observers like bracket colorization run).
     {
-        let mut visual_cx = gpui::VisualTestContext::from_window(window, &*cx);
+        let mut visual_cx = gpui_runtime::VisualTestContext::from_window(window, &*cx);
         visual_cx.draw(
             gpui::point(gpui::px(0.0), gpui::px(0.0)),
-            gpui::size(gpui::px(1024.0), gpui::px(768.0)),
+            gpui_backend::size(gpui::px(1024.0), gpui::px(768.0)),
             |_, _| editor.clone().into_any_element(),
         );
     }

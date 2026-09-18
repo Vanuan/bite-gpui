@@ -10,7 +10,7 @@ use std::net::IpAddr;
 
 pub use dap_types::*;
 use debugger_settings::DebuggerSettings;
-use gpui::App;
+use gpui_runtime::App;
 pub use registry::{DapLocator, DapRegistry};
 use serde::Serialize;
 use settings::Settings;

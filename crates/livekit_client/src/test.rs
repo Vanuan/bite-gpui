@@ -906,7 +906,7 @@ impl Room {
         Ok(SessionStats::default())
     }
 
-    pub fn stats_task(&self, _cx: &impl gpui::AppContext) -> gpui::Task<Result<SessionStats>> {
+    pub fn stats_task(&self, _cx: &impl gpui_runtime::AppContext) -> gpui::Task<Result<SessionStats>> {
         gpui::Task::ready(Ok(SessionStats::default()))
     }
 }
@@ -934,7 +934,7 @@ impl WeakRoom {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use livekit_api::Client as _;
     use std::{ops::Deref, sync::atomic::AtomicUsize};
 
@@ -994,7 +994,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn token_created_after_participant_removal_can_join(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,
@@ -1039,7 +1039,7 @@ mod tests {
         assert_eq!(fresh_room.connection_state(), ConnectionState::Connected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn guest_token_created_after_permission_update_can_join(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,

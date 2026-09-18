@@ -89,10 +89,10 @@ pub(super) enum EditPredictionKeybindAction {
 
 pub(super) struct EditPredictionKeybindDisplay {
     #[cfg(test)]
-    pub(super) accept_keystroke: Option<gpui::KeybindingKeystroke>,
+    pub(super) accept_keystroke: Option<gpui_types::KeybindingKeystroke>,
     #[cfg(test)]
-    pub(super) preview_keystroke: Option<gpui::KeybindingKeystroke>,
-    pub(super) displayed_keystroke: Option<gpui::KeybindingKeystroke>,
+    pub(super) preview_keystroke: Option<gpui_types::KeybindingKeystroke>,
+    pub(super) displayed_keystroke: Option<gpui_types::KeybindingKeystroke>,
     pub(super) action: EditPredictionKeybindAction,
     pub(super) missing_accept_keystroke: bool,
     pub(super) show_hold_label: bool,
@@ -629,7 +629,7 @@ impl Editor {
         &self,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<gpui::KeybindingKeystroke> {
+    ) -> Option<gpui_types::KeybindingKeystroke> {
         let key_context = self.key_context_internal(true, window, cx);
         let bindings = window.bindings_for_action_in_context(&AcceptEditPrediction, key_context);
         bindings
@@ -1080,7 +1080,7 @@ impl Editor {
     pub(super) fn render_edit_prediction_popover(
         &mut self,
         text_bounds: &Bounds<Pixels>,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         right_margin: Pixels,
         editor_snapshot: &EditorSnapshot,
         visible_row_range: Range<DisplayRow>,
@@ -1088,14 +1088,14 @@ impl Editor {
         scroll_bottom: ScrollOffset,
         line_layouts: &[LineWithInvisibles],
         line_height: Pixels,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         newest_selection_head: Option<DisplayPoint>,
         editor_width: Pixels,
         style: &EditorStyle,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<(AnyElement, gpui::Point<Pixels>)> {
+    ) -> Option<(AnyElement, gpui_types::Point<Pixels>)> {
         if self.mode().is_minimap() {
             return None;
         }
@@ -1200,7 +1200,7 @@ impl Editor {
 
                 let size = element.layout_as_root(AvailableSpace::min_size(), window, cx);
                 let origin_x = text_bounds.size.width - size.width - px(30.);
-                let origin = text_bounds.origin + gpui::Point::new(origin_x, px(16.));
+                let origin = text_bounds.origin + gpui_types::Point::new(origin_x, px(16.));
                 element.prepaint_at(origin, window, cx);
 
                 Some((element, origin))
@@ -1431,7 +1431,7 @@ impl Editor {
         granularity: EditPredictionGranularity,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<gpui::KeybindingKeystroke> {
+    ) -> Option<gpui_types::KeybindingKeystroke> {
         let key_context = self.key_context_internal(true, window, cx);
 
         let bindings =
@@ -1700,18 +1700,18 @@ impl Editor {
     fn render_edit_prediction_modifier_jump_popover(
         &mut self,
         text_bounds: &Bounds<Pixels>,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         visible_row_range: Range<DisplayRow>,
         line_layouts: &[LineWithInvisibles],
         line_height: Pixels,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         newest_selection_head: Option<DisplayPoint>,
         target_display_point: DisplayPoint,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<(AnyElement, gpui::Point<Pixels>)> {
+    ) -> Option<(AnyElement, gpui_types::Point<Pixels>)> {
         let scrolled_content_origin =
-            content_origin - gpui::Point::new(scroll_pixel_position.x.into(), Pixels::ZERO);
+            content_origin - gpui_types::Point::new(scroll_pixel_position.x.into(), Pixels::ZERO);
 
         const SCROLL_PADDING_Y: Pixels = px(12.);
 
@@ -1799,10 +1799,10 @@ impl Editor {
         visible_row_range: Range<DisplayRow>,
         line_layouts: &[LineWithInvisibles],
         newest_selection_head: Option<DisplayPoint>,
-        scrolled_content_origin: gpui::Point<Pixels>,
+        scrolled_content_origin: gpui_types::Point<Pixels>,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<(AnyElement, gpui::Point<Pixels>)> {
+    ) -> Option<(AnyElement, gpui_types::Point<Pixels>)> {
         let mut element = self
             .render_edit_prediction_line_popover("Scroll", Some(scroll_icon), window, cx)
             .into_any();
@@ -1825,18 +1825,18 @@ impl Editor {
     fn render_edit_prediction_eager_jump_popover(
         &mut self,
         text_bounds: &Bounds<Pixels>,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         editor_snapshot: &EditorSnapshot,
         visible_row_range: Range<DisplayRow>,
         scroll_top: ScrollOffset,
         scroll_bottom: ScrollOffset,
         line_height: Pixels,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         target_display_point: DisplayPoint,
         editor_width: Pixels,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<(AnyElement, gpui::Point<Pixels>)> {
+    ) -> Option<(AnyElement, gpui_types::Point<Pixels>)> {
         if target_display_point.row().as_f64() < scroll_top {
             let mut element = self
                 .render_edit_prediction_line_popover(
@@ -1898,12 +1898,12 @@ impl Editor {
         visible_row_range: Range<DisplayRow>,
         target_display_point: DisplayPoint,
         line_height: Pixels,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
-        content_origin: gpui::Point<Pixels>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
+        content_origin: gpui_types::Point<Pixels>,
         editor_width: Pixels,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<(AnyElement, gpui::Point<Pixels>)> {
+    ) -> Option<(AnyElement, gpui_types::Point<Pixels>)> {
         let target_line_end = DisplayPoint::new(
             target_display_point.row(),
             editor_snapshot.line_len(target_display_point.row()),
@@ -1953,14 +1953,14 @@ impl Editor {
     fn render_edit_prediction_diff_popover(
         self: &Editor,
         text_bounds: &Bounds<Pixels>,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         right_margin: Pixels,
         editor_snapshot: &EditorSnapshot,
         visible_row_range: Range<DisplayRow>,
         line_layouts: &[LineWithInvisibles],
         line_height: Pixels,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         newest_selection_head: Option<DisplayPoint>,
         editor_width: Pixels,
         style: &EditorStyle,
@@ -1969,7 +1969,7 @@ impl Editor {
         snapshot: &language::BufferSnapshot,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<(AnyElement, gpui::Point<Pixels>)> {
+    ) -> Option<(AnyElement, gpui_types::Point<Pixels>)> {
         let Some((first_edit_range, _)) = edits.first() else {
             return None;
         };
@@ -2030,7 +2030,7 @@ impl Editor {
                     // Workaround: For some reason, there's a gap if we don't do this
                     .ml(-BORDER_WIDTH)
                     .shadow(vec![
-                        gpui::BoxShadow::new(px(1.), px(1.), gpui::black().opacity(0.05))
+                        gpui_runtime::BoxShadow::new(px(1.), px(1.), gpui::black().opacity(0.05))
                             .blur_radius(px(2.)),
                     ])
                     .bg(Editor::edit_prediction_line_popover_bg_color(cx))
@@ -2149,7 +2149,7 @@ impl Editor {
 
     fn render_edit_prediction_inline_keystroke(
         &self,
-        keystroke: &gpui::KeybindingKeystroke,
+        keystroke: &gpui_types::KeybindingKeystroke,
         modifiers_color: Color,
         cx: &App,
     ) -> AnyElement {
@@ -2185,7 +2185,7 @@ impl Editor {
 
     fn render_edit_prediction_popover_keystroke(
         &self,
-        keystroke: &gpui::KeybindingKeystroke,
+        keystroke: &gpui_types::KeybindingKeystroke,
         color: Color,
         cx: &App,
     ) -> AnyElement {
@@ -2479,7 +2479,7 @@ impl Editor {
                         edit_prediction_fallback_text(edits, cx).first_line_preview()
                     };
 
-                let styled_text = gpui::StyledText::new(highlighted_edits.text)
+                let styled_text = gpui_runtime::StyledText::new(highlighted_edits.text)
                     .with_default_highlights(&style.text, highlighted_edits.highlights);
 
                 let preview = h_flex()

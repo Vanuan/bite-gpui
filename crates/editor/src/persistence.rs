@@ -414,8 +414,8 @@ VALUES {placeholders};
 mod tests {
     use super::*;
 
-    #[gpui::test]
-    async fn test_save_and_get_serialized_editor(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_save_and_get_serialized_editor(cx: &mut gpui_runtime::TestAppContext) {
         let db = cx.update(|cx| workspace::WorkspaceDb::global(cx));
         let workspace_id = db.next_id().await.unwrap();
         let editor_db = cx.update(|cx| EditorDb::global(cx));
@@ -504,8 +504,8 @@ mod tests {
     // 3. Reopen Zed - folds should be restored at their NEW correct positions
     // The search uses contains_str_at() to find fingerprints in the buffer.
 
-    #[gpui::test]
-    async fn test_save_and_get_file_folds(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_save_and_get_file_folds(cx: &mut gpui_runtime::TestAppContext) {
         let db = cx.update(|cx| workspace::WorkspaceDb::global(cx));
         let workspace_id = db.next_id().await.unwrap();
         let editor_db = cx.update(|cx| EditorDb::global(cx));

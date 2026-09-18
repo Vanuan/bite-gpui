@@ -117,7 +117,7 @@ impl ProtoMessageHandlerSet {
     fn add_message_handler(
         &mut self,
         message_type_id: TypeId,
-        entity: gpui::AnyWeakEntity,
+        entity: gpui_runtime::AnyWeakEntity,
         handler: ProtoMessageHandler,
     ) {
         self.entities_by_message_type
@@ -449,7 +449,7 @@ impl AnyProtoClient {
         }
     }
 
-    pub fn add_request_handler<M, E, H, F>(&self, entity: gpui::WeakEntity<E>, handler: H)
+    pub fn add_request_handler<M, E, H, F>(&self, entity: gpui_runtime::WeakEntity<E>, handler: H)
     where
         M: RequestMessage,
         E: 'static,
@@ -489,7 +489,7 @@ impl AnyProtoClient {
     where
         M: EnvelopedMessage + RequestMessage + EntityMessage,
         E: 'static,
-        H: 'static + Sync + Send + Fn(gpui::Entity<E>, TypedEnvelope<M>, AsyncApp) -> F,
+        H: 'static + Sync + Send + Fn(gpui_runtime::Entity<E>, TypedEnvelope<M>, AsyncApp) -> F,
         F: 'static + Future<Output = Result<M::Response>>,
     {
         let message_type_id = TypeId::of::<M>();
@@ -535,7 +535,7 @@ impl AnyProtoClient {
     where
         M: EnvelopedMessage + RequestMessage + EntityMessage,
         E: 'static,
-        H: 'static + Sync + Send + Fn(gpui::Entity<E>, TypedEnvelope<M>, AsyncApp) -> F,
+        H: 'static + Sync + Send + Fn(gpui_runtime::Entity<E>, TypedEnvelope<M>, AsyncApp) -> F,
         F: 'static + Future<Output = Result<S>>,
         S: 'static + Stream<Item = Result<M::Response>>,
     {
@@ -597,7 +597,7 @@ impl AnyProtoClient {
     where
         M: EnvelopedMessage + EntityMessage,
         E: 'static,
-        H: 'static + Sync + Send + Fn(gpui::Entity<E>, TypedEnvelope<M>, AsyncApp) -> F,
+        H: 'static + Sync + Send + Fn(gpui_runtime::Entity<E>, TypedEnvelope<M>, AsyncApp) -> F,
         F: 'static + Future<Output = Result<()>>,
     {
         let message_type_id = TypeId::of::<M>();

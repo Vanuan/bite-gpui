@@ -1,6 +1,6 @@
 use anyhow::{Context, anyhow};
 use db::kvp::KeyValueStore;
-use gpui::App;
+use gpui_runtime::App;
 use ui::Window;
 
 use crate::preview;

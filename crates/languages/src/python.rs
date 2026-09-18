@@ -890,7 +890,7 @@ impl ContextProvider for PythonContextProvider {
         location: ContextLocation<'_>,
         _: Option<HashMap<String, String>>,
         toolchains: Arc<dyn LanguageToolchainStore>,
-        cx: &mut gpui::App,
+        cx: &mut gpui_runtime::App,
     ) -> Task<Result<task::TaskVariables>> {
         let test_target = match selected_test_runner(Some(&location.file_location.buffer), cx) {
             TestRunner::UNITTEST => self.build_unittest_target(variables),
@@ -2840,7 +2840,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conda_activation_script_injection(cx: &mut TestAppContext) {
         use language::{LanguageName, Toolchain, ToolchainLister};
         use settings::{CondaManager, VenvSettings};
@@ -2911,7 +2911,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conda_activation_skips_when_name_missing(cx: &mut TestAppContext) {
         use language::{LanguageName, Toolchain, ToolchainLister};
         use settings::{CondaManager, VenvSettings};
@@ -2978,7 +2978,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conda_activation_skips_unquotable_name(cx: &mut TestAppContext) {
         use language::{LanguageName, Toolchain, ToolchainLister};
         use settings::{CondaManager, VenvSettings};
@@ -3048,7 +3048,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_python_autoindent(cx: &mut TestAppContext) {
         cx.executor().set_block_on_ticks(usize::MAX..=usize::MAX);
         let language = crate::language("python", tree_sitter_python::LANGUAGE.into());

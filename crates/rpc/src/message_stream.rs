@@ -110,7 +110,7 @@ where
 mod tests {
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_buffer_size() {
         let (tx, rx) = futures::channel::mpsc::unbounded();
         let mut sink = MessageStream::new(tx.sink_map_err(|_| anyhow::anyhow!("")));

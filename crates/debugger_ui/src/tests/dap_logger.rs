@@ -8,7 +8,7 @@ use serde_json::json;
 use std::cell::OnceCell;
 use util::path;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dap_logger_captures_all_session_rpc_messages(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,

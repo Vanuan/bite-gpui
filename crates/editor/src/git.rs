@@ -81,7 +81,7 @@ impl DiffHunkRenderer for HiddenDiffHunkRenderer {
         _window: &mut Window,
         _cx: &mut App,
     ) -> AnyElement {
-        gpui::Empty.into_any_element()
+        gpui_runtime::Empty.into_any_element()
     }
 }
 
@@ -99,7 +99,7 @@ impl DiffHunkRenderer for HiddenUnstagedDiffHunkRenderer {
         _window: &mut Window,
         _cx: &mut App,
     ) -> AnyElement {
-        gpui::Empty.into_any_element()
+        gpui_runtime::Empty.into_any_element()
     }
 
     fn render_hunk_as_staged(&self, _status: &DiffHunkStatus, _cx: &App) -> bool {
@@ -130,7 +130,7 @@ pub(super) struct InlineBlamePopoverState {
 }
 
 pub(super) struct InlineBlamePopover {
-    pub(super) position: gpui::Point<Pixels>,
+    pub(super) position: gpui_types::Point<Pixels>,
     pub(super) hide_task: Option<Task<()>>,
     pub(super) popover_bounds: Option<Bounds<Pixels>>,
     pub(super) popover_state: InlineBlamePopoverState,
@@ -1989,7 +1989,7 @@ impl Editor {
         &mut self,
         buffer: BufferId,
         blame_entry: &BlameEntry,
-        position: gpui::Point<Pixels>,
+        position: gpui_types::Point<Pixels>,
         ignore_timeout: bool,
         cx: &mut Context<Self>,
     ) {
@@ -2843,7 +2843,7 @@ impl Editor {
                     .into_any_element()
             } else {
                 // Display mode: no action buttons for now (edit/delete not yet implemented)
-                gpui::Empty.into_any_element()
+                gpui_runtime::Empty.into_any_element()
             })
     }
 

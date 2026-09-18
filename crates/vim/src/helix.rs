@@ -1297,7 +1297,7 @@ impl Vim {
                 return px(0.0);
             }
 
-            let run = gpui::TextRun {
+            let run = gpui_backend::TextRun {
                 len: text.len(),
                 font: font.clone(),
                 color: Hsla::default(),
@@ -2067,8 +2067,8 @@ mod test {
         })
     }
 
-    #[gpui::test]
-    async fn test_word_motions(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_word_motions(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         // «
@@ -2129,8 +2129,8 @@ mod test {
         cx.assert_state("aa\n«ˇ  »bb", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_next_subword_start(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_next_subword_start(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2201,8 +2201,8 @@ mod test {
         cx.assert_state("<?php\n\n$someVariable = 2«;ˇ»", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_next_subword_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_next_subword_end(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2277,8 +2277,8 @@ mod test {
         cx.assert_state("<?php\n\n$someVariable = 2«;ˇ»", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_previous_subword_start(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_previous_subword_start(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2355,8 +2355,8 @@ mod test {
         cx.assert_state("«ˇfoo»BarBaz", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_previous_subword_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_previous_subword_end(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2433,8 +2433,8 @@ mod test {
         cx.assert_state("«ˇfoo»BarBaz", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_delete(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2469,8 +2469,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_delete_character_end_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_character_end_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -2494,8 +2494,8 @@ mod test {
     // Deleting a selection that ends at the last non-newline character should
     // leave the cursor on the newline (matching Helix), not clamp it onto the
     // character to the left of the selection.
-    #[gpui::test]
-    async fn test_delete_to_end_of_line_keeps_cursor_on_newline(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_to_end_of_line_keeps_cursor_on_newline(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2516,8 +2516,8 @@ mod test {
         );
     }
 
-    // #[gpui::test]
-    // async fn test_delete_character_end_of_buffer(cx: &mut gpui::TestAppContext) {
+    // #[gpui_runtime::test]
+    // async fn test_delete_character_end_of_buffer(cx: &mut gpui_runtime::TestAppContext) {
     //     let mut cx = VimTestContext::new(cx, true).await;
 
     //     cx.set_state(
@@ -2539,8 +2539,8 @@ mod test {
     //     );
     // }
 
-    #[gpui::test]
-    async fn test_f_and_t(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_f_and_t(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2593,8 +2593,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_newline_char(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_newline_char(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2611,8 +2611,8 @@ mod test {
         cx.assert_state("«ˇaa»\n", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_insert_selected(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_insert_selected(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state(
@@ -2634,8 +2634,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_append(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_append(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2735,8 +2735,8 @@ mod test {
         cx.assert_state("ˇaaa bbb\nˇccc ddd", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_replace(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2768,8 +2768,8 @@ mod test {
         cx.assert_state("«xxˇ»", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_replace_with_crlf(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_with_crlf(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("«xˇ»z", Mode::HelixNormal);
@@ -2785,8 +2785,8 @@ mod test {
         cx.assert_state("«a\nbˇ»z", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_yank(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_yank(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2818,8 +2818,8 @@ mod test {
         cx.shared_clipboard().assert_eq("w");
     }
 
-    #[gpui::test]
-    async fn test_shift_r_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_shift_r_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2840,8 +2840,8 @@ mod test {
         cx.assert_state("foo hello worldˇ baz", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         assert_eq!(cx.mode(), Mode::Normal);
@@ -2853,8 +2853,8 @@ mod test {
         assert_eq!(cx.mode(), Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_insert_mode_stickiness(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_insert_mode_stickiness(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2867,8 +2867,8 @@ mod test {
         assert_eq!(cx.mode(), Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_append(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_append(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2877,8 +2877,8 @@ mod test {
         cx.assert_state("abˇcd", Mode::Insert);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_move_to_trailing_newline(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_move_to_trailing_newline(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2889,8 +2889,8 @@ mod test {
         cx.assert_state("line one\nline two\nline thre«e\nˇ»", Mode::HelixSelect);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_trailing_newline(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_trailing_newline(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2901,8 +2901,8 @@ mod test {
         cx.assert_state("line one\nline two\n«ˇline three\n»", Mode::HelixSelect);
     }
 
-    #[gpui::test]
-    async fn test_goto_last_modification(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_goto_last_modification(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -2934,8 +2934,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_select_lines(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_lines(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state(
             "line one\nline ˇtwo\nline three\nline four",
@@ -3135,8 +3135,8 @@ mod test {
         cx.assert_state("«one\nˇ»two\nthree", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_insert_before_after_select_lines(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_insert_before_after_select_lines(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -3164,8 +3164,8 @@ mod test {
         cx.assert_state("line one\nˇ\nline two\nline three\nline four", Mode::Insert);
     }
 
-    #[gpui::test]
-    async fn test_helix_insert_before_after_helix_select(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_insert_before_after_helix_select(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -3220,8 +3220,8 @@ mod test {
         cx.assert_state("line one\nline two\nline three\nˇ\nline four", Mode::Insert);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_mode_motion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_mode_motion(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         assert_eq!(cx.mode(), Mode::Normal);
@@ -3232,8 +3232,8 @@ mod test {
         cx.assert_state("h«ellˇ»o", Mode::HelixSelect);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_end_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_end_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -3249,8 +3249,8 @@ mod test {
         cx.assert_state("The ˇ\nfox jumps over", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_mode_motion_multiple_cursors(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_mode_motion_multiple_cursors(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         assert_eq!(cx.mode(), Mode::Normal);
@@ -3266,8 +3266,8 @@ mod test {
         cx.assert_state("«helˇ»lo\n«worˇ»ld", Mode::HelixSelect);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_word_motions(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_word_motions(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇone two", Mode::Normal);
@@ -3282,8 +3282,8 @@ mod test {
         cx.assert_state("«one ˇ»two", Mode::HelixSelect);
     }
 
-    #[gpui::test]
-    async fn test_exit_visual_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_exit_visual_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇone two", Mode::Normal);
@@ -3300,8 +3300,8 @@ mod test {
         cx.assert_state("«one ˇ»two", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_motion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_motion(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -3314,8 +3314,8 @@ mod test {
         cx.assert_state("«oneˇ» two three", Mode::HelixSelect);
     }
 
-    #[gpui::test]
-    async fn test_helix_full_cursor_selection(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_full_cursor_selection(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -3327,8 +3327,8 @@ mod test {
     // Regression test for ZED-758: helix motions called
     // `Editor::text_layout_details` on an editor whose `style` had never
     // been set, panicking on `unwrap()`.
-    #[gpui::test]
-    async fn test_helix_motion_on_unrendered_editor(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_motion_on_unrendered_editor(cx: &mut gpui_runtime::TestAppContext) {
         use editor::{Editor, EditorMode, SelectionEffects};
         use multi_buffer::{MultiBuffer, MultiBufferOffset};
 
@@ -3346,7 +3346,7 @@ mod test {
         let cx = cx.add_empty_window();
 
         let editor = cx.update(|window, cx| {
-            use gpui::AppContext as _;
+            use gpui_runtime::AppContext as _;
             let buffer = MultiBuffer::build_simple("one two three", cx);
             cx.new(|cx| {
                 let mut editor = Editor::new(EditorMode::full(), buffer, None, window, cx);
@@ -3379,8 +3379,8 @@ mod test {
         assert_eq!(cursor_offset, MultiBufferOffset(3));
     }
 
-    #[gpui::test]
-    async fn test_helix_select_regex(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_regex(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -3404,8 +3404,8 @@ mod test {
         // cx.assert_state("ˇstuff one two one", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_next_match(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_next_match(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇhello two one two one two one", Mode::Visual);
@@ -3441,8 +3441,8 @@ mod test {
         cx.assert_state("hello two «oneˇ» two «oneˇ» two «oneˇ»", Mode::HelixSelect);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_next_match_wrapping(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_next_match_wrapping(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -3460,8 +3460,8 @@ mod test {
         cx.assert_state("hello two «oneˇ» two «oneˇ» two «oneˇ»", Mode::HelixSelect);
     }
 
-    #[gpui::test]
-    async fn test_helix_select_next_match_wrapping_from_normal(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_next_match_wrapping_from_normal(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -3499,8 +3499,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_select_star_then_match(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_select_star_then_match(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -3547,8 +3547,8 @@ mod test {
         // Should not panic.
     }
 
-    #[gpui::test]
-    async fn test_helix_substitute(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_substitute(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇone two", Mode::HelixNormal);
@@ -3610,8 +3610,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_g_l_end_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_g_l_end_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -3665,8 +3665,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_starts_operator(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_starts_operator(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("ˇhello world\njump labels", Mode::HelixNormal);
@@ -3679,8 +3679,8 @@ mod test {
         )
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_cancels_on_escape(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_cancels_on_escape(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("ˇhello world\njump labels", Mode::HelixNormal);
@@ -3693,8 +3693,8 @@ mod test {
         assert_helix_jump_cleared(&mut cx, overlay_counts);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_cancels_on_invalid_first_char(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_cancels_on_invalid_first_char(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("ˇalpha beta gamma", Mode::HelixNormal);
@@ -3707,8 +3707,8 @@ mod test {
         assert_helix_jump_cleared(&mut cx, overlay_counts);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_cancels_on_invalid_second_char(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_cancels_on_invalid_second_char(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("ˇalpha beta gamma", Mode::HelixNormal);
@@ -3721,8 +3721,8 @@ mod test {
         assert_helix_jump_cleared(&mut cx, overlay_counts);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_keeps_full_overlay_after_first_key(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_keeps_full_overlay_after_first_key(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         let text = format!(
@@ -3765,8 +3765,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_includes_word_before_cursor_boundary(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_includes_word_before_cursor_boundary(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("oneˇ two three", Mode::HelixNormal);
@@ -3777,8 +3777,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_skips_single_char_words(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_skips_single_char_words(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("ˇa bb c dd e", Mode::HelixNormal);
@@ -3791,8 +3791,8 @@ mod test {
         assert_eq!(words, vec!["bb".to_string(), "dd".to_string()]);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_handles_underscored_words(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_handles_underscored_words(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("baz quxˇ foo_bar _private", Mode::HelixNormal);
@@ -3808,8 +3808,8 @@ mod test {
         assert!(!words.iter().any(|word| word == "bar"));
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_at_end_of_buffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_at_end_of_buffer(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("alpha beta gammaˇ", Mode::HelixNormal);
@@ -3820,8 +3820,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_moves_to_target_word(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_moves_to_target_word(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("ˇone two three", Mode::HelixNormal);
@@ -3832,8 +3832,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_includes_line_selection_targets(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_includes_line_selection_targets(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("alpha beta\nˇfoo bar baz\nqux quux", Mode::HelixNormal);
@@ -3845,8 +3845,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_vim_jump_moves_to_target_word_start(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_vim_jump_moves_to_target_word_start(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         bind_vim_jump_to_word(&mut cx, "g z");
         cx.set_state("ˇone two three", Mode::Normal);
@@ -3857,8 +3857,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_consumes_label_keystrokes_before_ime(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_consumes_label_keystrokes_before_ime(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         bind_vim_jump_to_word(&mut cx, "s");
         cx.set_state("ˇone two three", Mode::Normal);
@@ -3890,8 +3890,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_vim_jump_keeps_normal_cursor_shape(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_vim_jump_keeps_normal_cursor_shape(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         bind_vim_jump_to_word(&mut cx, "g z");
         cx.update(|_, cx| {
@@ -3918,8 +3918,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_vim_visual_jump_extends_selection(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_vim_visual_jump_extends_selection(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         bind_vim_jump_to_word(&mut cx, "g z");
         cx.set_state("one «twoˇ» three four", Mode::Visual);
@@ -3930,8 +3930,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_vim_visual_jump_extends_selection_backward(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_vim_visual_jump_extends_selection_backward(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         bind_vim_jump_to_word(&mut cx, "g z");
         cx.set_state("one two «threeˇ» four", Mode::Visual);
@@ -3942,8 +3942,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_extends_selection_forward(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_extends_selection_forward(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("one «twoˇ» three four", Mode::HelixSelect);
@@ -3954,9 +3954,9 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_helix_jump_extends_selection_backward_from_forward_selection(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
@@ -3968,8 +3968,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_extends_reversed_selection_backward(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_extends_reversed_selection_backward(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("one two «ˇthree» four", Mode::HelixSelect);
@@ -3980,9 +3980,9 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_helix_jump_prioritizes_nearby_targets_before_truncating(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
@@ -4016,8 +4016,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_label_ordering_alternates_directions(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_label_ordering_alternates_directions(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("aaa bbb ccc ˇddd eee fff ggg", Mode::HelixNormal);
@@ -4040,8 +4040,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_uses_theme_label_color(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_uses_theme_label_color(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.update(|_, cx| {
@@ -4107,8 +4107,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_input_is_case_insensitive(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_input_is_case_insensitive(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("ˇone two three", Mode::HelixNormal);
@@ -4131,8 +4131,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_helix_jump_with_unicode_words(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_jump_with_unicode_words(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("ˇcafé résumé naïve", Mode::HelixNormal);
@@ -4143,8 +4143,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_project_search_opens_in_normal_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_project_search_opens_in_normal_mode(cx: &mut gpui_runtime::TestAppContext) {
         VimTestContext::init(cx);
 
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -4199,8 +4199,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_scroll_with_selection(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_scroll_with_selection(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4276,8 +4276,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_insert_end_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_insert_end_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4323,8 +4323,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_replace_uses_graphemes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_replace_uses_graphemes(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4341,8 +4341,8 @@ mod test {
         cx.assert_state("«1ˇ»", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_start_of_document(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_start_of_document(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4445,8 +4445,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_goto_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_goto_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4536,8 +4536,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_end_of_document(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_end_of_document(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4623,8 +4623,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_go_to_hunk(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_go_to_hunk(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4687,8 +4687,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_helix_rename_uses_visible_cursor_position(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_rename_uses_visible_cursor_position(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new_typescript(cx).await;
         cx.enable_helix();
 
@@ -4736,8 +4736,8 @@ mod test {
         cx.assert_state("const after = 2; console.log(afterˇ)", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_trim_selections(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_trim_selections(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4748,8 +4748,8 @@ mod test {
         cx.assert_state("    «indented lineˇ»\nnext line\n", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_trim_selections_all_whitespace(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_trim_selections_all_whitespace(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4763,8 +4763,8 @@ mod test {
         cx.assert_state("aa   ˇ next\n", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_trim_selections_consumes_count(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_trim_selections_consumes_count(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -4777,8 +4777,8 @@ mod test {
         cx.assert_state("«  aa  \nˇ»bbb\nccc\n", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_insert_line_with_multi_keybinding_to_helix_normal(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_insert_line_with_multi_keybinding_to_helix_normal(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 

@@ -136,7 +136,7 @@ impl SharedClipboard {
 }
 
 impl NeovimBackedTestContext {
-    pub async fn new(cx: &mut gpui::TestAppContext) -> NeovimBackedTestContext {
+    pub async fn new(cx: &mut gpui_runtime::TestAppContext) -> NeovimBackedTestContext {
         #[cfg(feature = "neovim")]
         cx.executor().allow_parking();
         // rust stores the name of the test on the current thread.
@@ -160,7 +160,7 @@ impl NeovimBackedTestContext {
         }
     }
 
-    pub async fn new_html(cx: &mut gpui::TestAppContext) -> NeovimBackedTestContext {
+    pub async fn new_html(cx: &mut gpui_runtime::TestAppContext) -> NeovimBackedTestContext {
         #[cfg(feature = "neovim")]
         cx.executor().allow_parking();
         // rust stores the name of the test on the current thread.
@@ -184,7 +184,7 @@ impl NeovimBackedTestContext {
         }
     }
 
-    pub async fn new_markdown_with_rust(cx: &mut gpui::TestAppContext) -> NeovimBackedTestContext {
+    pub async fn new_markdown_with_rust(cx: &mut gpui_runtime::TestAppContext) -> NeovimBackedTestContext {
         #[cfg(feature = "neovim")]
         cx.executor().allow_parking();
         let thread = thread::current();
@@ -204,7 +204,7 @@ impl NeovimBackedTestContext {
         }
     }
 
-    pub async fn new_typescript(cx: &mut gpui::TestAppContext) -> NeovimBackedTestContext {
+    pub async fn new_typescript(cx: &mut gpui_runtime::TestAppContext) -> NeovimBackedTestContext {
         #[cfg(feature = "neovim")]
         cx.executor().allow_parking();
         // rust stores the name of the test on the current thread.
@@ -228,7 +228,7 @@ impl NeovimBackedTestContext {
         }
     }
 
-    pub async fn new_tsx(cx: &mut gpui::TestAppContext) -> NeovimBackedTestContext {
+    pub async fn new_tsx(cx: &mut gpui_runtime::TestAppContext) -> NeovimBackedTestContext {
         #[cfg(feature = "neovim")]
         cx.executor().allow_parking();
         let thread = thread::current();
@@ -414,9 +414,9 @@ impl DerefMut for NeovimBackedTestContext {
 #[cfg(test)]
 mod test {
     use crate::test::NeovimBackedTestContext;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn neovim_backed_test_context_works(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.shared_state().await.assert_matches();

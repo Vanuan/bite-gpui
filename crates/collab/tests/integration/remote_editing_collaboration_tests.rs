@@ -46,7 +46,7 @@ use std::{
 use task::TcpArgumentsTemplate;
 use util::{path, rel_path::rel_path};
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_sharing_an_ssh_remote_project(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -213,7 +213,7 @@ async fn test_sharing_an_ssh_remote_project(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ssh_collaboration_git_branches(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -401,7 +401,7 @@ async fn test_ssh_collaboration_git_branches(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ssh_collaboration_git_worktrees(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -646,7 +646,7 @@ async fn test_ssh_collaboration_git_worktrees(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ssh_collaboration_formatting_with_prettier(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -845,7 +845,7 @@ async fn test_ssh_collaboration_formatting_with_prettier(
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_ssh_restarting_language_server_replaces_remote_status(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -981,7 +981,7 @@ async fn test_ssh_restarting_language_server_replaces_remote_status(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_server_debugger(
     cx_a: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1094,7 +1094,7 @@ async fn test_remote_server_debugger(
     shutdown_session.await.unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_slow_adapter_startup_retries(
     cx_a: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1257,7 +1257,7 @@ async fn test_slow_adapter_startup_retries(
     shutdown_session.await.unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ssh_remote_worktree_trust(cx_a: &mut TestAppContext, server_cx: &mut TestAppContext) {
     cx_a.update(|cx| {
         release_channel::init(semver::Version::new(0, 0, 0), cx);
@@ -1512,7 +1512,7 @@ async fn test_ssh_remote_worktree_trust(cx_a: &mut TestAppContext, server_cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ssh_document_links_resolve(
     cx_a: &mut TestAppContext,
     server_cx: &mut TestAppContext,

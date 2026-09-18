@@ -431,7 +431,7 @@ impl Item for SoloDiffView {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<SplittableEditor>() {
@@ -448,7 +448,7 @@ impl Item for SoloDiffView {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.editor.for_each_project_item(cx, f)
     }
@@ -717,10 +717,10 @@ struct SoloDiffButtonStates {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use multi_buffer::MultiBufferRow;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_changes_only_multibuffer_has_one_buffer_and_expand_controls(cx: &mut TestAppContext) {
         let base_text = (0..20)
             .map(|line| format!("line {line}"))
@@ -758,7 +758,7 @@ mod tests {
 impl Render for SoloDiffGitToolbar {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let Some(solo_diff) = self.solo_diff() else {
-            return gpui::Empty.into_any_element();
+            return gpui_runtime::Empty.into_any_element();
         };
 
         let focus_handle = solo_diff.focus_handle(cx);

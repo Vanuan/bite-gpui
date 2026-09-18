@@ -62,7 +62,7 @@ impl AgentServer for NativeAgentServer {
 mod tests {
     use super::*;
 
-    use gpui::AppContext;
+    use gpui_runtime::AppContext;
 
     agent_servers::e2e_tests::common_e2e_tests!(
         async |fs, cx| {

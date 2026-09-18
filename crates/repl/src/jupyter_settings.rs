@@ -1,7 +1,7 @@
 use collections::HashMap;
 
 use editor::EditorSettings;
-use gpui::App;
+use gpui_runtime::App;
 use settings::{RegisterSetting, Settings};
 
 #[derive(Debug, Default, RegisterSetting)]

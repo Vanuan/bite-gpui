@@ -90,7 +90,7 @@ where
         &self,
         _delegate: AgentServerDelegate,
         _project: Entity<Project>,
-        _cx: &mut gpui::App,
+        _cx: &mut gpui_runtime::App,
     ) -> Task<gpui::Result<Rc<dyn AgentConnection>>> {
         Task::ready(Ok(Rc::new(self.connection.clone())))
     }

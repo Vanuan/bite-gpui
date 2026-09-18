@@ -39,7 +39,7 @@ pub struct TabularDataPreviewPane {
     pub(crate) settings: TabularDataPreviewSettings,
     /// Performance metrics for debugging and monitoring tabular data operations.
     pub(crate) performance_metrics: PerformanceMetrics,
-    pub(crate) list_state: gpui::ListState,
+    pub(crate) list_state: gpui_runtime::ListState,
     /// Cached row height, refreshed from the actual text line height on every render.
     /// Used to size not-yet-rendered rows for the scrollbar without a full `.measure_all()`
     /// pass, so it tracks the real row height instead of a hardcoded guess.
@@ -189,7 +189,7 @@ impl TabularDataPreviewPane {
                 is_parsing: false,
                 filter_sort_task: None,
                 performance_metrics: PerformanceMetrics::default(),
-                list_state: gpui::ListState::new(contents.rows.len(), ListAlignment::Top, px(1.))
+                list_state: gpui_runtime::ListState::new(contents.rows.len(), ListAlignment::Top, px(1.))
                     .with_uniform_item_height(row_height),
                 row_height,
                 settings: TabularDataPreviewSettings::default(),
@@ -365,14 +365,14 @@ impl ColumnWidths {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::{FakeFs, Project};
     use serde_json::json;
     use std::path::Path;
     use util::path;
     use workspace::AppState;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_detects_tabular_files_outside_the_project(cx: &mut TestAppContext) {
         init_test(cx);
 

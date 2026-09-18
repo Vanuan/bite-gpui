@@ -693,7 +693,7 @@ impl Item for BufferDiagnosticsEditor {
         type_id: std::any::TypeId,
         self_handle: &'a Entity<Self>,
         _: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<Editor>() {

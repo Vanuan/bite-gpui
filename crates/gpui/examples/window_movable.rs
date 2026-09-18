@@ -8,7 +8,7 @@ use gpui::{
     rgb, size,
 };
 use gpui::{SharedString, TitlebarOptions};
-use gpui_platform::application;
+use gpui::application;
 
 struct ExampleWindow {
     label: SharedString,
@@ -41,7 +41,7 @@ impl Render for ExampleWindow {
 
 fn open_test_window(
     cx: &mut App,
-    bounds: Bounds<gpui::Pixels>,
+    bounds: Bounds<gpui_types::Pixels>,
     label: &str,
     is_movable: bool,
     appears_transparent: bool,
@@ -126,6 +126,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

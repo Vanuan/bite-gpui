@@ -6,9 +6,9 @@ use std::{
     sync::Arc,
 };
 
-use gpui::HighlightStyle;
+use gpui_runtime::HighlightStyle;
 #[cfg(any(test, feature = "test-support"))]
-use gpui::Hsla;
+use gpui_types::Hsla;
 
 #[derive(Debug, PartialEq, Eq, Clone, Default)]
 pub struct SyntaxTheme {

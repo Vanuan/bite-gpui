@@ -744,7 +744,7 @@ mod tests {
         assert_eq!(reindex_after_removal(3, &(2..2)), Some(3));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diff_sync(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -849,7 +849,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_elicitation_preserves_entry_index(cx: &mut TestAppContext) {
         init_test(cx);
 

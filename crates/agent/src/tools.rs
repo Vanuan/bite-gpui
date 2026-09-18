@@ -33,7 +33,7 @@ use crate::AgentTool;
 use feature_flags::{
     CreateThreadToolFeatureFlag, FeatureFlagAppExt as _, LspToolFeatureFlag, RenameToolFeatureFlag,
 };
-use gpui::App;
+use gpui_runtime::App;
 use language_model::LanguageModelRequestTool;
 use serde::{
     Deserialize, Deserializer,

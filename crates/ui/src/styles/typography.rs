@@ -7,7 +7,7 @@ use theme::ActiveTheme;
 
 use crate::{Color, rems_from_px};
 
-/// Extends [`gpui::Styled`] with typography-related styling methods.
+/// Extends [`gpui_runtime::Styled`] with typography-related styling methods.
 pub trait StyledTypography: Styled + Sized {
     /// Sets the font family to the buffer font.
     fn font_buffer(self, cx: &App) -> Self {

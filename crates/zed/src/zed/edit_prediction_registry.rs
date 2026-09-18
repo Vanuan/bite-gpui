@@ -297,7 +297,7 @@ mod tests {
     use settings::{EditPredictionPromptFormatContent, EditPredictionProvider, SettingsStore};
     use workspace::AppState;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sweep_prompt_format_routes_to_sweep_prompt_model(cx: &mut TestAppContext) {
         let app_state = cx.update(|cx| {
             let app_state = AppState::test(cx);
@@ -345,7 +345,7 @@ mod tests {
         drop(app_state);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_ollama_provider_routes_to_fim_model(cx: &mut TestAppContext) {
         let app_state = cx.update(|cx| {
             let app_state = AppState::test(cx);
@@ -391,7 +391,7 @@ mod tests {
         drop(app_state);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_subscribe_uses_stale_provider_config_after_settings_change(
         cx: &mut TestAppContext,
     ) {

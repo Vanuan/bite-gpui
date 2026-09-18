@@ -38,7 +38,7 @@ impl AgentNotification {
         let notification_margin_width = px(16.);
         let notification_margin_height = px(-48.);
 
-        let bounds = gpui::Bounds::<Pixels> {
+        let bounds = gpui_types::Bounds::<Pixels> {
             origin: screen.bounds().top_right()
                 - point(
                     size.width + notification_margin_width,

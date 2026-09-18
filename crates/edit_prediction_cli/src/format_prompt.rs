@@ -6,7 +6,7 @@ use crate::{
     retrieve_context::{ContextRetrievalType, run_context_retrieval},
 };
 use anyhow::{Context as _, Result, anyhow};
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use std::ops::Range;
 use std::sync::Arc;
 use zeta_prompt::{

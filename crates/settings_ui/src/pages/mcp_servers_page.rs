@@ -554,7 +554,7 @@ pub(crate) fn render_add_server_popover(
                 )
                 .label_size(LabelSize::Small),
         )
-        .anchor(gpui::Anchor::TopRight)
+        .anchor(gpui_types::Anchor::TopRight)
         .menu({
             move |window, cx| {
                 let settings_window = settings_window.clone();

@@ -131,7 +131,7 @@ impl<M: ManagedView> Element for RightClickMenu<M> {
     fn request_layout(
         &mut self,
         id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -166,7 +166,7 @@ impl<M: ManagedView> Element for RightClickMenu<M> {
                     .map(|child_element| child_element.request_layout(window, cx));
 
                 let layout_id = window.request_layout(
-                    gpui::Style::default(),
+                    gpui_runtime::Style::default(),
                     menu_layout_id.into_iter().chain(child_layout_id),
                     cx,
                 );
@@ -186,7 +186,7 @@ impl<M: ManagedView> Element for RightClickMenu<M> {
     fn prepaint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         bounds: Bounds<Pixels>,
         request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -213,8 +213,8 @@ impl<M: ManagedView> Element for RightClickMenu<M> {
     fn paint(
         &mut self,
         id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
-        _bounds: Bounds<gpui::Pixels>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
+        _bounds: Bounds<gpui_types::Pixels>,
         request_layout: &mut Self::RequestLayoutState,
         prepaint_state: &mut Self::PrepaintState,
         window: &mut Window,

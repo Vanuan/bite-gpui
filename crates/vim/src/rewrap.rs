@@ -136,8 +136,8 @@ impl Vim {
 mod test {
     use crate::test::NeovimBackedTestContext;
 
-    #[gpui::test]
-    async fn test_indent_gv(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_indent_gv(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_neovim_option("shiftwidth=4").await;
 

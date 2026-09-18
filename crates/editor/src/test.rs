@@ -46,7 +46,7 @@ pub fn test_font() -> Font {
 #[track_caller]
 pub fn marked_display_snapshot(
     text: &str,
-    cx: &mut gpui::App,
+    cx: &mut gpui_runtime::App,
 ) -> (DisplaySnapshot, Vec<DisplayPoint>) {
     let (unmarked_text, markers) = marked_text_offsets(text);
 
@@ -144,7 +144,7 @@ struct TestBlockContent(
     HashMap<(EntityId, CustomBlockId), Rc<dyn Fn(&mut VisualTestContext) -> String>>,
 );
 
-impl gpui::Global for TestBlockContent {}
+impl gpui_runtime::Global for TestBlockContent {}
 
 pub fn set_block_content_for_tests(
     editor: &Entity<Editor>,
@@ -189,7 +189,7 @@ pub fn editor_content_with_blocks_and_size(
     cx: &mut VisualTestContext,
 ) -> String {
     cx.simulate_resize(draw_size);
-    cx.draw(gpui::Point::default(), draw_size, |_, _| {
+    cx.draw(gpui_types::Point::default(), draw_size, |_, _| {
         editor.clone().into_any_element()
     });
     let (snapshot, mut lines, blocks) = editor.update_in(cx, |editor, window, cx| {

@@ -129,7 +129,7 @@ impl ComponentPreview {
 
         let component_list = ListState::new(
             sorted_components.len(),
-            gpui::ListAlignment::Top,
+            gpui_runtime::ListAlignment::Top,
             px(1500.0),
         );
 
@@ -351,7 +351,7 @@ impl ComponentPreview {
             }
         }
 
-        self.component_list = ListState::new(new_len, gpui::ListAlignment::Top, px(1500.0));
+        self.component_list = ListState::new(new_len, gpui_runtime::ListAlignment::Top, px(1500.0));
         self.entries = entries;
 
         cx.emit(ItemEvent::UpdateTab);
@@ -521,7 +521,7 @@ impl ComponentPreview {
                         }),
                     )
                     .flex_grow_1()
-                    .with_sizing_behavior(gpui::ListSizingBehavior::Auto)
+                    .with_sizing_behavior(gpui_runtime::ListSizingBehavior::Auto)
                     .into_any_element()
                 },
             )
@@ -607,7 +607,7 @@ impl Render for ComponentPreview {
                         div()
                             .size_full()
                             .child(
-                                gpui::uniform_list(
+                                gpui_runtime::uniform_list(
                                     "component-nav",
                                     sidebar_entries.len(),
                                     cx.processor(move |this, range: Range<usize>, _window, cx| {
@@ -686,7 +686,7 @@ impl Render for ComponentPreview {
 impl EventEmitter<ItemEvent> for ComponentPreview {}
 
 impl Focusable for ComponentPreview {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -730,7 +730,7 @@ impl Item for ComponentPreview {
         _workspace_id: Option<WorkspaceId>,
         window: &mut Window,
         cx: &mut Context<Self>,
-    ) -> Task<Option<gpui::Entity<Self>>>
+    ) -> Task<Option<gpui_runtime::Entity<Self>>>
     where
         Self: Sized,
     {

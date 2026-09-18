@@ -51,8 +51,8 @@ pub fn bench(args: TokenStream, function: TokenStream) -> TokenStream {
     // The frame budget math lives in `BenchReport` so `bench_context` is the
     // single source of truth; `default()` supplies the default frame rate.
     let report_expr = match fps {
-        Some(fps) => quote! { gpui::BenchReport::with_fps(#fps) },
-        None => quote! { gpui::BenchReport::default() },
+        Some(fps) => quote! { gpui_runtime::BenchReport::with_fps(#fps) },
+        None => quote! { gpui_runtime::BenchReport::default() },
     };
 
     let mut inner_fn = match syn::parse::<ItemFn>(function) {
@@ -90,12 +90,12 @@ pub fn bench(args: TokenStream, function: TokenStream) -> TokenStream {
                 group.bench_with_input(criterion::BenchmarkId::new(#input_name, &input), &input, {
                     let report = report.clone();
                     move |bencher, input| {
-                        let mut cx = gpui::BenchAppContext::new_with_platform_and_report(
-                            gpui::bench_platform(
+                        let mut cx = gpui_runtime::BenchAppContext::new_with_platform_and_report(
+                            gpui_runtime::bench_platform(
                                 Some(Box::new(|| {
-                                    gpui_platform::current_headless_renderer()
+                                    gpui::current_headless_renderer()
                                 })),
-                                gpui_platform::current_platform(true).text_system(),
+                                gpui::current_platform(true).text_system(),
                             ),
                             Some(stringify!(#outer_fn_name)),
                             bencher,
@@ -133,12 +133,12 @@ pub fn bench(args: TokenStream, function: TokenStream) -> TokenStream {
             criterion.bench_function(stringify!(#outer_fn_name), {
                 let report = report.clone();
                 move |bencher| {
-                    let mut cx = gpui::BenchAppContext::new_with_platform_and_report(
-                        gpui::bench_platform(
+                    let mut cx = gpui_runtime::BenchAppContext::new_with_platform_and_report(
+                        gpui_runtime::bench_platform(
                             Some(Box::new(|| {
-                                gpui_platform::current_headless_renderer()
+                                gpui::current_headless_renderer()
                             })),
-                            gpui_platform::current_platform(true).text_system(),
+                            gpui::current_platform(true).text_system(),
                         ),
                         Some(stringify!(#outer_fn_name)),
                         bencher,

@@ -186,7 +186,7 @@ pub struct TerminalAssistantPromptContext {
 pub struct PromptLoadingParams<'a> {
     pub fs: Arc<dyn Fs>,
     pub repo_path: Option<PathBuf>,
-    pub cx: &'a gpui::App,
+    pub cx: &'a gpui_runtime::App,
 }
 
 pub struct PromptBuilder {

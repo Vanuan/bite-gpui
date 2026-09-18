@@ -210,8 +210,8 @@ mod test {
 
     use crate::{state::Mode, test::VimTestContext};
 
-    #[gpui::test]
-    async fn test_helix_surround_add(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_add(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -237,8 +237,8 @@ mod test {
         cx.assert_state("hello «ˇ(worl)»d", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_surround_add_composes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_add_composes(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -263,8 +263,8 @@ mod test {
         cx.assert_state("hello «(\"world\")ˇ» test", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_surround_delete(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_delete(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -306,8 +306,8 @@ mod test {
         cx.assert_state("«woˇ»rld", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_surround_replace(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_replace(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -349,8 +349,8 @@ mod test {
         cx.assert_state("[«woˇ»rld]", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_surround_multiline(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_multiline(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -371,8 +371,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_surround_select_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_select_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -381,8 +381,8 @@ mod test {
         cx.assert_state("hello «{world}ˇ» test", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_surround_multi_cursor(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_multi_cursor(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -401,8 +401,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_surround_escape_cancels(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_escape_cancels(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -415,8 +415,8 @@ mod test {
         cx.assert_state("hello (woˇrld)", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_surround_no_vim_aliases(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_no_vim_aliases(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -459,8 +459,8 @@ mod test {
         cx.assert_state("hello bwoˇrldb test", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_surround_match_nearest(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_surround_match_nearest(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 

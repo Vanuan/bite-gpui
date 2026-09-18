@@ -2,7 +2,7 @@ use crate::*;
 use anyhow::{Context as _, Result, anyhow};
 use collections::HashMap;
 use fs::Fs;
-use gpui::Rgba;
+use gpui_types::Rgba;
 use paths::{cursor_settings_file_paths, vscode_settings_file_paths};
 use serde::Deserialize;
 use serde_json::{Map, Value};

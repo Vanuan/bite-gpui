@@ -3,7 +3,7 @@ use std::sync::Arc;
 use context_server::ContextServerId;
 use extension::ExtensionManifest;
 use fs::Fs;
-use gpui::WeakEntity;
+use gpui_runtime::WeakEntity;
 use language::LanguageRegistry;
 use settings::update_settings_file;
 use ui::prelude::*;
@@ -105,14 +105,14 @@ fn show_configure_mcp_modal(
 mod tests {
     use super::*;
     use context_server::ContextServerCommand;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::{
         FakeFs, Project,
         project_settings::{ContextServerSettings, ProjectSettings},
     };
     use settings::Settings as _;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_configure_extension_only_opens_modal_in_active_workspace(
         cx: &mut TestAppContext,
     ) {

@@ -140,7 +140,7 @@ struct RegisteredBuffer {
     language_id: String,
     snapshot: BufferSnapshot,
     snapshot_version: i32,
-    _subscriptions: [gpui::Subscription; 2],
+    _subscriptions: [gpui_runtime::Subscription; 2],
     pending_buffer_change: Task<Option<()>>,
 }
 
@@ -516,9 +516,9 @@ impl Copilot {
     }
 
     #[cfg(any(test, feature = "test-support"))]
-    pub fn fake(cx: &mut gpui::TestAppContext) -> (Entity<Self>, lsp::FakeLanguageServer) {
+    pub fn fake(cx: &mut gpui_runtime::TestAppContext) -> (Entity<Self>, lsp::FakeLanguageServer) {
         use fs::FakeFs;
-        use gpui::Subscription;
+        use gpui_runtime::Subscription;
         use lsp::FakeLanguageServer;
         use node_runtime::NodeRuntime;
 
@@ -1412,7 +1412,7 @@ fn copilot_lsp_native_binary_path() -> anyhow::Result<PathBuf> {
 mod tests {
     use super::*;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use language::language_settings::AllLanguageSettings;
     use node_runtime::NodeRuntime;
     use settings::{Settings, SettingsStore};
@@ -1422,7 +1422,7 @@ mod tests {
         rel_path::{RelPath, rel_path},
     };
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_does_not_start_when_ai_disabled(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let store = SettingsStore::test(cx);
@@ -1457,7 +1457,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_stops_when_ai_becomes_disabled(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let store = SettingsStore::test(cx);
@@ -1525,7 +1525,7 @@ mod tests {
         });
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_buffer_management(cx: &mut TestAppContext) {
         init_test(cx);
         let (copilot, mut lsp) = Copilot::fake(cx);
@@ -1768,7 +1768,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_starts_when_ai_becomes_enabled(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let store = SettingsStore::test(cx);

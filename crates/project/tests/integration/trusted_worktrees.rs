@@ -33,7 +33,7 @@ fn init_trust_global(
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_single_worktree_trust(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -147,7 +147,7 @@ async fn test_single_worktree_trust(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_single_file_worktree_trust(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -235,7 +235,7 @@ async fn test_single_file_worktree_trust(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multiple_single_file_worktrees_trust_one(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -308,7 +308,7 @@ async fn test_multiple_single_file_worktrees_trust_one(cx: &mut TestAppContext) 
     assert!(!can_trust_2, "worktree 2 should still be restricted");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_two_directory_worktrees_separate_trust(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -390,7 +390,7 @@ async fn test_two_directory_worktrees_separate_trust(cx: &mut TestAppContext) {
     assert!(can_trust_b, "project_b should now be trusted");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_directory_worktree_trust_enables_single_file(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -463,7 +463,7 @@ async fn test_directory_worktree_trust_enables_single_file(cx: &mut TestAppConte
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_parent_path_trust_enables_single_file(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -539,7 +539,7 @@ async fn test_parent_path_trust_enables_single_file(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_abs_path_trust_covers_multiple_worktrees(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -599,7 +599,7 @@ async fn test_abs_path_trust_covers_multiple_worktrees(cx: &mut TestAppContext) 
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_trust_all(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -700,7 +700,7 @@ async fn test_auto_trust_all(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_trust_restrict_trust_cycle(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -805,7 +805,7 @@ async fn test_trust_restrict_trust_cycle(cx: &mut TestAppContext) {
     assert!(!has_restricted);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multi_host_trust_isolation(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -863,7 +863,7 @@ async fn test_multi_host_trust_isolation(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_invisible_worktree_stores_do_not_affect_trust(cx: &mut TestAppContext) {
     init_test(cx);
 

@@ -18,32 +18,32 @@ pub fn derive_app_context(input: TokenStream) -> TokenStream {
     let (impl_generics, type_generics, where_clause) = ast.generics.split_for_impl();
 
     let r#gen = quote! {
-        impl #impl_generics gpui::AppContext for #type_name #type_generics
+        impl #impl_generics gpui_runtime::AppContext for #type_name #type_generics
         #where_clause
         {
             fn new<T: 'static>(
                 &mut self,
-                build_entity: impl FnOnce(&mut gpui::Context<'_, T>) -> T,
-            ) -> gpui::Entity<T> {
+                build_entity: impl FnOnce(&mut gpui_runtime::Context<'_, T>) -> T,
+            ) -> gpui_runtime::Entity<T> {
                 self.#app_variable.new(build_entity)
             }
 
-            fn reserve_entity<T: 'static>(&mut self) -> gpui::Reservation<T> {
+            fn reserve_entity<T: 'static>(&mut self) -> gpui_runtime::Reservation<T> {
                 self.#app_variable.reserve_entity()
             }
 
             fn insert_entity<T: 'static>(
                 &mut self,
-                reservation: gpui::Reservation<T>,
-                build_entity: impl FnOnce(&mut gpui::Context<'_, T>) -> T,
-            ) -> gpui::Entity<T> {
+                reservation: gpui_runtime::Reservation<T>,
+                build_entity: impl FnOnce(&mut gpui_runtime::Context<'_, T>) -> T,
+            ) -> gpui_runtime::Entity<T> {
                 self.#app_variable.insert_entity(reservation, build_entity)
             }
 
             fn update_entity<T, R>(
                 &mut self,
-                handle: &gpui::Entity<T>,
-                update: impl FnOnce(&mut T, &mut gpui::Context<'_, T>) -> R,
+                handle: &gpui_runtime::Entity<T>,
+                update: impl FnOnce(&mut T, &mut gpui_runtime::Context<'_, T>) -> R,
             ) -> R
             where
                 T: 'static,
@@ -53,8 +53,8 @@ pub fn derive_app_context(input: TokenStream) -> TokenStream {
 
             fn as_mut<'y, 'z, T>(
                 &'y mut self,
-                handle: &'z gpui::Entity<T>,
-            ) -> gpui::GpuiBorrow<'y, T>
+                handle: &'z gpui_runtime::Entity<T>,
+            ) -> gpui_runtime::GpuiBorrow<'y, T>
             where
                 T: 'static,
             {
@@ -63,8 +63,8 @@ pub fn derive_app_context(input: TokenStream) -> TokenStream {
 
             fn read_entity<T, R>(
                 &self,
-                handle: &gpui::Entity<T>,
-                read: impl FnOnce(&T, &gpui::App) -> R,
+                handle: &gpui_runtime::Entity<T>,
+                read: impl FnOnce(&T, &gpui_runtime::App) -> R,
             ) -> R
             where
                 T: 'static,
@@ -72,17 +72,17 @@ pub fn derive_app_context(input: TokenStream) -> TokenStream {
                 self.#app_variable.read_entity(handle, read)
             }
 
-            fn update_window<T, F>(&mut self, window: gpui::AnyWindowHandle, f: F) -> gpui::Result<T>
+            fn update_window<T, F>(&mut self, window: gpui_runtime::AnyWindowHandle, f: F) -> gpui::Result<T>
             where
-                F: FnOnce(gpui::AnyView, &mut gpui::Window, &mut gpui::App) -> T,
+                F: FnOnce(gpui_runtime::AnyView, &mut gpui_runtime::Window, &mut gpui_runtime::App) -> T,
             {
                 self.#app_variable.update_window(window, f)
             }
 
             fn with_window<R>(
                 &mut self,
-                entity_id: gpui::EntityId,
-                f: impl FnOnce(&mut gpui::Window, &mut gpui::App) -> R,
+                entity_id: gpui_runtime::EntityId,
+                f: impl FnOnce(&mut gpui_runtime::Window, &mut gpui_runtime::App) -> R,
             ) -> Option<R>
             {
                 self.#app_variable.with_window(entity_id, f)
@@ -90,8 +90,8 @@ pub fn derive_app_context(input: TokenStream) -> TokenStream {
 
             fn read_window<T, R>(
                 &self,
-                window: &gpui::WindowHandle<T>,
-                read: impl FnOnce(gpui::Entity<T>, &gpui::App) -> R,
+                window: &gpui_runtime::WindowHandle<T>,
+                read: impl FnOnce(gpui_runtime::Entity<T>, &gpui_runtime::App) -> R,
             ) -> gpui::Result<R>
             where
                 T: 'static,
@@ -106,9 +106,9 @@ pub fn derive_app_context(input: TokenStream) -> TokenStream {
                 self.#app_variable.background_spawn(future)
             }
 
-            fn read_global<G, R>(&self, callback: impl FnOnce(&G, &gpui::App) -> R) -> R
+            fn read_global<G, R>(&self, callback: impl FnOnce(&G, &gpui_runtime::App) -> R) -> R
             where
-                G: gpui::Global,
+                G: gpui_runtime::Global,
             {
                 self.#app_variable.read_global(callback)
             }

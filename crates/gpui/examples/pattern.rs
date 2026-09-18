@@ -7,7 +7,7 @@ use gpui::{
     App, AppContext, Bounds, Context, Window, WindowBounds, WindowOptions, div, linear_color_stop,
     linear_gradient, pattern_slash, prelude::*, px, rgb, size,
 };
-use gpui_platform::application;
+use gpui::application;
 
 struct PatternExample;
 
@@ -131,6 +131,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

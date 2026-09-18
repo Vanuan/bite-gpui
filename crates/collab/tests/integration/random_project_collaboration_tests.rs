@@ -33,7 +33,7 @@ use util::{
     rel_path::{RelPath, RelPathBuf, rel_path},
 };
 
-#[gpui::test(iterations = 100, on_failure = "crate::save_randomized_test_plan")]
+#[gpui_runtime::test(iterations = 100, on_failure = "crate::save_randomized_test_plan")]
 async fn test_random_project_collaboration(
     cx: &mut TestAppContext,
     executor: BackgroundExecutor,

@@ -7,7 +7,7 @@ mod inspector;
 pub use inspector::init;
 
 #[cfg(not(debug_assertions))]
-pub fn init(_app_state: std::sync::Arc<workspace::AppState>, cx: &mut gpui::App) {
+pub fn init(_app_state: std::sync::Arc<workspace::AppState>, cx: &mut gpui_runtime::App) {
     use std::any::TypeId;
     use workspace::notifications::NotifyResultExt as _;
 

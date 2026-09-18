@@ -58,7 +58,7 @@ pub(crate) struct BreakpointList {
 }
 
 impl Focusable for BreakpointList {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -569,7 +569,7 @@ impl BreakpointList {
                     .collect()
             }),
         )
-        .with_horizontal_sizing_behavior(gpui::ListHorizontalSizingBehavior::Unconstrained)
+        .with_horizontal_sizing_behavior(gpui_runtime::ListHorizontalSizingBehavior::Unconstrained)
         .with_width_from_item(self.max_width_index)
         .track_scroll(&self.scroll_handle)
         .flex_1()

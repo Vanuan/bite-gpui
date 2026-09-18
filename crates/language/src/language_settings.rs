@@ -1032,11 +1032,11 @@ pub struct JsxTagAutoCloseSettings {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use settings::{LocalSettingsKind, LocalSettingsPath, WorktreeId};
     use util::rel_path::rel_path;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_edit_predictions_enabled_for_file(cx: &mut TestAppContext) {
         use crate::TestFile;
         use std::path::PathBuf;
@@ -1254,7 +1254,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_language_servers_across_settings_files(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let mut store = SettingsStore::new(cx, &settings::default_settings());
@@ -1447,7 +1447,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_language_servers_combined_restrictions(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let mut store = SettingsStore::new(cx, &settings::default_settings());

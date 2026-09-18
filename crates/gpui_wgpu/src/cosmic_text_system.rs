@@ -1204,7 +1204,7 @@ mod tests {
 
     #[test]
     fn all_font_names_tracks_available_families() -> Result<()> {
-        let text_system = gpui::TextSystem::new(Arc::new(
+        let text_system = gpui_backend::TextSystem::new(Arc::new(
             CosmicTextSystem::new_without_system_fonts("IBM Plex Sans"),
         ));
         assert!(text_system.all_font_names().is_empty());
@@ -1296,11 +1296,11 @@ mod tests {
     #[test]
     fn shape_text_with_mixed_direction_paragraphs() -> Result<()> {
         let platform_text_system = Arc::new(text_system()?);
-        let text_system = Arc::new(gpui::TextSystem::new(platform_text_system));
-        let window_text_system = gpui::WindowTextSystem::new(text_system);
+        let text_system = Arc::new(gpui_backend::TextSystem::new(platform_text_system));
+        let window_text_system = gpui_backend::WindowTextSystem::new(text_system);
 
         let text: SharedString = "first line\n\u{05d0}\u{001c}A".into();
-        let runs = [gpui::TextRun {
+        let runs = [gpui_backend::TextRun {
             len: text.len(),
             font: gpui::font("IBM Plex Sans"),
             ..Default::default()
@@ -1317,9 +1317,9 @@ mod tests {
     #[test]
     fn reports_graphemes_that_exhaust_font_fallback() -> Result<()> {
         let platform_text_system = Arc::new(text_system()?);
-        let dispatcher = gpui::TestDispatcher::new(0);
+        let dispatcher = gpui_platform::TestDispatcher::new(0);
         let cx =
-            gpui::TestAppContext::build_with_text_system(dispatcher, None, platform_text_system);
+            gpui_runtime::TestAppContext::build_with_text_system(dispatcher, None, platform_text_system);
         let observed = Rc::new(RefCell::new(Vec::new()));
         let _subscription = cx.update(|cx| {
             let observed = observed.clone();
@@ -1330,8 +1330,8 @@ mod tests {
         let text: SharedString = "界".into();
 
         cx.update(|cx| {
-            let text_system = gpui::WindowTextSystem::new(cx.text_system().clone());
-            let runs = [gpui::TextRun {
+            let text_system = gpui_backend::WindowTextSystem::new(cx.text_system().clone());
+            let runs = [gpui_backend::TextRun {
                 len: text.len(),
                 font: gpui::font("IBM Plex Sans"),
                 ..Default::default()
@@ -1373,10 +1373,10 @@ mod tests {
     #[test]
     fn adding_fonts_invalidates_cached_line_layouts() -> Result<()> {
         let platform_text_system = Arc::new(text_system()?);
-        let text_system = Arc::new(gpui::TextSystem::new(platform_text_system.clone()));
-        let window_text_system = gpui::WindowTextSystem::new(text_system.clone());
+        let text_system = Arc::new(gpui_backend::TextSystem::new(platform_text_system.clone()));
+        let window_text_system = gpui_backend::WindowTextSystem::new(text_system.clone());
         let text: SharedString = "cached text".into();
-        let runs = [gpui::TextRun {
+        let runs = [gpui_backend::TextRun {
             len: text.len(),
             font: gpui::font("IBM Plex Sans"),
             ..Default::default()

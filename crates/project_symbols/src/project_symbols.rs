@@ -308,7 +308,7 @@ impl PickerDelegate for ProjectSymbolsDelegate {
             .iter()
             .map(|pos| (*pos..label.ceil_char_boundary(pos + 1), highlight_style));
 
-        let highlights = gpui::combine_highlights(custom_highlights, syntax_runs);
+        let highlights = gpui_runtime::combine_highlights(custom_highlights, syntax_runs);
 
         Some(
             ListItem::new(ix)
@@ -351,7 +351,7 @@ mod tests {
     use util::path;
     use workspace::MultiWorkspace;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_symbols(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -505,7 +505,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_symbols_renders_utf8_match(cx: &mut TestAppContext) {
         init_test(cx);
 

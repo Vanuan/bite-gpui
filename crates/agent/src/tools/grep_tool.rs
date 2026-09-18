@@ -403,7 +403,7 @@ mod tests {
     use unindent::Unindent;
     use util::path;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_tool_with_include_pattern(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -488,7 +488,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_tool_with_case_sensitivity(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -565,7 +565,7 @@ mod tests {
     // The grep tool streams a clickable `file://` ResourceLink and a tool-call
     // location for every match so each result opens the file at the matched line
     // in the agent panel. The model-facing text output stays link-free.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_results_are_clickable_file_links(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -670,7 +670,7 @@ mod tests {
     // Snippets that themselves contain a ``` code fence (e.g. matches inside
     // markdown) must be wrapped in a longer fence so they don't break out of the
     // surrounding code block when rendered in the agent panel.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_snippet_fence_outlives_inner_backticks(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -805,7 +805,7 @@ mod tests {
         project
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_top_level_function(cx: &mut TestAppContext) {
         let project = setup_syntax_test(cx).await;
 
@@ -834,7 +834,7 @@ mod tests {
         assert_eq!(result, expected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_function_body(cx: &mut TestAppContext) {
         let project = setup_syntax_test(cx).await;
 
@@ -865,7 +865,7 @@ mod tests {
         assert_eq!(result, expected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_function_args_and_body(cx: &mut TestAppContext) {
         let project = setup_syntax_test(cx).await;
 
@@ -899,7 +899,7 @@ mod tests {
         assert_eq!(result, expected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_if_block(cx: &mut TestAppContext) {
         use unindent::Unindent;
         let project = setup_syntax_test(cx).await;
@@ -929,7 +929,7 @@ mod tests {
         assert_eq!(result, expected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_long_function_top(cx: &mut TestAppContext) {
         use unindent::Unindent;
         let project = setup_syntax_test(cx).await;
@@ -969,7 +969,7 @@ mod tests {
         assert_eq!(result, expected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_long_function_bottom(cx: &mut TestAppContext) {
         use unindent::Unindent;
         let project = setup_syntax_test(cx).await;
@@ -1034,7 +1034,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_security_boundaries(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1064,7 +1064,7 @@ mod tests {
         .await;
 
         cx.update(|cx| {
-            use gpui::UpdateGlobal;
+            use gpui_runtime::UpdateGlobal;
             use settings::SettingsStore;
             SettingsStore::update_global(cx, |store, cx| {
                 store.update_user_settings(cx, |settings| {
@@ -1247,7 +1247,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_grep_with_multiple_worktree_settings(cx: &mut TestAppContext) {
         init_test(cx);
 

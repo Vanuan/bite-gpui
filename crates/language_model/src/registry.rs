@@ -562,7 +562,7 @@ mod tests {
         assert!(SelectedModel::from_str("custom-provider/").is_err());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_register_providers(cx: &mut App) {
         let registry = cx.new(|_| LanguageModelRegistry::default());
 
@@ -583,7 +583,7 @@ mod tests {
         assert!(providers.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_provider_hiding_on_extension_install(cx: &mut App) {
         let registry = cx.new(|_| LanguageModelRegistry::default());
 
@@ -617,7 +617,7 @@ mod tests {
         assert_eq!(all.len(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_provider_unhiding_on_extension_uninstall(cx: &mut App) {
         let registry = cx.new(|_| LanguageModelRegistry::default());
 
@@ -650,7 +650,7 @@ mod tests {
         assert_eq!(visible[0].id(), provider_id);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_should_hide_provider(cx: &mut App) {
         let registry = cx.new(|_| LanguageModelRegistry::default());
 
@@ -677,8 +677,8 @@ mod tests {
         assert!(!registry_read.should_hide_provider(&LanguageModelProviderId("unknown".into())));
     }
 
-    #[gpui::test]
-    async fn test_configure_fallback_model(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_configure_fallback_model(cx: &mut gpui_runtime::TestAppContext) {
         let registry = cx.new(|_| LanguageModelRegistry::default());
 
         let provider = Arc::new(FakeLanguageModelProvider::default());
@@ -716,7 +716,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_inline_assistant_model_precedence(cx: &mut App) {
         let registry = cx.new(|_| LanguageModelRegistry::default());
         let provider = Arc::new(FakeLanguageModelProvider::default());
@@ -759,7 +759,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_sync_installed_llm_extensions(cx: &mut App) {
         let registry = cx.new(|_| LanguageModelRegistry::default());
 

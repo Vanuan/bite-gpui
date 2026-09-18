@@ -99,7 +99,7 @@ pub fn terminal_size(window: &mut Window, cx: &mut App) -> terminal::TerminalBou
         cell_width,
         line_height,
         bounds: Bounds {
-            origin: gpui::Point::default(),
+            origin: gpui_types::Point::default(),
             size: size(width, height),
         },
     }
@@ -109,7 +109,7 @@ pub fn max_width_for_columns(
     columns: usize,
     window: &mut Window,
     cx: &App,
-) -> Option<gpui::Pixels> {
+) -> Option<gpui_types::Pixels> {
     if columns == 0 {
         return None;
     }
@@ -252,14 +252,14 @@ mod tests {
         cx.add_empty_window()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_max_width_for_columns_zero(cx: &mut TestAppContext) {
         let cx = init_test(cx);
         let result = cx.update(|window, cx| max_width_for_columns(0, window, cx));
         assert!(result.is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_max_width_for_columns_matches_cell_width(cx: &mut TestAppContext) {
         let cx = init_test(cx);
         let columns = 5;
@@ -271,7 +271,7 @@ mod tests {
             let cell_width = text_system
                 .advance(font_id, font_pixels, 'w')
                 .map(|advance| advance.width)
-                .unwrap_or(gpui::Pixels::ZERO);
+                .unwrap_or(gpui_types::Pixels::ZERO);
             let result = max_width_for_columns(columns, window, cx);
             (result, cell_width * columns as f32)
         });
@@ -284,7 +284,7 @@ mod tests {
         assert!((result_f32 - expected_f32).abs() < 0.01);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_append_text_preserves_split_ansi_sequence(cx: &mut TestAppContext) {
         let cx = init_test(cx);
         let text = cx.update(|window, cx| {
@@ -299,7 +299,7 @@ mod tests {
         assert_eq!(text, "red\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_full_text_reads_terminal_output(cx: &mut TestAppContext) {
         let cx = init_test(cx);
         cx.update(|window, cx| {
@@ -311,7 +311,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_initial_text_uses_repl_terminal_size(cx: &mut TestAppContext) {
         let cx = init_test(cx);
         let (text, expected) = cx.update(|window, cx| {
@@ -327,7 +327,7 @@ mod tests {
         assert_eq!(text, expected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_repl_history_ignores_terminal_scrollback_setting(cx: &mut TestAppContext) {
         let cx = init_test(cx);
         let (text, expected) = cx.update(|window, cx| {

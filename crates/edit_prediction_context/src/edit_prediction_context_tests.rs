@@ -1,7 +1,7 @@
 use super::*;
 use crate::assemble_excerpts::assemble_excerpt_ranges;
 use futures::channel::mpsc::UnboundedReceiver;
-use gpui::TestAppContext;
+use gpui_runtime::TestAppContext;
 use indoc::indoc;
 use language::{Point, ToPoint as _, rust_lang};
 use lsp::FakeLanguageServer;
@@ -12,7 +12,7 @@ use std::fmt::Write as _;
 use util::rel_path::rel_path;
 use util::{path, test::marked_text_ranges};
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_context(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -160,7 +160,7 @@ async fn test_edit_prediction_context(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_assemble_excerpts(cx: &mut TestAppContext) {
     let table = [
         (
@@ -320,7 +320,7 @@ async fn test_assemble_excerpts(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fake_definition_lsp(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -373,7 +373,7 @@ async fn test_fake_definition_lsp(cx: &mut TestAppContext) {
     assert_definitions(&definitions, &["pub fn to_string(&self) -> String {"], cx);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fake_type_definition_lsp(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -454,7 +454,7 @@ async fn test_fake_type_definition_lsp(cx: &mut TestAppContext) {
     assert!(is_empty, "expected no type definitions for `main`");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_type_definitions_in_related_files(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -555,7 +555,7 @@ async fn test_type_definitions_in_related_files(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_type_definition_deduplication(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -640,7 +640,7 @@ async fn test_type_definition_deduplication(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_filters_raw_definitions_before_opening_buffers(
     cx: &mut TestAppContext,
 ) {
@@ -719,7 +719,7 @@ async fn test_edit_prediction_filters_raw_definitions_before_opening_buffers(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_definitions_ranked_by_cursor_proximity(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());

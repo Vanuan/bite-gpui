@@ -1068,7 +1068,7 @@ pub struct SearchState {
     pub prior_operator: Option<Operator>,
     pub prior_mode: Mode,
     pub helix_select: bool,
-    pub _dismiss_subscription: Option<gpui::Subscription>,
+    pub _dismiss_subscription: Option<gpui_runtime::Subscription>,
 }
 
 impl Operator {

@@ -227,14 +227,14 @@ impl Render for ConfigurationView {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::AsyncApp;
+    use gpui_runtime::AsyncApp;
     use http_client::FakeHttpClient;
     use parking_lot::Mutex;
     use std::future::Future;
     use std::pin::Pin;
 
-    #[gpui::test]
-    async fn test_authenticate_awaits_initial_load(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_authenticate_awaits_initial_load(cx: &mut gpui_runtime::TestAppContext) {
         let creds_json = serde_json::json!({
             "access_token": "fresh_access",
             "refresh_token": "fresh_refresh",

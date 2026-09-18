@@ -1554,7 +1554,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_inlay_hint_padding_with_multibyte_chars() {
         assert_eq!(
             Inlay::hint(
@@ -1577,7 +1577,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_basic_inlays(cx: &mut App) {
         let buffer = MultiBuffer::build_simple("abcdefghi", cx);
         let buffer_edits = buffer.update(cx, |buffer, _| buffer.subscribe());
@@ -1898,7 +1898,7 @@ mod tests {
         assert_eq!(inlay_snapshot.text(), "abxJKLyDzefghi");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_inlay_buffer_rows(cx: &mut App) {
         let buffer = MultiBuffer::build_simple("abc\ndef\nghi", cx);
         let (mut inlay_map, inlay_snapshot) = InlayMap::new(buffer.read(cx).snapshot(cx));
@@ -1944,7 +1944,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_random_inlays(cx: &mut App, mut rng: StdRng) {
         init_test(cx);
 
@@ -2256,8 +2256,8 @@ mod tests {
         }
     }
 
-    #[gpui::test(iterations = 100)]
-    fn test_random_chunk_bitmaps(cx: &mut gpui::App, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    fn test_random_chunk_bitmaps(cx: &mut gpui_runtime::App, mut rng: StdRng) {
         init_test(cx);
 
         // Generate random buffer using existing test infrastructure
@@ -2364,7 +2364,7 @@ mod tests {
     /// search over `self.inlays` relies on, so the scan reaches a valid inlay
     /// belonging to a region before the edit and pushes it after content that
     /// was already built, panicking in the rope layer.
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_sync_after_path_key_reused_for_different_buffer(cx: &mut App) {
         init_test(cx);
 
@@ -2473,7 +2473,7 @@ mod tests {
         inlay_highlights
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_inlay_utf8_boundary_panic_fix(cx: &mut App) {
         init_test(cx);
 
@@ -2535,7 +2535,7 @@ mod tests {
         assert_eq!(highlighted_chunks[0].chunk.text, "SortingDirec…");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_inlay_utf8_boundaries(cx: &mut App) {
         init_test(cx);
 

@@ -231,7 +231,7 @@ fn unix_millis() -> u128 {
 mod tests {
     use super::*;
     use crate::fs_watcher::WatchBackend;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use notify::{Event, EventKind, event::Flag};
     use std::path::Path;
 
@@ -284,7 +284,7 @@ mod tests {
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn recording_is_opt_in_and_bounded(cx: &TestAppContext) {
         let watcher = watcher(OsWatcherKind::Native, cx);
         watcher.diagnostics.record(|| panic!("not recording"));
@@ -319,7 +319,7 @@ mod tests {
         assert!(recording.snapshot().events.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn recording_keeps_raw_events_errors_and_rescans(cx: &TestAppContext) {
         let native = watcher(OsWatcherKind::Native, cx);
         let poll = watcher(OsWatcherKind::Poll, cx);
@@ -358,7 +358,7 @@ mod tests {
         assert_eq!(json["events"][3]["paths"][0], util::path!("/root/file"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn recording_snapshots_existing_roots_and_registration_errors(cx: &TestAppContext) {
         let watcher = watcher(OsWatcherKind::Native, cx);
         let root = util::path!("/root");

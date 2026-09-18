@@ -317,7 +317,7 @@ pub struct EditorMargins {
     pub extended_right: Pixels,
 }
 
-#[derive(gpui::AppContext, gpui::VisualContext)]
+#[derive(gpui_runtime::AppContext, gpui_runtime::VisualContext)]
 pub struct BlockContext<'a, 'b> {
     #[window]
     pub window: &'a mut Window,
@@ -2909,7 +2909,7 @@ impl CustomBlock {
             style: self.style,
             render: Arc::new(|_| {
                 // Not used
-                gpui::Empty.into_any_element()
+                gpui_runtime::Empty.into_any_element()
             }),
             priority: self.priority,
         }
@@ -2966,7 +2966,7 @@ mod tests {
     use std::env;
     use util::RandomCharIter;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_offset_for_row() {
         assert_eq!(offset_for_row("", RowDelta(0)), (RowDelta(0), 0));
         assert_eq!(offset_for_row("", RowDelta(1)), (RowDelta(0), 0));
@@ -2992,8 +2992,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_basic_blocks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_basic_blocks(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "aaa\nbbb\nccc\nddd";
@@ -3162,8 +3162,8 @@ mod tests {
         assert_eq!(snapshot.text(), "aaa\n\nb!!!\n\n\nbb\nccc\nddd\n\n\n");
     }
 
-    #[gpui::test]
-    fn test_blocks_hidden_in_folds(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_blocks_hidden_in_folds(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "line0\nline1\nline2\nline3\nline4";
@@ -3230,7 +3230,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_multibuffer_headers_and_footers(cx: &mut App) {
         init_test(cx);
 
@@ -3309,8 +3309,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_replace_with_heights(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_replace_with_heights(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "aaa\nbbb\nccc\nddd";
@@ -3414,8 +3414,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_blocks_on_wrapped_lines(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_blocks_on_wrapped_lines(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "one two three\nfour five six\nseven eight";
@@ -3457,8 +3457,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_insert_and_remove_block_anchored_past_soft_wrap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_insert_and_remove_block_anchored_past_soft_wrap(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "one two three\nfour\nfive";
@@ -3492,8 +3492,8 @@ mod tests {
         assert_eq!(snapshot.text(), "one two \nthree\nfour\nfive");
     }
 
-    #[gpui::test]
-    fn test_replace_lines(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_replace_lines(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "line1\nline2\nline3\nline4\nline5";
@@ -3627,8 +3627,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_custom_blocks_inside_buffer_folds(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_custom_blocks_inside_buffer_folds(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "111\n\n222\n\n333\n\n444\n\n555\n\n666";
@@ -3996,8 +3996,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_basic_buffer_fold(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_basic_buffer_fold(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "111";
@@ -4051,8 +4051,8 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 60)]
-    fn test_random_blocks(cx: &mut gpui::TestAppContext, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 60)]
+    fn test_random_blocks(cx: &mut gpui_runtime::TestAppContext, mut rng: StdRng) {
         cx.update(init_test);
 
         let operations = env::var("OPERATIONS")
@@ -4696,8 +4696,8 @@ mod tests {
     /// current base buffer instead (monotone: buffer ids never change and
     /// versions only grow), so anchors into deleted base text keep comparing
     /// positionally through their tombstones and the answer never flips.
-    #[gpui::test]
-    async fn test_folds_stay_sorted_when_diff_base_text_replaced(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_folds_stay_sorted_when_diff_base_text_replaced(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "bbb\nccc\nddd\n";
@@ -4795,9 +4795,9 @@ mod tests {
     /// leaves the block map holding stale header blocks. The inlay panic and
     /// the fold tree disorder are fixed by making anchor comparison track
     /// resolution; the canonical-form violation is still unfixed.
-    #[gpui::test(iterations = 20)]
+    #[gpui_runtime::test(iterations = 20)]
     async fn test_random_excerpt_removal_with_diffs(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
         mut rng: StdRng,
     ) {
         cx.update(init_test);
@@ -5216,8 +5216,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_remove_intersecting_replace_blocks_edge_case(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_remove_intersecting_replace_blocks_edge_case(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "abc\ndef\nghi\njkl\nmno";
@@ -5256,8 +5256,8 @@ mod tests {
         assert_eq!(blocks_snapshot.text(), "abc\n\ndef\nghi\njkl\nmno");
     }
 
-    #[gpui::test]
-    fn test_folded_buffer_with_near_blocks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_folded_buffer_with_near_blocks(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "line 1\nline 2\nline 3";
@@ -5301,8 +5301,8 @@ mod tests {
         assert_eq!(blocks_snapshot.text(), "");
     }
 
-    #[gpui::test]
-    fn test_folded_buffer_with_near_blocks_on_last_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_folded_buffer_with_near_blocks_on_last_line(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let text = "line 1\nline 2\nline 3\nline 4";
@@ -5346,8 +5346,8 @@ mod tests {
         assert_eq!(blocks_snapshot.text(), "");
     }
 
-    #[gpui::test]
-    fn test_companion_spacer_blocks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_companion_spacer_blocks(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let base_text = "aaa\nbbb\nccc\nddd\nddd\nddd\neee\n";
@@ -5570,8 +5570,8 @@ mod tests {
     // anchored at the trailing boundary of the old transforms
     // (`old.start == input_rows`), at which point the cursor is past the end of
     // the tree and `item()` is `None`. That used to abort the process.
-    #[gpui::test]
-    fn test_sync_edit_anchored_at_end_of_transforms(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_sync_edit_anchored_at_end_of_transforms(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(init_test);
 
         let buffer = cx.update(|cx| MultiBuffer::build_simple("aaa\nbbb\nccc\n", cx));
@@ -5618,7 +5618,7 @@ mod tests {
         assert_eq!(snapshot.snapshot.text(), "aaa\nbbb\nccc\nddd\neee\n");
     }
 
-    fn init_test(cx: &mut gpui::App) {
+    fn init_test(cx: &mut gpui_runtime::App) {
         let settings = SettingsStore::test(cx);
         cx.set_global(settings);
         theme_settings::init(theme::LoadThemes::JustBase, cx);

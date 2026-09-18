@@ -1311,9 +1311,9 @@ mod tests {
     use language_model::ProviderErrorCategory;
     use serde_json::json;
 
-    #[gpui::test]
-    fn language_model_exposes_token_limits(cx: &mut gpui::TestAppContext) {
-        use gpui::AppContext as _;
+    #[gpui_runtime::test]
+    fn language_model_exposes_token_limits(cx: &mut gpui_runtime::TestAppContext) {
+        use gpui_runtime::AppContext as _;
 
         let copilot_chat = cx.new(|cx| {
             CopilotChat::new(

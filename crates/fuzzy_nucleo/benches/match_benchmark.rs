@@ -152,9 +152,9 @@ fn to_fuzzy_candidates(
 fn bench_string_matching(criterion: &mut Criterion) {
     let cancel = AtomicBool::new(false);
 
-    let dispatcher = std::sync::Arc::new(gpui::TestDispatcher::new(0));
-    let background_executor = gpui::BackgroundExecutor::new(dispatcher.clone());
-    let foreground_executor = gpui::ForegroundExecutor::new(dispatcher);
+    let dispatcher = std::sync::Arc::new(gpui_platform::TestDispatcher::new(0));
+    let background_executor = gpui_platform::BackgroundExecutor::new(dispatcher.clone());
+    let foreground_executor = gpui_platform::ForegroundExecutor::new(dispatcher);
 
     let sizes = [100, 1000, 10_000];
     let query_count = 200;

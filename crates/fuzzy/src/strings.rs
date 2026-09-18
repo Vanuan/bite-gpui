@@ -3,7 +3,7 @@ use crate::{
     char_bag::simple_lowercase,
     matcher::{MatchCandidate, Matcher},
 };
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use std::{
     borrow::Borrow,
     cmp::{self, Ordering},

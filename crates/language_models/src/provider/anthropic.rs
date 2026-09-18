@@ -459,9 +459,9 @@ mod tests {
         assert!(model.supported_effort_levels.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn direct_anthropic_supports_explicit_compaction_after_minimum_input(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let provider = direct_anthropic_test_provider(FakeHttpClient::with_404_response(), cx);
         let model = direct_anthropic_test_model(&provider);
@@ -474,9 +474,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn direct_anthropic_explicit_compaction_uses_paused_completion(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let captured_request = Arc::new(Mutex::new(None));
         let captured_request_for_handler = captured_request.clone();
@@ -635,7 +635,7 @@ mod tests {
 
     fn direct_anthropic_test_provider(
         http_client: Arc<dyn HttpClient>,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> AnthropicLanguageModelProvider {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);

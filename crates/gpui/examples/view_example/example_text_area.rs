@@ -45,7 +45,7 @@ impl TextArea {
     }
 }
 
-impl gpui::View for TextArea {
+impl gpui_runtime::View for TextArea {
     fn entity_id(&self) -> Option<EntityId> {
         Some(match &self.source {
             Source::Value(value) => value.entity_id(),

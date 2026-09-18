@@ -1313,7 +1313,7 @@ pub struct Thread {
     subagent_context: Option<SubagentContext>,
     /// The user's unsent prompt text, persisted so it can be restored when reloading the thread.
     draft_prompt: Option<Vec<acp::ContentBlock>>,
-    ui_scroll_position: Option<gpui::ListOffset>,
+    ui_scroll_position: Option<gpui_runtime::ListOffset>,
     /// Weak references to running subagent threads for cancellation propagation
     running_subagents: Vec<WeakEntity<Thread>>,
     inherits_parent_model_settings: bool,
@@ -1834,7 +1834,7 @@ impl Thread {
             prompt_capabilities_rx,
             subagent_context: db_thread.subagent_context,
             draft_prompt: db_thread.draft_prompt,
-            ui_scroll_position: db_thread.ui_scroll_position.map(|sp| gpui::ListOffset {
+            ui_scroll_position: db_thread.ui_scroll_position.map(|sp| gpui_runtime::ListOffset {
                 item_ix: sp.item_ix,
                 offset_in_item: gpui::px(sp.offset_in_item),
             }),
@@ -1990,11 +1990,11 @@ impl Thread {
         self.draft_prompt = prompt;
     }
 
-    pub fn ui_scroll_position(&self) -> Option<gpui::ListOffset> {
+    pub fn ui_scroll_position(&self) -> Option<gpui_runtime::ListOffset> {
         self.ui_scroll_position
     }
 
-    pub fn set_ui_scroll_position(&mut self, position: Option<gpui::ListOffset>) {
+    pub fn set_ui_scroll_position(&mut self, position: Option<gpui_runtime::ListOffset>) {
         self.ui_scroll_position = position;
     }
 
@@ -6894,7 +6894,7 @@ fn convert_image(image_content: acp::ImageContent) -> LanguageModelImage {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use language_model::LanguageModelToolUseId;
     use language_model::fake_provider::FakeLanguageModel;
     use serde_json::json;
@@ -7044,7 +7044,7 @@ mod tests {
             .collect()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_summary_request_uses_compacted_history(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let thread_id = thread.read_with(cx, |thread, _| thread.id().to_string());
@@ -7134,7 +7134,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_threshold_uses_percentage_setting(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7169,7 +7169,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_threshold_accounts_for_max_output_tokens(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7233,7 +7233,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_threshold_respects_independent_input_limit(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let mut model = FakeLanguageModel::default();
@@ -7274,7 +7274,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_threshold_respects_enabled_setting(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7306,7 +7306,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_threshold_respects_token_settings(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7376,7 +7376,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_unavailable_for_small_context_window(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7403,7 +7403,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_inserts_before_new_user_and_requests_compacted_window(
         cx: &mut TestAppContext,
     ) {
@@ -7481,7 +7481,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_manual_compact_forces_summary(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7562,7 +7562,7 @@ mod tests {
 
     /// Cancelling an in-flight manual compaction must not leave the zero-content
     /// rewind marker (or a partial summary) dangling at the end of the thread.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_manual_compact_cancelled_leaves_no_marker(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7601,7 +7601,7 @@ mod tests {
 
     /// A failed compaction (here, an empty summary) reports an error and leaves
     /// the thread untouched — no marker, no compaction.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_manual_compact_empty_summary_leaves_no_marker(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7649,7 +7649,7 @@ mod tests {
 
     /// `/compact` on an empty thread (nothing to summarize) is a no-op: it
     /// issues no model request and adds no marker.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_manual_compact_noop_on_empty_thread(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7673,7 +7673,7 @@ mod tests {
     /// The zero-content marker replays as an empty user message, which the UI
     /// drops (it renders content blocks, of which there are none), so reloading
     /// a compacted thread doesn't surface an empty `/compact` bubble.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_manual_compact_marker_replays_as_empty_user_message(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let marker_id = ClientUserMessageId::new();
@@ -7718,7 +7718,7 @@ mod tests {
 
     /// When `agent.compaction_model` is configured, manual `/compact` streams
     /// to the configured model rather than the thread's primary model.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_uses_configured_compaction_model(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let thread_model = Arc::new(FakeLanguageModel::default());
@@ -7775,7 +7775,7 @@ mod tests {
     /// the provider isn't registered), manual `/compact` falls back to the
     /// thread's primary model and the telemetry reflects the actual stream
     /// model — not the one the user tried to configure.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_falls_back_when_compaction_model_unavailable(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let thread_model = Arc::new(FakeLanguageModel::default());
@@ -7834,7 +7834,7 @@ mod tests {
 
     /// Auto-compaction triggered by the threshold also honors
     /// `agent.compaction_model`.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_auto_compaction_uses_compaction_model(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let thread_model = Arc::new(FakeLanguageModel::default());
@@ -7893,7 +7893,7 @@ mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compaction_usage_counts_toward_cumulative_usage(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let model = Arc::new(FakeLanguageModel::default());
@@ -7994,7 +7994,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replay_emits_context_compaction(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let user_message_id = ClientUserMessageId::new();
@@ -8043,7 +8043,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_native_compaction_boundary(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
 
@@ -8074,7 +8074,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_retained_users_truncate_oldest(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
         let mut long_text = "START".to_string();
@@ -8215,7 +8215,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_authorize_sandbox_allow_always_does_not_cache_thread_grant(
         cx: &mut TestAppContext,
     ) {
@@ -8305,7 +8305,7 @@ mod tests {
     }
 
     #[cfg(target_os = "linux")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_authorize_sandbox_fallback_options_and_details(cx: &mut TestAppContext) {
         crate::tests::init_test(cx);
 
@@ -8360,7 +8360,7 @@ mod tests {
     }
 
     #[cfg(target_os = "linux")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_authorize_sandbox_fallback_retry_label_counts_attempts(cx: &mut TestAppContext) {
         crate::tests::init_test(cx);
 
@@ -8404,7 +8404,7 @@ mod tests {
     }
 
     #[cfg(target_os = "linux")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_authorize_sandbox_fallback_allow_thread_records_grant(cx: &mut TestAppContext) {
         crate::tests::init_test(cx);
 
@@ -8439,7 +8439,7 @@ mod tests {
     }
 
     #[cfg(target_os = "linux")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_authorize_sandbox_fallback_deny(cx: &mut TestAppContext) {
         crate::tests::init_test(cx);
 
@@ -8471,7 +8471,7 @@ mod tests {
     /// resulting title-less insert ("title is required for a tool call"), the
     /// event stream was torn down, and every terminal command was auto-declined
     /// without the user ever seeing a prompt.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_windows_fs_warning_targets_scoped_tool_call_id(cx: &mut TestAppContext) {
         crate::tests::init_test(cx);
 
@@ -8671,7 +8671,7 @@ mod tests {
         assert_eq!(strategy.delay_after(&error, MAX_RETRY_ATTEMPTS + 1), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replay_tool_call_replays_image_content(cx: &mut TestAppContext) {
         let (thread, _event_stream) = setup_thread_for_test(cx).await;
 
@@ -8789,7 +8789,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_model_propagates_to_subagents(cx: &mut TestAppContext) {
         let (parent, _event_stream) = setup_thread_for_test(cx).await;
         let subagents = setup_parent_with_subagents(cx, &parent, 2);
@@ -8817,7 +8817,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_summarization_model_propagates_to_subagents(cx: &mut TestAppContext) {
         let (parent, _event_stream) = setup_thread_for_test(cx).await;
         let subagents = setup_parent_with_subagents(cx, &parent, 2);
@@ -8846,7 +8846,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_thinking_enabled_propagates_to_subagents(cx: &mut TestAppContext) {
         let (parent, _event_stream) = setup_thread_for_test(cx).await;
         let subagents = setup_parent_with_subagents(cx, &parent, 2);
@@ -8876,7 +8876,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_thinking_effort_propagates_to_subagents(cx: &mut TestAppContext) {
         let (parent, _event_stream) = setup_thread_for_test(cx).await;
         let subagents = setup_parent_with_subagents(cx, &parent, 2);
@@ -8908,7 +8908,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_subagent_inherits_settings_at_creation(cx: &mut TestAppContext) {
         let (parent, _event_stream) = setup_thread_for_test(cx).await;
 
@@ -8932,7 +8932,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_speed_propagates_to_subagents(cx: &mut TestAppContext) {
         let (parent, _event_stream) = setup_thread_for_test(cx).await;
         let subagents = setup_parent_with_subagents(cx, &parent, 2);
@@ -8952,7 +8952,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dropped_subagent_does_not_panic(cx: &mut TestAppContext) {
         let (parent, _event_stream) = setup_thread_for_test(cx).await;
         let subagents = setup_parent_with_subagents(cx, &parent, 1);
@@ -8970,7 +8970,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_handle_tool_use_json_parse_error_adds_tool_use_to_content(
         cx: &mut TestAppContext,
     ) {

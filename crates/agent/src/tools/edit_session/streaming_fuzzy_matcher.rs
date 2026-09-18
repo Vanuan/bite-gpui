@@ -628,7 +628,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_resolve_location_single_line(mut rng: StdRng) {
         assert_location_resolution(
             concat!(
@@ -642,7 +642,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_resolve_location_multiline(mut rng: StdRng) {
         assert_location_resolution(
             concat!(
@@ -656,7 +656,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_resolve_location_function_with_typo(mut rng: StdRng) {
         assert_location_resolution(
             indoc! {"
@@ -673,7 +673,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_resolve_location_class_methods(mut rng: StdRng) {
         assert_location_resolution(
             indoc! {"
@@ -698,7 +698,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_resolve_location_imports_no_match(mut rng: StdRng) {
         assert_location_resolution(
             indoc! {"
@@ -732,7 +732,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_resolve_location_nested_closure(mut rng: StdRng) {
         assert_location_resolution(
             indoc! {"
@@ -764,7 +764,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_resolve_location_tool_invocation(mut rng: StdRng) {
         assert_location_resolution(
             indoc! {r#"
@@ -796,7 +796,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_line_hint_selection() {
         let text = indoc! {r#"
             fn first_function() {
@@ -846,7 +846,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_exact_match_takes_precedence_over_fuzzy_match() {
         let buffer = TextBuffer::new(
             ReplicaId::LOCAL,
@@ -874,7 +874,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_exact_match_uses_trailing_newline_to_disambiguate() {
         let buffer = TextBuffer::new(
             ReplicaId::LOCAL,
@@ -899,7 +899,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_exact_newline_only_match_excludes_line_ending() {
         let buffer = TextBuffer::new(ReplicaId::LOCAL, BufferId::new(1).unwrap(), "a\nb");
         let mut matcher = StreamingFuzzyMatcher::new(buffer.snapshot().clone());
@@ -914,7 +914,7 @@ mod tests {
         assert_eq!(search_match.range, 1..1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_exact_overlapping_matches_are_ambiguous() {
         let buffer = TextBuffer::new(ReplicaId::LOCAL, BufferId::new(1).unwrap(), "aaaaa");
         let mut matcher = StreamingFuzzyMatcher::new(buffer.snapshot().clone());
@@ -926,7 +926,7 @@ mod tests {
         assert_eq!(match_ranges(&matches), vec![0..4, 1..5]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_exact_multiline_match_does_not_extend_incomplete_line() {
         let buffer = TextBuffer::new(
             ReplicaId::LOCAL,
@@ -951,7 +951,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_prefix_of_last_line_resolves_to_correct_range() {
         let text = indoc! {r#"
             fn on_query_change(&mut self, cx: &mut Context<Self>) {

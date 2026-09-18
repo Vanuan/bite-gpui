@@ -1419,8 +1419,8 @@ mod tests {
         assert_eq!(backend.unwatch_calls, &[parent.to_path_buf()]);
     }
 
-    #[gpui::test]
-    async fn pending_path_is_registered_once_created(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn pending_path_is_registered_once_created(cx: &mut gpui_runtime::TestAppContext) {
         let temp_dir = tempfile::tempdir().expect("create temp dir");
         let path = temp_dir.path().join("file.txt");
 

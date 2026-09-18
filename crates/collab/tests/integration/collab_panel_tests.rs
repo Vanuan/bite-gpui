@@ -1,10 +1,10 @@
 use crate::TestServer;
 use collab_ui::CollabPanel;
 use collab_ui::collab_panel::{MoveChannelDown, MoveChannelUp, ToggleSelectedChannelFavorite};
-use gpui::TestAppContext;
+use gpui_runtime::TestAppContext;
 use menu::{SelectNext, SelectPrevious};
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_reorder_favorite_channels_independently_of_channels(cx: &mut TestAppContext) {
     let (server, client) = TestServer::start1(cx).await;
     let root = server
@@ -241,7 +241,7 @@ async fn test_reorder_favorite_channels_independently_of_channels(cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_reorder_channels_independently_of_favorites(cx: &mut TestAppContext) {
     let (server, client) = TestServer::start1(cx).await;
     let root = server

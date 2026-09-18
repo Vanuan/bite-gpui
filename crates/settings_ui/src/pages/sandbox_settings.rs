@@ -209,7 +209,7 @@ fn render_list_section(
     description: &'static str,
     rows: Vec<AnyElement>,
     add_input: AnyElement,
-    empty_border: gpui::Hsla,
+    empty_border: gpui_types::Hsla,
 ) -> impl IntoElement {
     let is_empty = rows.is_empty();
 
@@ -236,7 +236,7 @@ fn render_list_section(
         )
 }
 
-fn render_empty_state(border_color: gpui::Hsla) -> AnyElement {
+fn render_empty_state(border_color: gpui_types::Hsla) -> AnyElement {
     h_flex()
         .p_2()
         .rounded_md()

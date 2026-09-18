@@ -446,7 +446,7 @@ pub enum SelectPhase {
     Update {
         position: DisplayPoint,
         goal_column: u32,
-        scroll_delta: gpui::Point<f32>,
+        scroll_delta: gpui_types::Point<f32>,
     },
     End,
 }
@@ -894,7 +894,7 @@ enum SelectionDragState {
     /// State when the mouse is down on a selection that is about to be dragged.
     ReadyToDrag {
         selection: Selection<Anchor>,
-        click_position: gpui::Point<Pixels>,
+        click_position: gpui_types::Point<Pixels>,
         mouse_down_time: Instant,
     },
     /// State when the mouse is dragging the selection in the editor.
@@ -1104,7 +1104,7 @@ pub struct Editor {
     next_inlay_id: usize,
     next_color_inlay_id: usize,
     _subscriptions: Vec<Subscription>,
-    pixel_position_of_newest_cursor: Option<gpui::Point<Pixels>>,
+    pixel_position_of_newest_cursor: Option<gpui_types::Point<Pixels>>,
     gutter_dimensions: GutterDimensions,
     style: Option<EditorStyle>,
     text_style_refinement: Option<TextStyleRefinement>,
@@ -1747,7 +1747,7 @@ impl GutterButtonTooltip {
         if self.primary == self.secondary {
             return RIGHT_CLICK_HINT.to_string();
         }
-        let modifier_as_text = gpui::Keystroke {
+        let modifier_as_text = gpui_types::Keystroke {
             modifiers: Modifiers::secondary_key(),
             ..Default::default()
         };
@@ -2737,7 +2737,7 @@ impl Editor {
 
     pub fn deploy_mouse_context_menu(
         &mut self,
-        position: gpui::Point<Pixels>,
+        position: gpui_types::Point<Pixels>,
         context_menu: Entity<ContextMenu>,
         window: &mut Window,
         cx: &mut Context<Self>,
@@ -4706,7 +4706,7 @@ impl Editor {
 
         let breakpoint = Arc::from(breakpoint.clone());
 
-        let alt_as_text = gpui::Keystroke {
+        let alt_as_text = gpui_types::Keystroke {
             modifiers: Modifiers::secondary_key(),
             ..Default::default()
         };
@@ -6135,7 +6135,7 @@ impl Editor {
         &mut self,
         display_row: DisplayRow,
         position: Option<Anchor>,
-        clicked_point: gpui::Point<Pixels>,
+        clicked_point: gpui_types::Point<Pixels>,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
@@ -11040,7 +11040,7 @@ impl Editor {
         editor_snapshot: &EditorSnapshot,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<gpui::Point<Pixels>> {
+    ) -> Option<gpui_types::Point<Pixels>> {
         let source_point = source.to_display_point(editor_snapshot);
         self.display_to_pixel_point(source_point, editor_snapshot, window, cx)
     }
@@ -11051,7 +11051,7 @@ impl Editor {
         editor_snapshot: &EditorSnapshot,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<gpui::Point<Pixels>> {
+    ) -> Option<gpui_types::Point<Pixels>> {
         let line_height = self.style(cx).text.line_height_in_pixels(window.rem_size());
         let text_layout_details = self.text_layout_details(window, cx);
         let mut scroll_top = text_layout_details
@@ -11068,7 +11068,7 @@ impl Editor {
         }
         let source_x = editor_snapshot.x_for_display_point(source, &text_layout_details);
         let source_y = line_height * (source.row().as_f64() - scroll_top) as f32;
-        Some(gpui::Point::new(source_x, source_y))
+        Some(gpui_types::Point::new(source_x, source_y))
     }
 
     pub fn register_addon<T: Addon>(&mut self, instance: T) {
@@ -12111,7 +12111,7 @@ impl EditorSnapshot {
             .map(|display_map| display_map.text())
     }
 
-    pub fn scroll_position(&self) -> gpui::Point<ScrollOffset> {
+    pub fn scroll_position(&self) -> gpui_types::Point<ScrollOffset> {
         self.scroll_anchor.scroll_position(&self.display_snapshot)
     }
 
@@ -13044,7 +13044,7 @@ impl Focusable for PromptEditor {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct LineHighlight {
     pub background: Background,
-    pub border: Option<gpui::Hsla>,
+    pub border: Option<gpui_types::Hsla>,
     pub include_gutter: bool,
     pub type_id: Option<TypeId>,
 }

@@ -58,9 +58,9 @@ fn open_copilot_code_verification_window(copilot: &Entity<Copilot>, window: &Win
     let current_window_center = window.bounds().center();
     let width = px(450.);
     let height = px(350.);
-    let window_bounds = WindowBounds::Windowed(gpui::bounds(
+    let window_bounds = WindowBounds::Windowed(gpui_types::bounds(
         current_window_center - point(width / 2.0, height / 2.0),
-        gpui::size(width, height),
+        gpui_backend::size(width, height),
     ));
     let app_id = ReleaseChannel::global(cx).app_id();
     cx.open_window(
@@ -91,9 +91,9 @@ fn open_copilot_chat_code_verification_window(
     let current_window_center = window.bounds().center();
     let height = px(450.);
     let width = px(350.);
-    let window_bounds = WindowBounds::Windowed(gpui::bounds(
+    let window_bounds = WindowBounds::Windowed(gpui_types::bounds(
         current_window_center - point(height / 2.0, width / 2.0),
-        gpui::size(height, width),
+        gpui_backend::size(height, width),
     ));
     cx.open_window(
         WindowOptions {
@@ -187,7 +187,7 @@ pub struct CopilotCodeVerification {
 }
 
 impl Focusable for CopilotCodeVerification {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -513,7 +513,7 @@ pub struct CopilotChatCodeVerification {
 }
 
 impl Focusable for CopilotChatCodeVerification {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }

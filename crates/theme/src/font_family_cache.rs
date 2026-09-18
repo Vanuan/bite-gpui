@@ -62,7 +62,7 @@ impl FontFamilyCache {
     }
 
     /// Prefetch all font names in the background
-    pub async fn prefetch(&self, cx: &gpui::AsyncApp) {
+    pub async fn prefetch(&self, cx: &gpui_runtime::AsyncApp) {
         if self
             .state
             .try_read()

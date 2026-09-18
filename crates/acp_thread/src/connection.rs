@@ -739,7 +739,7 @@ mod test_support {
     /// `StubAgentConnection` instances within a test case. Set as a GPUI
     /// global in test init so each case starts fresh.
     pub struct StubSessionCounter(pub AtomicUsize);
-    impl gpui::Global for StubSessionCounter {}
+    impl gpui_runtime::Global for StubSessionCounter {}
 
     impl StubSessionCounter {
         pub fn next(cx: &App) -> usize {
@@ -828,7 +828,7 @@ mod test_support {
             project: Entity<Project>,
             work_dirs: PathList,
             title: Option<SharedString>,
-            cx: &mut gpui::App,
+            cx: &mut gpui_runtime::App,
         ) -> Entity<AcpThread> {
             let action_log = cx.new(|_| ActionLog::new(project.clone()));
             let thread = cx.new(|cx| {
@@ -918,7 +918,7 @@ mod test_support {
             self: Rc<Self>,
             project: Entity<Project>,
             work_dirs: PathList,
-            cx: &mut gpui::App,
+            cx: &mut gpui_runtime::App,
         ) -> Task<gpui::Result<Entity<AcpThread>>> {
             let session_id = acp::SessionId::new(StubSessionCounter::next(cx).to_string());
             let thread = self.create_session(session_id, project, work_dirs, None, cx);

@@ -47,7 +47,7 @@ pub struct BaseKeymapSelector {
 }
 
 impl Focusable for BaseKeymapSelector {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.picker.focus_handle(cx)
     }
 }

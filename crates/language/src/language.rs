@@ -1986,7 +1986,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
 
     async fn test_language_loading(cx: &mut TestAppContext) {
         let languages = LanguageRegistry::test(cx.executor());
@@ -2054,7 +2054,7 @@ mod tests {
         assert!(languages.language_for_name("Unknown").await.is_err());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_completion_label_omits_duplicate_data() {
         let regular_completion_item_1 = lsp::CompletionItem {
             label: "regular1".to_string(),

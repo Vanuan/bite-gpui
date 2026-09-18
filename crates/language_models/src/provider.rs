@@ -75,8 +75,8 @@ mod tests {
     use futures::{StreamExt, stream};
     use language_model::stream_in_background;
 
-    #[gpui::test]
-    async fn test_stream_in_background(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_stream_in_background(cx: &mut gpui_runtime::TestAppContext) {
         let events = stream::iter([1, 2, 3])
             .flat_map(|event| stream::iter([event, event * 10]))
             .boxed();

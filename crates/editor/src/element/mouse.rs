@@ -277,7 +277,7 @@ impl EditorElement {
         &self,
         editor_snapshot: &EditorSnapshot,
         visible_range: Range<DisplayRow>,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         window: &mut Window,
         cx: &mut App,
     ) -> Option<AnyElement> {
@@ -330,7 +330,7 @@ impl EditorElement {
                     anchored()
                         .position(position)
                         .child(context_menu)
-                        .anchor(gpui::Anchor::TopLeft)
+                        .anchor(gpui_types::Anchor::TopLeft)
                         .snap_to_window_with_margin(px(8.)),
                 )
                 .with_priority(1)
@@ -1025,7 +1025,7 @@ impl EditorElement {
 
         let scroll_delta = {
             let text_bounds = text_hitbox.bounds;
-            let mut scroll_delta = gpui::Point::<f32>::default();
+            let mut scroll_delta = gpui_types::Point::<f32>::default();
             let vertical_margin = position_map.line_height.min(text_bounds.size.height / 3.0);
             let top = text_bounds.origin.y + vertical_margin;
             let bottom = text_bounds.bottom_left().y - vertical_margin;
@@ -1211,7 +1211,7 @@ mod tests {
     };
     use gpui::{Modifiers, TestAppContext};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_mouse_drag_preserves_pending_sticky_header_autoscroll(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorTestContext::new(cx).await;
@@ -1250,11 +1250,11 @@ mod tests {
         });
 
         cx.update_editor(|editor, window, cx| {
-            editor.scroll(gpui::Point { x: 0., y: 5.5 }, window, cx);
+            editor.scroll(gpui_types::Point { x: 0., y: 5.5 }, window, cx);
         });
         cx.run_until_parked();
 
-        let mouse_drag_position = gpui::Point {
+        let mouse_drag_position = gpui_types::Point {
             x: text_origin_x,
             y: 2.25 * line_height,
         };

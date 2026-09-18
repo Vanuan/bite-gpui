@@ -1,4 +1,4 @@
-use gpui::KeyContext;
+use gpui_runtime::KeyContext;
 use ui::{Context, InteractiveElement, IntoElement, ParentElement, Render, Window, v_flex};
 
 use super::TextFinder;

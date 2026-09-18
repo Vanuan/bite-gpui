@@ -296,7 +296,7 @@ impl AgentTool for MovePathTool {
 mod tests {
     use super::*;
     use fs::Fs as _;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::{FakeFs, Project};
     use serde_json::json;
     use settings::SettingsStore;
@@ -315,7 +315,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_move_path_global_skill_directory_to_project(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -379,7 +379,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_move_path_project_directory_to_global_skill_directory(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -448,7 +448,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_move_path_symlink_escape_source_requests_authorization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -505,7 +505,7 @@ mod tests {
         assert!(result.is_ok(), "should succeed after approval: {result:?}");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_move_path_symlink_escape_denied(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -550,7 +550,7 @@ mod tests {
         assert!(result.is_err(), "should fail when denied");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_move_path_symlink_escape_confirm_requires_single_approval(
         cx: &mut TestAppContext,
     ) {
@@ -625,7 +625,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_move_path_symlink_escape_honors_deny_policy(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {

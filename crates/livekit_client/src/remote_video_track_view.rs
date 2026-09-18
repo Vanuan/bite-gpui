@@ -77,15 +77,15 @@ impl Render for RemoteVideoTrackView {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
         #[cfg(target_os = "macos")]
         if let Some(latest_frame) = &self.latest_frame {
-            use gpui::Styled as _;
-            return gpui::surface(latest_frame.clone())
+            use gpui_runtime::Styled as _;
+            return gpui_runtime::surface(latest_frame.clone())
                 .size_full()
                 .into_any_element();
         }
 
         #[cfg(not(target_os = "macos"))]
         if let Some(latest_frame) = &self.latest_frame {
-            use gpui::Styled as _;
+            use gpui_runtime::Styled as _;
             if let Some(current_rendered_frame) = self.current_rendered_frame.take() {
                 if let Some(frame) = self.previous_rendered_frame.take() {
                     // Only drop the frame if it's not also the current frame.
@@ -97,10 +97,10 @@ impl Render for RemoteVideoTrackView {
                 self.previous_rendered_frame = Some(current_rendered_frame)
             }
             self.current_rendered_frame = Some(latest_frame.clone());
-            use gpui::ParentElement;
+            use gpui_runtime::ParentElement;
             return ui::h_flex()
                 .size_full()
-                .child(gpui::img(latest_frame.clone()).size_full())
+                .child(gpui_runtime::img(latest_frame.clone()).size_full())
                 .into_any_element();
         }
 

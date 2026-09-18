@@ -623,7 +623,7 @@ mod tests {
     use super::*;
     use agent_skills::{SkillSource, parse_skill_frontmatter};
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     async fn write_migrated_skill_for_test(
         fs: &dyn Fs,
@@ -666,7 +666,7 @@ mod tests {
         assert!(skill.disable_model_invocation);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn pick_available_skill_dir_returns_primary_when_unused(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let skills_dir = PathBuf::from("/skills");
@@ -679,7 +679,7 @@ mod tests {
         assert_eq!(dir, skills_dir.join("my-rule"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn pick_available_skill_dir_appends_suffix_on_collision(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let skills_dir = PathBuf::from("/skills");
@@ -693,7 +693,7 @@ mod tests {
         assert_eq!(dir, skills_dir.join("my-rule-3"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn write_migrated_skill_creates_directory_and_file(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let skills_dir = PathBuf::from("/skills");
@@ -717,7 +717,7 @@ mod tests {
         assert!(skill.disable_model_invocation);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn write_migrated_skill_skips_when_primary_content_is_identical(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let skills_dir = PathBuf::from("/skills");
@@ -745,7 +745,7 @@ mod tests {
         assert_eq!(primary, identical);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn write_migrated_skill_skips_when_primary_differs_only_in_whitespace(
         cx: &mut TestAppContext,
     ) {
@@ -778,7 +778,7 @@ mod tests {
         assert_eq!(primary, padded);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn write_migrated_skill_does_not_clobber_existing_skill(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let skills_dir = PathBuf::from("/skills");
@@ -807,7 +807,7 @@ mod tests {
         assert!(migrated.contains("disable-model-invocation: true"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn write_migrated_skill_skips_when_any_existing_skill_has_same_body(
         cx: &mut TestAppContext,
     ) {
@@ -911,7 +911,7 @@ mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn append_default_rules_creates_agents_md_when_missing(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let agents_md = PathBuf::from("/config/AGENTS.md");
@@ -927,7 +927,7 @@ mod tests {
         assert_eq!(contents, "## Rule One\n\nBody one.\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn append_default_rules_appends_to_existing_agents_md(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let agents_md = PathBuf::from("/config/AGENTS.md");
@@ -955,7 +955,7 @@ mod tests {
         assert!(contents.contains("\n\n## Rule Two\n\nBody two.\n"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn append_default_rules_skips_sections_already_in_agents_md(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let agents_md = PathBuf::from("/config/AGENTS.md");
@@ -980,7 +980,7 @@ mod tests {
         assert_eq!(contents.matches("## Rule Two").count(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn append_default_rules_is_idempotent(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let agents_md = PathBuf::from("/config/AGENTS.md");
@@ -1004,7 +1004,7 @@ mod tests {
         assert_eq!(contents.matches("## Rule Two").count(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn append_default_rules_treats_whitespace_only_file_as_empty(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let agents_md = PathBuf::from("/config/AGENTS.md");
@@ -1022,7 +1022,7 @@ mod tests {
         assert_eq!(contents, "## Rule One\n\nBody one.\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn append_default_rules_no_op_for_empty_rules(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let agents_md = PathBuf::from("/config/AGENTS.md");

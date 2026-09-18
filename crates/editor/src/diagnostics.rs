@@ -41,7 +41,7 @@ impl GlobalDiagnosticRenderer {
     }
 }
 
-impl gpui::Global for GlobalDiagnosticRenderer {}
+impl gpui_runtime::Global for GlobalDiagnosticRenderer {}
 
 #[derive(Debug, Clone)]
 pub(super) struct InlineDiagnostic {
@@ -685,7 +685,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_diagnostics_refreshes_inline_diagnostics(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorTestContext::new(cx).await;
@@ -716,7 +716,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_inline_diagnostics_notifies_on_hide(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorTestContext::new(cx).await;
@@ -762,7 +762,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_actions_gated_by_lsp_data(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorTestContext::new(cx).await;
@@ -802,7 +802,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_diagnostics_remains_available_after_disabling_diagnostics(
         cx: &mut TestAppContext,
     ) {
@@ -835,7 +835,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_inline_diagnostics_availability(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorTestContext::new(cx).await;

@@ -85,7 +85,7 @@ use crate::zed::{CrashHandler, OpenRequestKind, eager_load_active_theme_and_icon
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
 fn build_application() -> Application {
-    let platform = gpui_platform::current_platform(false);
+    let platform = gpui::current_platform(false);
     if std::env::var("ZED_EXPERIMENTAL_A11Y").as_deref() == Ok("1") {
         Application::with_platform(platform)
     } else {
@@ -125,7 +125,7 @@ fn files_not_created_on_launch(errors: HashMap<io::ErrorKind, Vec<&Path>>) {
         .with_quit_mode(QuitMode::Explicit)
         .run(move |cx| {
             if let Ok(window) = cx.open_window(gpui::WindowOptions::default(), |_, cx| {
-                cx.new(|_| gpui::Empty)
+                cx.new(|_| gpui_runtime::Empty)
             }) {
                 window
                     .update(cx, |_, window, cx| {
@@ -571,7 +571,7 @@ fn main() {
                         Ok(workspace_store
                             .workspaces()
                             .filter_map(|weak| weak.upgrade())
-                            .map(|workspace: gpui::Entity<workspace::Workspace>| {
+                            .map(|workspace: gpui_runtime::Entity<workspace::Workspace>| {
                                 workspace.read(cx).project().read(cx).lsp_store()
                             })
                             .collect())
@@ -2016,7 +2016,7 @@ fn dump_all_gpui_actions() {
         documentation: Option<&'static str>,
     }
     let mut generator = settings::KeymapFile::action_schema_generator();
-    let mut actions = gpui::generate_list_of_all_registered_actions()
+    let mut actions = gpui_runtime::generate_list_of_all_registered_actions()
         .map(|action| {
             let schema = (action.json_schema)(&mut generator)
                 .map(|s| serde_json::to_value(s).expect("Failed to serialize action schema"));

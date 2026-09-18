@@ -3407,13 +3407,13 @@ mod test {
     use editor::{
         Editor, EditorMode, Inlay, MultiBuffer, test::editor_test_context::EditorTestContext,
     };
-    use gpui::KeyBinding;
+    use gpui_runtime::KeyBinding;
     use indoc::indoc;
     use language::Point;
     use multi_buffer::MultiBufferRow;
 
-    #[gpui::test]
-    async fn test_start_end_of_paragraph(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_start_end_of_paragraph(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         let initial_state = indoc! {r"ˇabc
@@ -3485,8 +3485,8 @@ mod test {
                 final"});
     }
 
-    #[gpui::test]
-    async fn test_paragraph_motion_with_whitespace_lines(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paragraph_motion_with_whitespace_lines(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // Test that whitespace-only lines are NOT treated as paragraph boundaries
@@ -3508,8 +3508,8 @@ mod test {
         shared_state.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_matching(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {r"func ˇ(a string) {
@@ -3553,8 +3553,8 @@ mod test {
         cx.shared_state().await.assert_eq("func boop(ˇ) {\n}");
     }
 
-    #[gpui::test]
-    async fn test_matching_in_multibuffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_in_multibuffer(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         let (editor, cx) = cx.add_window_view(|window, cx| {
@@ -3632,8 +3632,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_matching_quotes_disabled(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_quotes_disabled(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // Bind % to Matching with match_quotes: false to match Neovim's behavior
@@ -3680,8 +3680,8 @@ mod test {
             }"});
     }
 
-    #[gpui::test]
-    async fn test_matching_quotes_enabled(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_quotes_enabled(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new_markdown_with_rust(cx).await;
 
         // Test default behavior (match_quotes: true as configured in keymap/vim.json)
@@ -3720,8 +3720,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_matching_comments(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_comments(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {r"ˇ/*
@@ -3750,8 +3750,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇ// comment");
     }
 
-    #[gpui::test]
-    async fn test_matching_preprocessor_directives(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_preprocessor_directives(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {r"
@@ -3864,8 +3864,8 @@ mod test {
         "});
     }
 
-    #[gpui::test]
-    async fn test_unmatched_forward(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_unmatched_forward(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // test it works with curly braces
@@ -3916,8 +3916,8 @@ mod test {
         cx.shared_state().await.assert_eq("(\n     {()}\nˇ)");
     }
 
-    #[gpui::test]
-    async fn test_unmatched_backward(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_unmatched_backward(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // test it works with curly braces
@@ -3961,8 +3961,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇ(\n    {()} \n)");
     }
 
-    #[gpui::test]
-    async fn test_unmatched_forward_markdown(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_unmatched_forward_markdown(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new_markdown_with_rust(cx).await;
 
         cx.neovim.exec("set filetype=markdown").await;
@@ -4006,8 +4006,8 @@ mod test {
         "});
     }
 
-    #[gpui::test]
-    async fn test_unmatched_backward_markdown(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_unmatched_backward_markdown(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new_markdown_with_rust(cx).await;
 
         cx.neovim.exec("set filetype=markdown").await;
@@ -4051,8 +4051,8 @@ mod test {
         "});
     }
 
-    #[gpui::test]
-    async fn test_matching_tags(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_tags(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new_html(cx).await;
 
         cx.neovim.exec("set filetype=html").await;
@@ -4118,8 +4118,8 @@ mod test {
         </html>"#});
     }
 
-    #[gpui::test]
-    async fn test_matching_tag_with_quotes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_tag_with_quotes(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new_html(cx).await;
         cx.update(|_, cx| {
             cx.bind_keys([KeyBinding::new(
@@ -4158,8 +4158,8 @@ mod test {
             <ˇ/div>
             "});
     }
-    #[gpui::test]
-    async fn test_matching_braces_in_tag(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_braces_in_tag(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new_typescript(cx).await;
 
         // test brackets within tags
@@ -4181,8 +4181,8 @@ mod test {
         }"});
     }
 
-    #[gpui::test]
-    async fn test_matching_nested_brackets(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_nested_brackets(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new_tsx(cx).await;
 
         cx.set_shared_state(indoc! {r"<Button onClick=ˇ{() => {}}></Button>"})
@@ -4197,8 +4197,8 @@ mod test {
             .assert_eq(indoc! {r"<Button onClick=ˇ{() => {}}></Button>"});
     }
 
-    #[gpui::test]
-    async fn test_comma_semicolon(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_comma_semicolon(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // f and F
@@ -4232,8 +4232,8 @@ mod test {
         cx.shared_state().await.assert_eq("one two thˇree four");
     }
 
-    #[gpui::test]
-    async fn test_next_word_end_newline_last_char(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_next_word_end_newline_last_char(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         let initial_state = indoc! {r"something(ˇfoo)"};
         cx.set_shared_state(initial_state).await;
@@ -4241,16 +4241,16 @@ mod test {
         cx.shared_state().await.assert_eq("something(fooˇ)");
     }
 
-    #[gpui::test]
-    async fn test_next_line_start(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_next_line_start(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state("ˇone\n  two\nthree").await;
         cx.simulate_shared_keystrokes("enter").await;
         cx.shared_state().await.assert_eq("one\n  ˇtwo\nthree");
     }
 
-    #[gpui::test]
-    async fn test_end_of_line_downward(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_end_of_line_downward(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state("ˇ one\n two \nthree").await;
         cx.simulate_shared_keystrokes("g _").await;
@@ -4263,8 +4263,8 @@ mod test {
         cx.shared_state().await.assert_eq(" one \n twˇo \nthree");
     }
 
-    #[gpui::test]
-    async fn test_end_of_line_with_vertical_motion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_end_of_line_with_vertical_motion(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // test $ followed by k maintains end-of-line position
@@ -4340,8 +4340,8 @@ mod test {
             "});
     }
 
-    #[gpui::test]
-    async fn test_window_top(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_window_top(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         let initial_state = indoc! {r"abc
           def
@@ -4398,8 +4398,8 @@ mod test {
           7 8 ˇ9"});
     }
 
-    #[gpui::test]
-    async fn test_window_middle(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_window_middle(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         let initial_state = indoc! {r"abˇc
           def
@@ -4479,8 +4479,8 @@ mod test {
           "});
     }
 
-    #[gpui::test]
-    async fn test_window_bottom(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_window_bottom(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         let initial_state = indoc! {r"abc
           deˇf
@@ -4564,8 +4564,8 @@ mod test {
           "});
     }
 
-    #[gpui::test]
-    async fn test_previous_word_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_previous_word_end(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {r"
         456 5ˇ67 678
@@ -4661,8 +4661,8 @@ mod test {
         "});
     }
 
-    #[gpui::test]
-    async fn test_visual_match_eol(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_match_eol(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -4679,8 +4679,8 @@ mod test {
         "});
     }
 
-    #[gpui::test]
-    async fn test_clipping_with_inlay_hints(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_clipping_with_inlay_hints(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -4710,8 +4710,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_clipping_with_inlay_hints_end_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_clipping_with_inlay_hints_end_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -4741,8 +4741,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_visual_mode_with_inlay_hints_on_empty_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_mode_with_inlay_hints_on_empty_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Test the exact scenario from issue #29134
@@ -4819,8 +4819,8 @@ mod test {
         cx.assert_state("let a« = 1;\nlet b = 2;\n\nˇ»let c = 3;", Mode::Visual);
     }
 
-    #[gpui::test]
-    async fn test_go_to_percentage(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_go_to_percentage(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         // Normal mode
         cx.set_shared_state(indoc! {"
@@ -4918,8 +4918,8 @@ mod test {
             the lˇ»azy dog"});
     }
 
-    #[gpui::test]
-    async fn test_space_non_ascii(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_space_non_ascii(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇπππππ").await;
@@ -4927,8 +4927,8 @@ mod test {
         cx.shared_state().await.assert_eq("πππˇππ");
     }
 
-    #[gpui::test]
-    async fn test_space_non_ascii_eol(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_space_non_ascii_eol(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -4941,8 +4941,8 @@ mod test {
             πanˇotherline"});
     }
 
-    #[gpui::test]
-    async fn test_backspace_non_ascii_bol(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_backspace_non_ascii_bol(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -4955,8 +4955,8 @@ mod test {
                         πanotherline"});
     }
 
-    #[gpui::test]
-    async fn test_go_to_indent(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_go_to_indent(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state(
             indoc! {
@@ -5043,16 +5043,16 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_delete_key_can_remove_last_character(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_key_can_remove_last_character(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state("abˇc").await;
         cx.simulate_shared_keystrokes("delete").await;
         cx.shared_state().await.assert_eq("aˇb");
     }
 
-    #[gpui::test]
-    async fn test_forced_motion_delete_to_start_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_forced_motion_delete_to_start_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -5086,8 +5086,8 @@ mod test {
         assert!(!cx.cx.forced_motion());
     }
 
-    #[gpui::test]
-    async fn test_forced_motion_delete_to_middle_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_forced_motion_delete_to_middle_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -5141,8 +5141,8 @@ mod test {
         assert!(!cx.cx.forced_motion());
     }
 
-    #[gpui::test]
-    async fn test_forced_motion_delete_to_end_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_forced_motion_delete_to_end_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -5166,8 +5166,8 @@ mod test {
         assert!(!cx.cx.forced_motion());
     }
 
-    #[gpui::test]
-    async fn test_forced_motion_yank(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_forced_motion_yank(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -5215,8 +5215,8 @@ mod test {
         assert!(!cx.cx.forced_motion());
     }
 
-    #[gpui::test]
-    async fn test_inclusive_to_exclusive_delete(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_inclusive_to_exclusive_delete(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -5249,8 +5249,8 @@ mod test {
         assert!(!cx.cx.forced_motion());
     }
 
-    #[gpui::test]
-    async fn test_next_subword_start(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_next_subword_start(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Setup custom keybindings for subword motions so we can use the bindings
@@ -5310,8 +5310,8 @@ mod test {
         cx.assert_state("<?php\n\n$someVariable = ˇ2;", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_next_subword_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_next_subword_end(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Setup custom keybindings for subword motions so we can use the bindings
@@ -5369,8 +5369,8 @@ mod test {
         cx.set_state("foo;baˇr", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_previous_subword_start(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_previous_subword_start(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Setup custom keybindings for subword motions so we can use the bindings
@@ -5442,8 +5442,8 @@ mod test {
         cx.assert_state("ˇ<?php\n\n$someVariable = 2;", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_previous_subword_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_previous_subword_end(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Setup custom keybindings for subword motions so we can use the bindings
@@ -5491,8 +5491,8 @@ mod test {
         cx.assert_state("foˇo;bar", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_method_motion_with_expanded_diff_hunks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_method_motion_with_expanded_diff_hunks(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         let diff_base = indoc! {r#"
@@ -5598,8 +5598,8 @@ mod test {
         "#});
     }
 
-    #[gpui::test]
-    async fn test_comment_motion_with_expanded_diff_hunks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_comment_motion_with_expanded_diff_hunks(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         let diff_base = indoc! {r#"

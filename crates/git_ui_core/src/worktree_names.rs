@@ -79,7 +79,7 @@ mod tests {
     use super::*;
     use rand::rngs::StdRng;
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     fn test_generate_worktree_name_format(mut rng: StdRng) {
         let name = generate_worktree_name(&[], &mut rng).unwrap();
         let (adjective, noun) = name.split_once('-').expect("name should contain a hyphen");
@@ -90,7 +90,7 @@ mod tests {
         assert!(NOUNS.contains(&noun), "{noun:?} is not in NOUNS");
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_generate_worktree_name_avoids_existing(mut rng: StdRng) {
         let existing = &["swift-falcon", "calm-river", "bold-cedar"];
         let name = generate_worktree_name(existing, &mut rng).unwrap();
@@ -102,7 +102,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_generate_worktree_name_returns_none_when_stuck(mut rng: StdRng) {
         let all_names: Vec<String> = ADJECTIVES
             .iter()

@@ -85,7 +85,7 @@ use crate::mappings::keys::to_esc_str;
 #[derive(Clone, Copy, Default)]
 pub struct HeadlessTerminal(pub bool);
 
-impl gpui::Global for HeadlessTerminal {}
+impl gpui_runtime::Global for HeadlessTerminal {}
 
 impl HeadlessTerminal {
     pub fn is_enabled(cx: &App) -> bool {
@@ -3604,7 +3604,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_init_command_startup_marker_ignores_echoed_command(cx: &mut TestAppContext) {
         let terminal = cx.new(|cx| {
             TerminalBuilder::new_display_only(
@@ -3815,7 +3815,7 @@ mod tests {
     /// 25)` in headless/eval sandboxes: a `no_pty` task terminal must run
     /// without a PTY, capture stdout, and report its exit status.
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_pty_task_terminal_captures_output(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -3953,7 +3953,7 @@ mod tests {
     /// A left click that jitters by a pixel or two (e.g. the window-focusing
     /// click) must not begin a selection, otherwise `copy_on_select` would
     /// overwrite the clipboard. Regression test for #58970.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_click_jitter_does_not_start_selection(cx: &mut TestAppContext) {
         let terminal = init_terminal_test(cx, b"hello world\r\n");
 
@@ -3976,7 +3976,7 @@ mod tests {
     }
 
     /// A deliberate drag past the threshold must still start a selection.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_deliberate_drag_starts_selection(cx: &mut TestAppContext) {
         let terminal = init_terminal_test(cx, b"hello world\r\n");
 
@@ -4001,7 +4001,7 @@ mod tests {
     /// With mouse tracking active (e.g. htop), Shift is the escape hatch to
     /// select terminal text. Shift+drag must start a selection rather than being
     /// swallowed as a "extend existing selection" no-op. Regression test for #60254.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_shift_drag_selects_while_mouse_tracking(cx: &mut TestAppContext) {
         // `?1002h` enables button-event mouse tracking, `?1006h` selects SGR encoding.
         let terminal = init_terminal_test(cx, b"\x1b[?1002h\x1b[?1006hhello world\r\n");
@@ -4062,7 +4062,7 @@ mod tests {
 
     /// Shift+click with a selection already on screen must keep extending it
     /// (the behavior added in #25143), not re-anchor a fresh one.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_shift_click_extends_existing_selection(cx: &mut TestAppContext) {
         let terminal = init_terminal_test(cx, b"hello world\r\n");
 
@@ -4106,7 +4106,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_basic_terminal(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -4129,7 +4129,7 @@ mod tests {
     }
 
     #[cfg(unix)]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_foreground_process_command_tracks_path_command(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -4149,7 +4149,7 @@ mod tests {
 
     // TODO should be tested on Linux too, but does not work there well
     #[cfg(target_os = "macos")]
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_terminal_eof(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4217,7 +4217,7 @@ mod tests {
     }
 
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_terminal_closes_after_nonzero_exit(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4277,7 +4277,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_terminal_no_exit_on_spawn_failure(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -4358,7 +4358,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mouse_to_cell_test(mut rng: StdRng) {
         const ITERATIONS: usize = 10;
         const PRECISION: usize = 1000;
@@ -4407,7 +4407,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mouse_to_cell_clamp(mut rng: StdRng) {
         let size = crate::TerminalBounds {
             cell_width: Pixels::from(10.),
@@ -4439,7 +4439,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_size_coalesces_pixel_only_changes(cx: &mut TestAppContext) {
         let builder = cx.update(|cx| {
             TerminalBuilder::new_display_only(
@@ -4519,7 +4519,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_write_init_command_after_startup_clears_without_shell_command(
         cx: &mut TestAppContext,
     ) {
@@ -4559,7 +4559,7 @@ mod tests {
         assert_eq!(input_log, vec![b"agent\r".to_vec()]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_write_init_command_after_startup_skips_after_keyboard_input(
         cx: &mut TestAppContext,
     ) {
@@ -4590,7 +4590,7 @@ mod tests {
         assert_eq!(input_log, vec![b"user input".to_vec()]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_write_init_command_after_startup_skips_after_child_exit(cx: &mut TestAppContext) {
         let terminal = cx.new(|cx| {
             TerminalBuilder::new_display_only(
@@ -4630,7 +4630,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_write_output_converts_lf_to_crlf(cx: &mut TestAppContext) {
         let terminal = cx.new(|cx| {
             TerminalBuilder::new_display_only(
@@ -4677,7 +4677,7 @@ mod tests {
         assert!(line2_col0, "Second line should start at column 0");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_write_output_preserves_existing_crlf(cx: &mut TestAppContext) {
         let terminal = cx.new(|cx| {
             TerminalBuilder::new_display_only(
@@ -4718,7 +4718,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_write_output_preserves_bare_cr(cx: &mut TestAppContext) {
         let terminal = cx.new(|cx| {
             TerminalBuilder::new_display_only(
@@ -4760,7 +4760,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_display_only_write_output_ignores_osc52(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = settings::SettingsStore::test(cx);
@@ -4851,7 +4851,7 @@ mod tests {
             };
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_ctrl_click_same_position(cx: &mut TestAppContext) {
             let terminal = init_terminal_test(cx, b"Visit https://zed.dev/ for more\r\n");
 
@@ -4867,7 +4867,7 @@ mod tests {
             });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_hyperlink_ctrl_click_same_position_in_mouse_mode(cx: &mut TestAppContext) {
             let terminal = init_terminal_test(cx, b"Visit https://zed.dev/ for more\r\n");
 
@@ -4889,7 +4889,7 @@ mod tests {
         });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_hyperlink_ctrl_click_mismatch_in_mouse_mode_consumes_gesture(
             cx: &mut TestAppContext,
         ) {
@@ -4928,7 +4928,7 @@ mod tests {
         });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_plain_click_on_hyperlink_in_mouse_mode_is_reported(cx: &mut TestAppContext) {
             let terminal = init_terminal_test(cx, b"Visit https://zed.dev/ for more\r\n");
 
@@ -4953,7 +4953,7 @@ mod tests {
             });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_ctrl_click_on_non_hyperlink_in_mouse_mode_is_reported(
             cx: &mut TestAppContext,
         ) {
@@ -4981,7 +4981,7 @@ mod tests {
             });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_ctrl_click_in_mouse_mode_forwards_when_setting_disabled(
             cx: &mut TestAppContext,
         ) {
@@ -5016,7 +5016,7 @@ mod tests {
             });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_hyperlink_ctrl_click_drag_outside_bounds(cx: &mut TestAppContext) {
             let terminal = init_terminal_test(
                 cx,
@@ -5038,7 +5038,7 @@ mod tests {
             });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_ctrl_click_drag_within_bounds(cx: &mut TestAppContext) {
             let terminal = init_terminal_test(cx, b"Visit https://zed.dev/ for more\r\n");
 
@@ -5378,7 +5378,7 @@ mod tests {
         const ZED_DEV_STR: &str = "https://zed.dev/";
         const ZED_DEV_PT: GpuiPoint<Pixels> = point(px(30.0), px(2.5));
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_ctrl_hover_with_changing_content(cx: &mut TestAppContext) {
             let (test_entities, mut expected_hovered_word, cx) =
                 init_ctrl_hover_hyperlink_test_with_window(cx).await;
@@ -5498,7 +5498,7 @@ mod tests {
             });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_ctrl_hover_with_changing_bounds(cx: &mut TestAppContext) {
             let (test_entities, mut expected_hovered_word, cx) =
                 init_ctrl_hover_hyperlink_test_with_window(cx).await;
@@ -5529,7 +5529,7 @@ mod tests {
             });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_ctrl_hover_with_modifier_change_only(cx: &mut TestAppContext) {
             let (test_entities, mut expected_hovered_word, cx) =
                 init_ctrl_hover_hyperlink_test_with_window(cx).await;
@@ -5616,7 +5616,7 @@ mod tests {
     /// Test that kill_active_task properly terminates both the foreground process
     /// and the shell, allowing wait_for_completed_task to complete and output to be captured.
     #[cfg(unix)]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_kill_active_task_completes_and_captures_output(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -5651,7 +5651,7 @@ mod tests {
     }
 
     /// Test that kill_active_task on a task that's not running is a no-op
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_kill_active_task_on_completed_task_is_noop(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -5685,7 +5685,7 @@ mod tests {
         use util_macros::perf;
 
         #[perf]
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn scroll_long_line_benchmark(cx: &mut TestAppContext) {
             let (terminal, cx) =
                 init_terminal_test_with_window(cx, "long line ".repeat(1000).as_bytes());
@@ -5786,8 +5786,8 @@ mod tests {
     }
 
     fn make_display_only_terminal() -> Terminal {
-        let dispatcher = gpui::TestDispatcher::new(rand::random());
-        let executor = gpui::BackgroundExecutor::new(std::sync::Arc::new(dispatcher));
+        let dispatcher = gpui_platform::TestDispatcher::new(rand::random());
+        let executor = gpui_platform::BackgroundExecutor::new(std::sync::Arc::new(dispatcher));
         TerminalBuilder::new_display_only(
             SettingsCursorShape::default(),
             AlternateScroll::On,

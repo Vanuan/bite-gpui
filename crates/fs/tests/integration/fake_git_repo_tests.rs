@@ -4,7 +4,7 @@ use serde_json::json;
 use std::path::{Path, PathBuf};
 use util::path;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fake_worktree_lifecycle(cx: &mut TestAppContext) {
     let fs = FakeFs::new(cx.executor());
     fs.insert_tree("/project", json!({".git": {}, "file.txt": "content"}))
@@ -121,7 +121,7 @@ async fn test_fake_worktree_lifecycle(cx: &mut TestAppContext) {
     assert!(!fs.is_dir(&worktree_2_dir).await);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_checkpoints(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor);
     fs.insert_tree(

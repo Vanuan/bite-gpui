@@ -7,7 +7,7 @@ use gpui::{
     App, Context, Global, Menu, MenuItem, SharedString, SystemMenuType, Window, WindowOptions,
     actions, div, prelude::*,
 };
-use gpui_platform::application;
+use gpui::application;
 
 struct SetMenus;
 
@@ -53,7 +53,7 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }
 

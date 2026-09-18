@@ -3,7 +3,7 @@ use std::thread;
 use std::time::{Duration, Instant};
 
 use client::Client;
-use gpui::profiler::hang::{HangDetector, SerializedHangIncident};
+use gpui_runtime::profiler::hang::{HangDetector, SerializedHangIncident};
 use gpui::{AppContext, TasksIncluded, profiler};
 use parking_lot::Mutex;
 use ui::App;

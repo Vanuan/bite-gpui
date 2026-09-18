@@ -14,7 +14,7 @@ use task::{AttachRequest, SharedTaskContext};
 use tests::{init_test, init_test_workspace};
 use util::path;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_direct_attach_to_process(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -72,7 +72,7 @@ async fn test_direct_attach_to_process(executor: BackgroundExecutor, cx: &mut Te
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_show_attach_modal_and_select_process(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -181,7 +181,7 @@ async fn test_show_attach_modal_and_select_process(
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_attach_with_pick_pid_variable(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 

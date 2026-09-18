@@ -457,7 +457,7 @@ mod tests {
             .collect()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_compatible_provider_id_collision_resolves_when_one_entry_is_removed(cx: &mut App) {
         let (client, credentials_provider) = init_test(cx);
         let registry = cx.new(|_| LanguageModelRegistry::default());
@@ -502,7 +502,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_compatible_provider_changes_kind_and_unregisters(cx: &mut App) {
         let (client, credentials_provider) = init_test(cx);
         let registry = cx.new(|_| LanguageModelRegistry::default());

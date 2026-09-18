@@ -1293,8 +1293,8 @@ impl ConversationView {
         });
 
         let count = thread.read(cx).entries().len();
-        let list_state = ListState::new(0, gpui::ListAlignment::Top, px(2048.0));
-        list_state.set_follow_mode(gpui::FollowMode::Tail);
+        let list_state = ListState::new(0, gpui_runtime::ListAlignment::Top, px(2048.0));
+        list_state.set_follow_mode(gpui_runtime::FollowMode::Tail);
 
         entry_view_state.update(cx, |view_state, cx| {
             for ix in 0..count {
@@ -3807,7 +3807,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drop(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3818,7 +3818,7 @@ pub(crate) mod tests {
         assert!(!weak_view.is_upgradable());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drop_preserves_shared_pending_request_elicitations(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -3868,7 +3868,7 @@ pub(crate) mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_state_transition_preserves_shared_pending_request_elicitations(
         cx: &mut TestAppContext,
     ) {
@@ -3923,7 +3923,7 @@ pub(crate) mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_successful_session_creation_clears_resolved_request_elicitations(
         cx: &mut TestAppContext,
     ) {
@@ -4004,7 +4004,7 @@ pub(crate) mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_external_source_prompt_requires_manual_send(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4027,7 +4027,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_external_source_prompt_warning_clears_after_send(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4054,7 +4054,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_agent_code_span_resolver_resolves_worktree_paths(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4130,7 +4130,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_for_stop_event(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4156,7 +4156,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_notification_when_queued_message_will_be_auto_sent(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4222,7 +4222,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_queued_message_steer_defaults_off_and_toggles(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4263,7 +4263,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_queue_resumes_after_stop_and_new_message(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4332,7 +4332,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_for_error(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4359,7 +4359,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_acp_server_exit_transitions_conversation_to_load_error_without_panic(
         cx: &mut TestAppContext,
     ) {
@@ -4389,7 +4389,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_view_seeds_existing_elicitation_form_state(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -4414,7 +4414,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resume_without_history_adds_notice(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4549,7 +4549,7 @@ pub(crate) mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restored_threads_keep_available_commands(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4618,7 +4618,7 @@ pub(crate) mod tests {
         assert!(contents_result.is_ok());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resume_thread_uses_session_cwd_when_inside_project(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4674,7 +4674,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_refusal_handling(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4701,7 +4701,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_connect_failure_transitions_to_load_error(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4736,7 +4736,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reset_preserves_session_id_after_load_error(cx: &mut TestAppContext) {
         use crate::thread_metadata_store::{ThreadId, ThreadMetadata};
         use chrono::Utc;
@@ -4852,7 +4852,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_auth_required_on_initial_connect(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4966,7 +4966,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_for_tool_authorization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5008,7 +5008,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_when_panel_hidden(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5041,7 +5041,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_still_works_when_window_inactive(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5070,7 +5070,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_when_different_conversation_is_active_in_visible_panel(
         cx: &mut TestAppContext,
     ) {
@@ -5174,7 +5174,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_notification_when_sidebar_open_but_different_thread_focused(
         cx: &mut TestAppContext,
     ) {
@@ -5262,7 +5262,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_when_sidebar_open_but_thread_list_hidden(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5335,7 +5335,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_dismissed_when_sidebar_opens(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5423,7 +5423,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_when_workspace_is_background_in_multi_workspace(
         cx: &mut TestAppContext,
     ) {
@@ -5583,7 +5583,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_respects_never_setting(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5622,7 +5622,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_notification_closed_when_thread_view_dropped(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5680,7 +5680,7 @@ pub(crate) mod tests {
         setup_conversation_view_with_initial_content_opt(agent, None, cx).await
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_completed_plan_snapshot_keeps_list_state_in_sync(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6339,7 +6339,7 @@ pub(crate) mod tests {
             self: Rc<Self>,
             project: Entity<Project>,
             _work_dirs: PathList,
-            cx: &mut gpui::App,
+            cx: &mut gpui_runtime::App,
         ) -> Task<gpui::Result<Entity<AcpThread>>> {
             let thread = build_test_thread(
                 self,
@@ -6431,7 +6431,7 @@ pub(crate) mod tests {
             self: Rc<Self>,
             project: Entity<Project>,
             work_dirs: PathList,
-            cx: &mut gpui::App,
+            cx: &mut gpui_runtime::App,
         ) -> Task<gpui::Result<Entity<AcpThread>>> {
             if !*self.authenticated.lock() {
                 return Task::ready(Err(acp_thread::AuthRequired::new()
@@ -6521,7 +6521,7 @@ pub(crate) mod tests {
             self: Rc<Self>,
             project: Entity<Project>,
             work_dirs: PathList,
-            cx: &mut gpui::App,
+            cx: &mut gpui_runtime::App,
         ) -> Task<gpui::Result<Entity<AcpThread>>> {
             Task::ready(Ok(cx.new(|cx| {
                 let action_log = cx.new(|_| ActionLog::new(project.clone()));
@@ -6599,7 +6599,7 @@ pub(crate) mod tests {
             self: Rc<Self>,
             project: Entity<Project>,
             work_dirs: PathList,
-            cx: &mut gpui::App,
+            cx: &mut gpui_runtime::App,
         ) -> Task<gpui::Result<Entity<AcpThread>>> {
             *self.captured_work_dirs.lock() = Some(work_dirs.clone());
             let action_log = cx.new(|_| ActionLog::new(project.clone()));
@@ -6735,7 +6735,7 @@ pub(crate) mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rewind_views(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6909,7 +6909,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_regenerate_keeps_pending_subagent_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7081,7 +7081,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scroll_to_most_recent_user_prompt(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7141,7 +7141,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scroll_to_most_recent_user_prompt_falls_back_to_bottom_without_user_messages(
         cx: &mut TestAppContext,
     ) {
@@ -7158,7 +7158,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_finds_matches_across_entries(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7256,7 +7256,7 @@ pub(crate) mod tests {
         assert_eq!(active_text_apple.as_deref(), Some("0/0"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_includes_expanded_thinking_blocks(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7336,7 +7336,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_includes_expanded_tool_call_content(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7399,7 +7399,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_scrolls_to_later_user_message_match(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7471,7 +7471,7 @@ pub(crate) mod tests {
 
     /// Passive rescans (streaming updates, unrelated expansion toggles, query
     /// refinement) must not yank the list back to the active match.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_passive_rescan_preserves_scroll(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7535,7 +7535,7 @@ pub(crate) mod tests {
         // Simulate the user scrolling elsewhere, then a passive rescan re-running
         // the matcher while the same hit stays active.
         thread_view.update(cx, |view, _| {
-            view.list_state.scroll_to(gpui::ListOffset {
+            view.list_state.scroll_to(gpui_runtime::ListOffset {
                 item_ix: 0,
                 offset_in_item: gpui::px(0.),
             });
@@ -7554,7 +7554,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_dismiss_clears_highlights(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7604,7 +7604,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_release_clears_markdown_highlights(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7681,7 +7681,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_highlights_expanded_compaction_details(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7776,7 +7776,7 @@ pub(crate) mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_tracks_tool_name_fallback(cx: &mut TestAppContext) {
         init_test(cx);
         let (conversation_view, cx) =
@@ -7844,7 +7844,7 @@ pub(crate) mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_refreshes_on_new_thread_entry(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7925,7 +7925,7 @@ pub(crate) mod tests {
     }
 
     /// Regression test for re-entering `ThreadView` during search navigation.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_select_next_from_thread_view_update_does_not_panic(
         cx: &mut TestAppContext,
     ) {
@@ -7993,7 +7993,7 @@ pub(crate) mod tests {
     }
 
     /// Past user-message hits must be painted on the inner `Editor`.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_highlights_user_message_editor(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8067,7 +8067,7 @@ pub(crate) mod tests {
     }
 
     /// `editor::Cancel` should dismiss thread search before reaching workspace handlers.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_editor_cancel_dismisses_bar(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8109,7 +8109,7 @@ pub(crate) mod tests {
     }
 
     /// JetBrains keymaps route Shift+Enter through `editor::NewlineBelow`.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_shift_enter_navigates_with_jetbrains_keymap(
         cx: &mut TestAppContext,
     ) {
@@ -8223,7 +8223,7 @@ pub(crate) mod tests {
     /// `f3`/`shift-f3` are bound in the broad `AcpThread` context (like buffer
     /// search's pane-level `cmd-g`), so they must navigate matches even when
     /// focus is outside the search bar.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_search_navigates_from_outside_search_bar(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -8316,7 +8316,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_message_editing_cancel(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8391,7 +8391,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_message_doesnt_send_if_empty(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8429,7 +8429,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_message_editing_regenerate(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8537,7 +8537,7 @@ pub(crate) mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_message_editing_while_generating(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8636,7 +8636,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stale_stop_does_not_disable_follow_tail_during_regenerate(
         cx: &mut TestAppContext,
     ) {
@@ -8754,7 +8754,7 @@ pub(crate) mod tests {
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_escape_cancels_generation_from_conversation_focus(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8778,7 +8778,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_escape_cancels_generation_from_editor_focus(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8802,7 +8802,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_escape_when_idle_is_noop(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8834,7 +8834,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_interrupt(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8963,7 +8963,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_message_editing_insert_selections(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9065,7 +9065,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_insert_selections(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9135,7 +9135,7 @@ pub(crate) mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_permission_buttons_terminal_with_pattern(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9247,7 +9247,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_permission_buttons_edit_file_with_path_pattern(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9337,7 +9337,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_permission_buttons_fetch_with_domain_pattern(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9427,7 +9427,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_permission_buttons_without_pattern(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9531,7 +9531,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_authorize_tool_call_action_triggers_authorization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9609,7 +9609,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_authorize_tool_call_action_with_pattern_option(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9688,7 +9688,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_granularity_selection_updates_state(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9766,7 +9766,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_allow_button_uses_selected_granularity(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9863,7 +9863,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deny_button_uses_selected_granularity(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9925,7 +9925,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_option_id_transformation_for_allow() {
         let permission_options = ToolPermissionContext::new(
             TerminalTool::NAME,
@@ -9953,7 +9953,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_option_id_transformation_for_deny() {
         let permission_options = ToolPermissionContext::new(
             TerminalTool::NAME,
@@ -10154,7 +10154,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_manually_editing_title_updates_acp_thread_title(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10186,7 +10186,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_max_tokens_error_is_rendered(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10283,7 +10283,7 @@ pub(crate) mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conversation_multiple_tool_calls_fifo_ordering(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10365,7 +10365,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conversation_subagent_scoped_pending_tool_call(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10422,7 +10422,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conversation_parent_pending_tool_call_returns_first_across_threads(
         cx: &mut TestAppContext,
     ) {
@@ -10605,7 +10605,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_permission_row_hidden_when_inline_bounds_unavailable(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10629,7 +10629,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pending_tool_call_for_session_scopes_to_that_session(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10673,7 +10673,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_permission_row_scroll_to_dismisses_row(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10725,7 +10725,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_permission_row_does_not_flicker_when_activity_bar_squeezes_list(
         cx: &mut TestAppContext,
     ) {
@@ -10790,7 +10790,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_permission_row_shown_when_inline_prompt_is_above_viewport(
         cx: &mut TestAppContext,
     ) {
@@ -10853,7 +10853,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_permission_row_disappears_when_authorized(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10907,7 +10907,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_permission_row_ignores_subagent_requests(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10976,7 +10976,7 @@ pub(crate) mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_move_queued_message_to_empty_main_editor(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -11015,7 +11015,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_move_queued_message_to_non_empty_main_editor(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -11062,7 +11062,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_move_up_in_empty_editor_restores_last_queued_message(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -11123,7 +11123,7 @@ pub(crate) mod tests {
         assert_eq!(text, "second queued");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_paste_text_into_queued_message_promotes_to_main_editor(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -11138,7 +11138,7 @@ pub(crate) mod tests {
         assert_eq!(text, "queued PASTEDmessage");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_paste_image_into_queued_message_promotes_to_main_editor(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -11225,7 +11225,7 @@ pub(crate) mod tests {
         (conversation_view, cx)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_all_sessions_skips_when_unsupported(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -11284,7 +11284,7 @@ pub(crate) mod tests {
             .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_all_sessions_calls_close_when_supported(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -11326,7 +11326,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_session_returns_error_when_unsupported(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -11388,7 +11388,7 @@ pub(crate) mod tests {
             self: Rc<Self>,
             project: Entity<Project>,
             work_dirs: PathList,
-            cx: &mut gpui::App,
+            cx: &mut gpui_runtime::App,
         ) -> Task<gpui::Result<Entity<AcpThread>>> {
             let action_log = cx.new(|_| ActionLog::new(project.clone()));
             let thread = cx.new(|cx| {

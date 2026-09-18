@@ -1078,7 +1078,7 @@ mod tests {
         assert!(pairs.contains(&("nonce".into(), "abc123".into())));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_concurrent_refresh_deduplicates(cx: &mut TestAppContext) {
         let refresh_count = Arc::new(AtomicUsize::new(0));
         let refresh_count_clone = refresh_count.clone();
@@ -1123,7 +1123,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_fresh_credentials_skip_refresh(cx: &mut TestAppContext) {
         let refresh_count = Arc::new(AtomicUsize::new(0));
         let refresh_count_clone = refresh_count.clone();
@@ -1154,7 +1154,7 @@ mod tests {
         assert_eq!(refresh_count.load(Ordering::SeqCst), 0);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_credentials_returns_no_api_key(cx: &mut TestAppContext) {
         let http: Arc<dyn HttpClient> = FakeHttpClient::create(|_| async {
             Ok(http_client::Response::builder()
@@ -1173,7 +1173,7 @@ mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_fatal_refresh_clears_auth_state(cx: &mut TestAppContext) {
         let http: Arc<dyn HttpClient> = FakeHttpClient::create(move |_request| async move {
             Ok(http_client::Response::builder()
@@ -1195,7 +1195,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_transient_refresh_keeps_credentials(cx: &mut TestAppContext) {
         let http: Arc<dyn HttpClient> = FakeHttpClient::create(move |_request| async move {
             Ok(http_client::Response::builder()
@@ -1217,7 +1217,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_refresh_keeps_previous_refresh_token_when_omitted(cx: &mut TestAppContext) {
         let http: Arc<dyn HttpClient> = FakeHttpClient::create(move |_request| async move {
             let body = fake_token_response(false);
@@ -1236,7 +1236,7 @@ mod tests {
         assert_eq!(result.refresh_token, "old_refresh");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sign_out_during_refresh_discards_result(cx: &mut TestAppContext) {
         let (gate_tx, gate_rx) = futures::channel::oneshot::channel::<()>();
         let gate_rx = Arc::new(Mutex::new(Some(gate_rx)));
@@ -1276,7 +1276,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_fatal_refresh_after_sign_out_keeps_new_session(cx: &mut TestAppContext) {
         let (gate_tx, gate_rx) = futures::channel::oneshot::channel::<()>();
         let gate_rx = Arc::new(Mutex::new(Some(gate_rx)));
@@ -1341,7 +1341,7 @@ mod tests {
         assert!(creds_provider.storage.lock().is_some());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sign_out_completes_fully(cx: &mut TestAppContext) {
         let creds_provider = Arc::new(FakeCredentialsProvider::new());
         creds_provider
@@ -1371,7 +1371,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initial_load_restores_persisted_credentials(cx: &mut TestAppContext) {
         let creds = make_fresh_credentials();
         let creds_json = serde_json::to_vec(&creds).unwrap();

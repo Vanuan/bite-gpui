@@ -40,7 +40,7 @@ pub enum ResolvedProjectPath {
 /// project using the provided `Fs`. The returned paths can be passed to
 /// [`resolve_project_path`] and related helpers so that they don't need to
 /// perform blocking filesystem I/O themselves.
-pub async fn canonicalize_worktree_roots<C: gpui::AppContext>(
+pub async fn canonicalize_worktree_roots<C: gpui_runtime::AppContext>(
     project: &Entity<Project>,
     fs: &Arc<dyn Fs>,
     cx: &C,
@@ -881,7 +881,7 @@ pub fn authorize_dirty_buffer(
 mod tests {
     use super::*;
     use fs::Fs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::{FakeFs, Project};
     use serde_json::json;
     use settings::SettingsStore;
@@ -916,7 +916,7 @@ mod tests {
         roots
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_creatable_global_skill_path_allows_tilde_path(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -934,7 +934,7 @@ mod tests {
         assert_eq!(resolved, expected_path);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_global_skill_path_allows_tilde_path(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -962,7 +962,7 @@ mod tests {
         assert_eq!(resolved, skill_file);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_global_skill_path_allows_symlinked_skill_dir(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1002,7 +1002,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_global_skill_path_rejects_escape_from_symlinked_skill_dir(
         cx: &mut TestAppContext,
     ) {
@@ -1050,7 +1050,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_creatable_global_skill_path_rejects_other_home_paths(
         cx: &mut TestAppContext,
     ) {
@@ -1076,7 +1076,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_creatable_global_skill_path_rejects_symlink_escape(
         cx: &mut TestAppContext,
     ) {
@@ -1107,7 +1107,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_global_skill_path_resolvers_reject_absolute_paths_when_skills_dir_is_symlink_to_root(
         cx: &mut TestAppContext,
     ) {
@@ -1151,7 +1151,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_global_skill_path_resolvers_reject_absolute_paths_when_skills_dir_is_symlink_to_home(
         cx: &mut TestAppContext,
     ) {
@@ -1187,7 +1187,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_project_path_safe_for_normal_files(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1230,7 +1230,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_project_path_detects_symlink_escape(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1281,7 +1281,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_project_path_allows_intra_project_symlinks(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1318,7 +1318,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_project_path_missing_child_under_external_symlink(
         cx: &mut TestAppContext,
     ) {
@@ -1367,7 +1367,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_project_path_allows_cross_worktree_symlinks(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1419,7 +1419,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_project_path_missing_child_under_cross_worktree_symlink(
         cx: &mut TestAppContext,
     ) {

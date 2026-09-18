@@ -1029,9 +1029,9 @@ impl EditorElement {
         visible_display_row_range: Range<DisplayRow>,
         line_layouts: &[LineWithInvisibles],
         text_hitbox: &Hitbox,
-        content_origin: gpui::Point<Pixels>,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        content_origin: gpui_types::Point<Pixels>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         line_height: Pixels,
         em_width: Pixels,
         em_advance: Pixels,
@@ -1277,9 +1277,9 @@ impl EditorElement {
         visible_display_row_range: Range<DisplayRow>,
         line_layouts: &[LineWithInvisibles],
         text_hitbox: &Hitbox,
-        content_origin: gpui::Point<Pixels>,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        content_origin: gpui_types::Point<Pixels>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         line_height: Pixels,
         window: &mut Window,
         cx: &mut App,
@@ -1375,8 +1375,8 @@ impl EditorElement {
         &self,
         snapshot: &EditorSnapshot,
         scrollbar_layout_information: &ScrollbarLayoutInformation,
-        content_offset: gpui::Point<Pixels>,
-        scroll_position: gpui::Point<ScrollOffset>,
+        content_offset: gpui_types::Point<Pixels>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
         non_visible_cursors: bool,
         right_margin: Pixels,
         editor_width: Pixels,
@@ -1466,7 +1466,7 @@ impl EditorElement {
         &self,
         snapshot: &EditorSnapshot,
         minimap_width: Pixels,
-        scroll_position: gpui::Point<f64>,
+        scroll_position: gpui_types::Point<f64>,
         scrollbar_layout_information: &ScrollbarLayoutInformation,
         scrollbar_layout: Option<&EditorScrollbars>,
         window: &mut Window,
@@ -1525,7 +1525,7 @@ impl EditorElement {
         };
 
         let minimap_bounds = Bounds::from_anchor_and_size(
-            gpui::Anchor::TopRight,
+            gpui_types::Anchor::TopRight,
             top_right_anchor,
             size(minimap_width, editor_bounds.size.height),
         );
@@ -1649,7 +1649,7 @@ impl EditorElement {
         line_height: Pixels,
         gutter_dimensions: &GutterDimensions,
         gutter_settings: crate::editor_settings::Gutter,
-        scroll_position: gpui::Point<ScrollOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
         start_row: DisplayRow,
         gutter_hitbox: &Hitbox,
         window: &mut Window,
@@ -1681,7 +1681,7 @@ impl EditorElement {
 
     fn prepaint_expand_toggles(
         &self,
-        expand_toggles: &mut [Option<(AnyElement, gpui::Point<Pixels>)>],
+        expand_toggles: &mut [Option<(AnyElement, gpui_types::Point<Pixels>)>],
         window: &mut Window,
         cx: &mut App,
     ) {
@@ -1697,9 +1697,9 @@ impl EditorElement {
         trailers: Vec<Option<AnyElement>>,
         lines: &[LineWithInvisibles],
         line_height: Pixels,
-        content_origin: gpui::Point<Pixels>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
-        scroll_position: gpui::Point<ScrollOffset>,
+        content_origin: gpui_types::Point<Pixels>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
         start_row: DisplayRow,
         em_width: Pixels,
         window: &mut Window,
@@ -1746,7 +1746,7 @@ impl EditorElement {
         gutter_hitbox: &Hitbox,
         display_rows: Range<DisplayRow>,
         snapshot: &EditorSnapshot,
-        scroll_position: gpui::Point<ScrollOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
         window: &mut Window,
         cx: &mut App,
     ) -> Vec<(DisplayDiffHunk, Option<Hitbox>)> {
@@ -1780,10 +1780,10 @@ impl EditorElement {
         line_layouts: &[LineWithInvisibles],
         crease_trailers: &[Option<CreaseTrailerLayout>],
         row_block_types: &HashMap<DisplayRow, bool>,
-        content_origin: gpui::Point<Pixels>,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
-        edit_prediction_popover_origin: Option<gpui::Point<Pixels>>,
+        content_origin: gpui_types::Point<Pixels>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
+        edit_prediction_popover_origin: Option<gpui_types::Point<Pixels>>,
         start_row: DisplayRow,
         end_row: DisplayRow,
         line_height: Pixels,
@@ -1940,9 +1940,9 @@ impl EditorElement {
     fn layout_inline_code_actions(
         &self,
         display_point: DisplayPoint,
-        content_origin: gpui::Point<Pixels>,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        content_origin: gpui_types::Point<Pixels>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         line_height: Pixels,
         snapshot: &EditorSnapshot,
         window: &mut Window,
@@ -2104,9 +2104,9 @@ impl EditorElement {
         line_layout: &LineWithInvisibles,
         crease_trailer: Option<&CreaseTrailerLayout>,
         em_width: Pixels,
-        content_origin: gpui::Point<Pixels>,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        content_origin: gpui_types::Point<Pixels>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         line_height: Pixels,
         window: &mut Window,
         cx: &mut App,
@@ -2290,7 +2290,7 @@ impl EditorElement {
         &self,
         buffer_rows: &[RowInfo],
         em_width: Pixels,
-        scroll_position: gpui::Point<ScrollOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
         start_row: DisplayRow,
         line_height: Pixels,
         gutter_hitbox: &Hitbox,
@@ -2360,10 +2360,10 @@ impl EditorElement {
 
     fn layout_indent_guides(
         &self,
-        content_origin: gpui::Point<Pixels>,
-        text_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
+        text_origin: gpui_types::Point<Pixels>,
         visible_buffer_range: Range<MultiBufferRow>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         line_height: Pixels,
         snapshot: &DisplaySnapshot,
         window: &mut Window,
@@ -2440,8 +2440,8 @@ impl EditorElement {
     fn layout_wrap_guides(
         &self,
         em_advance: Pixels,
-        scroll_position: gpui::Point<f64>,
-        content_origin: gpui::Point<Pixels>,
+        scroll_position: gpui_types::Point<f64>,
+        content_origin: gpui_types::Point<Pixels>,
         scrollbar_layout: Option<&EditorScrollbars>,
         vertical_scrollbar_width: Pixels,
         hitbox: &Hitbox,
@@ -2474,7 +2474,7 @@ impl EditorElement {
         row_range: Range<MultiBufferRow>,
         line_height: Pixels,
         snapshot: &DisplaySnapshot,
-    ) -> (f64, gpui::Pixels, Range<DisplayRow>) {
+    ) -> (f64, gpui_types::Pixels, Range<DisplayRow>) {
         let start_point = Point::new(row_range.start.0, 0);
         let end_point = Point::new(row_range.end.0, 0);
 
@@ -2737,12 +2737,12 @@ impl EditorElement {
         gutter_dimensions: GutterDimensions,
         em_width: Pixels,
         line_height: Pixels,
-        scroll_position: gpui::Point<ScrollOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
         start_row: DisplayRow,
         buffer_rows: &[RowInfo],
         window: &mut Window,
         cx: &mut App,
-    ) -> Vec<Option<(AnyElement, gpui::Point<Pixels>)>> {
+    ) -> Vec<Option<(AnyElement, gpui_types::Point<Pixels>)>> {
         if self.editor.read(cx).disable_expand_excerpt_buttons {
             return vec![];
         }
@@ -3227,9 +3227,9 @@ impl EditorElement {
         start_row: DisplayRow,
         line_layouts: &mut [LineWithInvisibles],
         line_height: Pixels,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
-        content_origin: gpui::Point<Pixels>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
+        content_origin: gpui_types::Point<Pixels>,
         window: &mut Window,
         cx: &mut App,
     ) -> SmallVec<[AnyElement; 1]> {
@@ -3822,8 +3822,8 @@ impl EditorElement {
         hitbox: &Hitbox,
         gutter_hitbox: &Hitbox,
         line_height: Pixels,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         editor_margins: &EditorMargins,
         window: &mut Window,
         cx: &mut App,
@@ -3874,10 +3874,10 @@ impl EditorElement {
         &self,
         line_height: Pixels,
         text_hitbox: &Hitbox,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         right_margin: Pixels,
         start_row: DisplayRow,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         line_layouts: &[LineWithInvisibles],
         cursor: DisplayPoint,
         cursor_point: Point,
@@ -3929,7 +3929,7 @@ impl EditorElement {
 
         let cursor_row_layout = &line_layouts[cursor.row().minus(start_row) as usize];
         let target_position = content_origin
-            + gpui::Point {
+            + gpui_types::Point {
                 x: cmp::max(
                     px(0.),
                     Pixels::from(
@@ -4091,9 +4091,9 @@ impl EditorElement {
         &self,
         line_height: Pixels,
         text_hitbox: &Hitbox,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         right_margin: Pixels,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         gutter_overshoot: Pixels,
         window: &mut Window,
         cx: &mut App,
@@ -4110,7 +4110,7 @@ impl EditorElement {
         // Context menu was spawned via a click on a gutter. Ensure it's a bit closer to the
         // indicator than just a plain first column of the text field.
         let target_position = content_origin
-            + gpui::Point {
+            + gpui_types::Point {
                 x: -gutter_overshoot,
                 y: Pixels::from(
                     gutter_row.next_row().as_f64() * ScrollPixelOffset::from(line_height)
@@ -4157,7 +4157,7 @@ impl EditorElement {
 
     fn layout_popovers_above_or_below_line(
         &self,
-        target_position: gpui::Point<Pixels>,
+        target_position: gpui_types::Point<Pixels>,
         line_height: Pixels,
         min_height: Pixels,
         max_height: Pixels,
@@ -4243,7 +4243,7 @@ impl EditorElement {
                 .max()
                 .unwrap_or_default();
 
-            let mut current_position = gpui::Point {
+            let mut current_position = gpui_types::Point {
                 // Snap the right edge of the list to the right edge of the window if its horizontal bounds
                 // overflow. Include space for the scrollbar.
                 x: target_position
@@ -4406,8 +4406,8 @@ impl EditorElement {
         snapshot: &EditorSnapshot,
         hitbox: &Hitbox,
         visible_display_row_range: Range<DisplayRow>,
-        content_origin: gpui::Point<Pixels>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        content_origin: gpui_types::Point<Pixels>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         line_layouts: &[LineWithInvisibles],
         line_height: Pixels,
         em_width: Pixels,
@@ -4492,7 +4492,7 @@ impl EditorElement {
 
         fn draw_occluder(
             width: Pixels,
-            origin: gpui::Point<Pixels>,
+            origin: gpui_types::Point<Pixels>,
             window: &mut Window,
             cx: &mut App,
         ) {
@@ -4506,7 +4506,7 @@ impl EditorElement {
         }
 
         fn place_popovers_above(
-            hovered_point: gpui::Point<Pixels>,
+            hovered_point: gpui_types::Point<Pixels>,
             measured_hover_popovers: Vec<MeasuredHoverPopover>,
             window: &mut Window,
             cx: &mut App,
@@ -4530,7 +4530,7 @@ impl EditorElement {
         }
 
         fn place_popovers_below(
-            hovered_point: gpui::Point<Pixels>,
+            hovered_point: gpui_types::Point<Pixels>,
             measured_hover_popovers: Vec<MeasuredHoverPopover>,
             line_height: Pixels,
             window: &mut Window,
@@ -4733,7 +4733,7 @@ impl EditorElement {
         newest_cursor_row: Option<DisplayRow>,
         line_height: Pixels,
         right_margin: Pixels,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         sticky_header_height: Pixels,
         display_hunks: &[(DisplayDiffHunk, Option<Hitbox>)],
         highlighted_rows: &BTreeMap<DisplayRow, LineHighlight>,
@@ -4832,10 +4832,10 @@ impl EditorElement {
                         continue;
                     }
 
-                    let bounds = Bounds::new(gpui::Point::new(x, y), size);
+                    let bounds = Bounds::new(gpui_types::Point::new(x, y), size);
                     control_bounds.push((display_row_range.start, bounds));
 
-                    window.with_absolute_element_offset(gpui::Point::new(x, y), |window| {
+                    window.with_absolute_element_offset(gpui_types::Point::new(x, y), |window| {
                         element.prepaint(window, cx)
                     });
                     controls.push(element);
@@ -4849,8 +4849,8 @@ impl EditorElement {
     fn layout_signature_help(
         &self,
         hitbox: &Hitbox,
-        content_origin: gpui::Point<Pixels>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        content_origin: gpui_types::Point<Pixels>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         newest_selection_head: Option<DisplayPoint>,
         start_row: DisplayRow,
         line_layouts: &[LineWithInvisibles],
@@ -5423,7 +5423,7 @@ impl EditorElement {
     }
 
     fn diff_hunk_bounds(
-        scroll_position: gpui::Point<ScrollOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
         line_height: Pixels,
         gutter_bounds: Bounds<Pixels>,
         hunk: &DisplayDiffHunk,
@@ -5802,7 +5802,7 @@ impl EditorElement {
         let line_end_overshoot = layout.line_end_overshoot();
 
         // A softer than perfect black
-        let redaction_color = gpui::rgb(0x0e1111);
+        let redaction_color = gpui_types::rgb(0x0e1111);
 
         window.paint_layer(layout.position_map.text_hitbox.bounds, |window| {
             for range in layout.redacted_ranges.iter() {
@@ -6776,7 +6776,7 @@ impl EditorElement {
 struct Gutter<'a> {
     line_height: Pixels,
     range: Range<DisplayRow>,
-    scroll_position: gpui::Point<ScrollOffset>,
+    scroll_position: gpui_types::Point<ScrollOffset>,
     dimensions: &'a GutterDimensions,
     hitbox: &'a Hitbox,
     snapshot: &'a EditorSnapshot,
@@ -6866,12 +6866,12 @@ impl Gutter<'_> {
 pub fn render_breadcrumb_text(
     mut segments: Vec<HighlightedText>,
     breadcrumb_font: Option<Font>,
-    prefix: Option<gpui::AnyElement>,
+    prefix: Option<gpui_runtime::AnyElement>,
     active_item: &dyn ItemHandle,
     multibuffer_header: bool,
     window: &mut Window,
     cx: &App,
-) -> gpui::AnyElement {
+) -> gpui_runtime::AnyElement {
     const MAX_SEGMENTS: usize = 12;
 
     let element = h_flex().flex_grow_1().text_ui(cx);
@@ -7022,9 +7022,9 @@ pub fn render_breadcrumb_text(
 
 fn apply_dirty_filename_style(
     segment: &HighlightedText,
-    text_style: &gpui::TextStyle,
+    text_style: &gpui_runtime::TextStyle,
     cx: &App,
-) -> Option<gpui::AnyElement> {
+) -> Option<gpui_runtime::AnyElement> {
     let text = segment.text.replace('\n', " ");
 
     let filename_position = std::path::Path::new(segment.text.as_ref())
@@ -7049,7 +7049,7 @@ fn apply_dirty_filename_style(
         );
     }
 
-    let highlight_style = gpui::HighlightStyle {
+    let highlight_style = gpui_runtime::HighlightStyle {
         font_weight: Some(bold_weight),
         color: Some(default_color),
         ..Default::default()
@@ -7507,10 +7507,10 @@ impl LineWithInvisibles {
     fn prepaint(
         &mut self,
         line_height: Pixels,
-        scroll_position: gpui::Point<ScrollOffset>,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
         row: DisplayRow,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         line_elements: &mut SmallVec<[AnyElement; 1]>,
         window: &mut Window,
         cx: &mut App,
@@ -7530,8 +7530,8 @@ impl LineWithInvisibles {
     fn prepaint_with_custom_offset(
         &mut self,
         line_height: Pixels,
-        scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
-        content_origin: gpui::Point<Pixels>,
+        scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
+        content_origin: gpui_types::Point<Pixels>,
         line_y: Pixels,
         line_elements: &mut SmallVec<[AnyElement; 1]>,
         window: &mut Window,
@@ -7565,7 +7565,7 @@ impl LineWithInvisibles {
         &self,
         layout: &EditorLayout,
         row: DisplayRow,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         whitespace_setting: ShowWhitespaceSetting,
         selection_ranges: &[Range<DisplayPoint>],
         window: &mut Window,
@@ -7588,7 +7588,7 @@ impl LineWithInvisibles {
         &self,
         layout: &EditorLayout,
         row: DisplayRow,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         line_y: Pixels,
         whitespace_setting: ShowWhitespaceSetting,
         selection_ranges: &[Range<DisplayPoint>],
@@ -7639,7 +7639,7 @@ impl LineWithInvisibles {
         &self,
         layout: &EditorLayout,
         row: DisplayRow,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         window: &mut Window,
         cx: &mut App,
     ) {
@@ -7677,7 +7677,7 @@ impl LineWithInvisibles {
         &self,
         selection_ranges: &[Range<DisplayPoint>],
         layout: &EditorLayout,
-        content_origin: gpui::Point<Pixels>,
+        content_origin: gpui_types::Point<Pixels>,
         line_y: Pixels,
         row: DisplayRow,
         line_height: Pixels,
@@ -8019,7 +8019,7 @@ impl Element for EditorElement {
     fn request_layout(
         &mut self,
         _: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -8094,7 +8094,7 @@ impl Element for EditorElement {
     fn prepaint(
         &mut self,
         _: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         bounds: Bounds<Pixels>,
         request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -8889,7 +8889,7 @@ impl Element for EditorElement {
                         None
                     };
 
-                    let scroll_max: gpui::Point<ScrollPixelOffset> = point(
+                    let scroll_max: gpui_types::Point<ScrollPixelOffset> = point(
                         ScrollPixelOffset::from(
                             ((scroll_width - editor_width) / em_layout_width).max(0.0),
                         ),
@@ -9608,8 +9608,8 @@ impl Element for EditorElement {
     fn paint(
         &mut self,
         _: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
-        bounds: Bounds<gpui::Pixels>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
+        bounds: Bounds<gpui_types::Pixels>,
         _: &mut Self::RequestLayoutState,
         layout: &mut Self::PrepaintState,
         window: &mut Window,
@@ -9777,7 +9777,7 @@ pub struct EditorLayout {
     position_map: Rc<PositionMap>,
     hitbox: Hitbox,
     gutter_hitbox: Hitbox,
-    content_origin: gpui::Point<Pixels>,
+    content_origin: gpui_types::Point<Pixels>,
     scrollbars_layout: Option<EditorScrollbars>,
     minimap: Option<MinimapLayout>,
     mode: EditorMode,
@@ -9807,7 +9807,7 @@ pub struct EditorLayout {
     breakpoints: Vec<AnyElement>,
     diff_review_button: Option<AnyElement>,
     crease_toggles: Vec<Option<AnyElement>>,
-    expand_toggles: Vec<Option<(AnyElement, gpui::Point<Pixels>)>>,
+    expand_toggles: Vec<Option<(AnyElement, gpui_types::Point<Pixels>)>>,
     diff_hunk_controls: Vec<AnyElement>,
     crease_trailers: Vec<Option<CreaseTrailerLayout>>,
     edit_prediction_popover: Option<AnyElement>,
@@ -9879,8 +9879,8 @@ impl EditorScrollbars {
     pub fn from_scrollbar_axes(
         show_scrollbar: ScrollbarAxes,
         layout_information: &ScrollbarLayoutInformation,
-        content_offset: gpui::Point<Pixels>,
-        scroll_position: gpui::Point<f64>,
+        content_offset: gpui_types::Point<Pixels>,
+        scroll_position: gpui_types::Point<f64>,
         scrollbar_width: Pixels,
         right_margin: Pixels,
         editor_width: Pixels,
@@ -9898,7 +9898,7 @@ impl EditorScrollbars {
 
         let scrollbar_bounds_for = |axis: ScrollbarAxis| match axis {
             ScrollbarAxis::Horizontal => Bounds::from_anchor_and_size(
-                gpui::Anchor::BottomLeft,
+                gpui_types::Anchor::BottomLeft,
                 editor_bounds.bottom_left(),
                 size(
                     // The horizontal viewport size differs from the space available for the
@@ -9908,7 +9908,7 @@ impl EditorScrollbars {
                 ),
             ),
             ScrollbarAxis::Vertical => Bounds::from_anchor_and_size(
-                gpui::Anchor::TopRight,
+                gpui_types::Anchor::TopRight,
                 editor_bounds.top_right(),
                 size(scrollbar_width, viewport_size.height),
             ),
@@ -10126,7 +10126,7 @@ impl ScrollbarLayout {
         )
     }
 
-    fn thumb_hovered(&self, position: &gpui::Point<Pixels>) -> bool {
+    fn thumb_hovered(&self, position: &gpui_types::Point<Pixels>) -> bool {
         self.thumb_bounds
             .is_some_and(|bounds| bounds.contains(position))
     }
@@ -10253,9 +10253,9 @@ struct CreaseTrailerLayout {
 pub(crate) struct PositionMap {
     pub size: Size<Pixels>,
     pub line_height: Pixels,
-    pub scroll_position: gpui::Point<ScrollOffset>,
-    pub scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
-    pub scroll_max: gpui::Point<ScrollOffset>,
+    pub scroll_position: gpui_types::Point<ScrollOffset>,
+    pub scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
+    pub scroll_max: gpui_types::Point<ScrollOffset>,
     pub em_advance: Pixels,
     pub em_layout_width: Pixels,
     pub visible_row_range: Range<DisplayRow>,
@@ -10317,7 +10317,7 @@ impl PointForPosition {
 }
 
 impl PositionMap {
-    pub(crate) fn point_for_position(&self, position: gpui::Point<Pixels>) -> PointForPosition {
+    pub(crate) fn point_for_position(&self, position: gpui_types::Point<Pixels>) -> PointForPosition {
         let text_bounds = self.text_hitbox.bounds;
         let scroll_position = self.scroll_position;
         let position = position - text_bounds.origin;
@@ -10368,7 +10368,7 @@ impl PositionMap {
 
     fn point_for_position_on_line(
         &self,
-        position: gpui::Point<Pixels>,
+        position: gpui_types::Point<Pixels>,
         row: DisplayRow,
         line: &LineWithInvisibles,
     ) -> PointForPosition {
@@ -10458,7 +10458,7 @@ pub fn layout_line(
 
 #[derive(Debug, Clone)]
 pub struct IndentGuideLayout {
-    origin: gpui::Point<Pixels>,
+    origin: gpui_types::Point<Pixels>,
     length: Pixels,
     single_indent_width: Pixels,
     display_row_range: Range<DisplayRow>,
@@ -10474,7 +10474,7 @@ enum NavigationOverlayPaintCommand {
 struct NavigationLabelLayout {
     element: AnyElement,
     #[cfg_attr(not(test), allow(dead_code))]
-    origin: gpui::Point<Pixels>,
+    origin: gpui_types::Point<Pixels>,
 }
 
 struct NavigationOverlayLayoutContext<'a> {
@@ -10483,9 +10483,9 @@ struct NavigationOverlayLayoutContext<'a> {
     line_layouts: &'a [LineWithInvisibles],
     text_align: TextAlign,
     content_width: Pixels,
-    content_origin: gpui::Point<Pixels>,
-    scroll_position: gpui::Point<ScrollOffset>,
-    scroll_pixel_position: gpui::Point<ScrollPixelOffset>,
+    content_origin: gpui_types::Point<Pixels>,
+    scroll_position: gpui_types::Point<ScrollOffset>,
+    scroll_pixel_position: gpui_types::Point<ScrollPixelOffset>,
     line_height: Pixels,
     editor_font: Font,
     editor_font_size: Pixels,
@@ -10494,14 +10494,14 @@ struct NavigationOverlayLayoutContext<'a> {
 const LABEL_LINE_HEIGHT_PADDING_PX: f32 = 2.0;
 
 pub struct CursorLayout {
-    origin: gpui::Point<Pixels>,
+    origin: gpui_types::Point<Pixels>,
     block_width: Pixels,
     line_height: Pixels,
     color: Hsla,
     shape: CursorShape,
     block_text: Option<ShapedLine>,
     cursor_name: Option<AnyElement>,
-    animated_corners: Option<[gpui::Point<Pixels>; 4]>,
+    animated_corners: Option<[gpui_types::Point<Pixels>; 4]>,
 }
 
 #[derive(Debug)]
@@ -10513,7 +10513,7 @@ pub struct CursorName {
 
 impl CursorLayout {
     pub fn new(
-        origin: gpui::Point<Pixels>,
+        origin: gpui_types::Point<Pixels>,
         block_width: Pixels,
         line_height: Pixels,
         color: Hsla,
@@ -10532,14 +10532,14 @@ impl CursorLayout {
         }
     }
 
-    pub fn bounding_rect(&self, origin: gpui::Point<Pixels>) -> Bounds<Pixels> {
+    pub fn bounding_rect(&self, origin: gpui_types::Point<Pixels>) -> Bounds<Pixels> {
         Bounds {
             origin: self.origin + origin,
             size: size(self.block_width, self.line_height),
         }
     }
 
-    fn bounds(&self, origin: gpui::Point<Pixels>) -> Bounds<Pixels> {
+    fn bounds(&self, origin: gpui_types::Point<Pixels>) -> Bounds<Pixels> {
         match self.shape {
             CursorShape::Bar => Bounds {
                 origin: self.origin + origin,
@@ -10552,7 +10552,7 @@ impl CursorLayout {
             CursorShape::Underline => Bounds {
                 origin: self.origin
                     + origin
-                    + gpui::Point::new(Pixels::ZERO, self.line_height - px(2.0)),
+                    + gpui_types::Point::new(Pixels::ZERO, self.line_height - px(2.0)),
                 size: size(self.block_width, px(2.0)),
             },
         }
@@ -10560,7 +10560,7 @@ impl CursorLayout {
 
     pub fn layout(
         &mut self,
-        origin: gpui::Point<Pixels>,
+        origin: gpui_types::Point<Pixels>,
         cursor_name: Option<CursorName>,
         window: &mut Window,
         cx: &mut App,
@@ -10598,9 +10598,9 @@ impl CursorLayout {
         }
     }
 
-    pub fn paint(&mut self, origin: gpui::Point<Pixels>, window: &mut Window, cx: &mut App) {
+    pub fn paint(&mut self, origin: gpui_types::Point<Pixels>, window: &mut Window, cx: &mut App) {
         if let Some(corners) = self.animated_corners {
-            let mut builder = gpui::PathBuilder::fill();
+            let mut builder = gpui_runtime::PathBuilder::fill();
             builder.add_polygon(&corners, true);
             if let Ok(path) = builder.build() {
                 if let Some(name) = &mut self.cursor_name {
@@ -10712,9 +10712,9 @@ impl HighlightedRange {
 
         let top_curve_width = curve_width(first_line.start_x, first_line.end_x);
         let mut builder = if fill {
-            gpui::PathBuilder::fill()
+            gpui_runtime::PathBuilder::fill()
         } else {
-            gpui::PathBuilder::stroke(px(1.))
+            gpui_runtime::PathBuilder::stroke(px(1.))
         };
         builder.move_to(first_top_right - top_curve_width);
         builder.curve_to(first_top_right + curve_height, first_top_right);
@@ -10951,7 +10951,7 @@ mod tests {
     }
 
     const fn placeholder_hitbox() -> Hitbox {
-        use gpui::HitboxId;
+        use gpui_runtime::HitboxId;
         let zero_bounds = Bounds {
             origin: point(Pixels::ZERO, Pixels::ZERO),
             size: Size {
@@ -11007,7 +11007,7 @@ mod tests {
         Gutter {
             line_height,
             range: DisplayRow(0)..DisplayRow(6),
-            scroll_position: gpui::Point::default(),
+            scroll_position: gpui_types::Point::default(),
             dimensions: &DIMENSIONS,
             hitbox: &HITBOX,
             snapshot: snapshot,
@@ -11016,7 +11016,7 @@ mod tests {
     }
 
     // Regression test for https://github.com/zed-industries/zed/issues/48141.
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_selection_layout_around_inlay(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -11130,7 +11130,7 @@ mod tests {
         assert_eq!(vim_reversed_at_right_anchored_inlay.head, display_point(10));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_soft_wrap_editor_width_auto_height_editor(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let window = cx.add_window(|window, cx| {
@@ -11166,7 +11166,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_soft_wrap_editor_width_full_editor(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let window = cx.add_window(|window, cx| {
@@ -11193,7 +11193,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_status_bar_blame_location_reserves_no_scroll_width(cx: &mut TestAppContext) {
         struct FixedWidthBlameRenderer;
 
@@ -11204,7 +11204,7 @@ mod tests {
 
             fn render_blame_entry(
                 &self,
-                _: &gpui::TextStyle,
+                _: &gpui_runtime::TextStyle,
                 _: BlameEntry,
                 _: Option<ParsedCommitMessage>,
                 _: Vec<SharedString>,
@@ -11221,7 +11221,7 @@ mod tests {
 
             fn render_inline_blame_entry(
                 &self,
-                _: &gpui::TextStyle,
+                _: &gpui_runtime::TextStyle,
                 _: BlameEntry,
                 _: &mut App,
             ) -> Option<AnyElement> {
@@ -11383,7 +11383,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_point_for_position_clipped_rows(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -11424,7 +11424,7 @@ mod tests {
         assert_eq!(point.nearest_valid, target_point);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_navigation_overlay_covered_text_highlights_are_replaced(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let window = cx.add_window(|window, cx| {
@@ -11473,7 +11473,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_navigation_overlay_repositions_when_editor_width_changes(
         cx: &mut TestAppContext,
     ) {
@@ -11527,7 +11527,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_layout_line_numbers(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let window = cx.add_window(|window, cx| {
@@ -11644,7 +11644,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_layout_line_numbers_with_folded_lines(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -11719,7 +11719,7 @@ mod tests {
         assert_eq!(relative_rows[&DisplayRow(5)], 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_layout_line_numbers_wrapping(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let window = cx.add_window(|window, cx| {
@@ -11824,7 +11824,7 @@ mod tests {
         assert_eq!(relative_rows[&DisplayRow(5)], 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_relative_line_numbers_after_scrolling_wrapped_line(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -11875,7 +11875,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_vim_visual_selections(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -11946,7 +11946,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_layout_with_placeholder_text_and_blocks(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -11999,7 +11999,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_all_invisibles_drawing(cx: &mut TestAppContext) {
         const TAB_SIZE: u32 = 4;
 
@@ -12057,7 +12057,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_multibyte_whitespace_uses_utf8_byte_offsets(cx: &mut TestAppContext) {
         init_test(cx, |s| {
             s.defaults.show_whitespaces = Some(ShowWhitespaceSetting::All);
@@ -12085,7 +12085,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_replacement_chunks_are_clipped_to_max_line_len(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -12146,7 +12146,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_invisibles_dont_appear_in_certain_editors(cx: &mut TestAppContext) {
         init_test(cx, |s| {
             s.defaults.show_whitespaces = Some(ShowWhitespaceSetting::All);
@@ -12176,7 +12176,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_wrapped_invisibles_drawing(cx: &mut TestAppContext) {
         let tab_size = 4;
         let input_text = "a\tbcd     ".repeat(9);
@@ -12315,7 +12315,7 @@ mod tests {
             .collect()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_merge_overlapping_ranges() {
         let base_bg = Hsla::white();
         let color1 = Hsla {
@@ -12385,7 +12385,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_bg_segments_per_row() {
         let base_bg = Hsla::white();
 
@@ -12496,8 +12496,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_split_runs_by_bg_segments(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_split_runs_by_bg_segments(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let dx = |start: u32, end: u32| {
@@ -12665,7 +12665,7 @@ mod tests {
         assert!(!cursor_shape_supports_cursor_animation(CursorShape::Hollow));
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_random_spacer_pattern_period(mut rng: StdRng) {
         let line_height = rng.next_u32() as f32;
         let target_height = rng.next_u32() as f32;

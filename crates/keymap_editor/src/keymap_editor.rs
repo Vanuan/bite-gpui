@@ -314,7 +314,7 @@ struct ConflictState {
 type ConflictKeybindMapping = HashMap<
     Rc<[KeybindingKeystroke]>,
     Vec<(
-        Option<gpui::KeyBindingContextPredicate>,
+        Option<gpui_runtime::KeyBindingContextPredicate>,
         Vec<ConflictOrigin>,
     )>,
 >;
@@ -332,7 +332,7 @@ impl ConflictState {
             let mapping = binding.get_action_mapping();
             let predicate = mapping
                 .context
-                .and_then(|ctx| gpui::KeyBindingContextPredicate::parse(&ctx).ok());
+                .and_then(|ctx| gpui_runtime::KeyBindingContextPredicate::parse(&ctx).ok());
             let entry = action_keybind_mapping
                 .entry(mapping.keystrokes.clone())
                 .or_default();
@@ -391,7 +391,7 @@ impl ConflictState {
         } = action_mapping;
         let predicate = context
             .as_deref()
-            .and_then(|ctx| gpui::KeyBindingContextPredicate::parse(&ctx).ok());
+            .and_then(|ctx| gpui_runtime::KeyBindingContextPredicate::parse(&ctx).ok());
         self.keybind_mapping.get(keystrokes).and_then(|entries| {
             entries
                 .iter()
@@ -484,7 +484,7 @@ enum PreviousEdit {
 impl EventEmitter<()> for KeymapEditor {}
 
 impl Focusable for KeymapEditor {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         if self.selected_index.is_some() {
             self.focus_handle.clone()
         } else {
@@ -504,8 +504,8 @@ fn keystrokes_match_exactly(
 }
 
 fn disabled_binding_matches_context(
-    disabled_binding: &gpui::KeyBinding,
-    binding: &gpui::KeyBinding,
+    disabled_binding: &gpui_runtime::KeyBinding,
+    binding: &gpui_runtime::KeyBinding,
 ) -> bool {
     match (
         disabled_binding.predicate().as_deref(),
@@ -518,20 +518,20 @@ fn disabled_binding_matches_context(
 }
 
 fn binding_is_unbound_by_unbind(
-    binding: &gpui::KeyBinding,
+    binding: &gpui_runtime::KeyBinding,
     binding_index: usize,
-    all_bindings: &[&gpui::KeyBinding],
+    all_bindings: &[&gpui_runtime::KeyBinding],
 ) -> bool {
     all_bindings[binding_index + 1..]
         .iter()
         .rev()
         .any(|disabled_binding| {
-            gpui::is_unbind(disabled_binding.action())
+            gpui_runtime::is_unbind(disabled_binding.action())
                 && keystrokes_match_exactly(disabled_binding.keystrokes(), binding.keystrokes())
                 && disabled_binding
                     .action()
                     .as_any()
-                    .downcast_ref::<gpui::Unbind>()
+                    .downcast_ref::<gpui_runtime::Unbind>()
                     .is_some_and(|unbind| unbind.0.as_ref() == binding.action().name())
                 && disabled_binding_matches_context(disabled_binding, binding)
         })
@@ -839,7 +839,7 @@ impl KeymapEditor {
         let mut string_match_candidates = Vec::new();
 
         for (binding_index, &key_binding) in key_bindings.iter().enumerate() {
-            if gpui::is_unbind(key_binding.action()) {
+            if gpui_runtime::is_unbind(key_binding.action()) {
                 continue;
             }
 
@@ -849,7 +849,7 @@ impl KeymapEditor {
                 .unwrap_or(KeybindSource::Unknown);
 
             let keystroke_text = ui::text_for_keybinding_keystrokes(key_binding.keystrokes(), cx);
-            let is_no_action = gpui::is_no_action(key_binding.action());
+            let is_no_action = gpui_runtime::is_no_action(key_binding.action());
             let is_unbound_by_unbind =
                 binding_is_unbound_by_unbind(key_binding, binding_index, &key_bindings);
             let binding = KeyBinding::new(key_binding, source);
@@ -1676,8 +1676,8 @@ impl KeymapEditor {
                     }
                 }))
             })
-            .anchor(gpui::Anchor::TopRight)
-            .offset(gpui::Point {
+            .anchor(gpui_types::Anchor::TopRight)
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(2.0),
             })
@@ -1751,7 +1751,7 @@ struct KeyBinding {
 }
 
 impl KeyBinding {
-    fn new(binding: &gpui::KeyBinding, source: KeybindSource) -> Self {
+    fn new(binding: &gpui_runtime::KeyBinding, source: KeybindSource) -> Self {
         Self {
             keystrokes: Rc::from(binding.keystrokes()),
             source,
@@ -1946,7 +1946,7 @@ fn muted_styled_text(text: SharedString, cx: &App) -> StyledText {
     let len = text.len();
     StyledText::new(text).with_highlights([(
         0..len,
-        gpui::HighlightStyle::color(cx.theme().colors().text_muted),
+        gpui_runtime::HighlightStyle::color(cx.theme().colors().text_muted),
     )])
 }
 
@@ -2209,13 +2209,13 @@ impl Render for KeymapEditor {
                                                 muted_styled_text(NO_ACTION_ARGUMENTS_TEXT, cx)
                                                     .into_any_element()
                                             } else {
-                                                gpui::Empty.into_any_element()
+                                                gpui_runtime::Empty.into_any_element()
                                             }
                                         }
                                     };
 
                                     let context = binding.context().cloned().map_or(
-                                        gpui::Empty.into_any_element(),
+                                        gpui_runtime::Empty.into_any_element(),
                                         |context| {
                                             let is_local = context.local().is_some();
 
@@ -2367,7 +2367,7 @@ impl Render for KeymapEditor {
                 deferred(
                     anchored()
                         .position(*position)
-                        .anchor(gpui::Anchor::TopLeft)
+                        .anchor(gpui_types::Anchor::TopLeft)
                         .child(menu.clone()),
                 )
                 .with_priority(1)
@@ -2769,7 +2769,7 @@ impl KeybindingEditorModal {
         let Some(context) = new_context.is_empty().not().then_some(new_context) else {
             return Ok(None);
         };
-        gpui::KeyBindingContextPredicate::parse(&context).context("Failed to parse key context")?;
+        gpui_runtime::KeyBindingContextPredicate::parse(&context).context("Failed to parse key context")?;
 
         Ok(Some(context))
     }
@@ -3762,7 +3762,7 @@ fn collect_contexts_from_assets() -> Vec<SharedString> {
         for section in keymap.sections() {
             let context_expr = &section.context;
             let mut queue = Vec::new();
-            let Ok(root_context) = gpui::KeyBindingContextPredicate::parse(context_expr) else {
+            let Ok(root_context) = gpui_runtime::KeyBindingContextPredicate::parse(context_expr) else {
                 continue;
             };
 
@@ -3807,10 +3807,10 @@ fn collect_contexts_from_assets() -> Vec<SharedString> {
 }
 
 fn normalized_ctx_eq(
-    a: &gpui::KeyBindingContextPredicate,
-    b: &gpui::KeyBindingContextPredicate,
+    a: &gpui_runtime::KeyBindingContextPredicate,
+    b: &gpui_runtime::KeyBindingContextPredicate,
 ) -> bool {
-    use gpui::KeyBindingContextPredicate::*;
+    use gpui_runtime::KeyBindingContextPredicate::*;
     return match (a, b) {
         (Identifier(_), Identifier(_)) => a == b,
         (Equal(a_left, a_right), Equal(b_left, b_right)) => {
@@ -3872,10 +3872,10 @@ fn normalized_ctx_eq(
     };
 
     fn flatten_and<'a>(
-        pred: &'a gpui::KeyBindingContextPredicate,
-        operands: &mut Vec<&'a gpui::KeyBindingContextPredicate>,
+        pred: &'a gpui_runtime::KeyBindingContextPredicate,
+        operands: &mut Vec<&'a gpui_runtime::KeyBindingContextPredicate>,
     ) {
-        use gpui::KeyBindingContextPredicate::*;
+        use gpui_runtime::KeyBindingContextPredicate::*;
         match pred {
             And(left, right) => {
                 flatten_and(left, operands);
@@ -3886,10 +3886,10 @@ fn normalized_ctx_eq(
     }
 
     fn flatten_or<'a>(
-        pred: &'a gpui::KeyBindingContextPredicate,
-        operands: &mut Vec<&'a gpui::KeyBindingContextPredicate>,
+        pred: &'a gpui_runtime::KeyBindingContextPredicate,
+        operands: &mut Vec<&'a gpui_runtime::KeyBindingContextPredicate>,
     ) {
-        use gpui::KeyBindingContextPredicate::*;
+        use gpui_runtime::KeyBindingContextPredicate::*;
         match pred {
             Or(left, right) => {
                 flatten_or(left, operands);
@@ -3900,8 +3900,8 @@ fn normalized_ctx_eq(
     }
 
     fn compare_operand_sets(
-        a: &[&gpui::KeyBindingContextPredicate],
-        b: &[&gpui::KeyBindingContextPredicate],
+        a: &[&gpui_runtime::KeyBindingContextPredicate],
+        b: &[&gpui_runtime::KeyBindingContextPredicate],
     ) -> bool {
         if a.len() != b.len() {
             return false;
@@ -4102,7 +4102,7 @@ mod tests {
             .collect()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_one_of_two_identical_user_bindings(cx: &mut TestAppContext) {
         let keymap_content = r#"[
     {
@@ -4157,7 +4157,7 @@ mod tests {
     // keymap editor (aliases resolve to the canonical action on load), but
     // deletion targets the canonical action name, so `KeymapFile::update_keybinding`
     // used to never find the alias entry, making it impossible to delete.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_binding_with_deprecated_action_alias(cx: &mut TestAppContext) {
         let keymap_content = r#"[
     {
@@ -4232,9 +4232,9 @@ mod tests {
     fn normalized_ctx_cmp() {
         #[track_caller]
         fn cmp(a: &str, b: &str) -> bool {
-            let a = gpui::KeyBindingContextPredicate::parse(a)
+            let a = gpui_runtime::KeyBindingContextPredicate::parse(a)
                 .expect("Failed to parse keybinding context a");
-            let b = gpui::KeyBindingContextPredicate::parse(b)
+            let b = gpui_runtime::KeyBindingContextPredicate::parse(b)
                 .expect("Failed to parse keybinding context b");
             normalized_ctx_eq(&a, &b)
         }
@@ -4374,9 +4374,9 @@ mod tests {
 
     #[test]
     fn binding_is_unbound_by_unbind_respects_precedence() {
-        let binding = gpui::KeyBinding::new("tab", zed_actions::OpenKeymap, None);
+        let binding = gpui_runtime::KeyBinding::new("tab", zed_actions::OpenKeymap, None);
         let unbind =
-            gpui::KeyBinding::new("tab", gpui::Unbind(binding.action().name().into()), None);
+            gpui_runtime::KeyBinding::new("tab", gpui_runtime::Unbind(binding.action().name().into()), None);
 
         let unbind_then_binding = vec![&unbind, &binding];
         assert!(!binding_is_unbound_by_unbind(

@@ -14,7 +14,7 @@ use dap::{
     },
 };
 use extension::{Extension, WorktreeDelegate};
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use task::{DebugScenario, ZedDebugConfig};
 use util::rel_path::RelPath;
 

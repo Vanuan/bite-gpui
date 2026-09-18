@@ -1099,7 +1099,7 @@ fn main() {
 
     match &command {
         Command::ImportBatch(import_args) => {
-            gpui::block_on(async {
+            gpui_platform::block_on(async {
                 match import_args.provider {
                     BatchProvider::Anthropic => {
                         let client = anthropic_client::AnthropicClient::batch(&paths::LLM_CACHE_DB)
@@ -1158,7 +1158,7 @@ fn main() {
                 output_dir,
                 fresh: synth_args.fresh,
             };
-            gpui::block_on(async {
+            gpui_platform::block_on(async {
                 if let Err(e) = run_synthesize(config).await {
                     eprintln!("Error: {:?}", e);
                     std::process::exit(1);
@@ -1208,7 +1208,7 @@ fn main() {
     }
 
     let http_client = Arc::new(ReqwestClient::new());
-    let app = gpui_platform::headless().with_http_client(http_client);
+    let app = gpui::headless().with_http_client(http_client);
 
     app.run(move |cx| {
         let app_state = Arc::new(headless::init(cx));

@@ -12,7 +12,7 @@ use util::RandomCharIter;
 
 fn to_tab_point_benchmark(c: &mut Criterion) {
     let dispatcher = TestDispatcher::new(1);
-    let cx = gpui::TestAppContext::build(dispatcher, None);
+    let cx = gpui_runtime::TestAppContext::build(dispatcher, None);
 
     let create_tab_map = |length: usize| {
         let mut rng = StdRng::seed_from_u64(1);
@@ -57,7 +57,7 @@ fn to_tab_point_benchmark(c: &mut Criterion) {
 
 fn to_fold_point_benchmark(c: &mut Criterion) {
     let dispatcher = TestDispatcher::new(1);
-    let cx = gpui::TestAppContext::build(dispatcher, None);
+    let cx = gpui_runtime::TestAppContext::build(dispatcher, None);
 
     let create_tab_map = |length: usize| {
         let mut rng = StdRng::seed_from_u64(1);
@@ -109,7 +109,7 @@ fn create_highlight_endpoints_benchmark(c: &mut Criterion) {
     const HIGHLIGHTS_PER_LINE: usize = 4;
 
     let dispatcher = TestDispatcher::new(1);
-    let mut cx = gpui::TestAppContext::build(dispatcher, None);
+    let mut cx = gpui_runtime::TestAppContext::build(dispatcher, None);
     cx.update(|cx| {
         let store = SettingsStore::test(cx);
         cx.set_global(store);
@@ -209,7 +209,7 @@ fn highlighted_chunks_benchmark(c: &mut Criterion) {
     const LINE_COUNT: usize = 500;
 
     let dispatcher = TestDispatcher::new(1);
-    let mut cx = gpui::TestAppContext::build(dispatcher, None);
+    let mut cx = gpui_runtime::TestAppContext::build(dispatcher, None);
     cx.update(|cx| {
         let store = SettingsStore::test(cx);
         cx.set_global(store);

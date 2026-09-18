@@ -30,7 +30,7 @@ use language::{
 };
 
 #[cfg(any(test, feature = "test-support"))]
-use gpui::AppContext as _;
+use gpui_runtime::AppContext as _;
 
 use rope::DimensionPair;
 use settings::Settings;
@@ -505,13 +505,13 @@ pub trait ToPoint: 'static + fmt::Debug {
 
 struct BufferState {
     buffer: Entity<Buffer>,
-    _subscriptions: [gpui::Subscription; 2],
+    _subscriptions: [gpui_runtime::Subscription; 2],
 }
 
 struct DiffState {
     diff: Entity<BufferDiff>,
     main_buffer: Option<Entity<language::Buffer>>,
-    _subscription: gpui::Subscription,
+    _subscription: gpui_runtime::Subscription,
 }
 
 impl DiffState {
@@ -3181,14 +3181,14 @@ pub fn build_excerpt_ranges(
 
 #[cfg(any(test, feature = "test-support"))]
 impl MultiBuffer {
-    pub fn build_simple(text: &str, cx: &mut gpui::App) -> Entity<Self> {
+    pub fn build_simple(text: &str, cx: &mut gpui_runtime::App) -> Entity<Self> {
         let buffer = cx.new(|cx| Buffer::local(text, cx));
         cx.new(|cx| Self::singleton(buffer, cx))
     }
 
     pub fn build_multi<const COUNT: usize>(
         excerpts: [(&str, Vec<Range<Point>>); COUNT],
-        cx: &mut gpui::App,
+        cx: &mut gpui_runtime::App,
     ) -> Entity<Self> {
         let multi = cx.new(|_| Self::new(Capability::ReadWrite));
         for (ix, (text, ranges)) in excerpts.into_iter().enumerate() {
@@ -3212,11 +3212,11 @@ impl MultiBuffer {
         multi
     }
 
-    pub fn build_from_buffer(buffer: Entity<Buffer>, cx: &mut gpui::App) -> Entity<Self> {
+    pub fn build_from_buffer(buffer: Entity<Buffer>, cx: &mut gpui_runtime::App) -> Entity<Self> {
         cx.new(|cx| Self::singleton(buffer, cx))
     }
 
-    pub fn build_random(rng: &mut impl rand::Rng, cx: &mut gpui::App) -> Entity<Self> {
+    pub fn build_random(rng: &mut impl rand::Rng, cx: &mut gpui_runtime::App) -> Entity<Self> {
         cx.new(|cx| {
             let mut multibuffer = MultiBuffer::new(Capability::ReadWrite);
             let mutation_count = rng.random_range(1..=5);

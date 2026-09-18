@@ -19,7 +19,7 @@ wow so cool
 pub fn main() {
     env_logger::init();
 
-    gpui_platform::application().with_assets(Assets).run(|cx| {
+    gpui::application().with_assets(Assets).run(|cx| {
         let store = SettingsStore::test(cx);
         cx.set_global(store);
         cx.bind_keys([KeyBinding::new("cmd-c", markdown::Copy, None)]);
@@ -48,7 +48,7 @@ struct HelloWorld {
 impl Render for HelloWorld {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let markdown_style = MarkdownStyle {
-            base_text_style: gpui::TextStyle {
+            base_text_style: gpui_runtime::TextStyle {
                 font_family: "Zed Mono".into(),
                 color: cx.theme().colors().text,
                 ..Default::default()

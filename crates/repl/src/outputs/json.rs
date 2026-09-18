@@ -280,8 +280,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_json_view_toggle_path(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_json_view_toggle_path(cx: &mut gpui_runtime::App) {
         let view =
             cx.new(|_cx| JsonView::from_value(serde_json::json!({"nested": {"a": 1}})).unwrap());
 

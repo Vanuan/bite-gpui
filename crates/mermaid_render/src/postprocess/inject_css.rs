@@ -174,7 +174,7 @@ fn git_branch_css(theme: &MermaidTheme) -> String {
     css
 }
 
-fn adjust_lightness(color: &mut gpui::Hsla, dark_mode: bool) {
+fn adjust_lightness(color: &mut gpui_types::Hsla, dark_mode: bool) {
     if dark_mode {
         color.l = (color.l * 0.7).max(0.0);
     } else {
@@ -185,19 +185,19 @@ fn adjust_lightness(color: &mut gpui::Hsla, dark_mode: bool) {
 const ACCENT_FILL_OPACITY: f32 = 0.15;
 
 fn blend_over_background(
-    foreground: gpui::Hsla,
-    background: gpui::Hsla,
+    foreground: gpui_types::Hsla,
+    background: gpui_types::Hsla,
     opacity: f32,
-) -> gpui::Hsla {
-    let fg = gpui::Rgba::from(foreground);
-    let bg = gpui::Rgba::from(background);
-    let blended = gpui::Rgba {
+) -> gpui_types::Hsla {
+    let fg = gpui_types::Rgba::from(foreground);
+    let bg = gpui_types::Rgba::from(background);
+    let blended = gpui_types::Rgba {
         r: fg.r * opacity + bg.r * (1.0 - opacity),
         g: fg.g * opacity + bg.g * (1.0 - opacity),
         b: fg.b * opacity + bg.b * (1.0 - opacity),
         a: 1.0,
     };
-    gpui::Hsla::from(blended)
+    gpui_types::Hsla::from(blended)
 }
 
 fn accent_css(theme: &MermaidTheme) -> String {

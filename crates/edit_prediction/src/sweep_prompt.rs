@@ -450,7 +450,7 @@ mod tests {
     use gpui::{App, AppContext};
     use language::Buffer;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_original_window_for_current_window_uses_latest_pre_edit_snapshot(cx: &mut App) {
         cx.new(|cx| {
             let mut buffer = Buffer::local("zero\none\ntwo\nthree\n", cx);
@@ -485,7 +485,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_original_window_for_current_window_returns_none_without_matching_history(cx: &mut App) {
         cx.new(|cx| {
             let buffer = Buffer::local("hello\nworld\n", cx);

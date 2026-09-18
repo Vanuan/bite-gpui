@@ -158,7 +158,7 @@ mod integration {
         assert_eq!(actual, expected, "Bookmark labels for {}", path.display());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_all_serialized_bookmarks_empty(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -171,7 +171,7 @@ mod integration {
         assert!(get_all_bookmarks(&project, cx).is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_all_serialized_bookmarks_single_file(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -193,7 +193,7 @@ mod integration {
         assert_bookmark_rows(&bookmarks, path!("/project/file1.rs"), &[0, 2]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_all_serialized_bookmarks_includes_labels(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -219,7 +219,7 @@ mod integration {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_all_serialized_bookmarks_multiple_files(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -253,7 +253,7 @@ mod integration {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_all_serialized_bookmarks_after_toggle_off(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -276,7 +276,7 @@ mod integration {
         assert!(get_all_bookmarks(&project, cx).is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_all_serialized_bookmarks_with_clear(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -303,7 +303,7 @@ mod integration {
         assert!(get_all_bookmarks(&project, cx).is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_all_serialized_bookmarks_returns_sorted_by_path(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -335,7 +335,7 @@ mod integration {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_all_serialized_bookmarks_deduplicates_same_row(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -367,7 +367,7 @@ mod integration {
         assert_eq!(rows, deduped);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_with_serialized_bookmarks_restores_bookmarks(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -397,7 +397,7 @@ mod integration {
         assert_bookmark_rows(&restored, path!("/project/file2.rs"), &[1]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_with_serialized_bookmarks_skips_out_of_range_rows(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -439,7 +439,7 @@ mod integration {
         assert_bookmark_rows(&restored, path!("/project/file1.rs"), &[1, 2]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_with_serialized_bookmarks_skips_empty_entries(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -464,7 +464,7 @@ mod integration {
         assert!(!restored.contains_key(&project_path(path!("/project/file2.rs"))));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_with_serialized_bookmarks_all_out_of_range_produces_no_entry(
         cx: &mut TestAppContext,
     ) {
@@ -503,7 +503,7 @@ mod integration {
         assert!(get_all_bookmarks(&project, cx).is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_with_serialized_bookmarks_replaces_existing(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -534,7 +534,7 @@ mod integration {
         assert_bookmark_rows(&after, path!("/project/file1.rs"), &[2, 3]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_serialize_deserialize_round_trip(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -574,7 +574,7 @@ mod integration {
         assert_bookmark_rows(&restored, path!("/project/beta.rs"), &[1]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_round_trip_preserves_bookmarks_after_file_edit(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -607,7 +607,7 @@ mod integration {
         assert_bookmark_rows(&restored, path!("/project/file.rs"), &[2, 4]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_deletion_removes_bookmarks(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -643,7 +643,7 @@ mod integration {
         assert_bookmark_rows(&bookmarks, path!("/project/file2.rs"), &[1]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deleting_all_bookmarked_files_clears_store(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -678,7 +678,7 @@ mod integration {
         assert!(get_all_bookmarks(&project, cx).is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_rename_re_keys_bookmarks(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();
@@ -713,7 +713,7 @@ mod integration {
         assert_bookmark_rows(&bookmarks, path!("/project/new_name.rs"), &[0, 2]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_rename_preserves_other_bookmarks(cx: &mut TestAppContext) {
         init_test(cx);
         cx.executor().allow_parking();

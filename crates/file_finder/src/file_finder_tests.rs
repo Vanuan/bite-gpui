@@ -177,7 +177,7 @@ fn test_custom_project_search_ordering_in_file_finder() {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_matching_paths(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -257,7 +257,7 @@ async fn test_matching_paths(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_matching_paths_with_colon(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -304,7 +304,7 @@ async fn test_matching_paths_with_colon(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unicode_paths(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -336,7 +336,7 @@ async fn test_unicode_paths(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_absolute_paths(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -398,7 +398,7 @@ async fn test_absolute_paths(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_complex_path(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -444,7 +444,7 @@ async fn test_complex_path(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_row_column_numbers_query_inside_file(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -521,7 +521,7 @@ async fn test_row_column_numbers_query_inside_file(cx: &mut TestAppContext) {
         });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_row_column_numbers_query_inside_unicode_file(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -608,7 +608,7 @@ async fn test_row_column_numbers_query_inside_unicode_file(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_row_column_numbers_query_outside_file(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -759,7 +759,7 @@ fn test_parse_search_query() {
     assert_eq!(query.line_range, None);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_line_range_query_selects_lines(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -828,7 +828,7 @@ async fn test_line_range_query_selects_lines(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_line_range_query_outside_file_clamps_to_eof(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -882,7 +882,7 @@ async fn test_line_range_query_outside_file_clamps_to_eof(cx: &mut TestAppContex
 //
 // Typing `path:line` for an already-open file must keep the file selected
 // rather than offering to create one or skipping past it to a fuzzy neighbor.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_path_with_position_when_target_file_is_open(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -920,7 +920,7 @@ async fn test_path_with_position_when_target_file_is_open(cx: &mut TestAppContex
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_matching_cancellation(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -997,7 +997,7 @@ async fn test_matching_cancellation(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ignored_root_with_file_inclusions(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     cx.update(|cx| {
@@ -1091,7 +1091,7 @@ async fn test_ignored_root_with_file_inclusions(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ignored_root_with_file_inclusions_repro(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     cx.update(|cx| {
@@ -1138,7 +1138,7 @@ async fn test_ignored_root_with_file_inclusions_repro(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_action_include_ignored_param(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1180,7 +1180,7 @@ async fn test_toggle_action_include_ignored_param(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ignored_root(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -1398,7 +1398,7 @@ async fn test_ignored_root(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_single_file_worktrees(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -1451,7 +1451,7 @@ async fn test_single_file_worktrees(cx: &mut TestAppContext) {
     picker.update(cx, |f, _| assert_eq!(f.delegate.matches.len(), 0));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_history_items_uniqueness_for_multiple_worktree(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -1561,7 +1561,7 @@ async fn test_history_items_uniqueness_for_multiple_worktree(cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_create_file_for_multiple_worktrees(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -1638,7 +1638,7 @@ async fn test_create_file_for_multiple_worktrees(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_create_file_focused_file_does_not_belong_to_available_worktrees(
     cx: &mut TestAppContext,
 ) {
@@ -1725,7 +1725,7 @@ async fn test_create_file_focused_file_does_not_belong_to_available_worktrees(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_create_file_no_focused_with_multiple_worktrees(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -1788,7 +1788,7 @@ async fn test_create_file_no_focused_with_multiple_worktrees(cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_path_distance_ordering(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -1854,7 +1854,7 @@ async fn test_path_distance_ordering(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_search_worktree_without_files(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -1887,8 +1887,8 @@ async fn test_search_worktree_without_files(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_query_history(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_query_history(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -2031,8 +2031,8 @@ async fn test_query_history(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_history_match_positions(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_history_match_positions(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     cx.update(|cx| {
@@ -2097,8 +2097,8 @@ async fn test_history_match_positions(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_history_labels_do_not_include_worktree_root_name(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_history_labels_do_not_include_worktree_root_name(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     cx.update(|cx| {
@@ -2192,9 +2192,9 @@ async fn test_history_labels_do_not_include_worktree_root_name(cx: &mut gpui::Te
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_history_labels_include_worktree_root_name_when_hide_root_false(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let app_state = init_test(cx);
 
@@ -2242,9 +2242,9 @@ async fn test_history_labels_include_worktree_root_name_when_hide_root_false(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_history_labels_include_worktree_root_name_when_hide_root_true_and_multiple_folders(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let app_state = init_test(cx);
 
@@ -2351,8 +2351,8 @@ async fn test_history_labels_include_worktree_root_name_when_hide_root_true_and_
     });
 }
 
-#[gpui::test]
-async fn test_external_files_history(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_external_files_history(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -2473,8 +2473,8 @@ async fn test_external_files_history(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_non_project_file_open_with_filter(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_non_project_file_open_with_filter(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -2571,8 +2571,8 @@ async fn test_non_project_file_open_with_filter(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_non_project_file_matches_history_with_hidden_root(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_non_project_file_matches_history_with_hidden_root(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     cx.update(|cx| {
@@ -2649,8 +2649,8 @@ async fn test_non_project_file_matches_history_with_hidden_root(cx: &mut gpui::T
     });
 }
 
-#[gpui::test]
-async fn test_single_file_search_result_split_open(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_single_file_search_result_split_open(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
     app_state
         .fs
@@ -2716,8 +2716,8 @@ async fn test_single_file_search_result_split_open(cx: &mut gpui::TestAppContext
     });
 }
 
-#[gpui::test]
-async fn test_toggle_panel_new_selections(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_toggle_panel_new_selections(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -2773,8 +2773,8 @@ async fn test_toggle_panel_new_selections(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_search_preserves_history_items(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_preserves_history_items(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     cx.update(|cx| {
@@ -2886,8 +2886,8 @@ async fn test_search_preserves_history_items(cx: &mut gpui::TestAppContext) {
         });
 }
 
-#[gpui::test]
-async fn test_search_sorts_history_items(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_sorts_history_items(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     cx.update(|cx| {
@@ -2956,8 +2956,8 @@ async fn test_search_sorts_history_items(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_select_current_open_file_when_no_history(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_select_current_open_file_when_no_history(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -2986,7 +2986,7 @@ async fn test_select_current_open_file_when_no_history(cx: &mut gpui::TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_keep_opened_file_on_top_of_search_results_and_select_next_one(
     cx: &mut TestAppContext,
 ) {
@@ -3086,7 +3086,7 @@ async fn test_keep_opened_file_on_top_of_search_results_and_select_next_one(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_setting_auto_select_first_and_select_active_file(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -3156,7 +3156,7 @@ async fn test_setting_auto_select_first_and_select_active_file(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_non_separate_history_items(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -3255,7 +3255,7 @@ async fn test_non_separate_history_items(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_history_items_shown_in_order_of_open(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -3315,7 +3315,7 @@ async fn test_history_items_shown_in_order_of_open(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_selected_history_item_stays_selected_on_worktree_updated(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -3377,8 +3377,8 @@ async fn test_selected_history_item_stays_selected_on_worktree_updated(cx: &mut 
     });
 }
 
-#[gpui::test]
-async fn test_history_items_vs_very_good_external_match(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_history_items_vs_very_good_external_match(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     cx.update(|cx| {
@@ -3433,8 +3433,8 @@ async fn test_history_items_vs_very_good_external_match(cx: &mut gpui::TestAppCo
         });
 }
 
-#[gpui::test]
-async fn test_nonexistent_history_items_not_shown(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_nonexistent_history_items_not_shown(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     cx.update(|cx| {
@@ -3493,8 +3493,8 @@ async fn test_nonexistent_history_items_not_shown(cx: &mut gpui::TestAppContext)
     });
 }
 
-#[gpui::test]
-async fn test_search_results_refreshed_on_worktree_updates(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_results_refreshed_on_worktree_updates(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -3556,8 +3556,8 @@ async fn test_search_results_refreshed_on_worktree_updates(cx: &mut gpui::TestAp
     });
 }
 
-#[gpui::test]
-async fn test_worktree_entry_updates_are_coalesced(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_worktree_entry_updates_are_coalesced(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -3601,8 +3601,8 @@ async fn test_worktree_entry_updates_are_coalesced(cx: &mut gpui::TestAppContext
     });
 }
 
-#[gpui::test]
-async fn test_search_results_refreshed_on_standalone_file_creation(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_results_refreshed_on_standalone_file_creation(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -3695,9 +3695,9 @@ async fn test_search_results_refreshed_on_standalone_file_creation(cx: &mut gpui
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_search_results_refreshed_on_adding_and_removing_worktrees(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let app_state = init_test(cx);
 
@@ -3772,7 +3772,7 @@ async fn test_search_results_refreshed_on_adding_and_removing_worktrees(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_history_items_uniqueness_for_multiple_worktree_open_all_files(
     cx: &mut TestAppContext,
 ) {
@@ -3915,8 +3915,8 @@ async fn test_history_items_uniqueness_for_multiple_worktree_open_all_files(
     });
 }
 
-#[gpui::test]
-async fn test_selected_match_stays_selected_after_matches_refreshed(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_selected_match_stays_selected_after_matches_refreshed(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     cx.update(|cx| {
@@ -3990,9 +3990,9 @@ async fn test_selected_match_stays_selected_after_matches_refreshed(cx: &mut gpu
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_first_match_selected_if_previous_one_is_not_in_the_match_list(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let app_state = init_test(cx);
 
@@ -4034,8 +4034,8 @@ async fn test_first_match_selected_if_previous_one_is_not_in_the_match_list(
     });
 }
 
-#[gpui::test]
-async fn test_keeps_file_finder_open_after_modifier_keys_release(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_keeps_file_finder_open_after_modifier_keys_release(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -4063,8 +4063,8 @@ async fn test_keeps_file_finder_open_after_modifier_keys_release(cx: &mut gpui::
     active_file_picker(&workspace, cx);
 }
 
-#[gpui::test]
-async fn test_opens_file_on_modifier_keys_release(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_opens_file_on_modifier_keys_release(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -4103,9 +4103,9 @@ async fn test_opens_file_on_modifier_keys_release(cx: &mut gpui::TestAppContext)
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_switches_between_release_norelease_modes_on_forward_nav(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let app_state = init_test(cx);
 
@@ -4160,9 +4160,9 @@ async fn test_switches_between_release_norelease_modes_on_forward_nav(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_switches_between_release_norelease_modes_on_backward_nav(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let app_state = init_test(cx);
 
@@ -4221,8 +4221,8 @@ async fn test_switches_between_release_norelease_modes_on_backward_nav(
     });
 }
 
-#[gpui::test]
-async fn test_extending_modifiers_does_not_confirm_selection(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_extending_modifiers_does_not_confirm_selection(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -4250,8 +4250,8 @@ async fn test_extending_modifiers_does_not_confirm_selection(cx: &mut gpui::Test
     active_file_picker(&workspace, cx);
 }
 
-#[gpui::test]
-async fn test_repeat_toggle_action(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_repeat_toggle_action(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
     app_state
         .fs
@@ -4302,7 +4302,7 @@ async fn test_repeat_toggle_action(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_without_dismiss_keeps_finder_open(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -4358,7 +4358,7 @@ async fn test_open_without_dismiss_keeps_finder_open(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_without_dismiss_opens_multiple_files(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -4424,7 +4424,7 @@ async fn test_open_without_dismiss_opens_multiple_files(cx: &mut TestAppContext)
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_without_dismiss_then_confirm_closes_finder(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -4482,7 +4482,7 @@ async fn test_open_without_dismiss_then_confirm_closes_finder(cx: &mut TestAppCo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_reopen_with_preview_keeps_results_width(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -4522,7 +4522,7 @@ async fn open_close_queried_buffer(
     expected_matches: usize,
     expected_editor_title: &str,
     workspace: &Entity<Workspace>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) -> Vec<FoundPath> {
     let history_items = open_queried_buffer(
         input,
@@ -4546,7 +4546,7 @@ async fn open_queried_buffer(
     expected_matches: usize,
     expected_editor_title: &str,
     workspace: &Entity<Workspace>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) -> Vec<FoundPath> {
     let picker = open_file_picker(workspace, cx);
     simulate_input(cx, input);
@@ -4751,7 +4751,7 @@ fn assert_match_at_position(
     assert_eq!(match_file_name, expected_file_name);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_filename_precedence(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -4804,7 +4804,7 @@ async fn test_filename_precedence(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paths_with_starting_slash(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 
@@ -4859,7 +4859,7 @@ async fn test_paths_with_starting_slash(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clear_navigation_history(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -4957,7 +4957,7 @@ async fn test_clear_navigation_history(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_order_independent_search(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -5006,7 +5006,7 @@ async fn test_order_independent_search(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_filename_preferred_over_directory_match(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -5053,7 +5053,7 @@ async fn test_filename_preferred_over_directory_match(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_start_of_word_preferred_over_scattered_match(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -5099,7 +5099,7 @@ async fn test_start_of_word_preferred_over_scattered_match(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_exact_filename_stem_preferred(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -5146,7 +5146,7 @@ async fn test_exact_filename_stem_preferred(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_exact_filename_with_directory_token(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -5187,7 +5187,7 @@ async fn test_exact_filename_with_directory_token(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_hover_does_not_set_has_changed_selected_index(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
 

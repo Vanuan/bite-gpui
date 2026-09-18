@@ -95,8 +95,8 @@ pub(crate) fn render_add_llm_provider_popover(
                         .color(Color::Muted),
                 ),
         )
-        .anchor(gpui::Anchor::TopRight)
-        .offset(gpui::Point {
+        .anchor(gpui_types::Anchor::TopRight)
+        .offset(gpui_types::Point {
             x: px(0.0),
             y: px(2.0),
         })
@@ -1354,7 +1354,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn young_account_configuration_stays_within_provider_row(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);

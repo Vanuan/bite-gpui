@@ -1,7 +1,7 @@
 use std::borrow::Cow;
 
 /// The mappings defined in this file where created from reading the alacritty source
-use gpui::Keystroke;
+use gpui_types::Keystroke;
 
 use crate::Modes;
 
@@ -260,7 +260,7 @@ fn modifier_code(keystroke: &Keystroke) -> u32 {
 
 #[cfg(test)]
 mod test {
-    use gpui::Modifiers;
+    use gpui_types::Modifiers;
 
     use super::*;
 

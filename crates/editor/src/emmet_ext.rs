@@ -565,7 +565,7 @@ mod tests {
 
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_wrap_selection_in_emmet_abbreviation(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -597,7 +597,7 @@ mod tests {
             input.update(cx, |input, cx| input.set_text("div.wrap", window, cx));
         });
         cx.update(|_, cx| {
-            cx.bind_keys([gpui::KeyBinding::new(
+            cx.bind_keys([gpui_runtime::KeyBinding::new(
                 "enter",
                 menu::Confirm,
                 Some("Editor && inline_input"),
@@ -613,7 +613,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_input_stays_open_on_empty_expansion(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -647,7 +647,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_wrap_line_on_empty_selection(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("  hello world\n", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -672,7 +672,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_wrap_enclosing_element_on_empty_selection(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<div>\n  <p>hello</p>\n</div>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -712,7 +712,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multiline_expansion_preserves_surrounding_indentation(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) =
             setup("<section>\n  <p>a</p>\n  <p>b</p>\n</section>", cx).await;
@@ -754,7 +754,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_escape_dismisses_emmet_wrap_input(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         fake_servers.next().await.unwrap();
@@ -769,7 +769,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multiple_cursors_on_blank_line_wrap_once(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("   \n", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -802,7 +802,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stale_confirmation_is_ignored(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -852,7 +852,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_preview_updates_as_you_type(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -911,7 +911,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_preview_does_not_embed_base_indentation(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) =
             setup("<section>\n  <p>a</p>\n  <p>b</p>\n</section>", cx).await;
@@ -958,7 +958,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_last_abbreviation_is_prefilled(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -999,15 +999,15 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_up_and_down_cycle_abbreviation_history(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
         cx.executor().run_until_parked();
         cx.update(|_, cx| {
             cx.bind_keys([
-                gpui::KeyBinding::new("up", crate::MoveUp, Some("Editor")),
-                gpui::KeyBinding::new("down", crate::MoveDown, Some("Editor")),
+                gpui_runtime::KeyBinding::new("up", crate::MoveUp, Some("Editor")),
+                gpui_runtime::KeyBinding::new("down", crate::MoveDown, Some("Editor")),
             ]);
         });
         let mut requests = fake_server.set_request_handler::<LspExpandAbbreviation, _, _>(
@@ -1089,7 +1089,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_wrap_individual_lines(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) =
             setup("<div>\n    About\n    News\n    Products\n</div>", cx).await;
@@ -1140,7 +1140,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_trim_filter_strips_list_markers(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("  * one\n  2. two\n", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -1178,7 +1178,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_partial_tag_selection_expands_to_element(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -1207,7 +1207,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dollar_signs_in_wrapped_text_are_escaped(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>costs $100</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -1239,7 +1239,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_comment_and_bem_filters_are_forwarded(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -1282,7 +1282,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_wrap_is_unavailable_in_stylesheets(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1336,7 +1336,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_interleaved_overlapping_selections_are_merged(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<div><p>a</p><p>b</p>xy</div>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -1380,7 +1380,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_enter_confirms_when_parent_editor_is_focused(cx: &mut TestAppContext) {
         let (editor, mut fake_servers, cx) = setup("<p>hello</p>", cx).await;
         let fake_server = fake_servers.next().await.unwrap();
@@ -1401,12 +1401,12 @@ mod tests {
         });
         cx.update(|_, cx| {
             cx.bind_keys([
-                gpui::KeyBinding::new(
+                gpui_runtime::KeyBinding::new(
                     "enter",
                     crate::actions::Newline,
                     Some("Editor && mode == full"),
                 ),
-                gpui::KeyBinding::new("enter", menu::Confirm, Some("Editor && inline_input")),
+                gpui_runtime::KeyBinding::new("enter", menu::Confirm, Some("Editor && inline_input")),
             ]);
         });
         editor.update_in(cx, |editor, window, cx| {
@@ -1427,7 +1427,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_wrap_in_multibuffer_excerpts(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 

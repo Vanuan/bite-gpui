@@ -691,7 +691,7 @@ impl PickerDelegate for CallHierarchyDelegate {
         &self,
         _window: &mut Window,
         cx: &mut Context<Picker<Self>>,
-    ) -> Option<gpui::AnyElement> {
+    ) -> Option<gpui_runtime::AnyElement> {
         if self.calls.is_empty() && self.root_stack.is_empty() {
             return None;
         }
@@ -1168,7 +1168,7 @@ fn shaped_width(
     let run = TextRun {
         len: text.len(),
         font,
-        color: gpui::Hsla::default(),
+        color: gpui_types::Hsla::default(),
         background_color: None,
         underline: None,
         strikethrough: None,
@@ -1185,7 +1185,7 @@ fn render_item(
     cx: &App,
 ) -> (StyledText, Option<StyledText>) {
     let mut base_text_style = buffer_text_style(cx);
-    base_text_style.text_overflow = Some(gpui::TextOverflow::Truncate(SharedString::from("…")));
+    base_text_style.text_overflow = Some(gpui_runtime::TextOverflow::Truncate(SharedString::from("…")));
 
     let highlight_style = HighlightStyle {
         background_color: Some(cx.theme().colors().text_accent.alpha(0.3)),
@@ -1220,7 +1220,7 @@ fn render_item(
 
         StyledText::new(label_text).with_default_highlights(
             &base_text_style,
-            gpui::combine_highlights(custom_highlights, syntax_runs),
+            gpui_runtime::combine_highlights(custom_highlights, syntax_runs),
         )
     } else {
         StyledText::new(call_item.display.name.clone()).with_default_highlights(
@@ -1248,7 +1248,7 @@ mod tests {
     use util::{path, rel_path::rel_path};
     use workspace::{AppState, MultiWorkspace};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_display_basic(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1278,7 +1278,7 @@ mod tests {
         assert_eq!(display.path.as_deref(), Some(expected_path));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_display_external_path_compacted(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1312,7 +1312,7 @@ mod tests {
         assert_eq!(display.path.as_deref(), Some(expected_path.as_str()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_display_with_detail(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1342,7 +1342,7 @@ mod tests {
         assert_eq!(display.path.as_deref(), Some(expected_path));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_display_prefers_label_suffix(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1370,7 +1370,7 @@ mod tests {
         assert_eq!(display.detail.as_deref(), Some("(&self) -> i32"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_display_trims_raw_detail_after_symbol_name(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1393,7 +1393,7 @@ mod tests {
         assert_eq!(display.detail.as_deref(), Some("(&self, arg: i32) -> i32"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_display_multiline_detail(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1417,7 +1417,7 @@ mod tests {
         assert_eq!(display.detail.as_deref(), Some("line1 line2 line3"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_display_multiline_where_clause(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1446,7 +1446,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_display_multiline_params(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1475,7 +1475,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_display_single_letter_name(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1498,7 +1498,7 @@ mod tests {
         assert_eq!(display.detail.as_deref(), Some("()"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_signature_label_highlights(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1556,7 +1556,7 @@ mod tests {
         assert_eq!(find_symbol_name("fn foo()", ""), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_hierarchy_modal_basic(cx: &mut TestAppContext) {
         init_test(cx);
         let (workspace, fake_server, test_uri, cx) =
@@ -1606,7 +1606,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_hierarchy_modal_incoming_mode(cx: &mut TestAppContext) {
         init_test(cx);
         let (workspace, fake_server, test_uri, cx) =
@@ -1684,7 +1684,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_hierarchy_modal_filtering(cx: &mut TestAppContext) {
         init_test(cx);
         let (workspace, fake_server, test_uri, cx) = setup_modal_test(
@@ -1759,7 +1759,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_hierarchy_modal_direction_toggle(cx: &mut TestAppContext) {
         init_test(cx);
         let (workspace, fake_server, test_uri, cx) =
@@ -1858,7 +1858,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_hierarchy_modal_expand_and_back(cx: &mut TestAppContext) {
         init_test(cx);
         let (workspace, fake_server, test_uri, cx) = setup_modal_test(
@@ -1923,15 +1923,15 @@ mod tests {
 
         cx.update(|_, cx| {
             cx.bind_keys([
-                gpui::KeyBinding::new("right", editor::actions::MoveRight, Some("Editor")),
-                gpui::KeyBinding::new("left", editor::actions::MoveLeft, Some("Editor")),
-                gpui::KeyBinding::new("down", menu::SelectNext, Some("Picker > Editor")),
-                gpui::KeyBinding::new(
+                gpui_runtime::KeyBinding::new("right", editor::actions::MoveRight, Some("Editor")),
+                gpui_runtime::KeyBinding::new("left", editor::actions::MoveLeft, Some("Editor")),
+                gpui_runtime::KeyBinding::new("down", menu::SelectNext, Some("Picker > Editor")),
+                gpui_runtime::KeyBinding::new(
                     "cmd-k right",
                     menu::SelectChild,
                     Some("CallHierarchyPicker > Picker > Editor"),
                 ),
-                gpui::KeyBinding::new(
+                gpui_runtime::KeyBinding::new(
                     "cmd-k left",
                     menu::SelectParent,
                     Some("CallHierarchyPicker > Picker > Editor"),
@@ -2061,7 +2061,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_hierarchy_modal_refreshes_on_buffer_registration(cx: &mut TestAppContext) {
         init_test(cx);
         let (workspace, fake_server, test_uri, cx) =
@@ -2169,7 +2169,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_hierarchy_modal_refreshes_on_lsp_work_end(cx: &mut TestAppContext) {
         init_test(cx);
         let (workspace, fake_server, test_uri, cx) =
@@ -2241,7 +2241,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_hierarchy_modal_no_symbol(cx: &mut TestAppContext) {
         init_test(cx);
         let (workspace, fake_server, _test_uri, cx) = setup_modal_test("fn main() {}\n", cx).await;
@@ -2265,7 +2265,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_call_hierarchy_modal_groups_call_sites(cx: &mut TestAppContext) {
         init_test(cx);
         let (workspace, fake_server, test_uri, cx) = setup_modal_test(

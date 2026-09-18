@@ -101,7 +101,7 @@ impl EncodingSelector {
 }
 
 impl Render for EncodingSelector {
-    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl gpui::IntoElement {
+    fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl gpui_runtime::IntoElement {
         v_flex()
             .key_context("EncodingSelector")
             .child(self.picker.clone())

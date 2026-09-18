@@ -6,7 +6,7 @@ mod selection;
 
 use base64::Engine as _;
 use gpui::EdgesRefinement;
-use gpui::HitboxBehavior;
+use gpui_runtime::HitboxBehavior;
 use gpui::UnderlineStyle;
 use language::LanguageName;
 
@@ -1756,10 +1756,10 @@ impl MarkdownElement {
     #[cfg(any(test, feature = "test-support"))]
     pub fn rendered_text(
         markdown: Entity<Markdown>,
-        cx: &mut gpui::VisualTestContext,
+        cx: &mut gpui_runtime::VisualTestContext,
         style: impl FnOnce(&Window, &App) -> MarkdownStyle,
     ) -> String {
-        use gpui::size;
+        use gpui_backend::size;
 
         let (text, _) = cx.draw(
             Default::default(),
@@ -2562,7 +2562,7 @@ impl Element for MarkdownElement {
     fn request_layout(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -3294,14 +3294,14 @@ impl Element for MarkdownElement {
             on_render(rendered_markdown.text.clone());
         }
         let child_layout_id = rendered_markdown.element.request_layout(window, cx);
-        let layout_id = window.request_layout(gpui::Style::default(), [child_layout_id], cx);
+        let layout_id = window.request_layout(gpui_runtime::Style::default(), [child_layout_id], cx);
         (layout_id, rendered_markdown)
     }
 
     fn prepaint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         bounds: Bounds<Pixels>,
         rendered_markdown: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -3320,7 +3320,7 @@ impl Element for MarkdownElement {
     fn paint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         rendered_markdown: &mut Self::RequestLayoutState,
         hitbox: &mut Self::PrepaintState,
@@ -4238,7 +4238,7 @@ impl Element for HighlightedLine {
     fn request_layout(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -4248,7 +4248,7 @@ impl Element for HighlightedLine {
     fn prepaint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -4260,7 +4260,7 @@ impl Element for HighlightedLine {
     fn paint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         _prepaint: &mut Self::PrepaintState,
@@ -4962,7 +4962,7 @@ mod tests {
         fn request_layout(
             &mut self,
             id: Option<&GlobalElementId>,
-            inspector_id: Option<&gpui::InspectorElementId>,
+            inspector_id: Option<&gpui_runtime::InspectorElementId>,
             window: &mut Window,
             cx: &mut App,
         ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -4973,7 +4973,7 @@ mod tests {
         fn prepaint(
             &mut self,
             id: Option<&GlobalElementId>,
-            inspector_id: Option<&gpui::InspectorElementId>,
+            inspector_id: Option<&gpui_runtime::InspectorElementId>,
             bounds: Bounds<Pixels>,
             rendered_markdown: &mut Self::RequestLayoutState,
             window: &mut Window,
@@ -4986,7 +4986,7 @@ mod tests {
         fn paint(
             &mut self,
             id: Option<&GlobalElementId>,
-            inspector_id: Option<&gpui::InspectorElementId>,
+            inspector_id: Option<&gpui_runtime::InspectorElementId>,
             bounds: Bounds<Pixels>,
             rendered_markdown: &mut Self::RequestLayoutState,
             hitbox: &mut Self::PrepaintState,
@@ -5045,7 +5045,7 @@ mod tests {
             .expect("markdown should be rendered in the test view")
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_block_controls_are_unique_across_markdown_entities(cx: &mut TestAppContext) {
         struct TestWindow;
 
@@ -5091,7 +5091,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mappings(cx: &mut TestAppContext) {
         // Formatting.
         assert_mappings(
@@ -5146,7 +5146,7 @@ mod tests {
         render_markdown_with_language_registry(markdown, None, cx)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_active_search_highlight_uses_match_index(cx: &mut TestAppContext) {
         let markdown = cx.new(|cx| Markdown::new("zero one two".into(), None, None, cx));
 
@@ -5166,7 +5166,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_non_rendered_source_ranges(cx: &mut TestAppContext) {
         let source = "[@octocat](https://github.com/octocat) https://github.com/octocat";
         let markdown = cx.new(|cx| Markdown::new(source.into(), None, None, cx));
@@ -5178,7 +5178,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_non_rendered_source_ranges_for_reference_definitions(cx: &mut TestAppContext) {
         let source = "[@octocat][octocat]\n\n[octocat]: https://github.com/octocat";
         let markdown = cx.new(|cx| Markdown::new(source.into(), None, None, cx));
@@ -5190,7 +5190,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_non_rendered_source_ranges_for_images(cx: &mut TestAppContext) {
         let source = "![alt](https://example.com/img.png \"title\")";
         let markdown = cx.new(|cx| Markdown::new(source.into(), None, None, cx));
@@ -5202,7 +5202,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_non_rendered_source_ranges_for_linked_images(cx: &mut TestAppContext) {
         let source = "[![alt](https://example.com/img.png)](https://example.com/dest)";
         let markdown = cx.new(|cx| Markdown::new(source.into(), None, None, cx));
@@ -5214,7 +5214,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_non_rendered_source_ranges_for_image_between_link_text(cx: &mut TestAppContext) {
         let source = "[before ![alt](https://example.com/img.png) after](https://example.com/dest)";
         let markdown = cx.new(|cx| Markdown::new(source.into(), None, None, cx));
@@ -5226,7 +5226,7 @@ mod tests {
         assert_eq!(&source[43..49], " after");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_non_rendered_source_ranges_are_empty_while_parsing(cx: &mut TestAppContext) {
         let markdown =
             cx.new(|cx| Markdown::new("[a](https://example.com)".into(), None, None, cx));
@@ -5248,7 +5248,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_wrapped_code_block_has_no_scroll_handle(cx: &mut TestAppContext) {
         let markdown =
             cx.new(|cx| Markdown::new("```rust\nlet value = 1;\n```".into(), None, None, cx));
@@ -5264,7 +5264,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_block_highlights_cached_at_parse_time(cx: &mut TestAppContext) {
         let source = "```rust\nfn main() {}\n```";
         let (language, markdown) = markdown_with_rust_language(source, cx);
@@ -5289,7 +5289,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_block_highlights_reused_when_streaming(cx: &mut TestAppContext) {
         let source = "```rust\nfn main() {}\n```\n\nSome trailing text";
         let (language, markdown) = markdown_with_rust_language(source, cx);
@@ -5325,7 +5325,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_blocks_are_not_highlighted(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
         let mermaid_language = Arc::new(
@@ -5372,7 +5372,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_fallback_language_highlights_untagged_code_blocks(cx: &mut TestAppContext) {
         let language = language::rust_lang();
         language.set_theme(&rust_test_theme());
@@ -5411,7 +5411,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_no_fallback_language_without_untagged_code_blocks(cx: &mut TestAppContext) {
         let language = language::rust_lang();
         let language_registry = Arc::new(LanguageRegistry::test(cx.executor()));
@@ -5445,7 +5445,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_frontmatter_renders_without_delimiters(cx: &mut TestAppContext) {
         let rendered = render_markdown_with_options(
             "---\ntitle: Post\n---\nBody",
@@ -5459,7 +5459,7 @@ mod tests {
         assert_eq!(rendered.text_for_range(0..24), "title\nPost\nBody");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_frontmatter_falls_back_to_code_block_for_nested_yaml(cx: &mut TestAppContext) {
         let rendered = render_markdown_with_options(
             "---\ntags:\n  - zed\n---\nBody",
@@ -5557,7 +5557,7 @@ mod tests {
             .collect()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_inline_code_chips_cover_exactly_the_code_span_glyphs(cx: &mut TestAppContext) {
         let chip_background = gpui::red();
         let style_with_chips = || MarkdownStyle {
@@ -5619,7 +5619,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_soft_break_keeps_space_in_paragraph_with_image(cx: &mut TestAppContext) {
         let image = test_image(cx);
         let rendered = render_markdown_with_image_resolver(
@@ -5643,7 +5643,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_soft_break_after_image_does_not_insert_leading_space(cx: &mut TestAppContext) {
         let image = test_image(cx);
         let rendered = render_markdown_with_image_resolver(
@@ -5663,7 +5663,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_break_between_images_does_not_inject_leading_space(cx: &mut TestAppContext) {
         let image = test_image(cx);
         let rendered = render_markdown_with_image_resolver(
@@ -5686,7 +5686,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_break_in_tight_list_item_after_image_item_is_newline(cx: &mut TestAppContext) {
         let image = test_image(cx);
         let rendered = render_markdown_with_image_resolver(
@@ -5709,7 +5709,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_hard_style_soft_break_after_image_moves_caption_to_next_row(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
 
@@ -5765,7 +5765,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_surrounding_word_range(cx: &mut TestAppContext) {
         let rendered = render_markdown("Hello world tesεζ", cx);
 
@@ -5790,7 +5790,7 @@ mod tests {
         assert_eq!(selected_text, "Hello");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_surrounding_line_range(cx: &mut TestAppContext) {
         let rendered = render_markdown("First line\n\nSecond line\n\nThird lineεζ", cx);
 
@@ -5810,7 +5810,7 @@ mod tests {
         assert_eq!(selected_text, "Third lineεζ");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_selection_head_movement(cx: &mut TestAppContext) {
         let rendered = render_markdown("Hello world test", cx);
 
@@ -5844,7 +5844,7 @@ mod tests {
         assert_eq!(selection.tail(), 5);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_word_selection_drag(cx: &mut TestAppContext) {
         let rendered = render_markdown("Hello world test", cx);
 
@@ -5883,7 +5883,7 @@ mod tests {
         assert_eq!(selected_text, "world");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_selection_with_markdown_formatting(cx: &mut TestAppContext) {
         let rendered = render_markdown(
             "This is **bold** text, this is *italic* text, use `code` here",
@@ -5902,7 +5902,7 @@ mod tests {
         assert_eq!(selected_text, "code");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_table_column_selection(cx: &mut TestAppContext) {
         let rendered = render_markdown("| a | b |\n|---|---|\n| c | d |", cx);
 
@@ -5931,7 +5931,7 @@ mod tests {
         "| R2 | Low | src/lib.rs | 7 | Prefer iterators over index loops |\n",
     );
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_table_columns_are_sized_to_their_content(cx: &mut TestAppContext) {
         fn cells(row: &str) -> impl Iterator<Item = &str> {
             row.trim().trim_matches('|').split('|')
@@ -5971,7 +5971,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_table_never_renders_past_its_available_width(cx: &mut TestAppContext) {
         for width in [800., 600., 500., 400., 300., 200.] {
             let rendered = render_markdown_at_width(REVIEW_TABLE, px(width), cx);
@@ -5986,7 +5986,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_table_border_hugs_its_columns(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
 
@@ -6009,7 +6009,7 @@ mod tests {
                 TableView { markdown }
             });
             cx.run_until_parked();
-            gpui::VisualTestContext::from_window(window.into(), cx)
+            gpui_runtime::VisualTestContext::from_window(window.into(), cx)
                 .debug_bounds("markdown_table")
                 .expect("table should have been rendered")
                 .size
@@ -6195,7 +6195,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_escaped_pipes_in_inline_code_inside_tables(cx: &mut TestAppContext) {
         let markdown = "\
 | Pattern | What it does |
@@ -6248,7 +6248,7 @@ mod tests {
         assert_eq!(source_range_for_rendered(&mappings, &(2..2)), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_inline_code_word_selection_excludes_backticks(cx: &mut TestAppContext) {
         // Test that double-clicking on inline code selects just the code content,
         // not the backticks. This verifies the fix for the bug where selecting
@@ -6273,7 +6273,7 @@ mod tests {
         assert_eq!(word_range, 5..9);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_surrounding_word_range_respects_word_characters(cx: &mut TestAppContext) {
         let rendered = render_markdown("foo.bar() baz", cx);
 
@@ -6325,7 +6325,7 @@ mod tests {
         assert_eq!(selected_text, "#bar");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_all_selection(cx: &mut TestAppContext) {
         let rendered = render_markdown("Hello world\n\nThis is a test\n\nwith multiple lines", cx);
 
@@ -6491,7 +6491,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_inline_br_renders_as_line_break(cx: &mut TestAppContext) {
         let options = MarkdownOptions {
             parse_html: true,
@@ -6517,7 +6517,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_hard_break_in_text_paragraph_after_paragraph(cx: &mut TestAppContext) {
         let options = MarkdownOptions {
             parse_html: true,
@@ -6548,7 +6548,7 @@ mod tests {
         assert!(!has_code_block(&Markdown::escape(diagnostic)));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_link_detected_for_source_index(cx: &mut TestAppContext) {
         let rendered = render_markdown("[Click here](https://example.com)", cx);
 
@@ -6565,7 +6565,7 @@ mod tests {
         assert!(rendered.link_for_source_index(past_end).is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_link_for_source_index_ignores_plain_text(cx: &mut TestAppContext) {
         let rendered = render_markdown("Hello world", cx);
 
@@ -6574,7 +6574,7 @@ mod tests {
         assert!(rendered.link_for_source_index(5).is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_span_link_detected_for_source_index(cx: &mut TestAppContext) {
         let source = "see `foo.rs` for details";
         let rendered = render_markdown_with_code_span_link(
@@ -6598,7 +6598,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_span_link_receives_decoded_inline_code(cx: &mut TestAppContext) {
         let source = r"| Pattern |
 | --- |
@@ -6613,7 +6613,7 @@ mod tests {
         assert_eq!(rendered.links[0].destination_url, "file:///tmp/a-or-b");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_span_link_ignores_code_when_mouse_interaction_is_prevented(
         cx: &mut TestAppContext,
     ) {
@@ -6638,14 +6638,14 @@ mod tests {
         assert_eq!(callback_count.load(Ordering::Relaxed), 0);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_span_link_ignores_code_without_callback(cx: &mut TestAppContext) {
         let rendered = render_markdown("see `foo.rs` for details", cx);
 
         assert!(rendered.links.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_span_link_ignores_code_inside_markdown_link(cx: &mut TestAppContext) {
         let source = "see [`foo.rs`](https://example.com) for details";
         let rendered = render_markdown_with_code_span_link(
@@ -6658,7 +6658,7 @@ mod tests {
         assert_eq!(rendered.links[0].destination_url, "https://example.com");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_context_menu_link_initial_state(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
         let (_, cx) = cx.add_window_view(|_, _| TestWindow);
@@ -6671,7 +6671,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_url_hover_callback(cx: &mut TestAppContext) {
         struct HoverTestView {
             markdown: Entity<Markdown>,
@@ -6702,17 +6702,17 @@ mod tests {
         });
         cx.run_until_parked();
 
-        cx.simulate_mouse_move(point(px(8.), px(8.)), None, gpui::Modifiers::default());
+        cx.simulate_mouse_move(point(px(8.), px(8.)), None, gpui_types::Modifiers::default());
         assert_eq!(
             hovered_urls.borrow().last().cloned().flatten().as_deref(),
             Some("https://example.com")
         );
 
-        cx.simulate_mouse_move(point(px(500.), px(500.)), None, gpui::Modifiers::default());
+        cx.simulate_mouse_move(point(px(500.), px(500.)), None, gpui_types::Modifiers::default());
         assert_eq!(hovered_urls.borrow().last(), Some(&None));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_url_hover_callback_for_linked_image(cx: &mut TestAppContext) {
         struct HoverTestView {
             markdown: Entity<Markdown>,
@@ -6750,23 +6750,23 @@ mod tests {
         });
         cx.run_until_parked();
 
-        cx.simulate_mouse_move(point(px(4.), px(4.)), None, gpui::Modifiers::default());
+        cx.simulate_mouse_move(point(px(4.), px(4.)), None, gpui_types::Modifiers::default());
         assert_eq!(
             hovered_urls.borrow().last().cloned().flatten().as_deref(),
             Some("https://example.com")
         );
 
-        cx.simulate_mouse_move(point(px(8.), px(8.)), None, gpui::Modifiers::default());
+        cx.simulate_mouse_move(point(px(8.), px(8.)), None, gpui_types::Modifiers::default());
         assert_eq!(
             hovered_urls.borrow().last().cloned().flatten().as_deref(),
             Some("https://example.com")
         );
 
-        cx.simulate_mouse_move(point(px(500.), px(500.)), None, gpui::Modifiers::default());
+        cx.simulate_mouse_move(point(px(500.), px(500.)), None, gpui_types::Modifiers::default());
         assert_eq!(hovered_urls.borrow().last(), Some(&None));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_capture_for_context_menu(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
         let (_, cx) = cx.add_window_view(|_, _| TestWindow);
@@ -6814,7 +6814,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_preview_body_font_size_is_rem_based(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
         let (_, cx) = cx.add_window_view(|_, _| TestWindow);
@@ -6838,7 +6838,7 @@ mod tests {
 
     fn failing_image_source() -> ImageSource {
         ImageSource::Custom(Arc::new(|_, _| {
-            Some(Err(gpui::ImageCacheError::Asset(
+            Some(Err(gpui_runtime::ImageCacheError::Asset(
                 "failed to load image".into(),
             )))
         }))
@@ -6846,7 +6846,7 @@ mod tests {
 
     fn loaded_image_source() -> ImageSource {
         let buffer = image::ImageBuffer::from_pixel(16, 16, image::Rgba([0, 0, 0, 255]));
-        ImageSource::Render(Arc::new(gpui::RenderImage::new(SmallVec::from_elem(
+        ImageSource::Render(Arc::new(gpui_runtime::RenderImage::new(SmallVec::from_elem(
             image::Frame::new(buffer),
             1,
         ))))
@@ -6856,7 +6856,7 @@ mod tests {
         source: &str,
         image_source: ImageSource,
         cx: &'a mut TestAppContext,
-    ) -> &'a mut gpui::VisualTestContext {
+    ) -> &'a mut gpui_runtime::VisualTestContext {
         struct ImageTestView {
             markdown: Entity<Markdown>,
             image_source: ImageSource,
@@ -6883,7 +6883,7 @@ mod tests {
         cx
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_clicking_image_fallback_opens_image_url(cx: &mut TestAppContext) {
         let cx = open_markdown_image_test_window(
             "![alt text](https://example.com/image.png)",
@@ -6891,14 +6891,14 @@ mod tests {
             cx,
         );
 
-        cx.simulate_click(point(px(8.), px(8.)), gpui::Modifiers::default());
+        cx.simulate_click(point(px(8.), px(8.)), gpui_types::Modifiers::default());
         assert_eq!(
             cx.opened_url(),
             Some("https://example.com/image.png".to_string())
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_clicking_image_fallback_inside_link_opens_link_url(cx: &mut TestAppContext) {
         let cx = open_markdown_image_test_window(
             "[![alt text](https://example.com/image.png)](https://example.com/link)",
@@ -6906,14 +6906,14 @@ mod tests {
             cx,
         );
 
-        cx.simulate_click(point(px(8.), px(8.)), gpui::Modifiers::default());
+        cx.simulate_click(point(px(8.), px(8.)), gpui_types::Modifiers::default());
         assert_eq!(
             cx.opened_url(),
             Some("https://example.com/link".to_string())
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_clicking_loaded_image_inside_link_opens_link_url(cx: &mut TestAppContext) {
         let cx = open_markdown_image_test_window(
             "[![alt text](https://example.com/image.png)](https://example.com/link)",
@@ -6921,7 +6921,7 @@ mod tests {
             cx,
         );
 
-        cx.simulate_click(point(px(8.), px(8.)), gpui::Modifiers::default());
+        cx.simulate_click(point(px(8.), px(8.)), gpui_types::Modifiers::default());
         assert_eq!(
             cx.opened_url(),
             Some("https://example.com/link".to_string())
@@ -6964,7 +6964,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_bounds_for_source_range_skips_gaps_between_rendered_lines(cx: &mut TestAppContext) {
         let source = "First\n\nSecond";
         let rendered = render_markdown(source, cx);
@@ -6981,7 +6981,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_bounds_for_source_range_returns_one_bound_per_soft_wrap_row(cx: &mut TestAppContext) {
         let sentence = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, \
             sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
@@ -7008,7 +7008,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_heading_font_sizes_are_distinct(cx: &mut TestAppContext) {
         let rendered = render_markdown("# H1\n\n## H2\n\n### H3\n\nBody text", cx);
 
@@ -7037,7 +7037,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_ui_zoom_does_not_affect_markdown_preview(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
 
@@ -7065,7 +7065,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_markdown_preview_follows_ui_font_size_setting_when_unset(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
 
@@ -7101,7 +7101,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_block_line_height_follows_buffer_line_height_setting(cx: &mut TestAppContext) {
         let font_size = 14.0;
         let (tight_prose, tight_code) = rendered_prose_and_code_line_heights(cx, font_size, 1.2);
@@ -7128,7 +7128,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_code_block_line_height_tracks_overridden_code_font_size(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
         cx.update(|cx| {
@@ -7169,7 +7169,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_wide_table_scrolls_horizontally(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
         let source = indoc::indoc! {r#"
@@ -7245,7 +7245,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_highlights_are_clipped_to_scrollable_code_block(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
         let source = indoc::indoc! {r#"
@@ -7285,7 +7285,7 @@ mod tests {
         ) -> (Bounds<Pixels>, Bounds<Pixels>) {
             cx.update(|window, _| {
                 let scale_factor = window.scale_factor();
-                let unscale = |bounds: Bounds<gpui::ScaledPixels>| {
+                let unscale = |bounds: Bounds<gpui_types::ScaledPixels>| {
                     Bounds::new(
                         point(
                             px(bounds.origin.x.as_f32() / scale_factor),
@@ -7388,9 +7388,9 @@ mod tests {
             .map(|(name, color)| {
                 (
                     name.to_owned(),
-                    gpui::HighlightStyle {
+                    gpui_runtime::HighlightStyle {
                         color: Some(color),
-                        ..gpui::HighlightStyle::default()
+                        ..gpui_runtime::HighlightStyle::default()
                     },
                 )
             }),

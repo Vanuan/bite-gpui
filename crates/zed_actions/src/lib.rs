@@ -452,7 +452,7 @@ pub mod theme {
 }
 
 pub mod theme_selector {
-    use gpui::Action;
+    use gpui_runtime::Action;
     use schemars::JsonSchema;
     use serde::Deserialize;
 
@@ -467,7 +467,7 @@ pub mod theme_selector {
 }
 
 pub mod icon_theme_selector {
-    use gpui::Action;
+    use gpui_runtime::Action;
     use schemars::JsonSchema;
     use serde::Deserialize;
 
@@ -562,7 +562,7 @@ pub mod buffer_search {
     );
 }
 pub mod settings_profile_selector {
-    use gpui::Action;
+    use gpui_runtime::Action;
     use schemars::JsonSchema;
     use serde::Deserialize;
 
@@ -869,7 +869,7 @@ pub struct WslConnectionOptions {
 // `debug_assertions` makes the actions visible for the docs preprocessor
 #[cfg(any(debug_assertions, target_os = "windows"))]
 pub mod wsl_actions {
-    use gpui::Action;
+    use gpui_runtime::Action;
     use schemars::JsonSchema;
     use serde::Deserialize;
 

@@ -650,7 +650,7 @@ impl ContextProvider for GoContextProvider {
         location: ContextLocation<'_>,
         _: Option<HashMap<String, String>>,
         _: Arc<dyn LanguageToolchainStore>,
-        cx: &mut gpui::App,
+        cx: &mut gpui_runtime::App,
     ) -> Task<Result<TaskVariables>> {
         let local_abs_path = location
             .file_location
@@ -956,7 +956,7 @@ mod tests {
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_label_for_completion() {
         let adapter = Arc::new(GoLspAdapter);
         let language = go_language();
@@ -1045,7 +1045,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_test_main_ignored(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1079,7 +1079,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_testify_suite_detection(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1132,7 +1132,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_runnable_detection(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1221,7 +1221,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_test_templates_run_arg_is_shell_escaped(cx: &mut TestAppContext) {
         let templates = cx
             .update(|cx| GoContextProvider.associated_tasks(None, cx))
@@ -1288,7 +1288,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_example_test_detection(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1325,7 +1325,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_slice_detection(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1446,7 +1446,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_slice_without_explicit_variable_detection(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1524,7 +1524,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_map_without_explicit_variable_detection(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1598,7 +1598,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_slice_ignored(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1648,7 +1648,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_map_detection(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1737,7 +1737,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_map_ignored(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1787,7 +1787,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_stress(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1849,7 +1849,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_mismatched_field(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -1900,7 +1900,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_slice_picks_correct_field_when_not_first(cx: &mut TestAppContext) {
         // The subtest-name field `name` is declared AFTER `anotherStr`, but `t.Run(tc.name, ...)`
         // still selects on `name`. The resolver must match `@_field_check` text to the right
@@ -1966,7 +1966,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_table_test_map_extras_include_case_name(cx: &mut TestAppContext) {
         let language = go_language();
 
@@ -2018,7 +2018,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_go_outline_includes_methods_with_receiver_forms(cx: &mut TestAppContext) {
         let language = go_language();
 

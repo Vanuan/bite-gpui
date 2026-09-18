@@ -7,7 +7,7 @@ use anyhow::Context as _;
 use anyhow::Result;
 use git::GitHostingProviderRegistry;
 use git::repository::GitRepository;
-use gpui::App;
+use gpui_runtime::App;
 use url::Url;
 use util::maybe;
 

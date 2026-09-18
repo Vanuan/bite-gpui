@@ -991,7 +991,7 @@ mod tests {
         crate::test_support::record_zed_created_worktree(fs, worktree_path, None, cx).await
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_build_root_plan_returns_none_for_main_worktree(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1031,7 +1031,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_build_root_plan_returns_some_for_linked_worktree(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1116,7 +1116,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_build_root_plan_returns_none_for_external_linked_worktree(
         cx: &mut TestAppContext,
     ) {
@@ -1180,7 +1180,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_build_root_plan_returns_none_for_unrecorded_linked_worktree_in_managed_directory(
         cx: &mut TestAppContext,
     ) {
@@ -1249,7 +1249,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_build_root_plan_with_custom_worktree_directory(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1368,7 +1368,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_root_deletes_directory_and_git_metadata(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1450,7 +1450,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_root_succeeds_when_directory_already_gone(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1538,7 +1538,7 @@ mod tests {
             .expect("remove_root should succeed even when directory is already gone");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_root_refuses_when_worktree_recreated_outside_zed(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1649,7 +1649,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_root_returns_error_and_rolls_back_on_remove_dir_failure(
         cx: &mut TestAppContext,
     ) {

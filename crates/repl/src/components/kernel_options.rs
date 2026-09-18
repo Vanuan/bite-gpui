@@ -425,7 +425,7 @@ impl PickerDelegate for KernelPickerDelegate {
         &self,
         _: &mut Window,
         cx: &mut Context<Picker<Self>>,
-    ) -> Option<gpui::AnyElement> {
+    ) -> Option<gpui_runtime::AnyElement> {
         Some(
             h_flex()
                 .w_full()
@@ -487,7 +487,7 @@ where
         PopoverMenu::new("kernel-switcher")
             .menu(move |_window, _cx| Some(picker_view.clone()))
             .trigger_with_tooltip(self.trigger, self.tooltip)
-            .attach(gpui::Anchor::BottomLeft)
+            .attach(gpui_types::Anchor::BottomLeft)
             .when_some(self.handle, |menu, handle| menu.with_handle(handle))
     }
 }

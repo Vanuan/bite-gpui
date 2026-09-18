@@ -49,7 +49,7 @@ impl EditorLspTestContext {
     pub async fn new(
         language: Language,
         capabilities: lsp::ServerCapabilities,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> EditorLspTestContext {
         let app_state = cx.update(AppState::test);
 
@@ -162,14 +162,14 @@ impl EditorLspTestContext {
 
     pub async fn new_rust(
         capabilities: lsp::ServerCapabilities,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> EditorLspTestContext {
         Self::new(Arc::into_inner(rust_lang()).unwrap(), capabilities, cx).await
     }
 
     pub async fn new_typescript(
         capabilities: lsp::ServerCapabilities,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> EditorLspTestContext {
         let mut word_characters: HashSet<char> = Default::default();
         word_characters.insert('$');
@@ -274,7 +274,7 @@ impl EditorLspTestContext {
 
     pub async fn new_tsx(
         capabilities: lsp::ServerCapabilities,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> EditorLspTestContext {
         let mut word_characters: HashSet<char> = Default::default();
         word_characters.insert('$');
@@ -386,7 +386,7 @@ impl EditorLspTestContext {
         Self::new(language, capabilities, cx).await
     }
 
-    pub async fn new_html(cx: &mut gpui::TestAppContext) -> Self {
+    pub async fn new_html(cx: &mut gpui_runtime::TestAppContext) -> Self {
         let language = Language::new(
             LanguageConfig {
                 name: "HTML".into(),
@@ -418,7 +418,7 @@ impl EditorLspTestContext {
         Self::new(language, Default::default(), cx).await
     }
 
-    pub async fn new_markdown_with_rust(cx: &mut gpui::TestAppContext) -> Self {
+    pub async fn new_markdown_with_rust(cx: &mut gpui_runtime::TestAppContext) -> Self {
         let context = Self::new(
             Arc::into_inner(markdown_lang()).unwrap(),
             Default::default(),
@@ -487,7 +487,7 @@ impl EditorLspTestContext {
     where
         T: 'static + request::Request,
         T::Params: 'static + Send,
-        F: 'static + Send + FnMut(lsp::Uri, T::Params, gpui::AsyncApp) -> Fut,
+        F: 'static + Send + FnMut(lsp::Uri, T::Params, gpui_runtime::AsyncApp) -> Fut,
         Fut: 'static + Future<Output = Result<T::Result>>,
     {
         let url = self.buffer_lsp_url.clone();

@@ -504,7 +504,7 @@ pub struct ThreadMetadataStore {
     threads_by_main_paths: HashMap<PathList, HashSet<ThreadId>>,
     threads_by_session: HashMap<acp::SessionId, ThreadId>,
     reload_task: Option<Shared<Task<()>>>,
-    conversation_subscriptions: HashMap<gpui::EntityId, Subscription>,
+    conversation_subscriptions: HashMap<gpui_runtime::EntityId, Subscription>,
     pending_thread_ops_tx: async_channel::Sender<DbOperation>,
     in_flight_archives: HashMap<ThreadId, (Task<()>, async_channel::Sender<()>)>,
     _db_operations_task: Task<()>,
@@ -532,7 +532,7 @@ impl DbOperation {
 #[cfg(any(test, feature = "test-support"))]
 pub struct TestMetadataDbName(pub String);
 #[cfg(any(test, feature = "test-support"))]
-impl gpui::Global for TestMetadataDbName {}
+impl gpui_runtime::Global for TestMetadataDbName {}
 
 #[cfg(any(test, feature = "test-support"))]
 impl TestMetadataDbName {
@@ -562,7 +562,7 @@ impl ThreadMetadataStore {
     #[cfg(any(test, feature = "test-support"))]
     pub fn init_global(cx: &mut App) {
         let db_name = TestMetadataDbName::global(cx);
-        let db = gpui::block_on(db::open_test_db::<ThreadMetadataDb>(&db_name));
+        let db = gpui_platform::block_on(db::open_test_db::<ThreadMetadataDb>(&db_name));
         let thread_store = cx.new(|cx| Self::new(ThreadMetadataDb(db), cx));
         cx.set_global(GlobalThreadMetadataStore(thread_store));
     }
@@ -1363,7 +1363,7 @@ pub enum ThreadMetadataStoreEvent {
     ThreadArchived(ThreadId),
 }
 
-impl gpui::EventEmitter<ThreadMetadataStoreEvent> for ThreadMetadataStore {}
+impl gpui_runtime::EventEmitter<ThreadMetadataStoreEvent> for ThreadMetadataStore {}
 
 struct ThreadMetadataDb(ThreadSafeConnection);
 
@@ -1915,7 +1915,7 @@ mod tests {
 
     fn clear_thread_metadata_remote_connection_backfill(cx: &mut TestAppContext) {
         let kvp = cx.update(|cx| KeyValueStore::global(cx));
-        gpui::block_on(kvp.delete_kvp("thread-metadata-remote-connection-backfill".to_string()))
+        gpui_platform::block_on(kvp.delete_kvp("thread-metadata-remote-connection-backfill".to_string()))
             .unwrap();
     }
 
@@ -1946,7 +1946,7 @@ mod tests {
         assert_eq!(metadata.display_title().as_ref(), "Agent Generated Title");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_database_round_trips_title_override(_cx: &mut TestAppContext) {
         let now = Utc::now();
         let mut metadata = make_metadata(
@@ -1960,7 +1960,7 @@ mod tests {
         let thread = std::thread::current();
         let test_name = thread.name().unwrap_or("unknown_test");
         let db_name = format!("THREAD_METADATA_DB_{}", test_name);
-        let db = ThreadMetadataDb(gpui::block_on(db::open_test_db::<ThreadMetadataDb>(
+        let db = ThreadMetadataDb(gpui_platform::block_on(db::open_test_db::<ThreadMetadataDb>(
             &db_name,
         )));
 
@@ -1973,7 +1973,7 @@ mod tests {
         assert_eq!(rows[0].title().as_deref(), Some("User Title"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_store_set_title_override_updates_cached_metadata(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2005,7 +2005,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_store_set_generated_title_clears_title_override(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2038,7 +2038,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_store_initializes_cache_from_database(cx: &mut TestAppContext) {
         let first_paths = PathList::new(&[Path::new("/project-a")]);
         let second_paths = PathList::new(&[Path::new("/project-b")]);
@@ -2048,7 +2048,7 @@ mod tests {
         let thread = std::thread::current();
         let test_name = thread.name().unwrap_or("unknown_test");
         let db_name = format!("THREAD_METADATA_DB_{}", test_name);
-        let db = ThreadMetadataDb(gpui::block_on(db::open_test_db::<ThreadMetadataDb>(
+        let db = ThreadMetadataDb(gpui_platform::block_on(db::open_test_db::<ThreadMetadataDb>(
             &db_name,
         )));
 
@@ -2107,7 +2107,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_store_cache_updates_after_save_and_delete(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2236,7 +2236,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_migrate_thread_metadata_migrates_only_missing_threads(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2361,7 +2361,7 @@ mod tests {
         assert!(migrated_by_session["projectless"].archived);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_migrate_thread_metadata_noops_when_all_threads_already_exist(
         cx: &mut TestAppContext,
     ) {
@@ -2423,7 +2423,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_migrate_thread_remote_connections_backfills_from_workspace_db(
         cx: &mut TestAppContext,
     ) {
@@ -2499,7 +2499,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_migrate_thread_metadata_archives_beyond_five_most_recent_per_project(
         cx: &mut TestAppContext,
     ) {
@@ -2597,7 +2597,7 @@ mod tests {
     // manifests as "my old threads disappeared after upgrading": the threads
     // are still in the legacy `threads.db`, but never make it into
     // `sidebar_threads`, so the new sidebar UI can't see them.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_migration_awaits_thread_store_reload(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2653,7 +2653,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_draft_thread_metadata_promotes_on_first_message(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2712,7 +2712,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_nonempty_thread_metadata_preserved_when_thread_released(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2749,7 +2749,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_threads_without_project_association_are_archived_by_default(
         cx: &mut TestAppContext,
     ) {
@@ -2820,7 +2820,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_subagent_threads_excluded_from_sidebar_metadata(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2943,7 +2943,7 @@ mod tests {
         assert!(deduped.contains(&DbOperation::Upsert(metadata2)));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_archive_and_unarchive_thread(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3026,7 +3026,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_entries_for_path_excludes_archived(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3081,7 +3081,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_entries_filter_by_remote_connection(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3195,7 +3195,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_all_persists_multiple_threads(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3250,7 +3250,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_archived_flag_persists_across_reload(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3309,7 +3309,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_archive_nonexistent_thread_is_noop(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3334,7 +3334,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_followed_by_archiving_without_parking(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3368,7 +3368,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_and_retrieve_archived_worktree(cx: &mut TestAppContext) {
         init_test(cx);
         let store = cx.update(|cx| ThreadMetadataStore::global(cx));
@@ -3415,7 +3415,7 @@ mod tests {
         assert_eq!(wt.original_commit_hash, "original_000");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_archived_worktree(cx: &mut TestAppContext) {
         init_test(cx);
         let store = cx.update(|cx| ThreadMetadataStore::global(cx));
@@ -3458,7 +3458,7 @@ mod tests {
         assert!(worktrees.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_link_multiple_threads_to_archived_worktree(cx: &mut TestAppContext) {
         init_test(cx);
         let store = cx.update(|cx| ThreadMetadataStore::global(cx));
@@ -3514,7 +3514,7 @@ mod tests {
         assert_eq!(wt1[0].id, wt2[0].id);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_complete_worktree_restore_multiple_paths(cx: &mut TestAppContext) {
         init_test(cx);
         let store = cx.update(|cx| ThreadMetadataStore::global(cx));
@@ -3555,7 +3555,7 @@ mod tests {
         assert!(paths.contains(&PathBuf::from("/other/unrelated")));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_complete_worktree_restore_preserves_unmatched_paths(cx: &mut TestAppContext) {
         init_test(cx);
         let store = cx.update(|cx| ThreadMetadataStore::global(cx));
@@ -3593,7 +3593,7 @@ mod tests {
         assert!(!paths.contains(&PathBuf::from("/should/not/appear")));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_update_restored_worktree_paths_multiple(cx: &mut TestAppContext) {
         init_test(cx);
         let store = cx.update(|cx| ThreadMetadataStore::global(cx));
@@ -3634,7 +3634,7 @@ mod tests {
         assert!(paths.contains(&PathBuf::from("/other/unrelated")));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_update_restored_worktree_paths_preserves_unmatched(cx: &mut TestAppContext) {
         init_test(cx);
         let store = cx.update(|cx| ThreadMetadataStore::global(cx));
@@ -3672,7 +3672,7 @@ mod tests {
         assert!(!paths.contains(&PathBuf::from("/should/not/appear")));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multiple_archived_worktrees_per_thread(cx: &mut TestAppContext) {
         init_test(cx);
         let store = cx.update(|cx| ThreadMetadataStore::global(cx));
@@ -4033,7 +4033,7 @@ mod tests {
     /// Regression test: archiving a thread created in a git worktree must
     /// preserve the thread's folder paths so that restoring it later does
     /// not prompt the user to re-associate a project.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_archived_thread_retains_paths_after_worktree_removal(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4131,7 +4131,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_collab_guest_threads_not_saved_to_metadata_store(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4190,7 +4190,7 @@ mod tests {
     // overwrites the stored paths of any retained or active local threads with
     // the new (expanded) path set, corrupting metadata that belonged to the
     // guest's own local project.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_collab_guest_retained_thread_paths_not_overwritten_on_worktree_change(
         cx: &mut TestAppContext,
     ) {

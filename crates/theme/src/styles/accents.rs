@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use gpui::Hsla;
+use gpui_types::Hsla;
 use serde::Deserialize;
 
 use crate::{

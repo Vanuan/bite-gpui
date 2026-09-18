@@ -573,7 +573,7 @@ impl Item for AgentDiffPane {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.editor
             .read(cx)
@@ -662,7 +662,7 @@ impl Item for AgentDiffPane {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else {
@@ -944,7 +944,7 @@ impl editor::Addon for AgentDiffAddon {
         self
     }
 
-    fn extend_key_context(&self, key_context: &mut gpui::KeyContext, _: &App) {
+    fn extend_key_context(&self, key_context: &mut gpui_runtime::KeyContext, _: &App) {
         key_context.add("agent_diff");
     }
 }
@@ -1846,7 +1846,7 @@ impl editor::Addon for EditorAgentDiffAddon {
         self
     }
 
-    fn extend_key_context(&self, key_context: &mut gpui::KeyContext, _: &App) {
+    fn extend_key_context(&self, key_context: &mut gpui_runtime::KeyContext, _: &App) {
         key_context.add("agent_diff");
         key_context.add("editor_agent_diff");
     }
@@ -1867,7 +1867,7 @@ mod tests {
     use util::path;
     use workspace::{MultiWorkspace, PathList};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multibuffer_agent_diff(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);
@@ -2029,7 +2029,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_single_file_review_diff(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);

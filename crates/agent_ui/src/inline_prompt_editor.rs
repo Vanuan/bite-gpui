@@ -1710,7 +1710,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_secondary_confirm_emits_execute_true_in_terminal_mode(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1771,7 +1771,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_confirm_emits_execute_false_in_terminal_mode(cx: &mut TestAppContext) {
         init_test(cx);
 

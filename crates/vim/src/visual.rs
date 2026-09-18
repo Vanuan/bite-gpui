@@ -945,8 +945,8 @@ mod test {
         test::{NeovimBackedTestContext, VimTestContext},
     };
 
-    #[gpui::test]
-    async fn test_enter_visual_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_enter_visual_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1024,8 +1024,8 @@ mod test {
             ˇ"});
     }
 
-    #[gpui::test]
-    async fn test_visual_insert_first_non_whitespace(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_insert_first_non_whitespace(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -1047,8 +1047,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_visual_insert_end_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_insert_end_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -1070,8 +1070,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_enter_visual_line_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_enter_visual_line_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1125,8 +1125,8 @@ mod test {
             ˇb"});
     }
 
-    #[gpui::test]
-    async fn test_visual_delete(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_delete(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.simulate("v w", "The quick ˇbrown")
@@ -1169,8 +1169,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_visual_line_delete(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_line_delete(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -1215,8 +1215,8 @@ mod test {
         cx.shared_state().await.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_visual_yank(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_yank(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("The quick ˇbrown").await;
@@ -1297,8 +1297,8 @@ mod test {
         cx.shared_clipboard().await.assert_eq("fox jumps over\n");
     }
 
-    #[gpui::test]
-    async fn test_visual_block_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1428,8 +1428,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_visual_block_issue_2123(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_issue_2123(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1447,8 +1447,8 @@ mod test {
             "
         });
     }
-    #[gpui::test]
-    async fn test_visual_block_mode_down_right(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_mode_down_right(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
             The ˇquick brown
@@ -1462,8 +1462,8 @@ mod test {
             the lazy dog"});
     }
 
-    #[gpui::test]
-    async fn test_visual_block_mode_up_left(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_mode_up_left(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
             The quick brown
@@ -1477,8 +1477,8 @@ mod test {
             the lazy dog"});
     }
 
-    #[gpui::test]
-    async fn test_visual_block_mode_other_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_mode_other_end(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
             The quick brown
@@ -1497,8 +1497,8 @@ mod test {
             the l«ˇazy d»og"});
     }
 
-    #[gpui::test]
-    async fn test_visual_block_mode_shift_other_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_mode_shift_other_end(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
             The quick brown
@@ -1517,8 +1517,8 @@ mod test {
             the lazy dog"});
     }
 
-    #[gpui::test]
-    async fn test_visual_block_insert(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_insert(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1567,8 +1567,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_visual_block_insert_after_ctrl_d_scroll(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_insert_after_ctrl_d_scroll(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         let shared_state_lines = (1..=10)
             .map(|line_number| format!("{line_number:02}"))
@@ -1599,8 +1599,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_visual_block_wrapping_selection(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_wrapping_selection(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // Ensure that the editor is wrapping lines at 12 columns so that each
@@ -1656,8 +1656,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_visual_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("hello (in [parˇens] o)").await;
@@ -1683,8 +1683,8 @@ mod test {
             .assert_eq("«ˇhello in a word» again.");
     }
 
-    #[gpui::test]
-    async fn test_visual_object_expands(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_object_expands(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1739,8 +1739,8 @@ mod test {
         // });
     }
 
-    #[gpui::test]
-    async fn test_visual_move_trailing_newline(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_move_trailing_newline(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("This is a newlinˇe\n", Mode::Normal);
@@ -1750,8 +1750,8 @@ mod test {
         cx.assert_state("This is a newlin«e\nˇ»", Mode::Visual);
     }
 
-    #[gpui::test]
-    async fn test_mode_across_command(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_mode_across_command(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("aˇbc", Mode::Normal);
@@ -1761,8 +1761,8 @@ mod test {
         assert_eq!(cx.mode(), Mode::VisualBlock);
     }
 
-    #[gpui::test]
-    async fn test_gn(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_gn(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("aaˇ aa aa aa aa").await;
@@ -1790,8 +1790,8 @@ mod test {
         cx.shared_state().await.assert_eq("«ˇaa aa» aa aa aa");
     }
 
-    #[gpui::test]
-    async fn test_gl(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_gl(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("aaˇ aa\naa", Mode::Normal);
@@ -1801,8 +1801,8 @@ mod test {
         cx.assert_state("«aaˇ» aa\n«aaˇ»", Mode::Visual);
     }
 
-    #[gpui::test]
-    async fn test_dgn_repeat(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_dgn_repeat(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("aaˇ aa aa aa aa").await;
@@ -1817,8 +1817,8 @@ mod test {
         cx.shared_state().await.assert_eq("aa   ˇ aa");
     }
 
-    #[gpui::test]
-    async fn test_cgn_repeat(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_cgn_repeat(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("aaˇ aa aa aa aa").await;
@@ -1830,8 +1830,8 @@ mod test {
         cx.shared_state().await.assert_eq("aa x ˇx aa aa");
     }
 
-    #[gpui::test]
-    async fn test_cgn_nomatch(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_cgn_nomatch(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("aaˇ aa aa aa aa").await;
@@ -1851,8 +1851,8 @@ mod test {
         cx.shared_state().await.assert_eq("aa ˇx aa aa aa");
     }
 
-    #[gpui::test]
-    async fn test_visual_shift_d(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_shift_d(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1883,8 +1883,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_shift_y(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_shift_y(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1897,8 +1897,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_gv(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_gv(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1959,8 +1959,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_p_g_v_y(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_p_g_v_y(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1980,8 +1980,8 @@ mod test {
         cx.shared_clipboard().await.assert_eq("quick\n");
     }
 
-    #[gpui::test]
-    async fn test_v2ap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_v2ap(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -2002,8 +2002,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_visual_syntax_sibling_selection(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_syntax_sibling_selection(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -2035,8 +2035,8 @@ mod test {
         // are now available for use
     }
 
-    #[gpui::test]
-    async fn test_visual_replace_uses_graphemes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_replace_uses_graphemes(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("«Hällöˇ» Wörld", Mode::Visual);

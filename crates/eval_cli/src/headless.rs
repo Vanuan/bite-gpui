@@ -5,7 +5,7 @@ use client::{Client, ProxySettings, RefreshLlmTokenListener, UserStore};
 use db::AppDatabase;
 use extension::ExtensionHostProxy;
 use fs::RealFs;
-use gpui::http_client::read_proxy_from_env;
+use gpui_runtime::http_client::read_proxy_from_env;
 use gpui::{App, AppContext as _, Entity};
 use gpui_tokio::Tokio;
 use language::LanguageRegistry;

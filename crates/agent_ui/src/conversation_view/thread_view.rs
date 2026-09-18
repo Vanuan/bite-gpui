@@ -31,9 +31,9 @@ use crate::ui::{
 use crate::unicode_confusables;
 
 use db::kvp::KeyValueStore;
-use gpui::List;
-use gpui::Stateful;
-use gpui::TaskExt;
+use gpui_runtime::List;
+use gpui_runtime::Stateful;
+use gpui_platform::TaskExt;
 use heapless::Vec as ArrayVec;
 use language_model::{
     FastModeConfirmation, LanguageModel, LanguageModelEffortLevel, LanguageModelId,
@@ -3141,7 +3141,7 @@ impl ThreadView {
                     .rounded_t_md()
                     .when(opaque_window, |this| {
                         this.shadow(vec![
-                            gpui::BoxShadow::new(px(1.), px(-1.), gpui::black().opacity(0.12))
+                            gpui_runtime::BoxShadow::new(px(1.), px(-1.), gpui::black().opacity(0.12))
                                 .blur_radius(px(2.)),
                         ])
                     })
@@ -4671,7 +4671,7 @@ impl ThreadView {
                                     .label_size(LabelSize::Small)
                                     .when(is_next, |this| this.style(ButtonStyle::Outlined))
                                     .when(is_next && message_editor.is_empty(cx), |this| {
-                                        let action: Box<dyn gpui::Action> = if can_fast_track {
+                                        let action: Box<dyn gpui_runtime::Action> = if can_fast_track {
                                             Box::new(Chat)
                                         } else {
                                             Box::new(SendNextQueuedMessage)
@@ -5109,11 +5109,11 @@ impl ThreadView {
                             )
                         }))
                     })
-                    .offset(gpui::Point {
+                    .offset(gpui_types::Point {
                         x: px(0.0),
                         y: px(-2.0),
                     })
-                    .anchor(gpui::Anchor::BottomLeft)
+                    .anchor(gpui_types::Anchor::BottomLeft)
                     .into_any_element(),
             );
         }
@@ -5414,11 +5414,11 @@ impl ThreadView {
                 }))
             })
             .with_handle(self.thinking_effort_menu_handle.clone())
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(-2.0),
             })
-            .anchor(gpui::Anchor::BottomLeft)
+            .anchor(gpui_types::Anchor::BottomLeft)
     }
 
     fn render_send_button(&self, cx: &mut Context<Self>) -> AnyElement {
@@ -5522,9 +5522,9 @@ impl ThreadView {
                     }
                 },
             )
-            .anchor(gpui::Anchor::BottomLeft)
+            .anchor(gpui_types::Anchor::BottomLeft)
             .with_handle(self.add_context_menu_handle.clone())
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(-2.0),
             })
@@ -6139,7 +6139,7 @@ impl ThreadView {
                 }
             }),
         )
-        .with_sizing_behavior(gpui::ListSizingBehavior::Auto)
+        .with_sizing_behavior(gpui_runtime::ListSizingBehavior::Auto)
         .flex_grow_1()
     }
 
@@ -7218,7 +7218,7 @@ impl ThreadView {
                     let view = view.clone();
                     cx.defer(move |cx| {
                         view.update(cx, |this, cx| {
-                            this.list_state.scroll_to(gpui::ListOffset {
+                            this.list_state.scroll_to(gpui_runtime::ListOffset {
                                 item_ix: entry_ix,
                                 offset_in_item: gpui::px(0.),
                             });
@@ -9695,8 +9695,8 @@ impl ThreadView {
 
         PopoverMenu::new(("permission-granularity", entry_ix))
             .with_handle(permission_dropdown_handle.clone())
-            .anchor(gpui::Anchor::TopRight)
-            .attach(gpui::Anchor::BottomRight)
+            .anchor(gpui_types::Anchor::TopRight)
+            .attach(gpui_types::Anchor::BottomRight)
             .trigger(
                 Button::new(("granularity-trigger", entry_ix), current_label)
                     .end_icon(
@@ -10053,7 +10053,7 @@ impl ThreadView {
                             cx,
                         )
                         .color(cx.theme().status().warning)
-                        .position(gpui::Point {
+                        .position(gpui_types::Point {
                             x: px(-2.),
                             y: px(-2.),
                         }),
@@ -12843,8 +12843,8 @@ mod tests {
         assert_eq!(strip_leading_command("hello", "compact"), "hello");
     }
 
-    #[gpui::test]
-    async fn test_open_link_bare_path(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_open_link_bare_path(cx: &mut gpui_runtime::TestAppContext) {
         crate::test_support::init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -12903,8 +12903,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_open_link_percent_escape_disambiguation(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_open_link_percent_escape_disambiguation(cx: &mut gpui_runtime::TestAppContext) {
         crate::test_support::init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -12925,7 +12925,7 @@ mod tests {
         let workspace = multi_workspace.read_with(cx, |mw, _| mw.workspace().clone());
         let workspace_weak = workspace.downgrade();
 
-        let open_link_and_active_path = |url: String, cx: &mut gpui::VisualTestContext| {
+        let open_link_and_active_path = |url: String, cx: &mut gpui_runtime::VisualTestContext| {
             multi_workspace.update_in(cx, |_, window, cx| {
                 open_link(url.into(), &workspace_weak, window, cx);
             });
@@ -12971,8 +12971,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_open_link_out_of_project_path(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_open_link_out_of_project_path(cx: &mut gpui_runtime::TestAppContext) {
         crate::test_support::init_test(cx);
 
         let fs = FakeFs::new(cx.executor());

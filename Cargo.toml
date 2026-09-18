@@ -1,6 +1,12 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/gpui_authoring",
+    "crates/gpui_engine",
+    "crates/gpui_engine_default",
+    "crates/gpui_parley",
+    "crates/gpui_runtime",
+    "crates/gpui_types",
     "crates/acp_thread",
     "crates/acp_tools",
     "crates/action_log",
@@ -272,11 +278,6 @@ publish = false
 edition = "2024"
 
 [workspace.dependencies]
-
-#
-# Workspace member crates
-#
-
 acp_thread = { path = "crates/acp_thread" }
 acp_tools = { path = "crates/acp_tools" }
 action_log = { path = "crates/action_log" }
@@ -363,7 +364,7 @@ gpui_apple = { path = "crates/gpui_apple" }
 gpui_linux = { path = "crates/gpui_linux", default-features = false }
 gpui_macos = { path = "crates/gpui_macos", default-features = false }
 gpui_macros = { path = "crates/gpui_macros" }
-gpui_platform = { path = "crates/gpui_platform", default-features = false }
+gpui_platform = { path = "crates/gpui_platform" }
 gpui_shared_string = { path = "crates/gpui_shared_string" }
 gpui_tokio = { path = "crates/gpui_tokio" }
 gpui_util = { path = "crates/gpui_util" }
@@ -930,6 +931,11 @@ yawc = { git = "https://github.com/zed-industries/yawc", rev = "71a452f551cac178
 zeroize = "1.8"
 zstd = "0.11"
 
+gpui_authoring = { path = "crates/gpui_authoring" }
+gpui_engine = { path = "crates/gpui_engine" }
+gpui_engine_default = { path = "crates/gpui_engine_default" }
+gpui_runtime = { path = "crates/gpui_runtime" }
+gpui_types = { path = "crates/gpui_types" }
 [workspace.dependencies.windows]
 version = "0.62"
 features = [

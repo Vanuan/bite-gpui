@@ -212,7 +212,7 @@ fn string_field(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     fn accept_with(
         entries: impl IntoIterator<Item = (&'static str, &'static str)>,
@@ -231,7 +231,7 @@ mod tests {
         ))
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_ask_user_returns_selected_option(cx: &mut TestAppContext) {
         let (event_stream, mut event_rx) = ToolCallEventStream::test();
         let tool_call_id = event_stream.tool_call_id().clone();
@@ -265,7 +265,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_ask_user_free_text_answer(cx: &mut TestAppContext) {
         let (event_stream, mut event_rx) = ToolCallEventStream::test();
         let tool = Arc::new(AskUserTool);
@@ -296,7 +296,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_ask_user_free_text_takes_precedence(cx: &mut TestAppContext) {
         let (event_stream, mut event_rx) = ToolCallEventStream::test();
         let tool = Arc::new(AskUserTool);
@@ -327,7 +327,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_ask_user_decline_is_an_error(cx: &mut TestAppContext) {
         let (event_stream, mut event_rx) = ToolCallEventStream::test();
         let tool = Arc::new(AskUserTool);
@@ -359,7 +359,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_ask_user_requires_options_or_free_text(cx: &mut TestAppContext) {
         let (event_stream, _event_rx) = ToolCallEventStream::test();
         let tool = Arc::new(AskUserTool);

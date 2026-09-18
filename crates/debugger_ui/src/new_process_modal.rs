@@ -523,8 +523,8 @@ impl NewProcessModal {
         )
         .style(ui::DropdownStyle::Outlined)
         .tab_index(0)
-        .attach(gpui::Anchor::BottomLeft)
-        .offset(gpui::Point {
+        .attach(gpui_types::Anchor::BottomLeft)
+        .offset(gpui_types::Point {
             x: px(0.0),
             y: px(2.0),
         })
@@ -801,7 +801,7 @@ impl Render for NewProcessModal {
 
 impl EventEmitter<DismissEvent> for NewProcessModal {}
 impl Focusable for NewProcessModal {
-    fn focus_handle(&self, cx: &ui::App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &ui::App) -> gpui_runtime::FocusHandle {
         self.mode_focus_handle(cx)
     }
 }

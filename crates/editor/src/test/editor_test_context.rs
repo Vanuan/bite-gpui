@@ -35,14 +35,14 @@ use util::{
 use super::{build_editor, build_editor_with_project};
 
 pub struct EditorTestContext {
-    pub cx: gpui::VisualTestContext,
+    pub cx: gpui_runtime::VisualTestContext,
     pub window: AnyWindowHandle,
     pub editor: Entity<Editor>,
     pub assertion_cx: AssertionContextManager,
 }
 
 impl EditorTestContext {
-    pub async fn new(cx: &mut gpui::TestAppContext) -> EditorTestContext {
+    pub async fn new(cx: &mut gpui_runtime::TestAppContext) -> EditorTestContext {
         let fs = FakeFs::new(cx.executor());
         let root = Self::root_path();
         fs.insert_tree(
@@ -103,7 +103,7 @@ impl EditorTestContext {
         Path::new("/root")
     }
 
-    pub async fn for_editor_in(editor: Entity<Editor>, cx: &mut gpui::VisualTestContext) -> Self {
+    pub async fn for_editor_in(editor: Entity<Editor>, cx: &mut gpui_runtime::VisualTestContext) -> Self {
         cx.focus(&editor);
         Self {
             window: cx.windows()[0],
@@ -113,7 +113,7 @@ impl EditorTestContext {
         }
     }
 
-    pub async fn for_editor(editor: WindowHandle<Editor>, cx: &mut gpui::TestAppContext) -> Self {
+    pub async fn for_editor(editor: WindowHandle<Editor>, cx: &mut gpui_runtime::TestAppContext) -> Self {
         let editor_view = editor.root(cx).unwrap();
         Self {
             cx: VisualTestContext::from_window(*editor.deref(), cx),
@@ -125,7 +125,7 @@ impl EditorTestContext {
 
     #[track_caller]
     pub fn new_multibuffer<const COUNT: usize>(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
         excerpts: [&str; COUNT],
     ) -> EditorTestContext {
         let mut multibuffer = MultiBuffer::new(language::Capability::ReadWrite);
@@ -829,7 +829,7 @@ pub fn assert_state_with_diff(
 }
 
 impl Deref for EditorTestContext {
-    type Target = gpui::VisualTestContext;
+    type Target = gpui_runtime::VisualTestContext;
 
     fn deref(&self) -> &Self::Target {
         &self.cx

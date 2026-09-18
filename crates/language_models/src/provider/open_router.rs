@@ -776,7 +776,7 @@ fn add_message_content_part(
 mod tests {
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_session_id_is_stable_without_exposing_thread_id() {
         let model = open_router::Model::new(
             "openai/gpt-4o",
@@ -826,7 +826,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_anthropic_model_caching_two_tier() {
         let model = open_router::Model::new(
             "anthropic/claude-sonnet-4-5",
@@ -981,7 +981,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_anthropic_model_no_cache_when_no_cache_flag() {
         let model = open_router::Model::new(
             "anthropic/claude-sonnet-4-5",
@@ -1048,7 +1048,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_non_anthropic_model_no_cache_control() {
         let model = open_router::Model::new(
             "openai/gpt-4o",
@@ -1115,7 +1115,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_into_open_router_sends_requested_effort() {
         let model = open_router::Model::new(
             "z-ai/glm-5.2",
@@ -1155,7 +1155,7 @@ mod tests {
         assert_eq!(reasoning.enabled, Some(true));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_into_open_router_disables_reasoning_when_thinking_not_allowed() {
         let model = open_router::Model::new(
             "z-ai/glm-5.2",

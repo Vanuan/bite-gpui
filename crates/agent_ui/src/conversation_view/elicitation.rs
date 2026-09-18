@@ -363,7 +363,7 @@ impl ElicitationFormSubmission {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     #[test]
     fn string_validation_rejects_email_format_mismatch() {
@@ -611,7 +611,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn form_state_preserves_string_whitespace(cx: &mut TestAppContext) {
         crate::conversation_view::tests::init_test(cx);
 
@@ -639,7 +639,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn form_state_prevents_duplicate_submissions(cx: &mut TestAppContext) {
         crate::conversation_view::tests::init_test(cx);
 
@@ -657,7 +657,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn form_state_discards_validation_for_stale_values(cx: &mut TestAppContext) {
         crate::conversation_view::tests::init_test(cx);
 
@@ -685,7 +685,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn form_state_discards_invalid_optional_single_select_default(cx: &mut TestAppContext) {
         crate::conversation_view::tests::init_test(cx);
 
@@ -709,7 +709,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn form_state_replaces_invalid_required_single_select_default(cx: &mut TestAppContext) {
         crate::conversation_view::tests::init_test(cx);
 
@@ -738,7 +738,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn form_state_rejects_invalid_single_select_value(cx: &mut TestAppContext) {
         crate::conversation_view::tests::init_test(cx);
 
@@ -768,7 +768,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn form_state_reports_all_validation_errors(cx: &mut TestAppContext) {
         crate::conversation_view::tests::init_test(cx);
 

@@ -733,7 +733,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_show_stash_dismisses(cx: &mut TestAppContext) {
         init_test(cx);
 

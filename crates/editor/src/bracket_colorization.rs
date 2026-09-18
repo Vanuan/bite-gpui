@@ -565,8 +565,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_basic_bracket_colorization(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_basic_bracket_colorization(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |language_settings| {
             language_settings.defaults.colorize_brackets = Some(true);
         });
@@ -652,8 +652,8 @@ where
         );
     }
 
-    #[gpui::test]
-    async fn test_file_less_file_colorization(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_file_less_file_colorization(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |language_settings| {
             language_settings.defaults.colorize_brackets = Some(true);
         });
@@ -686,8 +686,8 @@ where
         );
     }
 
-    #[gpui::test]
-    async fn test_markdown_bracket_colorization(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_markdown_bracket_colorization(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |language_settings| {
             language_settings.defaults.colorize_brackets = Some(true);
         });
@@ -738,8 +738,8 @@ where
         );
     }
 
-    #[gpui::test]
-    async fn test_markdown_brackets_in_multiple_hunks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_markdown_brackets_in_multiple_hunks(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |language_settings| {
             language_settings.defaults.colorize_brackets = Some(true);
         });
@@ -796,8 +796,8 @@ where
         );
     }
 
-    #[gpui::test]
-    async fn test_markdown_code_block_brackets_across_chunks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_markdown_code_block_brackets_across_chunks(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |language_settings| {
             language_settings.defaults.colorize_brackets = Some(true);
         });
@@ -838,8 +838,8 @@ where
         );
     }
 
-    #[gpui::test]
-    async fn test_bracket_colorization_after_language_swap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_bracket_colorization_after_language_swap(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |language_settings| {
             language_settings.defaults.colorize_brackets = Some(true);
         });
@@ -893,8 +893,8 @@ where
         );
     }
 
-    #[gpui::test]
-    async fn test_bracket_colorization_when_editing(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_bracket_colorization_when_editing(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |language_settings| {
             language_settings.defaults.colorize_brackets = Some(true);
         });
@@ -1031,8 +1031,8 @@ fn process_data«1()1» «1{
         );
     }
 
-    #[gpui::test]
-    async fn test_bracket_colorization_chunks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_bracket_colorization_chunks(cx: &mut gpui_runtime::TestAppContext) {
         let comment_lines = 100;
 
         init_test(cx, |language_settings| {
@@ -1245,8 +1245,8 @@ mod foo «1{
         );
     }
 
-    #[gpui::test]
-    async fn test_rainbow_bracket_highlights(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rainbow_bracket_highlights(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |language_settings| {
             language_settings.defaults.colorize_brackets = Some(true);
         });
@@ -1499,7 +1499,7 @@ mod foo «1{
 
         cx.update_editor(|editor, window, cx| {
             let was_scrolled = editor.set_scroll_position(
-                gpui::Point::new(0.0, last_bracket.1.end.row as f64 * 2.0),
+                gpui_types::Point::new(0.0, last_bracket.1.end.row as f64 * 2.0),
                 window,
                 cx,
             );
@@ -1525,13 +1525,13 @@ mod foo «1{
         );
 
         cx.update_editor(|editor, window, cx| {
-            let was_scrolled = editor.set_scroll_position(gpui::Point::default(), window, cx);
+            let was_scrolled = editor.set_scroll_position(gpui_types::Point::default(), window, cx);
             assert!(was_scrolled.0);
         });
 
         for _ in 0..200 {
             cx.update_editor(|editor, window, cx| {
-                editor.apply_scroll_delta(gpui::Point::new(0.0, 0.25), window, cx);
+                editor.apply_scroll_delta(gpui_types::Point::new(0.0, 0.25), window, cx);
             });
             cx.executor().advance_clock(Duration::from_millis(100));
             cx.executor().run_until_parked();
@@ -1629,8 +1629,8 @@ mod foo «1{
         }
     }
 
-    #[gpui::test]
-    async fn test_multi_buffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_multi_buffer(cx: &mut gpui_runtime::TestAppContext) {
         let comment_lines = 100;
 
         init_test(cx, |language_settings| {
@@ -1854,8 +1854,8 @@ mod foo «1{
         );
     }
 
-    #[gpui::test]
-    async fn test_multi_buffer_close_excerpts(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_multi_buffer_close_excerpts(cx: &mut gpui_runtime::TestAppContext) {
         let comment_lines = 5;
 
         init_test(cx, |language_settings| {
@@ -1949,9 +1949,9 @@ mod foo «1{
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     // reproduction of #47846
-    async fn test_bracket_colorization_with_folds(cx: &mut gpui::TestAppContext) {
+    async fn test_bracket_colorization_with_folds(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |language_settings| {
             language_settings.defaults.colorize_brackets = Some(true);
         });

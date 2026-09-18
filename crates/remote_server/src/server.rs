@@ -567,7 +567,7 @@ pub fn execute_run(
     init_paths()?;
 
     let startup_time = Instant::now();
-    let app = gpui_platform::headless();
+    let app = gpui::headless();
     let pid = std::process::id();
     let id = pid.to_string();
     let should_install_crash_handler =
@@ -896,7 +896,7 @@ pub(crate) fn execute_proxy(
                 );
                 kill_running_server(pid, &server_paths)?;
             }
-            gpui::block_on(spawn_server(&server_paths)).map_err(ExecuteProxyError::SpawnServer)?;
+            gpui_platform::block_on(spawn_server(&server_paths)).map_err(ExecuteProxyError::SpawnServer)?;
             std::fs::read_to_string(&server_paths.pid_file)
                 .and_then(|contents| {
                     contents.parse::<u32>().map_err(|_| {
@@ -967,7 +967,7 @@ pub(crate) fn execute_proxy(
         }
     });
 
-    if let Err(forwarding_result) = gpui::block_on(async move {
+    if let Err(forwarding_result) = gpui_platform::block_on(async move {
         futures::select! {
             result = stdin_task.fuse() => result.map_err(ExecuteProxyError::StdinTask),
             result = stdout_task.fuse() => result.map_err(ExecuteProxyError::StdoutTask),
@@ -975,7 +975,7 @@ pub(crate) fn execute_proxy(
         }
     }) {
         log::error!("encountered error while forwarding messages: {forwarding_result:#}",);
-        if !matches!(gpui::block_on(check_server_running(server_pid)), Ok(true)) {
+        if !matches!(gpui_platform::block_on(check_server_running(server_pid)), Ok(true)) {
             log::error!("server exited unexpectedly");
             return Err(ExecuteProxyError::ServerNotRunning(
                 ProxyLaunchError::ServerNotRunning,

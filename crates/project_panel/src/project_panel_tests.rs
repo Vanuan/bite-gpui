@@ -28,8 +28,8 @@ use workspace::{
     register_project_item,
 };
 
-#[gpui::test]
-async fn test_visible_list(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_visible_list(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -121,8 +121,8 @@ async fn test_visible_list(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_opening_file(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_opening_file(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -190,8 +190,8 @@ async fn test_opening_file(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_opening_file_with_project_panel_previews_disabled(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_opening_file_with_project_panel_previews_disabled(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
@@ -239,9 +239,9 @@ async fn test_opening_file_with_project_panel_previews_disabled(cx: &mut gpui::T
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_history_action_uses_focused_project_panel_selection(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test_with_git_ui(cx);
 
@@ -355,9 +355,9 @@ async fn test_file_history_action_uses_focused_project_panel_selection(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_history_action_does_not_fall_back_to_editor_when_focused_project_panel_selection_has_no_git_repo(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test_with_git_ui(cx);
 
@@ -487,8 +487,8 @@ async fn test_file_history_action_does_not_fall_back_to_editor_when_focused_proj
     });
 }
 
-#[gpui::test]
-async fn test_exclusions_in_visible_list(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_exclusions_in_visible_list(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
@@ -609,8 +609,8 @@ async fn test_exclusions_in_visible_list(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_auto_collapse_dir_paths(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_auto_collapse_dir_paths(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -801,8 +801,8 @@ async fn test_auto_collapse_dir_paths(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test(iterations = 30)]
-async fn test_editing_files(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 30)]
+async fn test_editing_files(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1234,8 +1234,8 @@ async fn test_editing_files(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_rename_folder_with_dot_selects_whole_name(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_rename_folder_with_dot_selects_whole_name(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1299,8 +1299,8 @@ async fn test_rename_folder_with_dot_selects_whole_name(cx: &mut gpui::TestAppCo
     });
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_adding_directories_via_file(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_adding_directories_via_file(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1437,8 +1437,8 @@ async fn test_adding_directories_via_file(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_adding_directory_via_file(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_adding_directory_via_file(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1570,8 +1570,8 @@ async fn test_adding_directory_via_file(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test]
-async fn test_copy_paste(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_copy_paste(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1678,8 +1678,8 @@ async fn test_copy_paste(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_cut_paste(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_cut_paste(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1768,8 +1768,8 @@ async fn test_cut_paste(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_cut_paste_between_different_worktrees(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_cut_paste_between_different_worktrees(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1868,8 +1868,8 @@ async fn test_cut_paste_between_different_worktrees(cx: &mut gpui::TestAppContex
     );
 }
 
-#[gpui::test]
-async fn test_copy_paste_between_different_worktrees(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_copy_paste_between_different_worktrees(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2007,8 +2007,8 @@ async fn test_copy_paste_between_different_worktrees(cx: &mut gpui::TestAppConte
     );
 }
 
-#[gpui::test]
-async fn test_copy_paste_directory(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_copy_paste_directory(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2190,8 +2190,8 @@ async fn test_copy_paste_directory(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_copy_paste_directory_with_sibling_file(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_copy_paste_directory_with_sibling_file(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2220,7 +2220,7 @@ async fn test_copy_paste_directory_with_sibling_file(cx: &mut gpui::TestAppConte
 
     toggle_expand_dir(&panel, "test/dir1", cx);
 
-    cx.simulate_modifiers_change(gpui::Modifiers {
+    cx.simulate_modifiers_change(gpui_types::Modifiers {
         control: true,
         ..Default::default()
     });
@@ -2299,8 +2299,8 @@ async fn test_copy_paste_directory_with_sibling_file(cx: &mut gpui::TestAppConte
     );
 }
 
-#[gpui::test]
-async fn test_copy_paste_nested_and_root_entries(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_copy_paste_nested_and_root_entries(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2329,7 +2329,7 @@ async fn test_copy_paste_nested_and_root_entries(cx: &mut gpui::TestAppContext) 
 
     toggle_expand_dir(&panel, "test/dir1", cx);
 
-    cx.simulate_modifiers_change(gpui::Modifiers {
+    cx.simulate_modifiers_change(gpui_types::Modifiers {
         control: true,
         ..Default::default()
     });
@@ -2382,8 +2382,8 @@ async fn test_copy_paste_nested_and_root_entries(cx: &mut gpui::TestAppContext) 
     );
 }
 
-#[gpui::test]
-async fn test_paste_external_paths(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_paste_external_paths(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     set_auto_open_settings(
         cx,
@@ -2441,8 +2441,8 @@ async fn test_paste_external_paths(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_copy_and_cut_write_to_system_clipboard(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_copy_and_cut_write_to_system_clipboard(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2493,8 +2493,8 @@ async fn test_copy_and_cut_write_to_system_clipboard(cx: &mut gpui::TestAppConte
     );
 }
 
-#[gpui::test]
-async fn test_remove_opened_file(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_remove_opened_file(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2587,8 +2587,8 @@ async fn test_remove_opened_file(cx: &mut gpui::TestAppContext) {
     ensure_no_open_items_and_panes(&workspace, cx);
 }
 
-#[gpui::test]
-async fn test_auto_open_new_file_when_enabled(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_auto_open_new_file_when_enabled(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     set_auto_open_settings(
         cx,
@@ -2626,8 +2626,8 @@ async fn test_auto_open_new_file_when_enabled(cx: &mut gpui::TestAppContext) {
     ensure_single_file_is_opened(&workspace, "auto-open.rs", cx);
 }
 
-#[gpui::test]
-async fn test_auto_open_new_file_when_disabled(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_auto_open_new_file_when_disabled(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     set_auto_open_settings(
         cx,
@@ -2665,8 +2665,8 @@ async fn test_auto_open_new_file_when_disabled(cx: &mut gpui::TestAppContext) {
     ensure_no_open_items_and_panes(&workspace, cx);
 }
 
-#[gpui::test]
-async fn test_auto_open_on_paste_when_enabled(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_auto_open_on_paste_when_enabled(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     set_auto_open_settings(
         cx,
@@ -2714,8 +2714,8 @@ async fn test_auto_open_on_paste_when_enabled(cx: &mut gpui::TestAppContext) {
     ensure_single_file_is_opened(&workspace, "target/original.rs", cx);
 }
 
-#[gpui::test]
-async fn test_auto_open_on_paste_when_disabled(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_auto_open_on_paste_when_disabled(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     set_auto_open_settings(
         cx,
@@ -2767,8 +2767,8 @@ async fn test_auto_open_on_paste_when_disabled(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_auto_open_on_drop_when_enabled(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_auto_open_on_drop_when_enabled(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     set_auto_open_settings(
         cx,
@@ -2805,8 +2805,8 @@ async fn test_auto_open_on_drop_when_enabled(cx: &mut gpui::TestAppContext) {
     ensure_single_file_is_opened(&workspace, "dropped.rs", cx);
 }
 
-#[gpui::test]
-async fn test_auto_open_on_drop_when_disabled(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_auto_open_on_drop_when_disabled(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     set_auto_open_settings(
         cx,
@@ -2847,8 +2847,8 @@ async fn test_auto_open_on_drop_when_disabled(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_create_duplicate_items(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_create_duplicate_items(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3052,9 +3052,9 @@ async fn test_create_duplicate_items(cx: &mut gpui::TestAppContext) {
 // NOTE: This test is skipped on Windows, because on Windows,
 // when it triggers the lsp store it converts `/src/test/first copy.txt` into an uri
 // but it fails with message `"/src\\test\\first copy.txt" is not parseable as an URI`
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(target_os = "windows", ignore)]
-async fn test_create_duplicate_items_and_check_history(cx: &mut gpui::TestAppContext) {
+async fn test_create_duplicate_items_and_check_history(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3318,9 +3318,9 @@ async fn test_create_duplicate_items_and_check_history(cx: &mut gpui::TestAppCon
 // NOTE: This test is skipped on Windows, because on Windows,
 // when it triggers the lsp store it converts `/src/test/first.txt` into an uri
 // but it fails with message `"/src\\test\\first.txt" is not parseable as an URI`
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(target_os = "windows", ignore)]
-async fn test_rename_item_and_check_history(cx: &mut gpui::TestAppContext) {
+async fn test_rename_item_and_check_history(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3437,8 +3437,8 @@ async fn test_rename_item_and_check_history(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_select_git_entry(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_select_git_entry(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3733,8 +3733,8 @@ async fn test_select_git_entry(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_select_directory(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_select_directory(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3838,8 +3838,8 @@ async fn test_select_directory(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_select_first_last(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_select_first_last(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3953,8 +3953,8 @@ async fn test_select_first_last(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_dir_toggle_collapse(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_dir_toggle_collapse(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3999,7 +3999,7 @@ async fn test_dir_toggle_collapse(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collapse_selected_entry_scrolls_into_view(cx: &mut TestAppContext) {
     init_test(cx);
     let (panel, mut cx) = open_panel_with_tree(
@@ -4130,7 +4130,7 @@ async fn test_collapse_selected_entry_scrolls_into_view(cx: &mut TestAppContext)
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collapse_selected_entry_does_not_scroll_visible_parent(cx: &mut TestAppContext) {
     init_test(cx);
     let (panel, mut cx) = open_panel_with_tree(
@@ -4233,7 +4233,7 @@ async fn test_collapse_selected_entry_does_not_scroll_visible_parent(cx: &mut Te
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collapse_selected_entry_preserves_selection_during_refresh(cx: &mut TestAppContext) {
     init_test(cx);
     let (panel, mut cx) = open_panel_with_tree(
@@ -4269,8 +4269,8 @@ async fn test_collapse_selected_entry_preserves_selection_during_refresh(cx: &mu
     );
 }
 
-#[gpui::test]
-async fn test_collapse_all_entries(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_collapse_all_entries(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4331,8 +4331,8 @@ async fn test_collapse_all_entries(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_collapse_all_entries_multiple_worktrees(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_collapse_all_entries_multiple_worktrees(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4373,8 +4373,8 @@ async fn test_collapse_all_entries_multiple_worktrees(cx: &mut gpui::TestAppCont
     );
 }
 
-#[gpui::test]
-async fn test_collapse_all_entries_with_collapsed_root(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_collapse_all_entries_with_collapsed_root(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4444,8 +4444,8 @@ async fn test_collapse_all_entries_with_collapsed_root(cx: &mut gpui::TestAppCon
     );
 }
 
-#[gpui::test]
-async fn test_collapse_all_entries_with_invisible_worktree(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_collapse_all_entries_with_invisible_worktree(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4509,8 +4509,8 @@ async fn test_collapse_all_entries_with_invisible_worktree(cx: &mut gpui::TestAp
     );
 }
 
-#[gpui::test]
-async fn test_new_file_move(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_new_file_move(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4581,9 +4581,9 @@ async fn test_new_file_move(cx: &mut gpui::TestAppContext) {
 // to it, and thus renaming it will fail on Windows.
 // See: https://stackoverflow.com/questions/41365318/access-is-denied-when-renaming-folder
 // See: https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_rename_information
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(target_os = "windows", ignore)]
-async fn test_rename_root_of_worktree(cx: &mut gpui::TestAppContext) {
+async fn test_rename_root_of_worktree(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4663,8 +4663,8 @@ async fn test_rename_root_of_worktree(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_rename_with_hide_root(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_rename_with_hide_root(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4768,7 +4768,7 @@ async fn test_rename_with_hide_root(cx: &mut gpui::TestAppContext) {
 }
 
 async fn setup_three_worktree_panel(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) -> (Entity<ProjectPanel>, VisualTestContext) {
     init_test(cx);
 
@@ -4793,8 +4793,8 @@ async fn setup_three_worktree_panel(
     (panel, cx)
 }
 
-#[gpui::test]
-async fn test_drag_worktree_root_reorders_worktrees(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_drag_worktree_root_reorders_worktrees(cx: &mut gpui_runtime::TestAppContext) {
     let (panel, mut cx) = setup_three_worktree_panel(cx).await;
     let cx = &mut cx;
 
@@ -4842,8 +4842,8 @@ async fn test_drag_worktree_root_reorders_worktrees(cx: &mut gpui::TestAppContex
     );
 }
 
-#[gpui::test]
-async fn test_drag_including_worktree_root_only_reorders(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_drag_including_worktree_root_only_reorders(cx: &mut gpui_runtime::TestAppContext) {
     let (panel, mut cx) = setup_three_worktree_panel(cx).await;
     let cx = &mut cx;
 
@@ -4881,7 +4881,7 @@ async fn test_drag_including_worktree_root_only_reorders(cx: &mut gpui::TestAppC
 
     // With the copy modifier held, a selection containing a root should still
     // only reorder worktrees and copy nothing.
-    cx.simulate_modifiers_change(gpui::Modifiers {
+    cx.simulate_modifiers_change(gpui_types::Modifiers {
         alt: true,
         control: true,
         ..Default::default()
@@ -4902,8 +4902,8 @@ async fn test_drag_including_worktree_root_only_reorders(cx: &mut gpui::TestAppC
     );
 }
 
-#[gpui::test]
-async fn test_rename_survives_window_deactivation(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_rename_survives_window_deactivation(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4945,8 +4945,8 @@ async fn test_rename_survives_window_deactivation(cx: &mut gpui::TestAppContext)
     );
 }
 
-#[gpui::test]
-async fn test_file_drag_paths_use_worktree_snapshot(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_file_drag_paths_use_worktree_snapshot(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let temp_dir = tempfile::tempdir().unwrap();
@@ -5023,9 +5023,9 @@ async fn test_file_drag_paths_use_worktree_snapshot(cx: &mut gpui::TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_external_paths_for_dragged_selection_uses_active_selection_unless_marked(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -5075,9 +5075,9 @@ async fn test_external_paths_for_dragged_selection_uses_active_selection_unless_
     assert_eq!(paths.entries(), &[(active_path, false)]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_external_paths_for_dragged_selection_resolves_folded_directory(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -5133,9 +5133,9 @@ async fn test_external_paths_for_dragged_selection_resolves_folded_directory(
     assert_eq!(paths.entries(), &[(PathBuf::from("/root/a/b"), true)]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_external_paths_for_dragged_selection_skips_remote_worktrees(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -5170,8 +5170,8 @@ async fn test_external_paths_for_dragged_selection_skips_remote_worktrees(
     assert!(paths.is_none());
 }
 
-#[gpui::test]
-async fn test_multiple_marked_entries(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multiple_marked_entries(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     let fs = FakeFs::new(cx.executor());
     fs.insert_tree(
@@ -5237,7 +5237,7 @@ async fn test_multiple_marked_entries(cx: &mut gpui::TestAppContext) {
             "      file_1.py",
         ]
     );
-    let modifiers_with_shift = gpui::Modifiers {
+    let modifiers_with_shift = gpui_types::Modifiers {
         shift: true,
         ..Default::default()
     };
@@ -5373,8 +5373,8 @@ async fn test_multiple_marked_entries(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_dragged_selection_resolve_entry(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_dragged_selection_resolve_entry(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -5537,8 +5537,8 @@ async fn test_dragged_selection_resolve_entry(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_drag_marked_entries_in_folded_directories(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_drag_marked_entries_in_folded_directories(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -5622,9 +5622,9 @@ async fn test_drag_marked_entries_in_folded_directories(cx: &mut gpui::TestAppCo
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dragging_same_named_files_preserves_one_source_on_conflict(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -5706,8 +5706,8 @@ async fn test_dragging_same_named_files_preserves_one_source_on_conflict(
     );
 }
 
-#[gpui::test]
-async fn test_drag_entries_between_different_worktrees(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_drag_entries_between_different_worktrees(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -5809,8 +5809,8 @@ async fn test_drag_entries_between_different_worktrees(cx: &mut gpui::TestAppCon
     );
 }
 
-#[gpui::test]
-async fn test_drag_multiple_entries(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_drag_multiple_entries(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -5895,8 +5895,8 @@ async fn test_drag_multiple_entries(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_autoreveal_and_gitignored_files(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_autoreveal_and_gitignored_files(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
@@ -6198,8 +6198,8 @@ async fn test_autoreveal_and_gitignored_files(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_gitignored_and_always_included(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_gitignored_and_always_included(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
@@ -6323,8 +6323,8 @@ async fn test_gitignored_and_always_included(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_explicit_reveal(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_explicit_reveal(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
@@ -6595,15 +6595,15 @@ mod multibuffer_wrapper {
             Editor::to_item_events(event, f)
         }
 
-        fn tab_content(&self, params: TabContentParams, _: &Window, cx: &App) -> gpui::AnyElement {
+        fn tab_content(&self, params: TabContentParams, _: &Window, cx: &App) -> gpui_runtime::AnyElement {
             ui::Label::new(self.tab_content_text(params.detail.unwrap_or_default(), cx))
                 .into_any_element()
         }
     }
 }
 
-#[gpui::test]
-async fn test_autoreveal_follows_multibuffer_selection(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_autoreveal_follows_multibuffer_selection(cx: &mut gpui_runtime::TestAppContext) {
     use editor::{
         Editor, EditorEvent, EditorMode, MultiBuffer, PathKey, SelectionEffects, ToOffset,
     };
@@ -6780,8 +6780,8 @@ async fn test_autoreveal_follows_multibuffer_selection(cx: &mut gpui::TestAppCon
     );
 }
 
-#[gpui::test]
-async fn test_reveal_in_project_panel_fallback(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_reveal_in_project_panel_fallback(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
     fs.insert_tree(
@@ -6936,8 +6936,8 @@ async fn test_reveal_in_project_panel_fallback(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_creating_excluded_entries(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_creating_excluded_entries(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
@@ -7134,8 +7134,8 @@ async fn test_creating_excluded_entries(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_selection_restored_when_creation_cancelled(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_selection_restored_when_creation_cancelled(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7233,8 +7233,8 @@ async fn test_selection_restored_when_creation_cancelled(cx: &mut gpui::TestAppC
     );
 }
 
-#[gpui::test]
-async fn test_basic_file_deletion_scenarios(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_basic_file_deletion_scenarios(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7360,8 +7360,8 @@ async fn test_basic_file_deletion_scenarios(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_deletion_gitignored(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_deletion_gitignored(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7465,8 +7465,8 @@ async fn test_deletion_gitignored(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_nested_deletion_gitignore(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_nested_deletion_gitignore(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7534,8 +7534,8 @@ async fn test_nested_deletion_gitignore(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_complex_selection_scenarios(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_complex_selection_scenarios(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7576,7 +7576,7 @@ async fn test_complex_selection_scenarios(cx: &mut gpui::TestAppContext) {
     toggle_expand_dir(&panel, "root/dir2/subdir2", cx);
 
     // Test Case 1: Select and delete nested directory with parent
-    cx.simulate_modifiers_change(gpui::Modifiers {
+    cx.simulate_modifiers_change(gpui_types::Modifiers {
         control: true,
         ..Default::default()
     });
@@ -7649,8 +7649,8 @@ async fn test_complex_selection_scenarios(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_delete_all_files_and_directories(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_delete_all_files_and_directories(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7692,7 +7692,7 @@ async fn test_delete_all_files_and_directories(cx: &mut gpui::TestAppContext) {
     toggle_expand_dir(&panel, "root/dir2/subdir2", cx);
 
     // Test Case 1: Select all root files and directories
-    cx.simulate_modifiers_change(gpui::Modifiers {
+    cx.simulate_modifiers_change(gpui_types::Modifiers {
         control: true,
         ..Default::default()
     });
@@ -7728,8 +7728,8 @@ async fn test_delete_all_files_and_directories(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_nested_selection_deletion(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_nested_selection_deletion(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7765,7 +7765,7 @@ async fn test_nested_selection_deletion(cx: &mut gpui::TestAppContext) {
     toggle_expand_dir(&panel, "root/dir1", cx);
     toggle_expand_dir(&panel, "root/dir1/subdir1", cx);
     toggle_expand_dir(&panel, "root/dir2", cx);
-    cx.simulate_modifiers_change(gpui::Modifiers {
+    cx.simulate_modifiers_change(gpui_types::Modifiers {
         control: true,
         ..Default::default()
     });
@@ -7798,8 +7798,8 @@ async fn test_nested_selection_deletion(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_multiple_worktrees_deletion(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multiple_worktrees_deletion(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7846,7 +7846,7 @@ async fn test_multiple_worktrees_deletion(cx: &mut gpui::TestAppContext) {
     toggle_expand_dir(&panel, "root2/dir3", cx);
 
     // Test Case 1: Delete files across different worktrees
-    cx.simulate_modifiers_change(gpui::Modifiers {
+    cx.simulate_modifiers_change(gpui_types::Modifiers {
         control: true,
         ..Default::default()
     });
@@ -7945,8 +7945,8 @@ async fn test_multiple_worktrees_deletion(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_selection_vs_marked_entries_priority(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_selection_vs_marked_entries_priority(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7978,7 +7978,7 @@ async fn test_selection_vs_marked_entries_priority(cx: &mut gpui::TestAppContext
     toggle_expand_dir(&panel, "root/dir1", cx);
     toggle_expand_dir(&panel, "root/dir2", cx);
 
-    cx.simulate_modifiers_change(gpui::Modifiers {
+    cx.simulate_modifiers_change(gpui_types::Modifiers {
         control: true,
         ..Default::default()
     });
@@ -8049,8 +8049,8 @@ async fn test_selection_vs_marked_entries_priority(cx: &mut gpui::TestAppContext
     );
 }
 
-#[gpui::test]
-async fn test_selection_fallback_to_next_highest_worktree(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_selection_fallback_to_next_highest_worktree(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8085,7 +8085,7 @@ async fn test_selection_fallback_to_next_highest_worktree(cx: &mut gpui::TestApp
     toggle_expand_dir(&panel, "root_b/dir1", cx);
     toggle_expand_dir(&panel, "root_c/dir2", cx);
 
-    cx.simulate_modifiers_change(gpui::Modifiers {
+    cx.simulate_modifiers_change(gpui_types::Modifiers {
         control: true,
         ..Default::default()
     });
@@ -8147,8 +8147,8 @@ pub(crate) fn toggle_expand_dir(
     cx.run_until_parked();
 }
 
-#[gpui::test]
-async fn test_expand_all_for_entry(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_expand_all_for_entry(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8342,8 +8342,8 @@ async fn test_expand_all_for_entry(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_collapse_all_for_entry(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_collapse_all_for_entry(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8533,8 +8533,8 @@ async fn test_collapse_all_for_entry(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test]
-async fn test_collapse_selected_entry_and_children_action(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_collapse_selected_entry_and_children_action(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8628,8 +8628,8 @@ async fn test_collapse_selected_entry_and_children_action(cx: &mut gpui::TestApp
     );
 }
 
-#[gpui::test]
-async fn test_collapse_root_single_worktree(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_collapse_root_single_worktree(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8711,8 +8711,8 @@ async fn test_collapse_root_single_worktree(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_collapse_root_multi_worktree(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_collapse_root_multi_worktree(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8814,8 +8814,8 @@ async fn test_collapse_root_multi_worktree(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_collapse_non_root_multi_worktree(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_collapse_non_root_multi_worktree(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8924,8 +8924,8 @@ async fn test_collapse_non_root_multi_worktree(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_expand_all_entries(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_expand_all_entries(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8997,8 +8997,8 @@ async fn test_expand_all_entries(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_expand_all_entries_multiple_worktrees(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_expand_all_entries_multiple_worktrees(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9059,8 +9059,8 @@ async fn test_expand_all_entries_multiple_worktrees(cx: &mut gpui::TestAppContex
     );
 }
 
-#[gpui::test]
-async fn test_expand_all_entries_via_window_dispatch(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_expand_all_entries_via_window_dispatch(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9136,8 +9136,8 @@ async fn test_expand_all_entries_via_window_dispatch(cx: &mut gpui::TestAppConte
     );
 }
 
-#[gpui::test]
-async fn test_expand_all_for_entry_single_worktree(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_expand_all_for_entry_single_worktree(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9201,8 +9201,8 @@ async fn test_expand_all_for_entry_single_worktree(cx: &mut gpui::TestAppContext
     );
 }
 
-#[gpui::test]
-async fn test_expand_all_entries_with_auto_fold(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_expand_all_entries_with_auto_fold(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9267,8 +9267,8 @@ async fn test_expand_all_entries_with_auto_fold(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_create_entries_without_selection(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_create_entries_without_selection(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9335,8 +9335,8 @@ async fn test_create_entries_without_selection(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_create_entries_without_selection_hide_root(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_create_entries_without_selection_hide_root(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9491,8 +9491,8 @@ async fn test_create_entries_without_selection_hide_root(cx: &mut gpui::TestAppC
     );
 }
 
-#[gpui::test]
-async fn test_context_menu_new_file_in_empty_hidden_root(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_context_menu_new_file_in_empty_hidden_root(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9590,8 +9590,8 @@ async fn test_context_menu_new_file_in_empty_hidden_root(cx: &mut gpui::TestAppC
 }
 
 #[cfg(windows)]
-#[gpui::test]
-async fn test_create_entry_with_trailing_dot_windows(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_create_entry_with_trailing_dot_windows(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9658,8 +9658,8 @@ async fn test_create_entry_with_trailing_dot_windows(cx: &mut gpui::TestAppConte
     );
 }
 
-#[gpui::test]
-async fn test_highlight_entry_for_external_drag(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_highlight_entry_for_external_drag(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9732,8 +9732,8 @@ async fn test_highlight_entry_for_external_drag(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_highlight_entry_for_selection_drag(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_highlight_entry_for_selection_drag(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9871,8 +9871,8 @@ async fn test_highlight_entry_for_selection_drag(cx: &mut gpui::TestAppContext) 
     });
 }
 
-#[gpui::test]
-async fn test_highlight_entry_for_selection_drag_cross_worktree(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_highlight_entry_for_selection_drag_cross_worktree(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9962,8 +9962,8 @@ async fn test_highlight_entry_for_selection_drag_cross_worktree(cx: &mut gpui::T
     });
 }
 
-#[gpui::test]
-async fn test_should_highlight_background_for_selection_drag(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_should_highlight_background_for_selection_drag(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -10120,8 +10120,8 @@ async fn test_should_highlight_background_for_selection_drag(cx: &mut gpui::Test
     });
 }
 
-#[gpui::test]
-async fn test_hide_root(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_hide_root(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -10314,8 +10314,8 @@ async fn test_hide_root(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test]
-async fn test_compare_selected_files(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_compare_selected_files(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -10418,8 +10418,8 @@ async fn test_compare_selected_files(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_compare_files_context_menu(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_compare_files_context_menu(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -10504,9 +10504,9 @@ async fn test_compare_files_context_menu(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_reveal_in_file_manager_path_falls_back_to_worktree_root(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -10553,8 +10553,8 @@ async fn test_reveal_in_file_manager_path_falls_back_to_worktree_root(
     );
 }
 
-#[gpui::test]
-async fn test_hide_hidden_entries(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_hide_hidden_entries(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -11033,8 +11033,8 @@ fn visible_entries_as_strings(
 }
 
 /// Test that missing sort_mode field defaults to DirectoriesFirst
-#[gpui::test]
-async fn test_sort_mode_default_fallback(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_sort_mode_default_fallback(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     // Verify that when sort_mode is not specified, it defaults to DirectoriesFirst
@@ -11047,8 +11047,8 @@ async fn test_sort_mode_default_fallback(cx: &mut gpui::TestAppContext) {
 }
 
 /// Test sort modes: DirectoriesFirst (default) vs Mixed
-#[gpui::test]
-async fn test_sort_mode_directories_first(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_sort_mode_directories_first(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -11087,8 +11087,8 @@ async fn test_sort_mode_directories_first(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_sort_mode_mixed(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_sort_mode_mixed(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -11139,8 +11139,8 @@ async fn test_sort_mode_mixed(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_sort_mode_files_first(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_sort_mode_files_first(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -11190,8 +11190,8 @@ async fn test_sort_mode_files_first(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_sort_mode_toggle(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_sort_mode_toggle(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -11253,9 +11253,9 @@ async fn test_sort_mode_toggle(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ensure_temporary_folding_when_creating_in_different_nested_dirs(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -11374,9 +11374,9 @@ async fn test_ensure_temporary_folding_when_creating_in_different_nested_dirs(
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_preserve_temporary_unfolded_active_index_on_blur_from_context_menu(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -11553,8 +11553,8 @@ async fn test_preserve_temporary_unfolded_active_index_on_blur_from_context_menu
     );
 }
 
-#[gpui::test]
-async fn test_context_menu_opens_at_mouse_position(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_context_menu_opens_at_mouse_position(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (panel, mut cx) = open_panel_with_files(3, DockSide::Left, cx).await;
     let cx = &mut cx;
@@ -11584,8 +11584,8 @@ async fn test_context_menu_opens_at_mouse_position(cx: &mut gpui::TestAppContext
     });
 }
 
-#[gpui::test]
-async fn test_context_menu_for_entry_in_upper_half_opens_downwards(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_context_menu_for_entry_in_upper_half_opens_downwards(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (panel, mut cx) = open_panel_with_files(3, DockSide::Left, cx).await;
     let cx = &mut cx;
@@ -11636,9 +11636,9 @@ async fn test_context_menu_for_entry_in_upper_half_opens_downwards(cx: &mut gpui
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_menu_for_entry_in_right_docked_panel_opens_leftwards(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (panel, mut cx) = open_panel_with_files(3, DockSide::Right, cx).await;
@@ -11679,9 +11679,9 @@ async fn test_context_menu_for_entry_in_right_docked_panel_opens_leftwards(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_context_menu_for_entry_in_lower_half_scrolls_into_view_and_opens_upwards(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (panel, mut cx) = open_panel_with_files(200, DockSide::Left, cx).await;
@@ -11740,9 +11740,9 @@ async fn test_context_menu_for_entry_in_lower_half_scrolls_into_view_and_opens_u
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_panel_keeps_focus_highlight_while_context_menu_is_deployed(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (panel, mut cx) = open_panel_with_files(3, DockSide::Left, cx).await;
@@ -11777,7 +11777,7 @@ async fn test_panel_keeps_focus_highlight_while_context_menu_is_deployed(
 async fn open_panel_with_files(
     file_count: usize,
     dock: DockSide,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) -> (Entity<ProjectPanel>, VisualTestContext) {
     cx.update(|cx| {
         let settings = *ProjectPanelSettings::get_global(cx);
@@ -11814,7 +11814,7 @@ async fn run_create_file_in_folded_path_case(
     expected_temporary_state: &[&str],
     expected_final_state: &[&str],
     accept_creation: bool,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let expected_collapsed_state = &["v root1", "    > parent/subdir/child  <== selected"];
 
@@ -11944,8 +11944,8 @@ async fn run_create_file_in_folded_path_case(
     }
 }
 
-#[gpui::test]
-async fn test_focus_follows_mouse_into_blank_area(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_focus_follows_mouse_into_blank_area(cx: &mut gpui_runtime::TestAppContext) {
     init_test_with_editor(cx);
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
@@ -12238,8 +12238,8 @@ impl Render for TestProjectItemView {
     }
 }
 
-#[gpui::test]
-async fn test_delete_prompt_escapes_markdown_in_file_name(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_delete_prompt_escapes_markdown_in_file_name(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12274,8 +12274,8 @@ async fn test_delete_prompt_escapes_markdown_in_file_name(cx: &mut gpui::TestApp
     );
 }
 
-#[gpui::test]
-async fn test_restore_file_prompt_escapes_markdown_in_file_name(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_restore_file_prompt_escapes_markdown_in_file_name(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12312,8 +12312,8 @@ async fn test_restore_file_prompt_escapes_markdown_in_file_name(cx: &mut gpui::T
     assert_eq!(message, "Discard changes to `__init__.py`?");
 }
 
-#[gpui::test]
-async fn test_folder_indicator_selection(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_folder_indicator_selection(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12405,8 +12405,8 @@ async fn test_folder_indicator_selection(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_diagnostic_mark_decorates_the_row_glyph(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_diagnostic_mark_decorates_the_row_glyph(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12518,8 +12518,8 @@ async fn test_diagnostic_mark_decorates_the_row_glyph(cx: &mut gpui::TestAppCont
     );
 }
 
-#[gpui::test]
-async fn test_file_rows_reserve_the_chevron_slot(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_file_rows_reserve_the_chevron_slot(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12570,7 +12570,7 @@ async fn test_file_rows_reserve_the_chevron_slot(cx: &mut gpui::TestAppContext) 
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_drag_state_clears_before_window_handoff(cx: &mut TestAppContext) {
     init_test_with_editor(cx);
     let fs = FakeFs::new(cx.executor());
@@ -12621,7 +12621,7 @@ async fn test_file_drag_state_clears_before_window_handoff(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_drag_state_clears_on_render_after_drag_stops(cx: &mut TestAppContext) {
     init_test_with_editor(cx);
     let fs = FakeFs::new(cx.executor());

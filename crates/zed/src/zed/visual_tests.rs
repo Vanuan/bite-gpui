@@ -109,7 +109,7 @@ pub async fn open_test_workspace(
 }
 
 /// Returns the default window size for visual tests (1280x800).
-pub fn default_window_size() -> Size<gpui::Pixels> {
+pub fn default_window_size() -> Size<gpui_types::Pixels> {
     size(px(1280.0), px(800.0))
 }
 
@@ -426,7 +426,7 @@ mod tests {
     #[test]
     #[ignore]
     fn test_visual_test_smoke() {
-        let mut cx = VisualTestAppContext::new(gpui_platform::current_platform(false));
+        let mut cx = VisualTestAppContext::new(gpui::current_platform(false));
 
         let _window = cx
             .open_offscreen_window_default(|_, cx| cx.new(|_| Empty))
@@ -438,10 +438,10 @@ mod tests {
     #[test]
     #[ignore]
     fn test_workspace_opens() {
-        let mut cx = VisualTestAppContext::new(gpui_platform::current_platform(false));
+        let mut cx = VisualTestAppContext::new(gpui::current_platform(false));
         let app_state = init_visual_test(&mut cx);
 
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             app_state
                 .fs
                 .as_fake()
@@ -456,7 +456,7 @@ mod tests {
                 .await;
         });
 
-        let workspace_result = gpui::block_on(open_test_workspace(app_state, &mut cx));
+        let workspace_result = gpui_platform::block_on(open_test_workspace(app_state, &mut cx));
         assert!(
             workspace_result.is_ok(),
             "Failed to open workspace: {:?}",
@@ -479,10 +479,10 @@ mod tests {
     #[test]
     #[ignore]
     fn test_workspace_screenshot() {
-        let mut cx = VisualTestAppContext::new(gpui_platform::current_platform(false));
+        let mut cx = VisualTestAppContext::new(gpui::current_platform(false));
         let app_state = init_visual_test(&mut cx);
 
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             app_state
                 .fs
                 .as_fake()
@@ -498,10 +498,10 @@ mod tests {
                 .await;
         });
 
-        let workspace = gpui::block_on(open_test_workspace(app_state, &mut cx))
+        let workspace = gpui_platform::block_on(open_test_workspace(app_state, &mut cx))
             .expect("Failed to open workspace");
 
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             wait_for_ui_stabilization(&cx).await;
 
             let screenshot_result = cx.capture_screenshot(workspace.into());

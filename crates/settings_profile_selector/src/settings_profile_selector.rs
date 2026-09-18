@@ -35,7 +35,7 @@ impl ModalView for SettingsProfileSelector {}
 impl EventEmitter<DismissEvent> for SettingsProfileSelector {}
 
 impl Focusable for SettingsProfileSelector {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.picker.focus_handle(cx)
     }
 }
@@ -348,7 +348,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_settings_profile_selector_state(cx: &mut TestAppContext) {
         let classroom_and_streaming_profile_name = "Classroom / Streaming".to_string();
         let demo_videos_profile_name = "Demo Videos".to_string();
@@ -581,7 +581,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_settings_profile_with_user_base(cx: &mut TestAppContext) {
         let user_settings_json = json!({
             "buffer_font_size": 10.0,
@@ -632,7 +632,7 @@ mod tests {
         cx.dispatch_action(Confirm);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_settings_profile_with_default_base(cx: &mut TestAppContext) {
         let user_settings_json = json!({
             "buffer_font_size": 10.0,
@@ -689,7 +689,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_settings_profile_selector_is_in_user_configuration_order(
         cx: &mut TestAppContext,
     ) {

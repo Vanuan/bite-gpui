@@ -411,7 +411,7 @@ mod tests {
 
     use crate::Diff;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pending_diff(cx: &mut TestAppContext) {
         let buffer = cx.new(|cx| Buffer::local("hello!", cx));
         let _diff = cx.new(|cx| Diff::new(buffer.clone(), cx));

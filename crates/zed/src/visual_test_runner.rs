@@ -150,7 +150,7 @@ fn run_visual_tests(project_path: PathBuf, update_baseline: bool) -> Result<()> 
     // Create the visual test context with deterministic task scheduling
     // Use real Assets so that SVG icons render properly
     let mut cx = VisualTestAppContext::with_asset_source(
-        gpui_platform::current_platform(false),
+        gpui::current_platform(false),
         Arc::new(Assets),
     );
 
@@ -683,7 +683,7 @@ enum TestResult {
 #[cfg(target_os = "macos")]
 fn run_visual_test(
     test_name: &str,
-    window: gpui::AnyWindowHandle,
+    window: gpui_runtime::AnyWindowHandle,
     cx: &mut VisualTestAppContext,
     update_baseline: bool,
 ) -> Result<TestResult> {
@@ -2827,12 +2827,12 @@ fn run_multi_workspace_sidebar_visual_tests(
 struct ErrorWrappingTestView;
 
 #[cfg(target_os = "macos")]
-impl gpui::Render for ErrorWrappingTestView {
+impl gpui_runtime::Render for ErrorWrappingTestView {
     fn render(
         &mut self,
-        _window: &mut gpui::Window,
-        cx: &mut gpui::Context<Self>,
-    ) -> impl gpui::IntoElement {
+        _window: &mut gpui_runtime::Window,
+        cx: &mut gpui_runtime::Context<Self>,
+    ) -> impl gpui_runtime::IntoElement {
         use ui::{Button, Callout, IconName, LabelSize, Severity, prelude::*, v_flex};
 
         let long_error_message = "Rate limit reached for gpt-5.2-codex in organization \
@@ -2876,12 +2876,12 @@ impl gpui::Render for ErrorWrappingTestView {
 struct ThreadItemBranchNameTestView;
 
 #[cfg(target_os = "macos")]
-impl gpui::Render for ThreadItemBranchNameTestView {
+impl gpui_runtime::Render for ThreadItemBranchNameTestView {
     fn render(
         &mut self,
-        _window: &mut gpui::Window,
-        cx: &mut gpui::Context<Self>,
-    ) -> impl gpui::IntoElement {
+        _window: &mut gpui_runtime::Window,
+        cx: &mut gpui_runtime::Context<Self>,
+    ) -> impl gpui_runtime::IntoElement {
         use ui::{
             IconName, Label, LabelSize, ThreadItem, ThreadItemWorktreeInfo, WorktreeKind,
             prelude::*,
@@ -3129,12 +3129,12 @@ fn run_thread_item_branch_name_visual_tests(
 struct ThreadItemIconDecorationsTestView;
 
 #[cfg(target_os = "macos")]
-impl gpui::Render for ThreadItemIconDecorationsTestView {
+impl gpui_runtime::Render for ThreadItemIconDecorationsTestView {
     fn render(
         &mut self,
-        _window: &mut gpui::Window,
-        cx: &mut gpui::Context<Self>,
-    ) -> impl gpui::IntoElement {
+        _window: &mut gpui_runtime::Window,
+        cx: &mut gpui_runtime::Context<Self>,
+    ) -> impl gpui_runtime::IntoElement {
         use ui::{IconName, Label, LabelSize, ThreadItem, prelude::*};
 
         let section_label = |text: &str| {

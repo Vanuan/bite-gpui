@@ -13,13 +13,13 @@ pub trait PopoverTrigger: IntoElement + Clickable + Toggleable + 'static {}
 
 impl<T: IntoElement + Clickable + Toggleable + 'static> PopoverTrigger for T {}
 
-impl<T: Clickable> Clickable for gpui::AnimationElement<T>
+impl<T: Clickable> Clickable for gpui_runtime::AnimationElement<T>
 where
     T: Clickable + 'static,
 {
     fn on_click(
         self,
-        handler: impl Fn(&gpui::ClickEvent, &mut Window, &mut App) + 'static,
+        handler: impl Fn(&gpui_runtime::ClickEvent, &mut Window, &mut App) + 'static,
     ) -> Self {
         self.map_element(|e| e.on_click(handler))
     }
@@ -29,7 +29,7 @@ where
     }
 }
 
-impl<T: Toggleable> Toggleable for gpui::AnimationElement<T>
+impl<T: Toggleable> Toggleable for gpui_runtime::AnimationElement<T>
 where
     T: Toggleable + 'static,
 {
@@ -361,7 +361,7 @@ impl<M: ManagedView> Element for PopoverMenu<M> {
     fn request_layout(
         &mut self,
         global_id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -437,7 +437,7 @@ impl<M: ManagedView> Element for PopoverMenu<M> {
     fn prepaint(
         &mut self,
         global_id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -466,8 +466,8 @@ impl<M: ManagedView> Element for PopoverMenu<M> {
     fn paint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
-        _: Bounds<gpui::Pixels>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
+        _: Bounds<gpui_types::Pixels>,
         request_layout: &mut Self::RequestLayoutState,
         child_hitbox: &mut Option<HitboxId>,
         window: &mut Window,

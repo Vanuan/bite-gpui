@@ -22,7 +22,7 @@ use futures::{
     AsyncReadExt, FutureExt, StreamExt,
     channel::{mpsc, oneshot},
 };
-use gpui::App;
+use gpui_runtime::App;
 use gpui::{
     Entity, TestAppContext, UpdateGlobal,
     http_client::{FakeHttpClient, Response},
@@ -57,7 +57,7 @@ use crate::{
 
 use super::*;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_current_state(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     cx.update(|cx| set_jumps_feature_flag_override(cx, "on"));
@@ -133,7 +133,7 @@ async fn test_current_state(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_refresh_prediction_from_buffer_honors_debounce_duration(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     cx.update(|cx| set_jumps_feature_flag_override(cx, "on"));
@@ -191,7 +191,7 @@ async fn test_refresh_prediction_from_buffer_honors_debounce_duration(cx: &mut T
     cx.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_refresh_prediction_from_buffer_suppressed_while_following(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -255,7 +255,7 @@ async fn test_refresh_prediction_from_buffer_suppressed_while_following(cx: &mut
     assert_no_predict_request_ready(&mut requests.predict);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_simple_request(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -328,7 +328,7 @@ async fn test_simple_request(cx: &mut TestAppContext) {
     assert_eq!(prediction.edits[0].1.as_ref(), " are you?");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_zeta_request_sends_settled_body_when_data_collection_is_disabled(
     cx: &mut TestAppContext,
 ) {
@@ -390,7 +390,7 @@ async fn test_zeta_request_sends_settled_body_when_data_collection_is_disabled(
     assert_eq!(settled_request.sample_data, None);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_request_events(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -469,7 +469,7 @@ async fn test_request_events(cx: &mut TestAppContext) {
     assert_eq!(prediction.edits[0].1.as_ref(), " are you?");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_history_getter_pause_splits_last_event(cx: &mut TestAppContext) {
     let (ep_store, _requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -558,7 +558,7 @@ async fn test_edit_history_getter_pause_splits_last_event(cx: &mut TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_predicted_edits_are_separated_in_edit_history(cx: &mut TestAppContext) {
     let (ep_store, _requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -800,7 +800,7 @@ async fn apply_collaborator_edit(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_nearby_collaborator_edits_are_kept_in_history(cx: &mut TestAppContext) {
     let (ep_store, _requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -869,7 +869,7 @@ async fn test_nearby_collaborator_edits_are_kept_in_history(cx: &mut TestAppCont
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_distant_collaborator_edits_are_omitted_from_history(cx: &mut TestAppContext) {
     let (ep_store, _requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -936,7 +936,7 @@ async fn test_distant_collaborator_edits_are_omitted_from_history(cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_irrelevant_collaborator_edits_in_different_files_are_omitted_from_history(
     cx: &mut TestAppContext,
 ) {
@@ -995,7 +995,7 @@ async fn test_irrelevant_collaborator_edits_in_different_files_are_omitted_from_
     assert!(events.is_empty());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_large_edits_are_omitted_from_history(cx: &mut TestAppContext) {
     let (ep_store, _requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1070,7 +1070,7 @@ async fn test_large_edits_are_omitted_from_history(cx: &mut TestAppContext) {
     assert!(!rendered_events[1].contains(&large_edit));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_predicted_flag_coalescing(cx: &mut TestAppContext) {
     let (ep_store, _requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1329,7 +1329,7 @@ async fn test_predicted_flag_coalescing(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_empty_prediction(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1417,7 +1417,7 @@ async fn test_empty_prediction(cx: &mut TestAppContext) {
     assert_eq!(settled_request.sample_data, None);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_interpolated_empty(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1491,7 +1491,7 @@ async fn test_interpolated_empty(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_interpolate_failed(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1571,7 +1571,7 @@ const SIMPLE_DIFF: &str = indoc! { r"
      Bye
 "};
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_replace_current(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1669,7 +1669,7 @@ async fn test_replace_current(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_current_preferred(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1785,7 +1785,7 @@ async fn test_current_preferred(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cancel_earlier_pending_requests(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1893,7 +1893,7 @@ async fn test_cancel_earlier_pending_requests(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cancel_second_on_third_request(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -2057,7 +2057,7 @@ async fn test_cancel_second_on_third_request(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cloud_timeout_backs_off_zeta_requests(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -2135,7 +2135,7 @@ async fn test_cloud_timeout_backs_off_zeta_requests(cx: &mut TestAppContext) {
     cx.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_same_frame_duplicate_requests_deduplicated(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -2195,7 +2195,7 @@ async fn test_same_frame_duplicate_requests_deduplicated(cx: &mut TestAppContext
     assert_no_predict_request_ready(&mut requests.predict);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rejections_flushing(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
 
@@ -2326,7 +2326,7 @@ async fn test_rejections_flushing(cx: &mut TestAppContext) {
     assert_eq!(reject_request.rejections[1].request_id, "retry-2");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_active_buffer_diagnostics_fetching(cx: &mut TestAppContext) {
     let diagnostic_marker: TextRangeMarker = ('«', '»').into();
     let search_range_marker: TextRangeMarker = ('[', ']').into();
@@ -2521,7 +2521,7 @@ fn test_active_buffer_diagnostics_fetching(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_active_buffer_diagnostics_collection_limits(cx: &mut TestAppContext) {
     let text = (0..25)
         .map(|row| format!("line {row}\n"))
@@ -2861,7 +2861,7 @@ fn set_test_organization(user_store: &Entity<UserStore>, cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_basic_interpolation(cx: &mut TestAppContext) {
     let buffer = cx.new(|cx| Buffer::local("Lorem ipsum dolor", cx));
     let edits: Arc<[(Range<Anchor>, Arc<str>)]> = cx.update(|cx| {
@@ -2983,7 +2983,7 @@ async fn test_edit_prediction_basic_interpolation(cx: &mut TestAppContext) {
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clean_up_diff(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3035,7 +3035,7 @@ async fn test_clean_up_diff(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_end_of_buffer(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3048,7 +3048,7 @@ async fn test_edit_prediction_end_of_buffer(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_v4_end_of_buffer(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3106,7 +3106,7 @@ async fn test_edit_prediction_v4_end_of_buffer(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_no_spurious_trailing_newline(cx: &mut TestAppContext) {
     // Test that zeta2's newline normalization logic doesn't insert spurious newlines.
     // When the buffer ends without a trailing newline, but the model returns output
@@ -3182,7 +3182,7 @@ async fn test_edit_prediction_no_spurious_trailing_newline(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_v3_prediction_strips_cursor_marker_from_edit_text(cx: &mut TestAppContext) {
     let (ep_store, mut requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -3586,7 +3586,7 @@ fn from_completion_edits(
         .collect()
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unauthenticated_without_custom_url_blocks_prediction_impl(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3607,7 +3607,7 @@ async fn test_unauthenticated_without_custom_url_blocks_prediction_impl(cx: &mut
         move |_req| {
             request_count.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
             async move {
-                Ok(gpui::http_client::Response::builder()
+                Ok(gpui_runtime::http_client::Response::builder()
                     .status(401)
                     .body("Unauthorized".into())
                     .unwrap())
@@ -3655,7 +3655,7 @@ async fn test_unauthenticated_without_custom_url_blocks_prediction_impl(cx: &mut
     assert_eq!(request_count.load(std::sync::atomic::Ordering::SeqCst), 0);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sweep_prompt_request_prediction_diffs_rewritten_window_into_anchored_edits(
     cx: &mut TestAppContext,
 ) {
@@ -3711,7 +3711,7 @@ async fn test_sweep_prompt_request_prediction_diffs_rewritten_window_into_anchor
     assert_eq!(stop_tokens, vec!["<|file_sep|>", "</s>"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sweep_prompt_request_prediction_returns_none_for_identical_rewrite(
     cx: &mut TestAppContext,
 ) {
@@ -3756,7 +3756,7 @@ async fn test_sweep_prompt_request_prediction_returns_none_for_identical_rewrite
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_settled(cx: &mut TestAppContext) {
     let (ep_store, _requests) = init_test_with_fake_client(cx);
     let fs = FakeFs::new(cx.executor());
@@ -4052,7 +4052,7 @@ async fn enqueue_sample_capture(
     editable_offset_range
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_settled_sends_sample_data_after_quiescence(cx: &mut TestAppContext) {
     let (ep_store, mut requests, project, buffer) = init_sample_capture_test(
         json!({
@@ -4255,7 +4255,7 @@ async fn test_edit_prediction_settled_sends_sample_data_after_quiescence(cx: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_settled_sample_data_requires_observing_all_events_since_request(
     cx: &mut TestAppContext,
 ) {
@@ -4372,7 +4372,7 @@ async fn test_edit_prediction_settled_sample_data_requires_observing_all_events_
     assert_eq!(missed_request.sample_data, None);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_settled_drops_future_events_when_their_oss_status_is_unknown(
     cx: &mut TestAppContext,
 ) {
@@ -4421,7 +4421,7 @@ async fn test_edit_prediction_settled_drops_future_events_when_their_oss_status_
     assert_eq!(settled_request.sample_data, None);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_buffer_path_with_id_fallback(cx: &mut TestAppContext) {
     let buffer_1 = cx.new(|cx| Buffer::local("one", cx));
     let buffer_2 = cx.new(|cx| Buffer::local("two", cx));
@@ -4452,7 +4452,7 @@ fn test_buffer_path_with_id_fallback(cx: &mut TestAppContext) {
     assert_ne!(path_1.as_ref(), path_2.as_ref());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_data_collection_disabled_by_default(cx: &mut TestAppContext) {
     let (ep_store, _channels) = init_test_with_fake_client(cx);
 
@@ -4461,7 +4461,7 @@ async fn test_data_collection_disabled_by_default(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_data_collection_enabled_via_legacy_kv_store(cx: &mut TestAppContext) {
     let (ep_store, _channels) =
         init_test_with_fake_client_and_legacy_data_collection(cx, Some("true"));
@@ -4471,7 +4471,7 @@ async fn test_data_collection_enabled_via_legacy_kv_store(cx: &mut TestAppContex
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_data_collection_default_uses_cached_legacy_value(cx: &mut TestAppContext) {
     let (ep_store, _channels) =
         init_test_with_fake_client_and_legacy_data_collection(cx, Some("true"));
@@ -4490,7 +4490,7 @@ async fn test_data_collection_default_uses_cached_legacy_value(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_data_collection_setting_overrides_kv_store(cx: &mut TestAppContext) {
     let (ep_store, _channels) =
         init_test_with_fake_client_and_legacy_data_collection(cx, Some("true"));
@@ -4512,7 +4512,7 @@ async fn test_data_collection_setting_overrides_kv_store(cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_data_collection_enabled_via_setting(cx: &mut TestAppContext) {
     let (ep_store, _channels) = init_test_with_fake_client(cx);
 
@@ -4532,7 +4532,7 @@ async fn test_data_collection_enabled_via_setting(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_data_collection_always_enabled_for_staff(cx: &mut TestAppContext) {
     let (ep_store, _channels) = init_test_with_fake_client(cx);
 
@@ -4542,7 +4542,7 @@ async fn test_data_collection_always_enabled_for_staff(cx: &mut TestAppContext) 
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_data_collection_disabled_by_organization_configuration(cx: &mut TestAppContext) {
     let (ep_store, _channels) = init_test_with_fake_client(cx);
 
@@ -4586,7 +4586,7 @@ async fn test_data_collection_disabled_by_organization_configuration(cx: &mut Te
 // When a user had data collection enabled via the legacy KV store (with no explicit
 // setting in settings.json), toggle_data_collection must read the *resolved* state
 // (true) and write Some(false).
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_data_collection_from_kv_enabled_state(cx: &mut TestAppContext) {
     let (ep_store, _channels) =
         init_test_with_fake_client_and_legacy_data_collection(cx, Some("true"));
@@ -4624,7 +4624,7 @@ async fn test_toggle_data_collection_from_kv_enabled_state(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_upsell_shown_by_default(cx: &mut TestAppContext) {
     init_test(cx);
     let kvp = cx.update(|cx| KeyValueStore::global(cx));
@@ -4636,7 +4636,7 @@ async fn test_upsell_shown_by_default(cx: &mut TestAppContext) {
     cx.update(|cx| assert!(should_show_upsell_modal(cx)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_upsell_dismissed_when_data_collection_choice_in_kv_store(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -4662,7 +4662,7 @@ async fn test_upsell_dismissed_when_data_collection_choice_in_kv_store(cx: &mut 
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_upsell_dismissed_when_dismissed_key_set(cx: &mut TestAppContext) {
     init_test(cx);
     let kvp = cx.update(|cx| KeyValueStore::global(cx));
@@ -4678,7 +4678,7 @@ async fn test_upsell_dismissed_when_dismissed_key_set(cx: &mut TestAppContext) {
     kvp.delete_kvp(ZedPredictUpsell::KEY.into()).await.unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_upsell_dismissed_via_dismissable_api(cx: &mut TestAppContext) {
     init_test(cx);
     let kvp = cx.update(|cx| KeyValueStore::global(cx));

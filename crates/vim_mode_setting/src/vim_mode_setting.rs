@@ -4,7 +4,7 @@
 //! disable Vim/Helix modes without having to depend on the `vim` crate in its
 //! entirety.
 
-use gpui::App;
+use gpui_runtime::App;
 use settings::{RegisterSetting, Settings, SettingsContent};
 
 #[derive(RegisterSetting)]

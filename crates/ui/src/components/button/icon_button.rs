@@ -102,7 +102,7 @@ impl IconButton {
 
     pub fn on_right_click(
         mut self,
-        handler: impl Fn(&gpui::ClickEvent, &mut Window, &mut App) + 'static,
+        handler: impl Fn(&gpui_runtime::ClickEvent, &mut Window, &mut App) + 'static,
     ) -> Self {
         self.base = self.base.on_right_click(handler);
         self
@@ -162,7 +162,7 @@ impl SelectableButton for IconButton {
 impl Clickable for IconButton {
     fn on_click(
         mut self,
-        handler: impl Fn(&gpui::ClickEvent, &mut Window, &mut App) + 'static,
+        handler: impl Fn(&gpui_runtime::ClickEvent, &mut Window, &mut App) + 'static,
     ) -> Self {
         self.base = self.base.on_click(handler);
         self
@@ -216,7 +216,7 @@ impl ButtonCommon for IconButton {
         self
     }
 
-    fn track_focus(mut self, focus_handle: &gpui::FocusHandle) -> Self {
+    fn track_focus(mut self, focus_handle: &gpui_runtime::FocusHandle) -> Self {
         self.base = self.base.track_focus(focus_handle);
         self
     }

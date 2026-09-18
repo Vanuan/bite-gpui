@@ -44,7 +44,7 @@ pub fn test(args: TokenStream, item: TokenStream) -> TokenStream {
     let cx_teardowns = parsed_args.cx_teardowns;
 
     let proptest_args = quote! {
-        #[strategy = ::gpui::seed_strategy()] __seed: u64,
+        #[strategy = ::gpui_runtime::seed_strategy()] __seed: u64,
         #proptest_args
     };
 
@@ -56,7 +56,7 @@ pub fn test(args: TokenStream, item: TokenStream) -> TokenStream {
             result
         },
         Some(_) => quote! {
-            let foreground_executor = gpui::ForegroundExecutor::new(std::sync::Arc::new(dispatcher.clone()));
+            let foreground_executor = gpui_platform::ForegroundExecutor::new(std::sync::Arc::new(dispatcher.clone()));
             #cx_vars
             let result = foreground_executor.block_test(#inner_fn_name(#inner_args));
             #cx_teardowns
@@ -74,7 +74,7 @@ pub fn test(args: TokenStream, item: TokenStream) -> TokenStream {
         fn #test_name(#proptest_args) #test_ret_ty {
             #inner_fn
 
-            ::gpui::run_test_once(
+            ::gpui_runtime::run_test_once(
                 __seed,
                 Box::new(move |dispatcher| #test_ret_ty {
                     #run_test_body
@@ -100,7 +100,7 @@ impl Args {
             Some(config) => config.into_token_stream(),
         };
 
-        let fixed_config = quote!(::gpui::apply_seed_to_proptest_config(#user_provided_config));
+        let fixed_config = quote!(::gpui_runtime::apply_seed_to_proptest_config(#user_provided_config));
         let remaining_args = &self.remaining_args;
         let errors = &self.errors;
 
@@ -179,7 +179,7 @@ fn remove_cxs(parsed: &mut ParsedArgs, args: &mut Vec<FnArg>, test_name: &Ident)
         ix += 1;
 
         parsed.cx_vars.extend(quote!(
-            let mut #cx_varname = gpui::TestAppContext::build(
+            let mut #cx_varname = gpui_runtime::TestAppContext::build(
                 dispatcher.clone(),
                 Some(stringify!(#test_name)),
             );
@@ -221,7 +221,7 @@ fn remove_background_executor(parsed: &mut ParsedArgs, args: &mut Vec<FnArg>) {
         parsed.inner_fn_decl_args.extend(quote!(#arg,));
         parsed
             .inner_fn_args
-            .extend(quote!(gpui::BackgroundExecutor::new(std::sync::Arc::new(
+            .extend(quote!(gpui_platform::BackgroundExecutor::new(std::sync::Arc::new(
                 dispatcher.clone()
             )),));
 

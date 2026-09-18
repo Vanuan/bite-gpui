@@ -1,4 +1,4 @@
-use gpui::AnyElement;
+use gpui_runtime::AnyElement;
 use ui::{Indicator, ListItem, prelude::*};
 
 use crate::KernelSpecification;

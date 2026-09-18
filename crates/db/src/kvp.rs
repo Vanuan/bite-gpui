@@ -1,5 +1,5 @@
 use anyhow::Context as _;
-use gpui::App;
+use gpui_runtime::App;
 use sqlez_macros::sql;
 use util::ResultExt as _;
 
@@ -149,7 +149,7 @@ impl ScopedKeyValueStore<'_> {
 mod tests {
     use crate::kvp::KeyValueStore;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_kvp() {
         let db = KeyValueStore::open_test_db("test_kvp").await;
 
@@ -174,7 +174,7 @@ mod tests {
         assert_eq!(db.read_kvp("key-1").unwrap(), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scoped_kvp() {
         let db = KeyValueStore::open_test_db("test_scoped_kvp").await;
 
@@ -243,7 +243,7 @@ impl std::ops::Deref for GlobalKeyValueStore {
 static GLOBAL_KEY_VALUE_STORE: std::sync::LazyLock<GlobalKeyValueStore> =
     std::sync::LazyLock::new(|| {
         let db_dir = crate::database_dir();
-        GlobalKeyValueStore(gpui::block_on(crate::open_db::<GlobalKeyValueStore>(
+        GlobalKeyValueStore(gpui_platform::block_on(crate::open_db::<GlobalKeyValueStore>(
             db_dir,
             crate::GlobalDbScope,
         )))

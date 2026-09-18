@@ -94,7 +94,7 @@ impl Render for GitBlameStatus {
                     )
                     .on_click(cx.listener(|this, _, window, cx| {
                         if let Some(editor) = this.active_editor.clone() {
-                            let focus_handle = gpui::Focusable::focus_handle(editor.read(cx), cx);
+                            let focus_handle = gpui_runtime::Focusable::focus_handle(editor.read(cx), cx);
                             focus_handle.dispatch_action(
                                 &editor::actions::OpenGitBlameCommit,
                                 window,
@@ -550,7 +550,7 @@ fn deploy_blame_entry_context_menu(
     editor: Entity<Editor>,
     repository: Entity<Repository>,
     workspace: WeakEntity<Workspace>,
-    position: gpui::Point<Pixels>,
+    position: gpui_types::Point<Pixels>,
     window: &mut Window,
     cx: &mut App,
 ) {

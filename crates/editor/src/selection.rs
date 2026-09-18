@@ -5,7 +5,7 @@ impl Editor {
         &mut self,
         other: Entity<Editor>,
         cx: &mut Context<Self>,
-    ) -> gpui::Subscription {
+    ) -> gpui_runtime::Subscription {
         let other_selections = other.read(cx).selections.disjoint_anchors().to_vec();
         if !other_selections.is_empty() {
             self.selections
@@ -1361,7 +1361,7 @@ impl Editor {
         &mut self,
         position: DisplayPoint,
         goal_column: u32,
-        scroll_delta: gpui::Point<f32>,
+        scroll_delta: gpui_types::Point<f32>,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {

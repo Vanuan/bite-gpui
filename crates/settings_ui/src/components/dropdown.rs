@@ -90,7 +90,7 @@ impl EnumVariantDropdown {
 }
 
 impl RenderOnce for EnumVariantDropdown {
-    fn render(self, window: &mut ui::Window, cx: &mut ui::App) -> impl gpui::IntoElement {
+    fn render(self, window: &mut ui::Window, cx: &mut ui::App) -> impl gpui_runtime::IntoElement {
         let current_value_label = self.labels[self.selected_index];
 
         let context_menu = window.use_keyed_state(current_value_label, cx, |window, cx| {
@@ -132,7 +132,7 @@ impl RenderOnce for EnumVariantDropdown {
         .when_some(self.tab_index, |elem, tab_index| elem.tab_index(tab_index))
         .trigger_size(ButtonSize::Medium)
         .style(DropdownStyle::Outlined)
-        .offset(gpui::Point {
+        .offset(gpui_types::Point {
             x: px(0.0),
             y: px(2.0),
         })

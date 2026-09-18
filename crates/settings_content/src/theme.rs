@@ -8,7 +8,7 @@ use std::{borrow::Cow, fmt::Display, ops::Deref, sync::Arc};
 use crate::serialize_f32_with_two_decimal_places;
 
 /// OpenType font features as a map of feature tag to value.
-/// This is a content type that mirrors `gpui::FontFeatures` but without the Arc wrapper.
+/// This is a content type that mirrors `gpui_platform::FontFeatures` but without the Arc wrapper.
 /// Values can be specified as booleans (true=1, false=0) or integers.
 #[derive(Clone, Debug, Default, PartialEq, Eq, Serialize, MergeFrom)]
 #[serde(transparent)]
@@ -162,12 +162,12 @@ impl Display for ThemeColor {
     }
 }
 
-impl TryFrom<&ThemeColor> for gpui::Rgba {
+impl TryFrom<&ThemeColor> for gpui_types::Rgba {
     type Error = anyhow::Error;
 
     fn try_from(value: &ThemeColor) -> anyhow::Result<Self> {
         let s: &str = &value.0;
-        gpui::Rgba::try_from(s)
+        gpui_types::Rgba::try_from(s)
     }
 }
 

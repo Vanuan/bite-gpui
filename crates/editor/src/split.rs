@@ -166,7 +166,7 @@ impl DiffHunkRenderer for SplitLhsDiffHunkRenderer {
         cx: &mut App,
     ) -> AnyElement {
         let Some(splittable) = self.splittable.upgrade() else {
-            return gpui::Empty.into_any_element();
+            return gpui_runtime::Empty.into_any_element();
         };
         let renderer = splittable.read(cx).rhs_editor.read(cx).diff_hunk_renderer();
         renderer.render_hunk_controls(
@@ -415,7 +415,7 @@ pub struct ToggleSplitDiff;
 
 /// Unified/split diff view toggle buttons, shared by the toolbars of every
 /// diff view (project diff, branch diff, solo diff) so they can't drift apart.
-#[derive(gpui::IntoElement)]
+#[derive(gpui_runtime::IntoElement)]
 pub struct DiffStyleControls {
     splittable_editor: Entity<SplittableEditor>,
 }
@@ -444,7 +444,7 @@ impl DiffStyleControls {
 }
 
 impl RenderOnce for DiffStyleControls {
-    fn render(self, _window: &mut Window, cx: &mut App) -> impl gpui::IntoElement {
+    fn render(self, _window: &mut Window, cx: &mut App) -> impl gpui_runtime::IntoElement {
         let editor = self.splittable_editor.read(cx);
         let diff_view_style = editor.diff_view_style();
         let is_split_set = diff_view_style == DiffViewStyle::Split;
@@ -495,7 +495,7 @@ impl RenderOnce for DiffStyleControls {
                                     .text_ui_sm(cx)
                                     .text_color(Color::Muted.color(cx))
                                     .children(render_modifiers(
-                                        &gpui::Modifiers::secondary_key(),
+                                        &gpui_types::Modifiers::secondary_key(),
                                         PlatformStyle::platform(),
                                         None,
                                         Some(TextSize::Small.rems(cx).into()),
@@ -1876,7 +1876,7 @@ impl SplittableEditor {
         eprintln!();
     }
 
-    fn check_excerpt_invariants(&self, quiesced: bool, cx: &gpui::App) {
+    fn check_excerpt_invariants(&self, quiesced: bool, cx: &gpui_runtime::App) {
         let lhs = self.lhs.as_ref().expect("should have lhs editor");
 
         let rhs_snapshot = self.rhs_multibuffer.read(cx).snapshot(cx);
@@ -1945,7 +1945,7 @@ impl Item for SplittableEditor {
         self.rhs_editor.read(cx).tab_icon(window, cx)
     }
 
-    fn tab_content(&self, params: TabContentParams, window: &Window, cx: &App) -> gpui::AnyElement {
+    fn tab_content(&self, params: TabContentParams, window: &Window, cx: &App) -> gpui_runtime::AnyElement {
         self.rhs_editor.read(cx).tab_content(params, window, cx)
     }
 
@@ -1956,7 +1956,7 @@ impl Item for SplittableEditor {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.rhs_editor.read(cx).for_each_project_item(cx, f)
     }
@@ -2074,7 +2074,7 @@ impl Item for SplittableEditor {
         self.rhs_editor.read(cx).breadcrumbs(cx)
     }
 
-    fn pixel_position_of_cursor(&self, cx: &App) -> Option<gpui::Point<gpui::Pixels>> {
+    fn pixel_position_of_cursor(&self, cx: &App) -> Option<gpui_types::Point<gpui_types::Pixels>> {
         self.focused_editor().read(cx).pixel_position_of_cursor(cx)
     }
 
@@ -2083,7 +2083,7 @@ impl Item for SplittableEditor {
         type_id: std::any::TypeId,
         self_handle: &'a Entity<Self>,
         _: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == std::any::TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == std::any::TypeId::of::<Editor>() {
@@ -2258,7 +2258,7 @@ impl SearchableItem for SplittableEditor {
 impl EventEmitter<EditorEvent> for SplittableEditor {}
 impl EventEmitter<SearchEvent> for SplittableEditor {}
 impl Focusable for SplittableEditor {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.focused_editor().read(cx).focus_handle(cx)
     }
 }
@@ -2344,7 +2344,7 @@ mod tests {
     use multi_buffer::MultiBufferOffset;
 
     async fn init_test(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
         soft_wrap: SoftWrap,
         style: DiffViewStyle,
     ) -> (Entity<SplittableEditor>, &mut VisualTestContext) {
@@ -2446,8 +2446,8 @@ mod tests {
         assert_eq!(lhs_content, expected_lhs, "lhs");
     }
 
-    #[gpui::test(iterations = 25)]
-    async fn test_random_split_editor(mut rng: StdRng, cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test(iterations = 25)]
+    async fn test_random_split_editor(mut rng: StdRng, cx: &mut gpui_runtime::TestAppContext) {
         use multi_buffer::ExpandExcerptDirection;
         use rand::prelude::*;
         use util::RandomCharIter;
@@ -2620,7 +2620,7 @@ mod tests {
 
                     if lhs_max_row > 0 {
                         lhs_editor.update_in(cx, |editor, window, cx| {
-                            editor.set_scroll_position(gpui::Point::new(0., 1.), window, cx);
+                            editor.set_scroll_position(gpui_types::Point::new(0., 1.), window, cx);
                         });
                         editor.update(cx, |editor, cx| {
                             editor.check_invariants(false, cx);
@@ -2690,8 +2690,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_expand_excerpt_with_hunk_before_excerpt_start(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_expand_excerpt_with_hunk_before_excerpt_start(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
 
         let (editor, cx) = init_test(cx, SoftWrap::None, DiffViewStyle::Split).await;
@@ -2743,8 +2743,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_basic_alignment(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_basic_alignment(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -2872,8 +2872,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_deleting_unmodified_lines(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_deleting_unmodified_lines(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -3030,8 +3030,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_deleting_added_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_deleting_added_line(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -3149,8 +3149,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_inserting_consecutive_blank_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_inserting_consecutive_blank_line(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -3277,8 +3277,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_reverting_deletion_hunk(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_reverting_deletion_hunk(cx: &mut gpui_runtime::TestAppContext) {
         use git::Restore;
         use rope::Point;
         use unindent::Unindent as _;
@@ -3403,8 +3403,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_deleting_added_lines(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_deleting_added_lines(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -3516,8 +3516,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_soft_wrap_at_end_of_excerpt(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_soft_wrap_at_end_of_excerpt(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -3584,8 +3584,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_soft_wrap_before_modification_hunk(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_soft_wrap_before_modification_hunk(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -3646,8 +3646,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_soft_wrap_before_deletion_hunk(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_soft_wrap_before_deletion_hunk(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -3715,8 +3715,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_soft_wrap_spacer_after_editing_second_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_soft_wrap_spacer_after_editing_second_line(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -3827,8 +3827,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_no_base_text(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_no_base_text(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -3931,8 +3931,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_deleting_char_in_added_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_deleting_char_in_added_line(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -4013,8 +4013,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_soft_wrap_spacer_before_added_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_soft_wrap_spacer_before_added_line(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -4091,9 +4091,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     #[ignore]
-    async fn test_joining_added_line_with_unmodified_line(cx: &mut gpui::TestAppContext) {
+    async fn test_joining_added_line_with_unmodified_line(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -4214,8 +4214,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_added_file_at_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_added_file_at_end(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -4290,8 +4290,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_adding_line_to_addition_hunk(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_adding_line_to_addition_hunk(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -4384,10 +4384,10 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_scrolling(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_scrolling(cx: &mut gpui_runtime::TestAppContext) {
         use crate::test::editor_content_with_blocks_and_size;
-        use gpui::size;
+        use gpui_backend::size;
         use rope::Point;
 
         let (editor, mut cx) = init_test(cx, SoftWrap::None, DiffViewStyle::Split).await;
@@ -4419,7 +4419,7 @@ mod tests {
         });
 
         rhs_editor.update_in(cx, |e, window, cx| {
-            e.set_scroll_position(gpui::Point::new(0., 10.), window, cx);
+            e.set_scroll_position(gpui_types::Point::new(0., 10.), window, cx);
         });
 
         let rhs_pos =
@@ -4468,8 +4468,8 @@ mod tests {
         )
     }
 
-    #[gpui::test]
-    async fn test_edit_line_before_soft_wrapped_line_preceding_hunk(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_edit_line_before_soft_wrapped_line_preceding_hunk(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -4598,8 +4598,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_custom_block_sync_between_split_views(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_custom_block_sync_between_split_views(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -4745,8 +4745,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_custom_block_deletion_and_resplit_sync(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_custom_block_deletion_and_resplit_sync(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -4967,8 +4967,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_custom_block_sync_with_unsplit_start(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_custom_block_sync_with_unsplit_start(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -5292,8 +5292,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_buffer_folding_sync(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_buffer_folding_sync(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -5467,8 +5467,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_custom_block_in_middle_of_added_hunk(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_custom_block_in_middle_of_added_hunk(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -5628,8 +5628,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_custom_block_below_in_middle_of_added_hunk(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_custom_block_below_in_middle_of_added_hunk(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -5789,8 +5789,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_custom_block_resize_syncs_balancing_block(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_custom_block_resize_syncs_balancing_block(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -5915,8 +5915,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_edit_spanning_excerpt_boundaries_then_resplit(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_edit_spanning_excerpt_boundaries_then_resplit(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -5978,8 +5978,8 @@ mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
-    async fn test_range_folds_removed_on_split(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_range_folds_removed_on_split(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -6067,8 +6067,8 @@ mod tests {
         assert!(!lhs_has_folds, "lhs should not have any range folds");
     }
 
-    #[gpui::test]
-    async fn test_multiline_inlays_create_spacers(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_multiline_inlays_create_spacers(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -6159,8 +6159,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_split_after_removing_folded_buffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_split_after_removing_folded_buffer(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -6261,8 +6261,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_two_path_keys_for_one_buffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_two_path_keys_for_one_buffer(cx: &mut gpui_runtime::TestAppContext) {
         use multi_buffer::PathKey;
         use rope::Point;
         use unindent::Unindent as _;
@@ -6315,8 +6315,8 @@ mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
-    async fn test_spacer_blocks_revert_after_temporary_edit(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_spacer_blocks_revert_after_temporary_edit(cx: &mut gpui_runtime::TestAppContext) {
         use rope::Point;
         use unindent::Unindent as _;
 
@@ -6430,8 +6430,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_act_as_type(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_act_as_type(cx: &mut gpui_runtime::TestAppContext) {
         let (splittable_editor, cx) = init_test(cx, SoftWrap::None, DiffViewStyle::Split).await;
         let editor = splittable_editor.read_with(cx, |editor, cx| {
             editor.act_as_type(TypeId::of::<Editor>(), &splittable_editor, cx)

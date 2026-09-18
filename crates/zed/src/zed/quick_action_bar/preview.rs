@@ -41,21 +41,21 @@ impl QuickActionBar {
             PreviewTarget::Markdown(_) => (
                 "toggle-markdown-preview",
                 "Preview Markdown",
-                &markdown_preview::OpenPreview as &dyn gpui::Action,
+                &markdown_preview::OpenPreview as &dyn gpui_runtime::Action,
             ),
             PreviewTarget::Svg(_) => (
                 "toggle-svg-preview",
                 "Preview SVG",
-                &svg_preview::OpenPreview as &dyn gpui::Action,
+                &svg_preview::OpenPreview as &dyn gpui_runtime::Action,
             ),
             PreviewTarget::TabularData(_) => (
                 "toggle-tabular-preview",
                 "Preview Tabular Data",
-                &tabular_data_preview::OpenPreview as &dyn gpui::Action,
+                &tabular_data_preview::OpenPreview as &dyn gpui_runtime::Action,
             ),
         };
 
-        let alt_click = gpui::Keystroke {
+        let alt_click = gpui_types::Keystroke {
             key: "click".into(),
             modifiers: Modifiers::alt(),
             ..Default::default()

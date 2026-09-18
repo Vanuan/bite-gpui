@@ -91,8 +91,8 @@ mod tests {
     use indoc::indoc;
     use language::{BracketPair, BracketPairConfig, Language, LanguageConfig, LanguageMatcher};
 
-    #[gpui::test]
-    async fn test_matching_bracket_highlights(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_matching_bracket_highlights(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new(

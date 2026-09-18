@@ -1,7 +1,7 @@
 use std::ops::Range;
 
 use editor::{DisplayPoint, MultiBufferOffset, display_map::DisplaySnapshot};
-use gpui::Context;
+use gpui_runtime::Context;
 use language::PointUtf16;
 use multi_buffer::{MultiBufferPoint, MultiBufferRow};
 use text::Bias;
@@ -153,8 +153,8 @@ mod tests {
 
     use crate::{state::Mode, test::VimTestContext};
 
-    #[gpui::test]
-    async fn test_selection_duplication(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_selection_duplication(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -212,8 +212,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_selection_duplication_backwards(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_selection_duplication_backwards(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -238,8 +238,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_selection_duplication_count(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_selection_duplication_count(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -264,8 +264,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_selection_duplication_multiline_multibyte(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_selection_duplication_multiline_multibyte(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -290,8 +290,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_selection_duplication_multibyte(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_selection_duplication_multibyte(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -314,8 +314,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_selection_duplication_with_inlay_hints(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_selection_duplication_with_inlay_hints(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 

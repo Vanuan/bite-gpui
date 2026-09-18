@@ -898,7 +898,7 @@ mod test {
             has_buildx: false,
         };
 
-        let result = gpui::block_on(docker.run_docker_exec(
+        let result = gpui_platform::block_on(docker.run_docker_exec(
             "container",
             "/workspace",
             "root",

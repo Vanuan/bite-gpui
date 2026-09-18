@@ -1,7 +1,7 @@
 #[cfg(all(test, feature = "unit-eval"))]
 use futures::future::LocalBoxFuture;
 #[cfg(all(test, feature = "unit-eval"))]
-use gpui::TestAppContext;
+use gpui_runtime::TestAppContext;
 #[cfg(all(test, feature = "unit-eval"))]
 use std::{fmt::Display, time::Duration};
 
@@ -28,7 +28,7 @@ fn run_gpui_eval<T>(
 where
     T: Display,
 {
-    let dispatcher = gpui::TestDispatcher::new(rand::random());
+    let dispatcher = gpui_platform::TestDispatcher::new(rand::random());
     let mut cx = TestAppContext::build(dispatcher.clone(), None);
     let entity_refcounts = cx.app.borrow().ref_counts_drop_handle();
     let foreground_executor = cx.foreground_executor().clone();

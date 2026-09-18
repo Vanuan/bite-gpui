@@ -48,7 +48,7 @@ fn test_point_for_row_and_column_from_external_source() {
     assert_eq!(snapshot.point_from_external_input(1, 3), Point::new(1, 3));
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 fn test_random_edits(mut rng: StdRng) {
     let operations = env::var("OPERATIONS")
         .map(|i| i.parse().expect("invalid `OPERATIONS` variable"))
@@ -791,7 +791,7 @@ fn test_edit_partially_intersecting_a_deleted_fragment() {
     assert_eq!(buffer.text(), "abfgh");
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 fn test_random_concurrent_edits(mut rng: StdRng) {
     let peers = env::var("PEERS")
         .map(|i| i.parse().expect("invalid `PEERS` variable"))

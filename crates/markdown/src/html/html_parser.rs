@@ -802,7 +802,7 @@ fn extract_html_table(node: &Node, source_range: Range<usize>) -> Option<ParsedH
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TextAlign;
+    use gpui_runtime::TextAlign;
 
     #[test]
     fn parses_html_styled_text() {

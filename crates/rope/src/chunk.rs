@@ -824,7 +824,7 @@ mod tests {
     use rand::prelude::*;
     use util::RandomCharIter;
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_random_chunks(mut rng: StdRng) {
         let text = random_string_with_utf8_len(&mut rng, MAX_BASE);
         log::info!("Chunk: {:?}", text);
@@ -855,7 +855,7 @@ mod tests {
         }
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_split_chunk_slice(mut rng: StdRng) {
         let text = &random_string_with_utf8_len(&mut rng, MAX_BASE);
         let chunk = Chunk::new(text);
@@ -869,7 +869,7 @@ mod tests {
         verify_chunk(b, b_str);
     }
 
-    #[gpui::test(iterations = 1000)]
+    #[gpui_runtime::test(iterations = 1000)]
     fn test_nth_set_bit_random(mut rng: StdRng) {
         let set_count = rng.random_range(0..=128);
         let mut set_bits = (0..128).choose_multiple(&mut rng, set_count);
@@ -905,7 +905,7 @@ mod tests {
         str
     }
 
-    #[gpui::test(iterations = 1000)]
+    #[gpui_runtime::test(iterations = 1000)]
     fn test_append_random_strings(mut rng: StdRng) {
         let len1 = rng.random_range(0..=MAX_BASE);
         let len2 = rng.random_range(0..=MAX_BASE).saturating_sub(len1);
@@ -921,7 +921,7 @@ mod tests {
         verify_chunk(chunk1.as_slice(), &(str1 + &str2[start_offset..end_offset]));
     }
 
-    #[gpui::test(iterations = 1000)]
+    #[gpui_runtime::test(iterations = 1000)]
     fn test_prepend_random_strings(mut rng: StdRng) {
         let len1 = rng.random_range(0..=MAX_BASE);
         let len2 = rng.random_range(0..=MAX_BASE).saturating_sub(len1);
@@ -1232,7 +1232,7 @@ mod tests {
         assert_eq!(chunk.tabs().collect::<Vec<_>>(), expected_tab_positions);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_point_utf16_to_offset_clips_to_correct_absolute_offset() {
         let text = "abc\nde";
         let chunk = Chunk::new(text);

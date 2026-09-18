@@ -37,7 +37,7 @@ use gpui::{
     AccessibleAction, App, Bounds, Context, FocusHandle, KeyBinding, Role, SharedString, Toggled,
     Window, WindowBounds, WindowOptions, actions, div, prelude::*, px, rgb, size, text,
 };
-use gpui_platform::application;
+use gpui::application;
 
 actions!(a11y_example, [Tab, TabPrev]);
 
@@ -267,6 +267,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

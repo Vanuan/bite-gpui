@@ -2105,9 +2105,9 @@ impl WgpuRenderer {
         };
 
         let config = WgpuSurfaceConfig {
-            size: gpui::Size {
-                width: gpui::DevicePixels(self.surface_config.width as i32),
-                height: gpui::DevicePixels(self.surface_config.height as i32),
+            size: gpui_types::Size {
+                width: gpui_types::DevicePixels(self.surface_config.width as i32),
+                height: gpui_types::DevicePixels(self.surface_config.height as i32),
             },
             transparent: self.surface_config.alpha_mode != wgpu::CompositeAlphaMode::Opaque,
             preferred_present_mode: Some(self.surface_config.present_mode),

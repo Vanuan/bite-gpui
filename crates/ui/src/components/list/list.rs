@@ -1,5 +1,5 @@
 use component::{Component, ComponentScope, example_group_with_title, single_example};
-use gpui::AnyElement;
+use gpui_runtime::AnyElement;
 use smallvec::SmallVec;
 
 use crate::{Label, ListHeader, ListItem, prelude::*};

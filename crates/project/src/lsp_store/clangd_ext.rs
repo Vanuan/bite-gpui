@@ -1,7 +1,7 @@
 use std::{borrow::Cow, sync::Arc};
 
 use ::serde::{Deserialize, Serialize};
-use gpui::WeakEntity;
+use gpui_runtime::WeakEntity;
 use language::{CachedLspAdapter, Diagnostic, DiagnosticSourceKind};
 use lsp::{LanguageServer, LanguageServerName};
 use util::ResultExt as _;

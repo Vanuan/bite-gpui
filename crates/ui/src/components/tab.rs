@@ -86,7 +86,7 @@ impl Tab {
 }
 
 impl InteractiveElement for Tab {
-    fn interactivity(&mut self) -> &mut gpui::Interactivity {
+    fn interactivity(&mut self) -> &mut gpui_runtime::Interactivity {
         self.div.interactivity()
     }
 }

@@ -629,7 +629,7 @@ impl Editor {
         &mut self,
         snapshot: &EditorSnapshot,
         point_for_position: PointForPosition,
-        mouse_position: Option<gpui::Point<Pixels>>,
+        mouse_position: Option<gpui_types::Point<Pixels>>,
         secondary_held: bool,
         shift_held: bool,
         window: &mut Window,
@@ -1141,7 +1141,7 @@ pub mod tests {
     use util::path;
     use util::paths::natural_sort;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_clearing_buffers_clears_only_matching_hovered_command(cx: &mut TestAppContext) {
         let hovered_buffer_id = BufferId::new(1).expect("hovered buffer id");
         let other_buffer_id = BufferId::new(2).expect("other buffer id");
@@ -1195,8 +1195,8 @@ pub mod tests {
         assert!(inlay_hints.hovered_command.is_none());
     }
 
-    #[gpui::test]
-    async fn test_basic_cache_update_with_duplicate_hints(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_basic_cache_update_with_duplicate_hints(cx: &mut gpui_runtime::TestAppContext) {
         let allowed_hint_kinds = HashSet::from_iter([None, Some(InlayHintKind::Type)]);
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
@@ -1308,8 +1308,8 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_racy_cache_updates(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_racy_cache_updates(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 enabled: Some(true),
@@ -1384,8 +1384,8 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_no_hint_duplication_when_refresh_races_with_fetch(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_no_hint_duplication_when_refresh_races_with_fetch(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 enabled: Some(true),
@@ -1472,8 +1472,8 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_cache_update_on_lsp_completion_tasks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_cache_update_on_lsp_completion_tasks(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -1628,8 +1628,8 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_no_hint_updates_for_unrelated_language_files(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_no_hint_updates_for_unrelated_language_files(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -1875,8 +1875,8 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_hint_setting_changes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hint_setting_changes(cx: &mut gpui_runtime::TestAppContext) {
         let allowed_hint_kinds = HashSet::from_iter([None, Some(InlayHintKind::Type)]);
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
@@ -2237,8 +2237,8 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_hint_request_cancellation(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hint_request_cancellation(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -2374,8 +2374,8 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_inlay_hint_response_after_buffer_shrinks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_inlay_hint_response_after_buffer_shrinks(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 enabled: Some(true),
@@ -2496,8 +2496,8 @@ pub mod tests {
         }
     }
 
-    #[gpui::test(iterations = 4)]
-    async fn test_large_buffer_inlay_requests_split(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test(iterations = 4)]
+    async fn test_large_buffer_inlay_requests_split(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 enabled: Some(true),
@@ -2707,7 +2707,7 @@ pub mod tests {
 
     fn editor_visible_range(
         editor: &WindowHandle<Editor>,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> Range<Point> {
         let ranges = editor
             .update(cx, |editor, _window, cx| editor.visible_buffer_ranges(cx))
@@ -2721,8 +2721,8 @@ pub mod tests {
         visible_range.to_point(&buffer_snapshot)
     }
 
-    #[gpui::test]
-    async fn test_multiple_excerpts_large_multibuffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_multiple_excerpts_large_multibuffer(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -3097,8 +3097,8 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_editing_in_multi_buffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_editing_in_multi_buffer(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 enabled: Some(true),
@@ -3337,8 +3337,8 @@ let c = 3;"#
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_excerpts_removed(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_excerpts_removed(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -3569,8 +3569,8 @@ let c = 3;"#
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_inside_char_boundary_range_hints(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_inside_char_boundary_range_hints(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -3680,8 +3680,8 @@ let c = 3;"#
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_toggle_inlay_hints(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_toggle_inlay_hints(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -3828,8 +3828,8 @@ let c = 3;"#
         }).unwrap();
     }
 
-    #[gpui::test]
-    async fn test_modifiers_change(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_modifiers_change(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -4095,8 +4095,8 @@ let c = 3;"#
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_inlays_at_the_same_place(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_inlays_at_the_same_place(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -4263,8 +4263,8 @@ let c = 3;"#
         });
     }
 
-    #[gpui::test]
-    async fn test_invalidation_and_addition_race(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_invalidation_and_addition_race(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 enabled: Some(true),
@@ -4636,8 +4636,8 @@ let c = 3;"#
         );
     }
 
-    #[gpui::test]
-    async fn test_edit_then_scroll_race(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_edit_then_scroll_race(cx: &mut gpui_runtime::TestAppContext) {
         // Bug 1: An edit fires with a long debounce, and a scroll brings new lines
         // before that debounce elapses. The edit task's apply_fetched_hints removes
         // ALL visible hints (including the scroll-added ones) but only adds back
@@ -4834,8 +4834,8 @@ let c = 3;"#
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_refresh_requested_multi_server(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_refresh_requested_multi_server(cx: &mut gpui_runtime::TestAppContext) {
         // Bug 2: When one LSP server sends workspace/inlayHint/refresh, the editor
         // wipes all tracking state via clear(), then spawns tasks that call
         // LspStore::inlay_hints with for_server=Some(requesting_server). The LspStore
@@ -5026,8 +5026,8 @@ let c = 3;"#
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn test_multi_language_multibuffer_no_duplicate_hints(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_multi_language_multibuffer_no_duplicate_hints(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -5238,9 +5238,9 @@ let c = 3;"#
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_hints_cleared_when_language_changes_and_no_server_attaches(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, &|settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
@@ -5439,7 +5439,7 @@ let c = 3;"#
     async fn run_work_cycle(
         fake_server: &FakeLanguageServer,
         progress_token: i32,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         fake_server
             .request::<lsp::request::WorkDoneProgressCreate>(

@@ -54,14 +54,14 @@ pub fn visibility_style_methods(input: TokenStream) -> TokenStream {
         /// Sets the visibility of the element to `visible`.
         /// [Docs](https://tailwindcss.com/docs/visibility)
         #visibility fn visible(mut self) -> Self {
-            self.style().visibility = Some(gpui::Visibility::Visible);
+            self.style().visibility = Some(gpui_runtime::Visibility::Visible);
             self
         }
 
         /// Sets the visibility of the element to `hidden`.
         /// [Docs](https://tailwindcss.com/docs/visibility)
         #visibility fn invisible(mut self) -> Self {
-            self.style().visibility = Some(gpui::Visibility::Hidden);
+            self.style().visibility = Some(gpui_runtime::Visibility::Hidden);
             self
         }
     };
@@ -109,14 +109,14 @@ pub fn position_style_methods(input: TokenStream) -> TokenStream {
         /// Sets the position of the element to `relative`.
         /// [Docs](https://tailwindcss.com/docs/position)
         #visibility fn relative(mut self) -> Self {
-            self.style().position = Some(gpui::Position::Relative);
+            self.style().position = Some(gpui_runtime::Position::Relative);
             self
         }
 
         /// Sets the position of the element to `absolute`.
         /// [Docs](https://tailwindcss.com/docs/position)
         #visibility fn absolute(mut self) -> Self {
-            self.style().position = Some(gpui::Position::Absolute);
+            self.style().position = Some(gpui_runtime::Position::Absolute);
             self
         }
 
@@ -133,22 +133,22 @@ pub fn overflow_style_methods(input: TokenStream) -> TokenStream {
         /// Sets the behavior of content that overflows the container to be hidden.
         /// [Docs](https://tailwindcss.com/docs/overflow#hiding-content-that-overflows)
         #visibility fn overflow_hidden(mut self) -> Self {
-            self.style().overflow.x = Some(gpui::Overflow::Hidden);
-            self.style().overflow.y = Some(gpui::Overflow::Hidden);
+            self.style().overflow.x = Some(gpui_runtime::Overflow::Hidden);
+            self.style().overflow.y = Some(gpui_runtime::Overflow::Hidden);
             self
         }
 
         /// Sets the behavior of content that overflows the container on the X axis to be hidden.
         /// [Docs](https://tailwindcss.com/docs/overflow#hiding-content-that-overflows)
         #visibility fn overflow_x_hidden(mut self) -> Self {
-            self.style().overflow.x = Some(gpui::Overflow::Hidden);
+            self.style().overflow.x = Some(gpui_runtime::Overflow::Hidden);
             self
         }
 
         /// Sets the behavior of content that overflows the container on the Y axis to be hidden.
         /// [Docs](https://tailwindcss.com/docs/overflow#hiding-content-that-overflows)
         #visibility fn overflow_y_hidden(mut self) -> Self {
-            self.style().overflow.y = Some(gpui::Overflow::Hidden);
+            self.style().overflow.y = Some(gpui_runtime::Overflow::Hidden);
             self
         }
     };
@@ -368,7 +368,7 @@ pub fn border_style_methods(input: TokenStream) -> TokenStream {
         /// Sets the border color of the element.
         #visibility fn border_color<C>(mut self, border_color: C) -> Self
         where
-            C: Into<gpui::Hsla>,
+            C: Into<gpui_types::Hsla>,
             Self: Sized,
         {
             self.style().border_color = Some(border_color.into());
@@ -387,7 +387,7 @@ pub fn box_shadow_style_methods(input: TokenStream) -> TokenStream {
     let output = quote! {
         /// Sets the box shadow of the element.
         /// [Docs](https://tailwindcss.com/docs/box-shadow)
-        #visibility fn shadow(mut self, shadows: std::vec::Vec<gpui::BoxShadow>) -> Self {
+        #visibility fn shadow(mut self, shadows: std::vec::Vec<gpui_runtime::BoxShadow>) -> Self {
             self.style().box_shadow = Some(shadows);
             self
         }

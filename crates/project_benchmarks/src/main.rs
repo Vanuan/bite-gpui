@@ -5,8 +5,8 @@ use askpass::EncryptedPassword;
 use clap::Parser;
 use client::{Client, UserStore};
 use futures::channel::oneshot;
-use gpui::AppContext as _;
-use gpui::TaskExt;
+use gpui_runtime::AppContext as _;
+use gpui_platform::TaskExt;
 use http_client::FakeHttpClient;
 use language::LanguageRegistry;
 use node_runtime::NodeRuntime;
@@ -50,7 +50,7 @@ impl RemoteClientDelegate for BenchmarkRemoteClient {
         prompt: String,
         tx: oneshot::Sender<EncryptedPassword>,
         _cancellation: oneshot::Receiver<()>,
-        _cx: &mut gpui::AsyncApp,
+        _cx: &mut gpui_runtime::AsyncApp,
     ) {
         eprintln!("SSH asking for password: {}", prompt);
         match rpassword::prompt_password(&prompt) {
@@ -71,7 +71,7 @@ impl RemoteClientDelegate for BenchmarkRemoteClient {
         _platform: remote::RemotePlatform,
         _release_channel: ReleaseChannel,
         _version: Option<Version>,
-        _cx: &mut gpui::AsyncApp,
+        _cx: &mut gpui_runtime::AsyncApp,
     ) -> gpui::Task<gpui::Result<Option<String>>> {
         unimplemented!()
     }
@@ -81,12 +81,12 @@ impl RemoteClientDelegate for BenchmarkRemoteClient {
         _platform: remote::RemotePlatform,
         _release_channel: ReleaseChannel,
         _version: Option<Version>,
-        _cx: &mut gpui::AsyncApp,
+        _cx: &mut gpui_runtime::AsyncApp,
     ) -> gpui::Task<gpui::Result<std::path::PathBuf>> {
         unimplemented!()
     }
 
-    fn set_status(&self, status: Option<&str>, _: &mut gpui::AsyncApp) {
+    fn set_status(&self, status: Option<&str>, _: &mut gpui_runtime::AsyncApp) {
         if let Some(status) = status {
             println!("SSH status: {status}");
         }
@@ -127,7 +127,7 @@ fn main() -> Result<(), anyhow::Error> {
             None,
         )
     }?;
-    gpui_platform::headless().run(|cx| {
+    gpui::headless().run(|cx| {
         release_channel::init_test(semver::Version::new(0, 0, 0), ReleaseChannel::Dev, cx);
         settings::init(cx);
         let client = Client::production(cx);

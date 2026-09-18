@@ -80,7 +80,7 @@ impl Render for EditorWithRightOccluders {
 }
 
 async fn assert_edit_prediction_diff_popover_avoids_right_occluders(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
     right_dock_width: Option<Pixels>,
     right_sidebar_width: Option<Pixels>,
 ) {
@@ -104,7 +104,7 @@ async fn assert_edit_prediction_diff_popover_avoids_right_occluders(
     let editor = window
         .read_with(cx, |root, _| root.editor.clone())
         .expect("test window should contain editor");
-    let mut cx = gpui::VisualTestContext::from_window(*window, cx);
+    let mut cx = gpui_runtime::VisualTestContext::from_window(*window, cx);
     cx.simulate_resize(size(window_width, px(500.)));
     cx.run_until_parked();
 
@@ -158,26 +158,26 @@ async fn assert_edit_prediction_diff_popover_avoids_right_occluders(
     }
 }
 
-#[gpui::test]
-async fn test_edit_prediction_diff_popover_avoids_right_sidebar(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_diff_popover_avoids_right_sidebar(cx: &mut gpui_runtime::TestAppContext) {
     assert_edit_prediction_diff_popover_avoids_right_occluders(cx, None, Some(px(300.))).await;
 }
 
-#[gpui::test]
-async fn test_edit_prediction_diff_popover_avoids_right_dock(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_diff_popover_avoids_right_dock(cx: &mut gpui_runtime::TestAppContext) {
     assert_edit_prediction_diff_popover_avoids_right_occluders(cx, Some(px(300.)), None).await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_diff_popover_avoids_right_dock_and_sidebar(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     assert_edit_prediction_diff_popover_avoids_right_occluders(cx, Some(px(300.)), Some(px(300.)))
         .await;
 }
 
-#[gpui::test]
-async fn test_edit_prediction_insert(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_insert(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let mut cx = EditorTestContext::new(cx).await;
@@ -198,8 +198,8 @@ async fn test_edit_prediction_insert(cx: &mut gpui::TestAppContext) {
     cx.assert_editor_state("let absolute_zero_celsius = -273.15ˇ;")
 }
 
-#[gpui::test]
-async fn test_edit_prediction_cursor_position_inside_insertion(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_cursor_position_inside_insertion(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {
         eprintln!("");
     });
@@ -233,8 +233,8 @@ async fn test_edit_prediction_cursor_position_inside_insertion(cx: &mut gpui::Te
     cx.assert_editor_state("fn foo() baˇr(){}");
 }
 
-#[gpui::test]
-async fn test_edit_prediction_cursor_position_outside_edit(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_cursor_position_outside_edit(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let mut cx = EditorTestContext::new(cx).await;
@@ -264,8 +264,8 @@ async fn test_edit_prediction_cursor_position_outside_edit(cx: &mut gpui::TestAp
     cx.assert_editor_state("let ˇx = 42;");
 }
 
-#[gpui::test]
-async fn test_edit_prediction_cursor_position_fallback(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_cursor_position_fallback(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let mut cx = EditorTestContext::new(cx).await;
@@ -283,8 +283,8 @@ async fn test_edit_prediction_cursor_position_fallback(cx: &mut gpui::TestAppCon
     cx.assert_editor_state("let x = 42ˇ;")
 }
 
-#[gpui::test]
-async fn test_edit_prediction_modification(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_modification(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let mut cx = EditorTestContext::new(cx).await;
@@ -305,8 +305,8 @@ async fn test_edit_prediction_modification(cx: &mut gpui::TestAppContext) {
     cx.assert_editor_state("let pi = 3.14159ˇ;")
 }
 
-#[gpui::test]
-async fn test_edit_prediction_jump_button(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_jump_button(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let mut cx = EditorTestContext::new(cx).await;
@@ -374,8 +374,8 @@ async fn test_edit_prediction_jump_button(cx: &mut gpui::TestAppContext) {
     "});
 }
 
-#[gpui::test]
-async fn test_edit_prediction_invalidation_range(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_invalidation_range(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let mut cx = EditorTestContext::new(cx).await;
@@ -479,8 +479,8 @@ async fn test_edit_prediction_invalidation_range(cx: &mut gpui::TestAppContext) 
     });
 }
 
-#[gpui::test]
-async fn test_edit_prediction_jump_disabled_for_non_zed_providers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_jump_disabled_for_non_zed_providers(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let mut cx = EditorTestContext::new(cx).await;
@@ -522,8 +522,8 @@ async fn test_edit_prediction_jump_disabled_for_non_zed_providers(cx: &mut gpui:
     });
 }
 
-#[gpui::test]
-async fn test_edit_prediction_refresh_suppressed_while_following(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_refresh_suppressed_while_following(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let mut cx = EditorTestContext::new(cx).await;
@@ -594,8 +594,8 @@ async fn test_edit_prediction_refresh_suppressed_while_following(cx: &mut gpui::
     );
 }
 
-#[gpui::test]
-async fn test_edit_prediction_preview_cleanup_on_toggle_off(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_preview_cleanup_on_toggle_off(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     // Bind `ctrl-shift-a` to accept the provided edit prediction. The actual key
@@ -651,9 +651,9 @@ async fn test_edit_prediction_preview_cleanup_on_toggle_off(cx: &mut gpui::TestA
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_hidden_edit_prediction_does_not_open_snippet_menu_on_word_input(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
 
@@ -667,9 +667,9 @@ async fn test_hidden_edit_prediction_does_not_open_snippet_menu_on_word_input(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_hidden_edit_prediction_opens_snippet_menu_for_strong_prefix_match(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
 
@@ -692,9 +692,9 @@ async fn test_hidden_edit_prediction_opens_snippet_menu_for_strong_prefix_match(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_preview_activates_when_prediction_arrives_with_modifier_held(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
     load_default_keymap(cx);
@@ -742,9 +742,9 @@ async fn test_edit_prediction_preview_activates_when_prediction_arrives_with_mod
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_preview_does_not_hide_code_actions_on_modifier_press(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
     update_test_language_settings(cx, &|settings| {
@@ -860,8 +860,8 @@ async fn test_edit_prediction_preview_does_not_hide_code_actions_on_modifier_pre
     });
 }
 
-#[gpui::test]
-async fn test_edit_prediction_preview_supersedes_completions_menu(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edit_prediction_preview_supersedes_completions_menu(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
     update_test_language_settings(cx, &|settings| {
         settings.edit_predictions.get_or_insert_default().mode = Some(EditPredictionsMode::Subtle);
@@ -913,7 +913,7 @@ async fn test_edit_prediction_preview_supersedes_completions_menu(cx: &mut gpui:
     });
 }
 
-fn load_default_keymap(cx: &mut gpui::TestAppContext) {
+fn load_default_keymap(cx: &mut gpui_runtime::TestAppContext) {
     cx.update(|cx| {
         cx.bind_keys(
             settings::KeymapFile::load_asset_allow_partial_failure(
@@ -925,8 +925,8 @@ fn load_default_keymap(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_inline_edit_prediction_keybind_selection_cases(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_inline_edit_prediction_keybind_selection_cases(cx: &mut gpui_runtime::TestAppContext) {
     enum InlineKeybindState {
         Normal,
         ShowingCompletions,
@@ -1194,8 +1194,8 @@ async fn test_inline_edit_prediction_keybind_selection_cases(cx: &mut gpui::Test
     }
 }
 
-#[gpui::test]
-async fn test_tab_accepts_edit_prediction_over_completion(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_tab_accepts_edit_prediction_over_completion(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
     load_default_keymap(cx);
 
@@ -1218,8 +1218,8 @@ async fn test_tab_accepts_edit_prediction_over_completion(cx: &mut gpui::TestApp
     cx.assert_editor_state("let x = 42ˇ;");
 }
 
-#[gpui::test]
-async fn test_cursor_popover_edit_prediction_keybind_cases(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_cursor_popover_edit_prediction_keybind_cases(cx: &mut gpui_runtime::TestAppContext) {
     enum CursorPopoverPredictionKind {
         SingleLine,
         MultiLine,
@@ -1430,8 +1430,8 @@ fn assert_editor_active_move_completion(
     })
 }
 
-#[gpui::test]
-async fn test_cancel_clears_stale_edit_prediction_in_menu(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_cancel_clears_stale_edit_prediction_in_menu(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
     load_default_keymap(cx);
 
@@ -1457,8 +1457,8 @@ async fn test_cancel_clears_stale_edit_prediction_in_menu(cx: &mut gpui::TestApp
     });
 }
 
-#[gpui::test]
-async fn test_discard_clears_delegate_completion(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_discard_clears_delegate_completion(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
     load_default_keymap(cx);
 
@@ -1605,7 +1605,7 @@ fn propose_edits_with_cursor_position_in_insertion<T: ToOffset>(
 }
 
 async fn hidden_edit_prediction_snippet_test_context(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) -> EditorTestContext {
     let mut cx = EditorTestContext::new(cx).await;
     let provider = cx.new(|_| FakeEditPredictionDelegate::default());
@@ -1777,49 +1777,49 @@ impl EditPredictionDelegate for FakeEditPredictionDelegate {
         true
     }
 
-    fn icons(&self, _cx: &gpui::App) -> EditPredictionIconSet {
+    fn icons(&self, _cx: &gpui_runtime::App) -> EditPredictionIconSet {
         EditPredictionIconSet::new(IconName::ZedPredict)
     }
 
     fn is_enabled(
         &self,
-        _buffer: &gpui::Entity<language::Buffer>,
+        _buffer: &gpui_runtime::Entity<language::Buffer>,
         _cursor_position: language::Anchor,
-        _cx: &gpui::App,
+        _cx: &gpui_runtime::App,
     ) -> bool {
         true
     }
 
-    fn is_refreshing(&self, _cx: &gpui::App) -> bool {
+    fn is_refreshing(&self, _cx: &gpui_runtime::App) -> bool {
         false
     }
 
     fn refresh(
         &mut self,
-        _buffer: gpui::Entity<language::Buffer>,
+        _buffer: gpui_runtime::Entity<language::Buffer>,
         _cursor_position: language::Anchor,
         _debounce_duration: Duration,
         _trigger: edit_prediction_types::EditPredictionRequestTrigger,
-        _cx: &mut gpui::Context<Self>,
+        _cx: &mut gpui_runtime::Context<Self>,
     ) {
         self.refresh_count.fetch_add(1, atomic::Ordering::SeqCst);
     }
 
-    fn accept(&mut self, _cx: &mut gpui::Context<Self>) {}
+    fn accept(&mut self, _cx: &mut gpui_runtime::Context<Self>) {}
 
     fn discard(
         &mut self,
         _reason: edit_prediction_types::EditPredictionDiscardReason,
-        _cx: &mut gpui::Context<Self>,
+        _cx: &mut gpui_runtime::Context<Self>,
     ) {
         self.completion.take();
     }
 
     fn suggest<'a>(
         &mut self,
-        _buffer: &gpui::Entity<language::Buffer>,
+        _buffer: &gpui_runtime::Entity<language::Buffer>,
         _cursor_position: language::Anchor,
-        _cx: &mut gpui::Context<Self>,
+        _cx: &mut gpui_runtime::Context<Self>,
     ) -> Option<edit_prediction_types::EditPrediction> {
         self.completion.clone()
     }
@@ -1856,48 +1856,48 @@ impl EditPredictionDelegate for FakeNonZedEditPredictionDelegate {
         false
     }
 
-    fn icons(&self, _cx: &gpui::App) -> EditPredictionIconSet {
+    fn icons(&self, _cx: &gpui_runtime::App) -> EditPredictionIconSet {
         EditPredictionIconSet::new(IconName::ZedPredict)
     }
 
     fn is_enabled(
         &self,
-        _buffer: &gpui::Entity<language::Buffer>,
+        _buffer: &gpui_runtime::Entity<language::Buffer>,
         _cursor_position: language::Anchor,
-        _cx: &gpui::App,
+        _cx: &gpui_runtime::App,
     ) -> bool {
         true
     }
 
-    fn is_refreshing(&self, _cx: &gpui::App) -> bool {
+    fn is_refreshing(&self, _cx: &gpui_runtime::App) -> bool {
         false
     }
 
     fn refresh(
         &mut self,
-        _buffer: gpui::Entity<language::Buffer>,
+        _buffer: gpui_runtime::Entity<language::Buffer>,
         _cursor_position: language::Anchor,
         _debounce_duration: Duration,
         _trigger: edit_prediction_types::EditPredictionRequestTrigger,
-        _cx: &mut gpui::Context<Self>,
+        _cx: &mut gpui_runtime::Context<Self>,
     ) {
     }
 
-    fn accept(&mut self, _cx: &mut gpui::Context<Self>) {}
+    fn accept(&mut self, _cx: &mut gpui_runtime::Context<Self>) {}
 
     fn discard(
         &mut self,
         _reason: edit_prediction_types::EditPredictionDiscardReason,
-        _cx: &mut gpui::Context<Self>,
+        _cx: &mut gpui_runtime::Context<Self>,
     ) {
         self.completion.take();
     }
 
     fn suggest<'a>(
         &mut self,
-        _buffer: &gpui::Entity<language::Buffer>,
+        _buffer: &gpui_runtime::Entity<language::Buffer>,
         _cursor_position: language::Anchor,
-        _cx: &mut gpui::Context<Self>,
+        _cx: &mut gpui_runtime::Context<Self>,
     ) -> Option<edit_prediction_types::EditPrediction> {
         self.completion.clone()
     }

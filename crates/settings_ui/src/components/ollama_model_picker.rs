@@ -274,8 +274,8 @@ pub fn render_ollama_model_picker(
                     .popover()
             }))
         })
-        .anchor(gpui::Anchor::TopLeft)
-        .offset(gpui::Point {
+        .anchor(gpui_types::Anchor::TopLeft)
+        .offset(gpui_types::Point {
             x: px(0.0),
             y: px(2.0),
         })

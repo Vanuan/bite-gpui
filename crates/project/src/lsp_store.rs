@@ -343,7 +343,7 @@ pub struct LocalLspStore {
         >,
     >,
     buffer_snapshots: HashMap<BufferId, HashMap<LanguageServerId, Vec<LspBufferSnapshot>>>, // buffer_id -> server_id -> vec of snapshots
-    _subscription: gpui::Subscription,
+    _subscription: gpui_runtime::Subscription,
     _binary_status_task: Task<()>,
     lsp_tree: LanguageServerTree,
     registered_buffers: HashMap<BufferId, usize>,
@@ -16520,7 +16520,7 @@ impl LspAdapterDelegate for LocalLspAdapterDelegate {
         Ok(())
     }
 
-    fn status_source_id(&self) -> gpui::EntityId {
+    fn status_source_id(&self) -> gpui_runtime::EntityId {
         self.lsp_store.entity_id()
     }
 

@@ -5,7 +5,7 @@ use editor::Editor;
 use gpui::{BackgroundExecutor, TestAppContext};
 use rpc::proto;
 use util::rel_path::rel_path;
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_guests(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -65,7 +65,7 @@ async fn test_channel_guests(
     assert!(room_b.read_with(cx_b, |room, _| room.is_muted()));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_guest_promotion(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -179,7 +179,7 @@ async fn test_channel_guest_promotion(cx_a: &mut TestAppContext, cx_b: &mut Test
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_requires_zed_cla(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let client_a = server.create_client(cx_a, "user_a").await;

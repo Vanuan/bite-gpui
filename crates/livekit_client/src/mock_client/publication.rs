@@ -1,4 +1,4 @@
-use gpui::App;
+use gpui_runtime::App;
 
 use crate::{RemoteTrack, TrackSid, test::WeakRoom};
 

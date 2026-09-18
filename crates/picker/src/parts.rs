@@ -1,6 +1,6 @@
 //! Components used in multiple pickers
 
-use gpui::Entity;
+use gpui_runtime::Entity;
 use project::Project;
 use ui::{CommonAnimationExt, Tooltip, prelude::*};
 

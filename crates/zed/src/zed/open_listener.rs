@@ -1189,7 +1189,7 @@ mod tests {
         assert_eq!(request.open_paths, vec![path]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_ssh_urls(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
         let cases = [
@@ -1273,7 +1273,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_derive_paths_with_position_directory_with_position_like_name(
         cx: &mut TestAppContext,
     ) {
@@ -1316,7 +1316,7 @@ mod tests {
     // Test file with colon (`:`) in the name on non-Windows platforms,
     // as it is valid for file names on Unix-like systems.
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_derive_paths_with_position_colon_in_name_reverts_on_unix(
         cx: &mut TestAppContext,
     ) {
@@ -1343,7 +1343,7 @@ mod tests {
     // On Windows `:` is used to delimit NTFS alternate data streams,
     // `notes.txt:10` should be parsed as `notes.txt` at row 10
     #[cfg(target_os = "windows")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_derive_paths_with_position_colon_in_name_parsed_as_position_on_windows(
         cx: &mut TestAppContext,
     ) {
@@ -1367,7 +1367,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_ssh_url_preserves_open_behavior(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -1386,7 +1386,7 @@ mod tests {
         assert_eq!(request.open_behavior, Some(cli::OpenBehavior::AlwaysNew));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_reject_ssh_urls(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -1409,7 +1409,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_open_options_for_behavior_always_new(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
         let options = cx.update(|cx| {
@@ -1427,9 +1427,9 @@ mod tests {
         assert!(options.requesting_window.is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_open_options_for_request_respects_default_open_behavior(cx: &mut TestAppContext) {
-        use gpui::UpdateGlobal as _;
+        use gpui_runtime::UpdateGlobal as _;
 
         let _app_state = init_test(cx);
 
@@ -1469,7 +1469,7 @@ mod tests {
         assert!(options.add_dirs_to_sidebar);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_agent_url(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -1494,7 +1494,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_skill_install_url(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -1523,7 +1523,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_malformed_skill_install_url_errors(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -1546,7 +1546,7 @@ mod tests {
         serializer.finish()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_agent_url_with_prompt(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
         let prompt = "Write me a script\nThanks";
@@ -1577,7 +1577,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_agent_url_with_trailing_slash(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -1607,7 +1607,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_focus_app_url(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -1634,7 +1634,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_agent_url_with_empty_prompt(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -1659,7 +1659,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_git_commit_url(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -1739,7 +1739,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_workspace_with_directory(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -1805,7 +1805,7 @@ mod tests {
         assert_eq!(cx.windows().len(), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_wait_with_directory_waits_for_window_close(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -1861,7 +1861,7 @@ mod tests {
         assert!(!errored);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_workspace_with_nonexistent_files(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -1969,7 +1969,7 @@ mod tests {
         assert!(!errored);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reuse_flag_functionality(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2078,7 +2078,7 @@ mod tests {
         assert!(!errored_reuse);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_git_clone_url(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -2103,7 +2103,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_git_clone_url_without_slash(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -2128,7 +2128,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_parse_git_clone_url_with_encoding(cx: &mut TestAppContext) {
         let _app_state = init_test(cx);
 
@@ -2154,7 +2154,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_add_flag_prefers_focused_window(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2318,7 +2318,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dev_container_flag_opens_modal(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(|cx| recent_projects::init(cx));
@@ -2377,7 +2377,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dev_container_flag_cleared_without_config(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(|cx| recent_projects::init(cx));
@@ -2539,7 +2539,7 @@ mod tests {
         (exit_status, prompt_shown)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_no_flags_no_windows_no_prompt(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2569,7 +2569,7 @@ mod tests {
         assert_eq!(cx.windows().len(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_prompt_user_picks_existing_window(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2619,7 +2619,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_prompt_user_picks_new_window(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2669,7 +2669,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_setting_already_configured_no_prompt(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2712,7 +2712,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_new_window_setting_restores_workspace_when_no_paths(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2784,7 +2784,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_new_window_setting_opens_project_root_in_new_window(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2835,7 +2835,7 @@ mod tests {
         assert_eq!(cx.windows().len(), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_new_window_setting_focuses_existing_window_for_subpaths(
         cx: &mut TestAppContext,
     ) {
@@ -2913,7 +2913,7 @@ mod tests {
         assert_eq!(cx.windows().len(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_explicit_existing_flag_no_prompt(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2942,7 +2942,7 @@ mod tests {
         assert_eq!(cx.windows().len(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_explicit_new_flag_no_prompt(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2982,7 +2982,7 @@ mod tests {
         assert_eq!(cx.windows().len(), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_explicit_new_flag_with_file_url_opens_new_window(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -3011,7 +3011,7 @@ mod tests {
         assert_eq!(cx.windows().len(), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_e2e_paths_in_existing_workspace_no_prompt(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 

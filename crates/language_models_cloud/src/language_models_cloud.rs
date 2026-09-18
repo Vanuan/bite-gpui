@@ -1362,8 +1362,8 @@ mod tests {
     use serde_json::json;
     use std::sync::Mutex;
 
-    #[gpui::test]
-    async fn cloud_google_completion_emits_stop(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn cloud_google_completion_emits_stop(cx: &mut gpui_runtime::TestAppContext) {
         for (finish_reason, expected_stop) in [
             ("STOP", StopReason::EndTurn),
             ("MAX_TOKENS", StopReason::MaxTokens),
@@ -1408,9 +1408,9 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn cloud_google_tool_completion_preserves_transport_errors(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         for stream_ended in [false, true] {
             let mut events = vec![json!({"event": {"candidates": [{
@@ -1449,8 +1449,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn cloud_google_incomplete_completion_does_not_emit_stop(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn cloud_google_incomplete_completion_does_not_emit_stop(cx: &mut gpui_runtime::TestAppContext) {
         for stream_ended in [false, true] {
             let mut events = vec![json!({"event": {"candidates": [{
                 "content": {"role": "model", "parts": [{"text": "Partial answer"}]}
@@ -1480,9 +1480,9 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn cloud_explicit_compaction_forwards_supported_request_fields(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let captured_request = Arc::new(Mutex::new(None));
         let captured_request_for_handler = captured_request.clone();
@@ -1594,9 +1594,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn cloud_anthropic_explicit_compaction_uses_paused_completion(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let captured_request = Arc::new(Mutex::new(None));
         let captured_request_for_handler = captured_request.clone();
@@ -1739,9 +1739,9 @@ mod tests {
         assert!(body["provider_request"]["tools"].is_null());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn cloud_explicit_compaction_rejects_output_without_compaction_item(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let http_client = FakeHttpClient::create(|_| async move {
             Ok(http_client::Response::builder()
@@ -1964,8 +1964,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn cloud_transport_errors_include_hostname(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn cloud_transport_errors_include_hostname(cx: &mut gpui_runtime::TestAppContext) {
         let http_client =
             FakeHttpClient::create(|_| async move { Err(anyhow::anyhow!("DNS lookup failed")) });
         let model = cloud_test_model(http_client);
@@ -2026,8 +2026,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn hosted_input_counts_use_authenticated_count_endpoint(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn hosted_input_counts_use_authenticated_count_endpoint(cx: &mut gpui_runtime::TestAppContext) {
         for anthropic in [true, false] {
             let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
             let http_client = FakeHttpClient::create({
@@ -2077,9 +2077,9 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn hosted_input_counts_surface_errors_and_skip_unsupported_providers(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         for (status, body) in [(429, "rate limit"), (200, r#"{"tokens":-1}"#), (200, "{}")] {
             let model = cloud_test_model(FakeHttpClient::create(move |_| async move {
@@ -2119,9 +2119,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn retention_consent_gates_counting_compaction_and_generation(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
         let mut model = cloud_anthropic_test_model(FakeHttpClient::create({
@@ -2177,9 +2177,9 @@ mod tests {
         assert_eq!(calls.load(std::sync::atomic::Ordering::SeqCst), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn hosted_open_ai_preserves_unset_output_and_clamps_explicit_caps(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         for (limit, expected) in [
             (None, None),

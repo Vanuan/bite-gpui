@@ -65,7 +65,7 @@ use std::{
 use unindent::Unindent as _;
 use util::{path, path_list::PathList, paths::PathMatcher, rel_path::rel_path};
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_basic_remote_editing(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -228,7 +228,7 @@ async fn test_basic_remote_editing(cx: &mut TestAppContext, server_cx: &mut Test
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_buffer_path_swap(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -290,7 +290,7 @@ async fn test_remote_buffer_path_swap(cx: &mut TestAppContext, server_cx: &mut T
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_telemetry_event_forwarding(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -444,17 +444,17 @@ struct RemoteImageTestView {
     source: ImageSource,
 }
 
-impl gpui::Render for RemoteImageTestView {
+impl gpui_runtime::Render for RemoteImageTestView {
     fn render(
         &mut self,
-        _window: &mut gpui::Window,
-        _cx: &mut gpui::Context<Self>,
-    ) -> impl gpui::IntoElement {
+        _window: &mut gpui_runtime::Window,
+        _cx: &mut gpui_runtime::Context<Self>,
+    ) -> impl gpui_runtime::IntoElement {
         img(self.source.clone())
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_image_source(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -490,7 +490,7 @@ async fn test_remote_project_image_source(cx: &mut TestAppContext, server_cx: &m
     let loaded_bytes = Arc::new(std::sync::Mutex::new(None));
     let observed_source = ImageSource::from({
         let loaded_bytes = loaded_bytes.clone();
-        move |window: &mut gpui::Window, cx: &mut gpui::App| {
+        move |window: &mut gpui_runtime::Window, cx: &mut gpui_runtime::App| {
             let result = load_image(window, cx);
             if let Some(Ok(image)) = &result {
                 *loaded_bytes.lock().expect("loaded image mutex poisoned") =
@@ -521,7 +521,7 @@ async fn test_remote_project_image_source(cx: &mut TestAppContext, server_cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_search(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -595,7 +595,7 @@ async fn test_remote_project_search(cx: &mut TestAppContext, server_cx: &mut Tes
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_search_single_cpu(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -642,7 +642,7 @@ async fn test_remote_project_search_single_cpu(
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_search_inclusion(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -707,7 +707,7 @@ async fn test_remote_project_search_inclusion(
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_search_reports_open_excluded_file_once(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -776,7 +776,7 @@ async fn test_remote_project_search_reports_open_excluded_file_once(
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_search_reports_untitled_buffer_once(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -846,7 +846,7 @@ async fn test_remote_project_search_reports_untitled_buffer_once(
     assert_eq!(result_buffers.len(), 2);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_settings(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -974,7 +974,7 @@ async fn test_remote_settings(cx: &mut TestAppContext, server_cx: &mut TestAppCo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_lsp(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -1214,7 +1214,7 @@ async fn test_remote_lsp(cx: &mut TestAppContext, server_cx: &mut TestAppContext
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_call_hierarchy(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -1390,7 +1390,7 @@ async fn test_remote_call_hierarchy(cx: &mut TestAppContext, server_cx: &mut Tes
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_code_action_resolve(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     cx.update(|cx| {
         let settings_store = SettingsStore::test(cx);
@@ -1557,7 +1557,7 @@ async fn test_remote_code_action_resolve(cx: &mut TestAppContext, server_cx: &mu
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_code_lens_fetch_after_lsp_starts(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1693,7 +1693,7 @@ async fn test_remote_code_lens_fetch_after_lsp_starts(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_code_lens_refetch_after_refresh(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1833,7 +1833,7 @@ async fn test_remote_code_lens_refetch_after_refresh(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_lsp_data_cache_converges_with_multiple_servers(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2002,7 +2002,7 @@ async fn test_remote_lsp_data_cache_converges_with_multiple_servers(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_per_server_refresh_queries_only_the_refreshed_server(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2149,7 +2149,7 @@ async fn test_remote_per_server_refresh_queries_only_the_refreshed_server(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_code_lens_resolve(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     cx.update(|cx| {
         let settings_store = SettingsStore::test(cx);
@@ -2308,7 +2308,7 @@ async fn test_remote_code_lens_resolve(cx: &mut TestAppContext, server_cx: &mut 
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_cancel_language_server_work(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2482,7 +2482,7 @@ async fn test_remote_cancel_language_server_work(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_reload(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -2557,7 +2557,7 @@ async fn test_remote_reload(cx: &mut TestAppContext, server_cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_resolve_path_in_buffer(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2646,7 +2646,7 @@ async fn test_remote_resolve_path_in_buffer(
     assert!(path.is_dir());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_resolve_abs_path(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -2693,7 +2693,7 @@ async fn test_remote_resolve_abs_path(cx: &mut TestAppContext, server_cx: &mut T
     assert!(path.is_none());
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_canceling_buffer_opening(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -2740,7 +2740,7 @@ async fn test_canceling_buffer_opening(cx: &mut TestAppContext, server_cx: &mut 
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_adding_then_removing_then_adding_worktrees(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2797,7 +2797,7 @@ async fn test_adding_then_removing_then_adding_worktrees(
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_server_settings(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -2830,7 +2830,7 @@ async fn test_open_server_settings(cx: &mut TestAppContext, server_cx: &mut Test
     })
 }
 
-#[gpui::test(iterations = 20)]
+#[gpui_runtime::test(iterations = 20)]
 async fn test_reconnect(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -2903,7 +2903,7 @@ async fn test_reconnect(cx: &mut TestAppContext, server_cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_root_rename(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -2942,7 +2942,7 @@ async fn test_remote_root_rename(cx: &mut TestAppContext, server_cx: &mut TestAp
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_rename_entry(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -2987,7 +2987,7 @@ async fn test_remote_rename_entry(cx: &mut TestAppContext, server_cx: &mut TestA
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_file_into_remote_project(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -3097,7 +3097,7 @@ async fn test_copy_file_into_remote_project(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_root_repo_common_dir(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -3207,7 +3207,7 @@ async fn test_remote_root_repo_common_dir(cx: &mut TestAppContext, server_cx: &m
     assert!(!is_linked_worktree);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_search_commits_streams_proto_chunks(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -3309,7 +3309,7 @@ async fn test_remote_search_commits_streams_proto_chunks(
     assert_eq!(actual_shas, expected_shas);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_archive_git_operations_are_supported(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -3401,7 +3401,7 @@ async fn test_remote_archive_git_operations_are_supported(
     .expect("restore_archive_checkpoint should succeed for remote repository");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_path_to_gitignore_in_remote_repository(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -3464,7 +3464,7 @@ async fn test_add_path_to_gitignore_in_remote_repository(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_path_to_git_info_exclude_in_remote_repository(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -3522,7 +3522,7 @@ async fn test_add_path_to_git_info_exclude_in_remote_repository(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_git_diffs(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let text_2 = "
         fn one() -> usize {
@@ -3636,7 +3636,7 @@ async fn test_remote_git_diffs(cx: &mut TestAppContext, server_cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_git_diffs_when_recv_update_repository_delay(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -3650,7 +3650,7 @@ async fn test_remote_git_diffs_when_recv_update_repository_delay(
     });
 
     use editor::Editor;
-    use gpui::VisualContext;
+    use gpui_runtime::VisualContext;
     let text_2 = "
         fn one() -> usize {
             1
@@ -3781,7 +3781,7 @@ async fn test_remote_git_diffs_when_recv_update_repository_delay(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_git_branches(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -3915,7 +3915,7 @@ async fn test_remote_git_branches(cx: &mut TestAppContext, server_cx: &mut TestA
     assert_eq!(default_branch_with_remote.as_deref(), Some("origin/main"));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_git_checkpoints(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -4062,7 +4062,7 @@ async fn test_remote_git_checkpoints(cx: &mut TestAppContext, server_cx: &mut Te
     assert!(diff.is_empty(), "diff after restore should be empty");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_agent_fs_tool_calls(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -4113,7 +4113,7 @@ async fn test_remote_agent_fs_tool_calls(cx: &mut TestAppContext, server_cx: &mu
     does_not_exist_result.await.unwrap_err();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_adding_remote_skill(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     use acp_thread::AgentConnection as _;
 
@@ -4256,7 +4256,7 @@ async fn test_adding_remote_skill(cx: &mut TestAppContext, server_cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_external_agent_server(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -4340,7 +4340,7 @@ async fn test_remote_external_agent_server(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_apply_code_action_skips_unadvertised_command(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -4483,7 +4483,7 @@ async fn test_remote_apply_code_action_skips_unadvertised_command(
     assert_eq!(transaction.0.len(), 0);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_lsp_show_document(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -4591,7 +4591,7 @@ async fn test_remote_lsp_show_document(cx: &mut TestAppContext, server_cx: &mut 
     assert_eq!(handled_requests.load(Ordering::Acquire), 1);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_execute_lsp_command(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
     fs.insert_tree(
@@ -4719,7 +4719,7 @@ async fn test_remote_execute_lsp_command(cx: &mut TestAppContext, server_cx: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_restore_unstaged_hunk_clears_diff(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -4733,7 +4733,7 @@ async fn test_remote_restore_unstaged_hunk_clears_diff(
     });
 
     use editor::Editor;
-    use gpui::VisualContext;
+    use gpui_runtime::VisualContext;
 
     let base_text = "
         fn one() -> usize {
@@ -4828,7 +4828,7 @@ async fn test_remote_restore_unstaged_hunk_clears_diff(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_load_commit_template(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
 
@@ -4870,7 +4870,7 @@ async fn test_remote_load_commit_template(cx: &mut TestAppContext, server_cx: &m
     assert_eq!(commit_template.template, "chore: commit template");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_delete_project_entry_with_trash(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -4925,7 +4925,7 @@ async fn test_remote_delete_project_entry_with_trash(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_trash_restore(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
     let fs = FakeFs::new(server_cx.executor());
 
@@ -4977,7 +4977,7 @@ async fn test_remote_trash_restore(cx: &mut TestAppContext, server_cx: &mut Test
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_creation_notifies_new_entity_observers(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -5021,7 +5021,7 @@ async fn test_remote_project_creation_notifies_new_entity_observers(
     assert!(project.read_with(cx, |project, _| project.is_remote()));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_log_store_keys_remote_events_by_primary_kind_on_supplementary_id_collision(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,

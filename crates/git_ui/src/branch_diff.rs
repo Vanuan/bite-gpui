@@ -493,7 +493,7 @@ impl Item for BranchDiff {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.diff.read(cx).for_each_project_item(cx, f);
     }
@@ -595,7 +595,7 @@ impl Item for BranchDiff {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<DiffMultibuffer>() {
@@ -913,7 +913,7 @@ mod tests {
     use collections::HashMap;
     use editor::test::editor_test_context::assert_state_with_diff;
     use git::status::{FileStatus, TrackedStatus, UnmergedStatus, UnmergedStatusCode};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::FakeFs;
     use serde_json::json;
     use settings::{DiffViewStyle, SettingsStore};
@@ -943,7 +943,7 @@ mod tests {
         });
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     async fn test_split_diff_conflict_path_transition_with_dirty_buffer_invalid_anchor_panics(
         cx: &mut TestAppContext,
     ) {
@@ -1098,7 +1098,7 @@ mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_branch_diff(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1195,7 +1195,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_branch_diff_action_matches_existing_item_by_base_ref(cx: &mut TestAppContext) {
         init_test(cx);
 

@@ -247,7 +247,7 @@ impl Global for SettingsStore {}
 #[derive(Default)]
 pub struct DefaultSemanticTokenRules(pub SemanticTokenRules);
 
-impl gpui::Global for DefaultSemanticTokenRules {}
+impl gpui_runtime::Global for DefaultSemanticTokenRules {}
 
 #[doc(hidden)]
 #[derive(Debug)]
@@ -335,7 +335,7 @@ impl SettingsStore {
         this
     }
 
-    pub fn observe_active_settings_profile_name(cx: &mut App) -> gpui::Subscription {
+    pub fn observe_active_settings_profile_name(cx: &mut App) -> gpui_runtime::Subscription {
         cx.observe_global::<ActiveSettingsProfileName>(|cx| {
             Self::update_global(cx, |store, cx| {
                 store.recompute_values(None, cx);
@@ -1756,8 +1756,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_update_settings_file_updates_store_before_watcher(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_update_settings_file_updates_store_before_watcher(cx: &mut gpui_runtime::TestAppContext) {
         let fs = FakeFs::new(cx.background_executor.clone());
         fs.create_dir(paths::settings_file().parent().unwrap())
             .await
@@ -1840,7 +1840,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_default_settings_release_channel_overrides(cx: &mut App) {
         // The test deals with overrides and should ignore the other set-ups (Preview and Stable runs)
         if *release_channel::RELEASE_CHANNEL != release_channel::ReleaseChannel::Dev {
@@ -1866,7 +1866,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_settings_store_basic(cx: &mut App) {
         let mut store = SettingsStore::new(cx, &default_settings());
         store.register_setting::<AutoUpdateSetting>();
@@ -1971,7 +1971,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_setting_store_assign_json_before_register(cx: &mut App) {
         let mut store = SettingsStore::new(cx, &test_settings());
         store
@@ -2002,7 +2002,7 @@ mod tests {
         pretty_assertions::assert_eq!(new_json, expected_new_json);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_setting_store_update(cx: &mut App) {
         let mut store = SettingsStore::new(cx, &test_settings());
 
@@ -2182,7 +2182,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_edits_for_update_preserves_unknown_keys(cx: &mut App) {
         let mut store = SettingsStore::new(cx, &test_settings());
         store.register_setting::<AutoUpdateSetting>();
@@ -2206,7 +2206,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_edits_for_update_returns_error_on_invalid_json(cx: &mut App) {
         let store = SettingsStore::new(cx, &test_settings());
 
@@ -2215,7 +2215,7 @@ mod tests {
         assert!(result.is_err());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_vscode_import(cx: &mut App) {
         let mut store = SettingsStore::new(cx, &test_settings());
         store.register_setting::<DefaultLanguageSettings>();
@@ -2738,7 +2738,7 @@ mod tests {
         pretty_assertions::assert_eq!(new, expected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_update_git_settings(cx: &mut App) {
         let store = SettingsStore::new(cx, &test_settings());
 
@@ -2766,7 +2766,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_global_settings(cx: &mut App) {
         let mut store = SettingsStore::new(cx, &test_settings());
         store.register_setting::<ItemSettings>();
@@ -2815,7 +2815,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_get_value_for_field_basic(cx: &mut App) {
         let mut store = SettingsStore::new(cx, &test_settings());
         store.register_setting::<DefaultLanguageSettings>();
@@ -2877,7 +2877,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_get_value_for_field_local_worktrees_dont_interfere(cx: &mut App) {
         let mut store = SettingsStore::new(cx, &test_settings());
         store.register_setting::<DefaultLanguageSettings>();
@@ -3005,7 +3005,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_get_overrides_for_field(cx: &mut App) {
         let mut store = SettingsStore::new(cx, &test_settings());
         store.register_setting::<DefaultLanguageSettings>();
@@ -3169,7 +3169,7 @@ mod tests {
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_lsp_settings_schema_generation(cx: &mut App) {
         SettingsStore::test(cx);
 
@@ -3224,7 +3224,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_lsp_project_settings_schema_generation(cx: &mut App) {
         SettingsStore::test(cx);
 
@@ -3279,7 +3279,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_file_types_schema_generation(cx: &mut App) {
         SettingsStore::test(cx);
 
@@ -3315,7 +3315,7 @@ mod tests {
         assert_eq!(properties.get("TypeScript"), Some(patterns_schema));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_project_json_schema_differs_from_user_schema(cx: &mut App) {
         SettingsStore::test(cx);
 

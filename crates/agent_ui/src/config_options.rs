@@ -533,7 +533,7 @@ impl Render for ConfigOptionSelector {
                     picker,
                     trigger_button,
                     tooltip,
-                    gpui::Anchor::BottomRight,
+                    gpui_types::Anchor::BottomRight,
                     cx,
                 )
                 .with_handle(picker_handle)
@@ -1100,12 +1100,12 @@ mod tests {
     use super::*;
     use acp_thread::AgentConnection;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use parking_lot::Mutex;
     use project::{AgentId, Project};
     use std::{any::Any, cell::RefCell};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn cycling_config_option_saves_selected_value_as_default(cx: &mut TestAppContext) {
         let agent_server = Rc::new(TestAgentServer::default());
         let config_options = Rc::new(TestSessionConfigOptions::new(vec![
@@ -1156,7 +1156,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn cycling_boolean_config_option_saves_selected_value_as_default(cx: &mut TestAppContext) {
         let agent_server = Rc::new(TestAgentServer::default());
         let config_options = Rc::new(TestSessionConfigOptions::new(vec![
@@ -1199,7 +1199,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn cycling_category_cycles_boolean_config_option_first(cx: &mut TestAppContext) {
         let agent_server = Rc::new(TestAgentServer::default());
         let config_options = Rc::new(TestSessionConfigOptions::new(vec![
@@ -1252,7 +1252,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn toggling_category_picker_without_select_config_option_is_unhandled(cx: &mut TestAppContext) {
         let agent_server = Rc::new(TestAgentServer::default());
         let config_options = Rc::new(TestSessionConfigOptions::new(vec![

@@ -1070,7 +1070,7 @@ mod remote_button {
                 }))
             })
             .anchor(Anchor::TopRight)
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.),
                 y: px(2.),
             })
@@ -1419,7 +1419,7 @@ mod view_commit_tests {
         (project, workspace)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_show_ref_picker_with_repository(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = setup_git_repo(cx).await;

@@ -3640,7 +3640,7 @@ mod test {
         Ok((test_dependencies, manifest))
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn should_get_remote_user_from_devcontainer_if_available(cx: &mut TestAppContext) {
         let (_, devcontainer_manifest) = init_default_devcontainer_manifest(
             cx,
@@ -3680,7 +3680,7 @@ mod test {
         assert_eq!(remote_user, "root".to_string())
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn should_get_remote_user_from_docker_config(cx: &mut TestAppContext) {
         let (_, devcontainer_manifest) =
             init_default_devcontainer_manifest(cx, "{}").await.unwrap();
@@ -3737,7 +3737,7 @@ mod test {
         assert!(!is_local_feature_ref("https://example.com/feature.tgz"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn should_create_correct_docker_run_command(cx: &mut TestAppContext) {
         let mut metadata = HashMap::new();
         metadata.insert(
@@ -3828,7 +3828,7 @@ mod test {
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn should_not_override_entrypoint_when_override_command_is_false(
         cx: &mut TestAppContext,
     ) {
@@ -3878,7 +3878,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn should_substitute_nonremote_variables_in_image_metadata(cx: &mut TestAppContext) {
         let (_, mut devcontainer_manifest) = init_default_devcontainer_manifest(
             cx,
@@ -3960,7 +3960,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn should_use_devcontainer_cli_post_start_marker_for_started_container(
         cx: &mut TestAppContext,
     ) {
@@ -4160,7 +4160,7 @@ mod test {
     fn run_shell_script(script: &str, home_directory: &Path) -> Output {
         let mut command = Command::new("sh");
         command.arg("-c").arg(script).env("HOME", home_directory);
-        gpui::block_on(command.output()).expect("shell should run postStartCommand marker script")
+        gpui_platform::block_on(command.output()).expect("shell should run postStartCommand marker script")
     }
 
     #[cfg(not(target_os = "windows"))]
@@ -4177,7 +4177,7 @@ mod test {
         path
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn should_find_primary_service_in_docker_compose(cx: &mut TestAppContext) {
         // State where service not defined in dev container
         let (_, given_dev_container) = init_default_devcontainer_manifest(cx, "{}").await.unwrap();
@@ -4237,7 +4237,7 @@ mod test {
         assert_eq!(service_name, "found_service".to_string());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_nonremote_variable_replacement_with_default_mount(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let given_devcontainer_contents = r#"
@@ -4398,7 +4398,7 @@ mod test {
         assert_eq!(replaced, "before one:two after");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_nonremote_variable_replacement_with_explicit_mount(cx: &mut TestAppContext) {
         let given_devcontainer_contents = r#"
                 // These are some external comments. serde_lenient should handle them
@@ -4489,7 +4489,7 @@ mod test {
     // updateRemoteUserUID is treated as false in Windows, so this test will fail
     // It is covered by test_spawns_devcontainer_with_dockerfile_and_no_update_uid
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_devcontainer_with_dockerfile_and_features(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -4874,7 +4874,7 @@ chmod +x ./install.sh
     // updateRemoteUserUID is treated as false in Windows, so this test will fail
     // It is covered by test_spawns_devcontainer_with_docker_compose_and_no_update_uid
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_devcontainer_with_docker_compose(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -5200,7 +5200,7 @@ ENV DOCKER_BUILDKIT=1
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compose_build_includes_primary_service_when_run_services_excludes_it(
         cx: &mut TestAppContext,
     ) {
@@ -5609,7 +5609,7 @@ RUN apt-get update
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dockerfile_location_with_compose_context_parent(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -5638,7 +5638,7 @@ RUN apt-get update
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_devcontainer_with_docker_compose_and_no_update_uid(
         cx: &mut TestAppContext,
     ) {
@@ -5814,7 +5814,7 @@ ENV DOCKER_BUILDKIT=1
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_only_requested_compose_services(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -5919,7 +5919,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resumes_only_requested_compose_services_without_recreating(
         cx: &mut TestAppContext,
     ) {
@@ -5989,7 +5989,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     }
 
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_devcontainer_with_docker_compose_and_podman(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -6214,7 +6214,7 @@ ENV DOCKER_BUILDKIT=1
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_devcontainer_with_dockerfile_and_no_update_uid(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -6499,7 +6499,7 @@ chmod +x ./install.sh
     }
 
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_devcontainer_with_local_feature(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -6609,7 +6609,7 @@ chmod +x ./install.sh
     }
 
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_devcontainer_with_plain_image(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -6684,7 +6684,7 @@ RUN sed -i -E 's/((^|\s)PATH=)([^\$]*)$/\1\${PATH:-\3}/g' /etc/profile || true
     }
 
     #[cfg(target_os = "windows")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_devcontainer_with_plain_image(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -6711,7 +6711,7 @@ RUN sed -i -E 's/((^|\s)PATH=)([^\$]*)$/\1\${PATH:-\3}/g' /etc/profile || true
     }
 
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawns_devcontainer_with_docker_compose_and_plain_image(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -6804,7 +6804,7 @@ RUN sed -i -E 's/((^|\s)PATH=)([^\$]*)$/\1\${PATH:-\3}/g' /etc/profile || true
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_gets_base_image_from_dockerfile(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -6864,7 +6864,7 @@ FROM ${IMAGE} AS devcontainer
         assert_eq!(base_image, "docker.io/stuff/mybuild:1.22".to_string());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_gets_base_image_from_dockerfile_with_target_specified(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -7014,7 +7014,7 @@ FROM ${IMAGE} AS production
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_expands_args_in_dockerfile(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -7087,7 +7087,7 @@ FROM docker.io/hexpm/elixir:1.21-erlang-28.4.1-debian-trixie-20260316-slim AS de
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_expands_compose_service_args_in_dockerfile(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -7127,7 +7127,7 @@ FROM docker.io/hexpm/elixir:1.21-erlang-28.4.1-debian-trixie-20260316-slim AS de
         assert_eq!(base_image, "test_image:latest");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_expands_bare_dollar_args_in_dockerfile(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();
@@ -7177,7 +7177,7 @@ RUN echo $RUBY_VERSION2
     }
 
     #[cfg(not(target_os = "windows"))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn check_for_existing_container_errors_when_multiple_match(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         let (test_dependencies, devcontainer_manifest) =
@@ -7198,7 +7198,7 @@ RUN echo $RUBY_VERSION2
         assert_eq!(ids, vec!["abc123".to_string(), "def456".to_string()]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn trim_non_alphanumeric_chars_from_image_tag(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         env_logger::try_init().ok();

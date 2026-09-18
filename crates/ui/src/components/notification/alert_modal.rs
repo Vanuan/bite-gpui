@@ -1,10 +1,10 @@
 use crate::component_prelude::*;
 use crate::prelude::*;
 use crate::{Checkbox, ListBulletItem, ToggleState};
-use gpui::Action;
-use gpui::FocusHandle;
-use gpui::IntoElement;
-use gpui::Stateful;
+use gpui_runtime::Action;
+use gpui_runtime::FocusHandle;
+use gpui_runtime::IntoElement;
+use gpui_runtime::Stateful;
 use smallvec::{SmallVec, smallvec};
 use theme::ActiveTheme;
 
@@ -86,7 +86,7 @@ impl AlertModal {
         self
     }
 
-    pub fn track_focus(mut self, focus_handle: &gpui::FocusHandle) -> Self {
+    pub fn track_focus(mut self, focus_handle: &gpui_runtime::FocusHandle) -> Self {
         self.focus_handle = Some(focus_handle.clone());
         self
     }
