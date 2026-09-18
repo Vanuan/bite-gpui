@@ -24,7 +24,7 @@ use std::{
 macro_rules! actions {
     ($namespace:path, [ $( $(#[$attr:meta])* $name:ident),* $(,)? ]) => {
         $(
-            #[derive(::std::clone::Clone, ::std::cmp::PartialEq, ::std::default::Default, ::std::fmt::Debug, gpui::Action)]
+            #[derive(::std::clone::Clone, ::std::cmp::PartialEq, ::std::default::Default, ::std::fmt::Debug, crate::Action)]
             #[action(namespace = $namespace)]
             $(#[$attr])*
             pub struct $name;
@@ -32,7 +32,7 @@ macro_rules! actions {
     };
     ([ $( $(#[$attr:meta])* $name:ident),* $(,)? ]) => {
         $(
-            #[derive(::std::clone::Clone, ::std::cmp::PartialEq, ::std::default::Default, ::std::fmt::Debug, gpui::Action)]
+            #[derive(::std::clone::Clone, ::std::cmp::PartialEq, ::std::default::Default, ::std::fmt::Debug, crate::Action)]
             $(#[$attr])*
             pub struct $name;
         )*
@@ -442,17 +442,17 @@ mod no_action {
     /// In keymap JSON this is written as:
     ///
     /// `["zed::Unbind", "editor::NewLine"]`
-    #[derive(Clone, Debug, PartialEq, Deserialize, JsonSchema, gpui::Action)]
+    #[derive(Clone, Debug, PartialEq, Deserialize, JsonSchema, crate::Action)]
     #[action(namespace = zed)]
     pub struct Unbind(pub gpui::SharedString);
 
     /// Returns whether or not this action represents a removed key binding.
-    pub fn is_no_action(action: &dyn gpui::Action) -> bool {
+    pub fn is_no_action(action: &dyn crate::Action) -> bool {
         action.as_any().is::<NoAction>()
     }
 
     /// Returns whether or not this action represents an unbind marker.
-    pub fn is_unbind(action: &dyn gpui::Action) -> bool {
+    pub fn is_unbind(action: &dyn crate::Action) -> bool {
         action.as_any().is::<Unbind>()
     }
 }

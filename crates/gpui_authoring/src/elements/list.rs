@@ -1715,7 +1715,7 @@ impl sum_tree::SeekTarget<'_, ListItemSummary, ListItemSummary> for Height {
 #[cfg(test)]
 mod test {
 
-    use gpui::{ScrollDelta, ScrollWheelEvent};
+    use gpui_platform::{ScrollDelta, ScrollWheelEvent};
     use std::cell::Cell;
     use std::rc::Rc;
 
@@ -1730,7 +1730,7 @@ mod test {
         let cx = cx.add_empty_window();
 
         let state = ListState::new(5, crate::ListAlignment::Top, px(10.));
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 2,
             offset_in_item: px(0.),
         });
@@ -1785,7 +1785,7 @@ mod test {
         let state = ListState::new(5, crate::ListAlignment::Top, px(10.));
 
         // Ensure that the list is scrolled to the top
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 0,
             offset_in_item: px(0.0),
         });
@@ -1945,7 +1945,7 @@ mod test {
 
         let state = ListState::new(5, crate::ListAlignment::Top, px(10.)).measure_all();
 
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 2,
             offset_in_item: px(0.),
         });
@@ -1963,7 +1963,7 @@ mod test {
 
         let state = ListState::new(5, crate::ListAlignment::Top, px(10.)).measure_all();
 
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 2,
             offset_in_item: px(0.),
         });
@@ -1981,7 +1981,7 @@ mod test {
 
         let state = ListState::new(5, crate::ListAlignment::Top, px(10.)).measure_all();
 
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 2,
             offset_in_item: px(20.),
         });
@@ -1999,7 +1999,7 @@ mod test {
 
         let state = ListState::new(5, crate::ListAlignment::Top, px(10.)).measure_all();
 
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 2,
             offset_in_item: px(0.),
         });
@@ -2017,7 +2017,7 @@ mod test {
 
         let state = ListState::new(5, crate::ListAlignment::Top, px(10.)).measure_all();
 
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 2,
             offset_in_item: px(0.),
         });
@@ -2131,7 +2131,7 @@ mod test {
 
         // Simulate scrolling 40px inside the element with index 2. Since the
         // original item height is 100px, this equates to 40% inside the item.
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 2,
             offset_in_item: px(40.),
         });
@@ -2193,7 +2193,7 @@ mod test {
             })
         });
 
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 5,
             offset_in_item: px(40.),
         });
@@ -2236,7 +2236,7 @@ mod test {
             cx.update(|_, cx| cx.new(|_| TestView(state)))
         };
 
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 5,
             offset_in_item: px(40.),
         });
@@ -2300,7 +2300,7 @@ mod test {
             cx.update(|_, cx| cx.new(|_| TestView { state, item_height }))
         };
 
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 5,
             offset_in_item: px(40.),
         });
@@ -2687,7 +2687,7 @@ mod test {
         let view = cx.update(|_, cx| cx.new(|_| TestView(state.clone())));
 
         // Scroll to the middle of the list (item 3).
-        state.scroll_to(gpui::ListOffset {
+        state.scroll_to(crate::ListOffset {
             item_ix: 3,
             offset_in_item: px(0.),
         });
