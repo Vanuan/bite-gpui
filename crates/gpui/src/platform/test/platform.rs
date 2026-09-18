@@ -3,9 +3,9 @@ use crate::{
     DummyKeyboardMapper, ForegroundExecutor, Keymap, MenuCommandId, NoopTextSystem,
     PathPromptOptions, Platform, PlatformDisplay, PlatformHeadlessRenderer, PlatformKeyboardLayout,
     PlatformKeyboardMapper, PlatformMenu, PlatformMenuItem, PlatformTextSystem, PromptButton,
-    ScreenCaptureFrame, ScreenCaptureSource, ScreenCaptureStream, SharedString, SourceMetadata,
-    SystemNotification, SystemNotificationResponse, Task, TestDisplay, TestWindow, ThermalState,
-    WindowAppearance, WindowId, WindowParams, size,
+    SceneRenderer, ScreenCaptureFrame, ScreenCaptureSource, ScreenCaptureStream, SharedString,
+    SourceMetadata, SystemNotification, SystemNotificationResponse, Task, TestDisplay, TestWindow,
+    ThermalState, WindowAppearance, WindowId, WindowParams, size,
 };
 use anyhow::Result;
 use collections::VecDeque;
@@ -125,9 +125,7 @@ impl TestPlatform {
         executor: BackgroundExecutor,
         foreground_executor: ForegroundExecutor,
         text_system: Arc<dyn PlatformTextSystem>,
-        headless_renderer_factory: Option<
-            Box<dyn Fn() -> Option<Box<dyn PlatformHeadlessRenderer>>>,
-        >,
+        headless_renderer_factory: Option<Box<dyn Fn() -> Option<Box<dyn SceneRenderer>>>>,
     ) -> Rc<Self> {
         Rc::new_cyclic(|weak| TestPlatform {
             background_executor: executor,
