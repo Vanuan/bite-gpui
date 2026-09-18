@@ -17,6 +17,7 @@
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
 
+use gpui_platform::{Autocapitalize, TextInputAction, TextInputConfiguration};
 use wasm_bindgen::JsCast;
 
 use crate::window::WebWindowInner;

@@ -7,11 +7,14 @@
 //! Run the app: cargo run -p gpui --example testing
 //! Run tests:   cargo test -p gpui --example testing --features test-support
 
+#[path = "example_support/fonts.rs"]
+mod example_support;
+
+use gpui::application;
 use gpui::{
     App, Bounds, Context, FocusHandle, Focusable, Render, Task, Window, WindowBounds,
     WindowOptions, actions, div, prelude::*, px, rgb, size,
 };
-use gpui_platform::application;
 
 actions!(counter, [Increment, Decrement]);
 
@@ -208,7 +211,7 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }
 

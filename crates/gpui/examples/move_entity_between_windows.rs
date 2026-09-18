@@ -10,11 +10,11 @@
 
 use std::time::Duration;
 
+use gpui::application;
 use gpui::{
     App, AppContext as _, Bounds, Context, EventEmitter, MouseButton, Render, SharedString,
     Subscription, Task, Window, WindowBounds, WindowOptions, div, prelude::*, px, rgb, size,
 };
-use gpui_platform::application;
 
 struct MoveToNewWindow;
 
@@ -149,6 +149,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

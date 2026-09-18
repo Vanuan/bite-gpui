@@ -28,8 +28,8 @@ use crate::{
     AnyWindowHandle, App, AppCell, AppContext, AsyncApp, BackgroundExecutor, BorrowAppContext,
     Bounds, BoundsExt, ClipboardItem, Context, Entity, ForegroundExecutor, Global, InputEvent,
     Keystroke, MouseButton, MouseDownEvent, MouseMoveEvent, MouseUpEvent, Pixels, Platform,
-    PlatformTextSystem, Point, Render, Size, Task, TestDispatcher, TestPlatform, TextSystem,
-    Window, WindowBounds, WindowHandle, WindowOptions, app::GpuiMode,
+    PlatformTextSystem, Point, Render, Size, Task, TestDispatcher, TestPlatform, TestWindow,
+    TextSystem, Window, WindowBounds, WindowHandle, WindowOptions, app::GpuiMode,
 };
 use std::{future::Future, rc::Rc, sync::Arc, time::Duration};
 
@@ -473,11 +473,38 @@ impl<V: 'static + Render> TestAppWindow<V> {
         let window_id = self.handle.window_id();
         let mut app = self.app.borrow_mut();
         if let Some(Some(window)) = app.windows.get_mut(window_id) {
-            if let Some(test_window) = window.platform_window.as_test() {
+            if let Some(test_window) = window
+                .platform_window
+                .as_test()
+                .and_then(|any| any.downcast_mut::<TestWindow>())
+            {
                 test_window.simulate_resize(size);
             }
         }
         drop(app);
+        self.background_executor.run_until_parked();
+    }
+
+    /// Simulate the window moving to a display with a different scale factor.
+    pub fn simulate_scale_factor_change(&mut self, scale_factor: f32) {
+        let window_id = self.handle.window_id();
+        let test_window = {
+            let mut app = self.app.borrow_mut();
+            app.windows
+                .get_mut(window_id)
+                .and_then(|window| window.as_mut())
+                .and_then(|window| {
+                    window
+                        .platform_window
+                        .as_test()
+                        .and_then(|any| any.downcast_mut::<TestWindow>())
+                })
+                .map(|test_window| test_window.clone())
+        };
+        // The resize callback needs to borrow the app again synchronously.
+        if let Some(mut test_window) = test_window {
+            test_window.simulate_scale_factor_change(scale_factor);
+        }
         self.background_executor.run_until_parked();
     }
 

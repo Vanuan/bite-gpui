@@ -1,10 +1,13 @@
 #![cfg_attr(target_family = "wasm", no_main)]
 
+#[path = "example_support/fonts.rs"]
+mod example_support;
+
+use gpui::application;
 use gpui::{
     App, Bounds, Context, MousePressureEvent, PressureStage, Window, WindowBounds, WindowOptions,
     div, prelude::*, px, rgb, size,
 };
-use gpui_platform::application;
 
 struct MousePressureExample {
     pressure_stage: PressureStage,
@@ -76,6 +79,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

@@ -210,7 +210,36 @@ impl LineLayout {
     ///
     /// This is a lower-level alternative to [`ShapedLine::paint`] for callers that
     /// hold a bare layout and track decorations themselves.
-    pub fn paint(
+    fn paint(
+        &self,
+        origin: Point<Pixels>,
+        line_height: Pixels,
+        align: TextAlign,
+        align_width: Option<Pixels>,
+        decoration_runs: &[DecorationRun],
+        window: &mut Window,
+        cx: &mut App,
+    ) -> Result<()>;
+
+    /// Paint the background of this layout to the window, using the given
+    /// decoration runs to determine background colors.
+    ///
+    /// This is a lower-level alternative to [`ShapedLine::paint_background`] for
+    /// callers that hold a bare layout and track decorations themselves.
+    fn paint_background(
+        &self,
+        origin: Point<Pixels>,
+        line_height: Pixels,
+        align: TextAlign,
+        align_width: Option<Pixels>,
+        decoration_runs: &[DecorationRun],
+        window: &mut Window,
+        cx: &mut App,
+    ) -> Result<()>;
+}
+
+impl LineLayoutExt for LineLayout {
+    fn paint(
         &self,
         origin: Point<Pixels>,
         line_height: Pixels,
@@ -233,12 +262,7 @@ impl LineLayout {
         )
     }
 
-    /// Paint the background of this layout to the window, using the given
-    /// decoration runs to determine background colors.
-    ///
-    /// This is a lower-level alternative to [`ShapedLine::paint_background`] for
-    /// callers that hold a bare layout and track decorations themselves.
-    pub fn paint_background(
+    fn paint_background(
         &self,
         origin: Point<Pixels>,
         line_height: Pixels,

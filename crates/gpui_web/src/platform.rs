@@ -40,7 +40,7 @@ pub struct WebPlatform {
     background_executor: BackgroundExecutor,
     foreground_executor: ForegroundExecutor,
     text_system: Arc<dyn PlatformTextSystem>,
-    active_window: Rc<RefCell<Option<AnyWindowHandle>>>,
+    active_window: Rc<RefCell<Option<WindowId>>>,
     active_display: Rc<dyn PlatformDisplay>,
     callbacks: RefCell<WebPlatformCallbacks>,
     backend_preference: WebBackendPreference,
@@ -108,9 +108,9 @@ struct WebPlatformCallbacks {
     open_urls: Option<Box<dyn FnMut(Vec<String>)>>,
     quit: Option<Box<dyn FnMut() -> bool>>,
     reopen: Option<Box<dyn FnMut()>>,
-    app_menu_action: Option<Box<dyn FnMut(&dyn Action)>>,
+    app_menu_action: Option<Box<dyn FnMut(MenuCommandId)>>,
     will_open_app_menu: Option<Box<dyn FnMut()>>,
-    validate_app_menu_command: Option<Box<dyn FnMut(&dyn Action) -> bool>>,
+    validate_app_menu_command: Option<Box<dyn FnMut(MenuCommandId) -> bool>>,
     keyboard_layout_change: Option<Box<dyn FnMut()>>,
     thermal_state_change: Option<Box<dyn FnMut()>>,
 }
@@ -325,13 +325,13 @@ impl Platform for WebPlatform {
         Some(self.active_display.clone())
     }
 
-    fn active_window(&self) -> Option<AnyWindowHandle> {
+    fn active_window(&self) -> Option<WindowId> {
         *self.active_window.borrow()
     }
 
     fn open_window(
         &self,
-        handle: AnyWindowHandle,
+        handle: WindowId,
         params: WindowParams,
     ) -> anyhow::Result<Box<dyn PlatformWindow>> {
         match &params.kind {
@@ -468,11 +468,11 @@ impl Platform for WebPlatform {
 
     fn on_system_wake(&self, _callback: Box<dyn FnMut()>) {}
 
-    fn set_menus(&self, _menus: Vec<Menu>, _keymap: &Keymap) {}
+    fn set_menus(&self, _menus: Vec<PlatformMenu>) {}
 
-    fn set_dock_menu(&self, _menu: Vec<MenuItem>, _keymap: &Keymap) {}
+    fn set_dock_menu(&self, _menu: Vec<PlatformMenuItem>) {}
 
-    fn on_app_menu_action(&self, callback: Box<dyn FnMut(&dyn Action)>) {
+    fn on_app_menu_action(&self, callback: Box<dyn FnMut(MenuCommandId)>) {
         self.callbacks.borrow_mut().app_menu_action = Some(callback);
     }
 
@@ -480,7 +480,7 @@ impl Platform for WebPlatform {
         self.callbacks.borrow_mut().will_open_app_menu = Some(callback);
     }
 
-    fn on_validate_app_menu_command(&self, callback: Box<dyn FnMut(&dyn Action) -> bool>) {
+    fn on_validate_app_menu_command(&self, callback: Box<dyn FnMut(MenuCommandId) -> bool>) {
         self.callbacks.borrow_mut().validate_app_menu_command = Some(callback);
     }
 

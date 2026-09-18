@@ -4,7 +4,7 @@
 //!
 //! Run with: `cargo run -p gpui --example a11y`
 //!
-//! Or on Linux: `cargo run -p gpui --features gpui_platform/wayland,gpui_platform/x11 --example a11y`
+//! Or on Linux: `cargo run -p gpui --features gpui/wayland,gpui/x11 --example a11y`
 //!
 //! This app uses GPUI's accessibility APIs to attach structured information to
 //! the element tree, which allows assistive technology to see and interact with
@@ -30,11 +30,14 @@
 //!     - "2. Run tests"
 //!     - "3. Ship it"
 
+#[path = "example_support/fonts.rs"]
+mod example_support;
+
+use gpui::application;
 use gpui::{
     AccessibleAction, App, Bounds, Context, FocusHandle, KeyBinding, Role, SharedString, Toggled,
     Window, WindowBounds, WindowOptions, actions, div, prelude::*, px, rgb, size, text,
 };
-use gpui_platform::application;
 
 actions!(a11y_example, [Tab, TabPrev]);
 
@@ -261,6 +264,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }
