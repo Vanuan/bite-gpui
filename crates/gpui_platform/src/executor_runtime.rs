@@ -1,12 +1,14 @@
-use std::{future::Future, marker::PhantomData, mem, pin::Pin, rc::Rc, sync::Arc, time::Duration};
+use std::{future::Future, marker::PhantomData, rc::Rc, sync::Arc, time::Duration};
 #[cfg(not(target_family = "wasm"))]
+use std::{mem, pin::Pin};
 
 #[cfg(not(target_family = "wasm"))]
 use futures::channel::mpsc;
 use futures::prelude::*;
 use scheduler::Instant;
 use scheduler::Scheduler;
-#[cfg(not(target_family = "wasm"))]
+
+use crate::{ActivityGuard, PlatformDispatcher, PlatformScheduler};
 
 pub use scheduler::{
     DedicatedExecutor, FallibleTask, LocalExecutor as SchedulerLocalExecutor, Priority,
