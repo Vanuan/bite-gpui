@@ -28,9 +28,7 @@ use x11rb::{
     xcb_ffi::XCBConnection,
 };
 
-use std::{
-    cell::RefCell, ffi::c_void, fmt::Display, num::NonZeroU32, ptr::NonNull, rc::Rc, sync::Arc,
-};
+use std::{cell::RefCell, ffi::c_void, fmt::Display, num::NonZeroU32, ptr::NonNull, rc::Rc};
 
 use super::{X11Display, XINPUT_ALL_DEVICE_GROUPS, XINPUT_ALL_DEVICES};
 
@@ -1717,7 +1715,12 @@ impl PlatformWindow for X11Window {
         self.0.callbacks.borrow_mut().button_layout_changed = Some(callback);
     }
 
-    fn draw(&self, scene: &Scene) {
+    fn with_renderer(&mut self, f: &mut dyn FnMut(&mut dyn SceneRenderer)) {
+        let mut inner = self.0.state.borrow_mut();
+        f(&mut inner.renderer);
+    }
+
+    fn present(&mut self, f: &mut dyn FnMut(&mut dyn SceneRenderer) -> bool) {
         let mut inner = self.0.state.borrow_mut();
 
         if inner.renderer.device_lost() {
@@ -1740,16 +1743,11 @@ impl PlatformWindow for X11Window {
             return;
         }
 
-        inner.renderer.draw(scene);
+        f(&mut inner.renderer);
 
         if inner.renderer.needs_redraw() {
             inner.force_render_after_recovery = true;
         }
-    }
-
-    fn sprite_atlas(&self) -> Arc<dyn PlatformAtlas> {
-        let inner = self.0.state.borrow();
-        inner.renderer.sprite_atlas().clone()
     }
 
     fn show_window_menu(&self, position: Point<Pixels>) {
