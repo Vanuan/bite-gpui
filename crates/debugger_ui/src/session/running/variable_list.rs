@@ -1551,7 +1551,7 @@ impl VariableList {
 }
 
 impl Focusable for VariableList {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -1589,8 +1589,8 @@ impl Render for VariableList {
                 )
                 .track_scroll(&self.list_handle)
                 .with_width_from_item(self.max_width_index)
-                .with_sizing_behavior(gpui::ListSizingBehavior::Auto)
-                .with_horizontal_sizing_behavior(gpui::ListHorizontalSizingBehavior::Unconstrained)
+                .with_sizing_behavior(gpui_runtime::ListSizingBehavior::Auto)
+                .with_horizontal_sizing_behavior(gpui_runtime::ListHorizontalSizingBehavior::Unconstrained)
                 .gap_1_5()
                 .size_full()
                 .flex_grow_1(),
@@ -1599,7 +1599,7 @@ impl Render for VariableList {
                 deferred(
                     anchored()
                         .position(*position)
-                        .anchor(gpui::Anchor::TopLeft)
+                        .anchor(gpui_types::Anchor::TopLeft)
                         .child(menu.clone()),
                 )
                 .with_priority(1)

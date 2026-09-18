@@ -2119,9 +2119,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_run_rejects_invalid_substitution_before_terminal_creation(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -2186,9 +2186,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_run_allows_invalid_substitution_in_unconditional_allow_all_mode(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -2249,9 +2249,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_run_hardcoded_denial_still_wins_in_unconditional_allow_all_mode(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -2308,8 +2308,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_run_env_prefixed_allow_pattern_is_used_end_to_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_run_env_prefixed_allow_pattern_is_used_end_to_end(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -2381,9 +2381,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_run_filters_model_output_and_bypasses_byte_limit_when_head_or_tail_is_set(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -2441,9 +2441,9 @@ mod tests {
         assert_eq!(environment.terminal_output_limits(), vec![None]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_run_uses_byte_limit_when_head_and_tail_are_not_set(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -2493,9 +2493,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_run_old_anchored_git_pattern_no_longer_auto_allows_env_prefix(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -2637,7 +2637,7 @@ mod tests {
 
     async fn assert_rejected_before_terminal_creation(
         command: &str,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = fs::FakeFs::new(cx.executor());
         fs.insert_tree("/root", serde_json::json!({})).await;
@@ -2691,80 +2691,80 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_rejects_variable_expansion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_variable_expansion(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo ${HOME}", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_positional_parameter(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_positional_parameter(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo $1", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_special_parameter_question(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_special_parameter_question(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo $?", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_special_parameter_dollar(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_special_parameter_dollar(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo $$", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_special_parameter_at(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_special_parameter_at(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo $@", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_command_substitution_dollar_parens(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_command_substitution_dollar_parens(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo $(whoami)", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_command_substitution_backticks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_command_substitution_backticks(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo `whoami`", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_arithmetic_expansion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_arithmetic_expansion(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo $((1 + 1))", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_process_substitution_input(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_process_substitution_input(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("cat <(ls)", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_process_substitution_output(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_process_substitution_output(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("ls >(cat)", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_env_prefix_with_variable(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_env_prefix_with_variable(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("PAGER=$HOME git log", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_env_prefix_with_command_substitution(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_env_prefix_with_command_substitution(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("PAGER=$(whoami) git log", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_env_prefix_with_brace_expansion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_env_prefix_with_brace_expansion(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation(
             "GIT_SEQUENCE_EDITOR=${EDITOR} git rebase -i HEAD~2",
@@ -2773,27 +2773,27 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_multiline_with_forbidden_on_second_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_multiline_with_forbidden_on_second_line(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo ok\necho $HOME", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_multiline_with_forbidden_mixed(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_multiline_with_forbidden_mixed(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("PAGER=less git log\necho $(whoami)", cx).await;
     }
 
-    #[gpui::test]
-    async fn test_rejects_nested_command_substitution(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_rejects_nested_command_substitution(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
         assert_rejected_before_terminal_creation("echo $(cat $(whoami).txt)", cx).await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_allow_all_terminal_specific_default_with_empty_patterns(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -2863,8 +2863,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_env_prefix_pattern_rejects_different_value(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_env_prefix_pattern_rejects_different_value(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -2928,9 +2928,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_env_prefix_multiple_assignments_preserved_in_order(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -3003,9 +3003,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_env_prefix_quoted_whitespace_value_matches_only_with_quotes_in_pattern(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -3254,9 +3254,9 @@ mod tests {
     }
 
     #[cfg(target_os = "macos")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_legacy_allow_fs_write_uses_sandbox_permission_options(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         use feature_flags::FeatureFlagAppExt as _;
 
@@ -3348,8 +3348,8 @@ mod tests {
     }
 
     #[cfg(target_os = "macos")]
-    #[gpui::test]
-    async fn test_unsandboxed_uses_sandbox_permission_options(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_unsandboxed_uses_sandbox_permission_options(cx: &mut gpui_runtime::TestAppContext) {
         use feature_flags::FeatureFlagAppExt as _;
 
         crate::tests::init_test(cx);
@@ -3450,8 +3450,8 @@ mod tests {
     /// within the same conversation, and a later identical command would run
     /// without prompting again (the bug this guards against).
     #[cfg(target_os = "macos")]
-    #[gpui::test]
-    async fn test_allow_always_grant_is_revocable_via_settings(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_allow_always_grant_is_revocable_via_settings(cx: &mut gpui_runtime::TestAppContext) {
         use feature_flags::FeatureFlagAppExt as _;
 
         crate::tests::init_test(cx);
@@ -3572,7 +3572,7 @@ mod tests {
     /// Set up a sandboxing-enabled, auto-allowing project for the floor-
     /// enforcement tests, with the given persistent settings and thread grants.
     async fn floor_test_tool(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
         persistent: agent_settings::SandboxPermissions,
         grants: crate::sandboxing::ThreadSandboxGrants,
     ) -> (
@@ -3612,9 +3612,9 @@ mod tests {
     /// A standing "run unsandboxed for this thread" grant makes an ordinary
     /// command (one that requests no escalation) run without a sandbox, and the
     /// model is told so in the output.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_unsandboxed_thread_grant_runs_bare_command_unsandboxed(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let mut grants = crate::sandboxing::ThreadSandboxGrants::default();
         grants.record(&crate::sandboxing::SandboxRequest {
@@ -3641,8 +3641,8 @@ mod tests {
     /// Once the thread is unsandboxed, the model must not be able to ask for a
     /// scoped sandbox (it would silently run unsandboxed instead) — the call is
     /// rejected so the model fixes its request.
-    #[gpui::test]
-    async fn test_unsandboxed_thread_grant_rejects_scoping_request(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_unsandboxed_thread_grant_rejects_scoping_request(cx: &mut gpui_runtime::TestAppContext) {
         let mut grants = crate::sandboxing::ThreadSandboxGrants::default();
         grants.record(&crate::sandboxing::SandboxRequest {
             unsandboxed: true,
@@ -3677,9 +3677,9 @@ mod tests {
 
     /// A persistent "allow unrestricted filesystem writes" setting makes scoping
     /// writes to specific paths meaningless, so such a request is rejected.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_unrestricted_fs_setting_rejects_scoped_write_paths(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let persistent = agent_settings::SandboxPermissions {
             allow_fs_write_all: true,
@@ -3712,8 +3712,8 @@ mod tests {
 
     /// A standing "any host" network grant makes scoping to specific hosts
     /// meaningless, so such a request is rejected.
-    #[gpui::test]
-    async fn test_unrestricted_network_grant_rejects_scoped_hosts(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_unrestricted_network_grant_rejects_scoped_hosts(cx: &mut gpui_runtime::TestAppContext) {
         let mut grants = crate::sandboxing::ThreadSandboxGrants::default();
         grants.record(&crate::sandboxing::SandboxRequest {
             network: NetworkRequest::AnyHost,

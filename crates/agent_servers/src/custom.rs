@@ -334,7 +334,7 @@ fn default_settings_for_agent() -> settings::CustomAgentServerSettings {
 mod tests {
     use super::*;
     use collections::HashMap;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::agent_registry_store::{
         AgentRegistryStore, RegistryAgent, RegistryAgentMetadata, RegistryNpxAgent,
     };
@@ -391,7 +391,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_unknown_agent_is_not_registry(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -399,7 +399,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_agent_in_registry_store_is_registry(cx: &mut TestAppContext) {
         init_test(cx);
         init_registry_with_agents(cx, &["some-new-registry-agent"]);
@@ -409,7 +409,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_agent_with_registry_settings_type_is_registry(cx: &mut TestAppContext) {
         init_test(cx);
         set_agent_server_settings(

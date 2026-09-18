@@ -26,7 +26,7 @@ use wasm_bindgen::prelude::*;
 /// Provides the GPUI platform implementation for web browsers.
 ///
 /// The platform starts with an empty font database. Applications must add fonts
-/// through [`gpui::App::text_system`] before opening a window.
+/// through [`gpui_runtime::App::text_system`] before opening a window.
 pub struct WebPlatform {
     browser_window: web_sys::Window,
     dispatcher: Arc<WebDispatcher>,

@@ -559,7 +559,7 @@ fn nearly_equal(left: f32, right: f32) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::size;
+    use gpui_backend::size;
 
     fn bounds(x: f32, y: f32) -> Bounds<Pixels> {
         Bounds {

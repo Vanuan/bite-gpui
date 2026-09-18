@@ -892,7 +892,7 @@ impl KeymapFile {
         mut operation: KeybindUpdateOperation<'a>,
         mut keymap_contents: String,
         tab_size: usize,
-        keyboard_mapper: &dyn gpui::PlatformKeyboardMapper,
+        keyboard_mapper: &dyn gpui_platform::PlatformKeyboardMapper,
         deprecated_aliases: &HashMap<&'static str, &'static str>,
     ) -> Result<String> {
         // When replacing or removing a non-user binding, we may need to write an unbind entry
@@ -1130,7 +1130,7 @@ impl KeymapFile {
             keymap: &'b KeymapFile,
             target: &KeybindUpdateTarget<'a>,
             target_action_value: &Value,
-            keyboard_mapper: &dyn gpui::PlatformKeyboardMapper,
+            keyboard_mapper: &dyn gpui_platform::PlatformKeyboardMapper,
             deprecated_aliases: &HashMap<&'static str, &'static str>,
         ) -> Option<BindingLocation<'b>> {
             let target_context_parsed =
@@ -1177,7 +1177,7 @@ impl KeymapFile {
             index: usize,
             target: &KeybindUpdateTarget<'a>,
             target_action_value: &Value,
-            keyboard_mapper: &dyn gpui::PlatformKeyboardMapper,
+            keyboard_mapper: &dyn gpui_platform::PlatformKeyboardMapper,
             deprecated_aliases: &HashMap<&'static str, &'static str>,
             action_value: impl Fn(&T) -> &Value,
         ) -> Option<BindingLocation<'b>> {
@@ -1603,7 +1603,7 @@ mod tests {
         KeymapFile::parse(json).unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn keymap_section_unbinds_are_loaded_before_bindings(cx: &mut App) {
         let key_bindings = match KeymapFile::load(
             indoc::indoc! {r#"
@@ -1657,7 +1657,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn keymap_unbind_loads_valid_target_action_with_input(cx: &mut App) {
         let key_bindings = match KeymapFile::load(
             indoc::indoc! {r#"
@@ -1690,7 +1690,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn keymap_unbind_rejects_null(cx: &mut App) {
         match KeymapFile::load(
             indoc::indoc! {r#"
@@ -1719,7 +1719,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn keymap_unbind_rejects_unbind_action(cx: &mut App) {
         match KeymapFile::load(
             indoc::indoc! {r#"
@@ -1809,7 +1809,7 @@ mod tests {
             operation,
             input.to_string(),
             4,
-            &gpui::DummyKeyboardMapper,
+            &gpui_platform::DummyKeyboardMapper,
             &deprecated_aliases,
         )
         .expect("Update succeeded");

@@ -1,4 +1,4 @@
-use gpui::Rgba;
+use gpui_types::Rgba;
 use vte::ansi::Rgb as VteRgb;
 
 pub(crate) fn to_vte_rgb(color: impl Into<Rgba>) -> VteRgb {

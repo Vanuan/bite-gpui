@@ -64,7 +64,7 @@ use util::{path, rel_path::rel_path, uri};
 use workspace::item::Item as _;
 use workspace::{CloseIntent, MultiWorkspace, Workspace};
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_host_disconnect(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -209,7 +209,7 @@ async fn test_host_disconnect(
     project_a.read_with(cx_a, |project, _| assert!(!project.is_shared()));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_above_or_below_does_not_move_guest_cursor(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -316,7 +316,7 @@ async fn test_newline_above_or_below_does_not_move_guest_cursor(
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collaborating_with_completion(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -741,7 +741,7 @@ async fn test_collaborating_with_completion(cx_a: &mut TestAppContext, cx_b: &mu
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_collaborating_with_code_actions(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -957,7 +957,7 @@ async fn test_collaborating_with_code_actions(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_collaborating_with_renames(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -1202,7 +1202,7 @@ async fn test_collaborating_with_renames(cx_a: &mut TestAppContext, cx_b: &mut T
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_rename_uses_server_that_prepared_it(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -1362,7 +1362,7 @@ async fn test_remote_rename_uses_server_that_prepared_it(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_rename_with_stale_server_id_falls_back_to_capable_server(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -1468,7 +1468,7 @@ async fn test_remote_rename_with_stale_server_id_falls_back_to_capable_server(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_dynamic_call_hierarchy_followups_use_prepared_server(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -1606,7 +1606,7 @@ async fn test_remote_dynamic_call_hierarchy_followups_use_prepared_server(
     assert_eq!(outgoing_request_count.load(atomic::Ordering::SeqCst), 1);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_slow_lsp_server(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -1823,7 +1823,7 @@ async fn test_slow_lsp_server(cx_a: &mut TestAppContext, cx_b: &mut TestAppConte
     )
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collaborating_with_code_lens_resolve(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -1979,7 +1979,7 @@ async fn test_collaborating_with_code_lens_resolve(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_language_server_statuses(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let executor = cx_a.executor();
@@ -2092,7 +2092,7 @@ async fn test_language_server_statuses(cx_a: &mut TestAppContext, cx_b: &mut Tes
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_local_registration_for_new_available_server_from_remote(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -2175,7 +2175,7 @@ async fn test_local_registration_for_new_available_server_from_remote(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_local_registration_for_existing_available_server_from_remote(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -2263,7 +2263,7 @@ async fn test_local_registration_for_existing_available_server_from_remote(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_share_project(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -2452,7 +2452,7 @@ async fn test_share_project(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_on_input_format_from_host_to_guest(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -2580,7 +2580,7 @@ async fn test_on_input_format_from_host_to_guest(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_on_input_format_from_guest_to_host(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -2718,7 +2718,7 @@ async fn test_on_input_format_from_guest_to_host(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_mutual_editor_inlay_hint_cache_update(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -2950,7 +2950,7 @@ async fn test_mutual_editor_inlay_hint_cache_update(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_inlay_hint_refresh_is_forwarded(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -3160,7 +3160,7 @@ async fn test_inlay_hint_refresh_is_forwarded(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_lsp_document_color(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let expected_color = Rgba {
         r: 0.33,
@@ -3449,7 +3449,7 @@ async fn test_lsp_document_color(cx_a: &mut TestAppContext, cx_b: &mut TestAppCo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_lsp_document_links(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let executor = cx_a.executor();
@@ -4581,7 +4581,7 @@ async fn test_lsp_pull_diagnostics(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_non_streamed_lsp_pull_diagnostics(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -4589,12 +4589,12 @@ async fn test_non_streamed_lsp_pull_diagnostics(
     test_lsp_pull_diagnostics(false, cx_a, cx_b).await;
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_streamed_lsp_pull_diagnostics(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     test_lsp_pull_diagnostics(true, cx_a, cx_b).await;
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_git_blame_is_forwarded(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -4879,7 +4879,7 @@ async fn test_git_blame_is_forwarded(cx_a: &mut TestAppContext, cx_b: &mut TestA
     assert_eq!(forwarded_blame, blame_at_revision);
 }
 
-#[gpui::test(iterations = 30)]
+#[gpui_runtime::test(iterations = 30)]
 async fn test_collaborating_with_editorconfig(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -5130,7 +5130,7 @@ fn main() { let foo = other::foo(); }"};
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_collaborating_with_external_editorconfig(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -5233,7 +5233,7 @@ async fn test_collaborating_with_external_editorconfig(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_breakpoints(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let executor = cx_a.executor();
     let mut server = TestServer::start(executor.clone()).await;
@@ -5420,7 +5420,7 @@ async fn test_add_breakpoints(cx_a: &mut TestAppContext, cx_b: &mut TestAppConte
     assert_eq!(breakpoints_a, breakpoints_b);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_client_can_query_lsp_ext(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -5575,7 +5575,7 @@ async fn test_client_can_query_lsp_ext(cx_a: &mut TestAppContext, cx_b: &mut Tes
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_client_can_wrap_with_emmet_abbreviation(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -5723,7 +5723,7 @@ async fn test_client_can_wrap_with_emmet_abbreviation(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_file_name_without_extension(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -5817,7 +5817,7 @@ async fn test_copy_file_name_without_extension(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_file_name(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -5908,7 +5908,7 @@ async fn test_copy_file_name(cx_a: &mut TestAppContext, cx_b: &mut TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_file_location(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -6148,7 +6148,7 @@ fn extract_semantic_token_ranges(editor: &Editor, cx: &App) -> Vec<Range<MultiBu
         .collect()
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_mutual_editor_semantic_token_cache_update(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -6363,7 +6363,7 @@ async fn test_mutual_editor_semantic_token_cache_update(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_guest_semantic_tokens_honor_dynamic_document_selectors(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -6381,7 +6381,7 @@ async fn test_guest_semantic_tokens_honor_dynamic_document_selectors(
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_guest_does_not_guess_semantic_token_legend_without_matching_adapter(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -6400,7 +6400,7 @@ async fn test_guest_does_not_guess_semantic_token_legend_without_matching_adapte
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_guest_receives_dynamic_document_selectors_when_project_is_shared_later(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -6419,7 +6419,7 @@ async fn test_guest_receives_dynamic_document_selectors_when_project_is_shared_l
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_guest_preserves_static_capability_after_nonmatching_dynamic_registration(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -6436,7 +6436,7 @@ async fn test_guest_preserves_static_capability_after_nonmatching_dynamic_regist
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_guest_does_not_treat_nonmatching_dynamic_capability_as_static(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -6449,7 +6449,7 @@ async fn test_guest_does_not_treat_nonmatching_dynamic_capability_as_static(
     .await;
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_semantic_token_refresh_is_forwarded(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -6636,7 +6636,7 @@ async fn test_semantic_token_refresh_is_forwarded(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_document_folding_ranges(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let executor = cx_a.executor();
@@ -6817,9 +6817,9 @@ async fn test_document_folding_ranges(cx_a: &mut TestAppContext, cx_b: &mut Test
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_worktree_trust(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
-    let has_restricted_worktrees = |project: &gpui::Entity<project::Project>,
+    let has_restricted_worktrees = |project: &gpui_runtime::Entity<project::Project>,
                                     cx: &mut VisualTestContext| {
         cx.update(|_, cx| {
             let worktree_store = project.read(cx).worktree_store();
@@ -6930,7 +6930,7 @@ async fn test_remote_project_worktree_trust(cx_a: &mut TestAppContext, cx_b: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_document_symbols(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.executor()).await;
     let executor = cx_a.executor();

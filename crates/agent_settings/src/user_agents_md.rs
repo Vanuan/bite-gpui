@@ -163,7 +163,7 @@ async fn probe_read_error(fs: &dyn Fs, path: &std::path::Path) -> Option<SharedS
 mod tests {
     use super::*;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use std::cell::RefCell;
     use std::rc::Rc;
 
@@ -189,7 +189,7 @@ mod tests {
         (fs, history)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn loads_initial_content(cx: &mut TestAppContext) {
         let path = paths::agents_file();
         let (fs, history) = init_test(cx).await;
@@ -215,7 +215,7 @@ mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn empty_file_is_ignored(cx: &mut TestAppContext) {
         let path = paths::agents_file();
         let (fs, history) = init_test(cx).await;
@@ -235,7 +235,7 @@ mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn reacts_to_file_changes(cx: &mut TestAppContext) {
         let path = paths::agents_file();
         let (fs, _history) = init_test(cx).await;

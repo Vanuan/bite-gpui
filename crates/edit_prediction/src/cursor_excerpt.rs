@@ -315,7 +315,7 @@ mod tests {
         context_token_limit: usize,
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_editable_and_context_ranges(cx: &mut App) {
         // Markers:
         // ˇ = cursor position
@@ -515,7 +515,7 @@ mod tests {
             assert_eq!(expected_editable.len(), 1, "{}", test_case.name);
             assert_eq!(expected_context.len(), 1, "{}", test_case.name);
 
-            cx.new(|cx: &mut gpui::Context<Buffer>| {
+            cx.new(|cx: &mut gpui_runtime::Context<Buffer>| {
                 let text = text.trim_end_matches('\n');
                 let buffer = Buffer::local(text, cx).with_language(rust_lang(), cx);
                 let snapshot = buffer.snapshot();
@@ -578,7 +578,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_fixed_line_window_around_cursor_start_middle_and_end(cx: &mut App) {
         cx.new(|cx| {
             let text = (0..30)

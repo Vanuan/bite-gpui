@@ -1,6 +1,6 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use language::{LspAdapter, LspAdapterDelegate, LspInstaller, Toolchain};
 use lsp::{LanguageServerBinary, LanguageServerName, Uri};
 use node_runtime::{NodeRuntime, VersionStrategy};
@@ -203,7 +203,7 @@ mod tests {
     use gpui::{AppContext as _, TestAppContext};
     use unindent::Unindent;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline(cx: &mut TestAppContext) {
         let language = crate::language("css", tree_sitter_css::LANGUAGE.into());
 

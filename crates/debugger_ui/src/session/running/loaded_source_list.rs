@@ -14,7 +14,7 @@ pub(crate) struct LoadedSourceList {
 impl LoadedSourceList {
     pub fn new(session: Entity<Session>, cx: &mut Context<Self>) -> Self {
         let focus_handle = cx.focus_handle();
-        let list = ListState::new(0, gpui::ListAlignment::Top, px(1000.));
+        let list = ListState::new(0, gpui_runtime::ListAlignment::Top, px(1000.));
 
         let _subscription = cx.subscribe(&session, |this, _, event, cx| match event {
             SessionEvent::Stopped(_)
@@ -66,7 +66,7 @@ impl LoadedSourceList {
 }
 
 impl Focusable for LoadedSourceList {
-    fn focus_handle(&self, _: &gpui::App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &gpui_runtime::App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }

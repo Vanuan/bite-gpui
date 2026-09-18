@@ -191,7 +191,7 @@ impl<D: PickerDelegate> Picker<D> {
     fn render_actions_button(
         &self,
         actions: Rc<[crate::footer::PickerAction]>,
-        focus_handle: gpui::FocusHandle,
+        focus_handle: gpui_runtime::FocusHandle,
         _window: &mut Window,
         cx: &mut Context<Self>,
     ) -> impl IntoElement {
@@ -216,9 +216,9 @@ impl<D: PickerDelegate> Picker<D> {
                     menu
                 }))
             })
-            .attach(gpui::Anchor::TopRight)
-            .anchor(gpui::Anchor::BottomRight)
-            .offset(gpui::Point {
+            .attach(gpui_types::Anchor::TopRight)
+            .anchor(gpui_types::Anchor::BottomRight)
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(-2.0),
             })

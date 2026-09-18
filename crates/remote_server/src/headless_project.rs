@@ -2,7 +2,7 @@ use anyhow::{Context as _, Result, anyhow};
 use client::ProjectId;
 use collections::HashMap;
 use collections::HashSet;
-use gpui::TasksIncluded;
+use gpui_runtime::TasksIncluded;
 use language::File;
 use lsp::LanguageServerId;
 
@@ -68,7 +68,7 @@ pub struct HeadlessProject {
     pub extensions: Entity<HeadlessExtensionStore>,
     pub git_store: Entity<GitStore>,
     pub environment: Entity<ProjectEnvironment>,
-    pub profiling_collector: gpui::ProfilingCollector,
+    pub profiling_collector: gpui_runtime::ProfilingCollector,
     // Used mostly to keep alive the toolchain store for RPC handlers.
     // Local variant is used within LSP store, but that's a separate entity.
     pub _toolchain_store: Entity<ToolchainStore>,
@@ -358,7 +358,7 @@ impl HeadlessProject {
             extensions,
             git_store,
             environment,
-            profiling_collector: gpui::ProfilingCollector::new(startup_time),
+            profiling_collector: gpui_runtime::ProfilingCollector::new(startup_time),
             _toolchain_store: toolchain_store,
             kernels: Default::default(),
         }
@@ -1304,11 +1304,11 @@ impl HeadlessProject {
 
         let (deltas, now_nanos) = cx.update(|cx| {
             let timings = if foreground_only {
-                vec![gpui::profiler::get_current_thread_timings(
+                vec![gpui_runtime::profiler::get_current_thread_timings(
                     TasksIncluded::OnlyCompleted,
                 )]
             } else {
-                gpui::profiler::get_all_timings(TasksIncluded::OnlyCompleted)
+                gpui_runtime::profiler::get_all_timings(TasksIncluded::OnlyCompleted)
             };
             this.update(cx, |this, _cx| {
                 let deltas = this.profiling_collector.collect_unseen(timings);

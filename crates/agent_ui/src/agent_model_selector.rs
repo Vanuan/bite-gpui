@@ -131,11 +131,11 @@ impl Render for AgentModelSelector {
                         .size(IconSize::XSmall),
                 ),
             tooltip,
-            gpui::Anchor::TopRight,
+            gpui_types::Anchor::TopRight,
             cx,
         )
         .with_handle(self.menu_handle.clone())
-        .offset(gpui::Point {
+        .offset(gpui_types::Point {
             x: px(0.0),
             y: px(2.0),
         })

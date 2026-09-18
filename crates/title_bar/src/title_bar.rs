@@ -219,7 +219,7 @@ pub struct TitleBar {
     banner: Option<Entity<OnboardingBanner>>,
     update_version: Entity<UpdateVersion>,
     screen_share_popover_handle: PopoverMenuHandle<ContextMenu>,
-    _diagnostics_subscription: Option<gpui::Subscription>,
+    _diagnostics_subscription: Option<gpui_runtime::Subscription>,
 }
 
 impl Render for TitleBar {
@@ -697,7 +697,7 @@ impl TitleBar {
                         )
                     },
                 )
-                .anchor(gpui::Anchor::TopLeft)
+                .anchor(gpui_types::Anchor::TopLeft)
                 .into_any_element(),
         )
     }
@@ -871,7 +871,7 @@ impl TitleBar {
                     Tooltip::for_action("Recent Projects", &zed_actions::OpenRecent::default(), cx)
                 },
             )
-            .anchor(gpui::Anchor::TopLeft)
+            .anchor(gpui_types::Anchor::TopLeft)
             .into_any_element()
     }
 
@@ -923,7 +923,7 @@ impl TitleBar {
                     Tooltip::for_action("Recent Projects", &zed_actions::OpenRecent::default(), cx)
                 },
             )
-            .anchor(gpui::Anchor::TopLeft)
+            .anchor(gpui_types::Anchor::TopLeft)
     }
 
     fn render_worktree_and_branch(
@@ -1029,7 +1029,7 @@ impl TitleBar {
                         )
                     },
                 )
-                .anchor(gpui::Anchor::TopLeft)
+                .anchor(gpui_types::Anchor::TopLeft)
         });
 
         let branch_picker = branch_name.and_then(|branch_name| {
@@ -1086,7 +1086,7 @@ impl TitleBar {
                             cx,
                         )
                     })
-                    .anchor(gpui::Anchor::TopLeft)
+                    .anchor(gpui_types::Anchor::TopLeft)
             })
         });
 

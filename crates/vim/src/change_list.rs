@@ -96,8 +96,8 @@ mod test {
 
     use crate::{state::Mode, test::NeovimBackedTestContext};
 
-    #[gpui::test]
-    async fn test_change_list_insert(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_list_insert(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇ").await;
@@ -170,8 +170,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_change_list_delete(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_list_delete(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {
         "one two
@@ -191,8 +191,8 @@ mod test {
         three fur"});
     }
 
-    #[gpui::test]
-    async fn test_gi(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_gi(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {
         "one two
@@ -205,8 +205,8 @@ mod test {
         three foˇur"});
     }
 
-    #[gpui::test]
-    async fn test_dot_mark(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_dot_mark(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {
         "one two

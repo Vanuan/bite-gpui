@@ -949,7 +949,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline(cx: &mut TestAppContext) {
         for language in [
             crate::language(
@@ -993,7 +993,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_with_destructuring(cx: &mut TestAppContext) {
         for language in [
             crate::language(
@@ -1072,7 +1072,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_with_object_properties(cx: &mut TestAppContext) {
         for language in [
             crate::language(
@@ -1137,7 +1137,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_with_nested_object_methods(cx: &mut TestAppContext) {
         for language in [
             crate::language(
@@ -1213,7 +1213,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_with_complex_nested_objects(cx: &mut TestAppContext) {
         for language in [
             crate::language(
@@ -1344,7 +1344,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_with_computed_property_names(cx: &mut TestAppContext) {
         for language in [
             crate::language(
@@ -1427,7 +1427,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_generator_function_outline(cx: &mut TestAppContext) {
         let language = crate::language("javascript", tree_sitter_typescript::LANGUAGE_TSX.into());
 
@@ -1483,7 +1483,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_conditional_test_wrappers(cx: &mut TestAppContext) {
         for language in [
             crate::language(
@@ -1661,7 +1661,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_package_json_discovery(executor: BackgroundExecutor, cx: &mut TestAppContext) {
         cx.update(|cx| {
             settings::init(cx);
@@ -1817,7 +1817,7 @@ mod tests {
     // This hierarchy assumes that if a dedicated test framework is installed, it is the
     // preferred testing mechanism. Between runtime-specific options, `bun test` is
     // typically preferred over `node --test` when @types/bun is present.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_task_ordering_with_multiple_test_runners(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,

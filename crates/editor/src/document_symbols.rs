@@ -408,7 +408,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_document_symbols_fetches_when_enabled(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -448,7 +448,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_document_symbols_nested(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -507,7 +507,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_document_symbols_switch_tree_sitter_to_lsp_and_back(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -578,7 +578,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_document_symbols_caches_results(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -636,7 +636,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_document_symbols_flat_response(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -681,7 +681,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_breadcrumbs_use_lsp_symbols(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -730,7 +730,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_document_symbols_multibyte_highlights(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -822,7 +822,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_document_symbols_fall_back_to_reparsed_text_highlights(
         cx: &mut TestAppContext,
     ) {
@@ -898,7 +898,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_document_symbols_empty_response(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -934,7 +934,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_document_symbols_disabled_by_default(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -984,7 +984,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_breadcrumb_highlights_update_on_theme_change(cx: &mut TestAppContext) {
         use collections::IndexMap;
         use gpui::{Hsla, Rgba, UpdateGlobal as _};
@@ -1114,7 +1114,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_breadcrumbs_keep_file_name_without_lsp_symbols(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1157,7 +1157,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_breadcrumbs_refresh_on_document_symbols_setting_change(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 

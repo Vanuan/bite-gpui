@@ -58,7 +58,7 @@ fn init_logger() {
     zlog::init_test();
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_database_failure_during_client_reconnection(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -87,7 +87,7 @@ async fn test_database_failure_during_client_reconnection(
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_basic_calls(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -272,7 +272,7 @@ async fn test_basic_calls(
     );
 
     // User A shares their screen
-    let display = gpui::TestScreenCaptureSource::new();
+    let display = gpui_runtime::TestScreenCaptureSource::new();
     let events_b = active_call_events(cx_b);
     let events_c = active_call_events(cx_c);
     cx_a.set_screen_capture_sources(vec![display]);
@@ -398,7 +398,7 @@ async fn test_basic_calls(
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_calling_multiple_users_simultaneously(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -527,7 +527,7 @@ async fn test_calling_multiple_users_simultaneously(
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_joining_channels_and_calling_multiple_users_simultaneously(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -633,7 +633,7 @@ async fn test_joining_channels_and_calling_multiple_users_simultaneously(
     executor.run_until_parked();
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_room_uniqueness(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -745,7 +745,7 @@ async fn test_room_uniqueness(
     assert_eq!(call_b2.calling_user.username, "user_c");
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_client_disconnecting_from_room(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -904,7 +904,7 @@ async fn test_client_disconnecting_from_room(
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_server_restarts(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1217,7 +1217,7 @@ async fn test_server_restarts(
     assert!(incoming_call_d.next().await.unwrap().is_none());
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_calls_on_multiple_connections(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1377,7 +1377,7 @@ async fn test_calls_on_multiple_connections(
     active_call_a.read_with(cx_a, |call, _| assert!(call.room().is_none()));
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_unshare_project(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1478,7 +1478,7 @@ async fn test_unshare_project(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_project_reconnect(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1839,7 +1839,7 @@ async fn test_project_reconnect(
     buffer_b1.read_with(cx_b, |buffer, _| assert_eq!(buffer.text(), "WXaYZ"));
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_active_call_events(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1949,7 +1949,7 @@ fn active_call_events(cx: &mut TestAppContext) -> Rc<RefCell<Vec<room::Event>>> 
     events
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_mute_deafen(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -2129,7 +2129,7 @@ async fn test_mute_deafen(
     }
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_room_location(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -2290,7 +2290,7 @@ async fn test_room_location(
     }
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_propagate_saves_and_fs_changes(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -2542,7 +2542,7 @@ async fn test_propagate_saves_and_fs_changes(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_unloaded_entries_sync_to_guests(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -2601,7 +2601,7 @@ async fn test_unloaded_entries_sync_to_guests(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_git_diff_base_change(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -2945,7 +2945,7 @@ async fn test_git_diff_base_change(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_git_diff_index_matches_head(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -3046,7 +3046,7 @@ async fn test_git_diff_index_matches_head(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_git_branch_name(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -3139,7 +3139,7 @@ async fn test_git_branch_name(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_git_status_sync(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -3322,7 +3322,7 @@ async fn test_git_status_sync(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_fs_operations(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -3591,7 +3591,7 @@ async fn test_fs_operations(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_local_settings(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -3740,7 +3740,7 @@ async fn test_local_settings(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_buffer_conflict_after_save(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -3806,7 +3806,7 @@ async fn test_buffer_conflict_after_save(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_buffer_reloading(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -3871,7 +3871,7 @@ async fn test_buffer_reloading(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_editing_while_guest_opens_buffer(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -3923,7 +3923,7 @@ async fn test_editing_while_guest_opens_buffer(
     buffer_b.read_with(cx_b, |buf, _| assert_eq!(buf.text(), text));
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_leaving_worktree_while_opening_buffer(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -3967,7 +3967,7 @@ async fn test_leaving_worktree_while_opening_buffer(
     project_a.read_with(cx_a, |p, _| assert!(p.collaborators().is_empty()));
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_canceling_buffer_opening(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -4023,7 +4023,7 @@ async fn test_canceling_buffer_opening(
     buffer_b.read_with(cx_b, |buf, _| assert_eq!(buf.text(), "abc"));
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_leaving_project(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -4175,7 +4175,7 @@ async fn test_leaving_project(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_collaborating_with_diagnostics(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -4464,7 +4464,7 @@ async fn test_collaborating_with_diagnostics(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_collaborating_with_lsp_progress_updates_and_diagnostics_ordering(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -4597,7 +4597,7 @@ async fn test_collaborating_with_lsp_progress_updates_and_diagnostics_ordering(
     assert!(disk_based_diagnostics_finished.load(SeqCst));
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_reloading_buffer_manually(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -4694,7 +4694,7 @@ async fn test_reloading_buffer_manually(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_formatting_buffer(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -4809,7 +4809,7 @@ async fn test_formatting_buffer(
     }
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_range_formatting_buffer(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -4900,7 +4900,7 @@ async fn test_range_formatting_buffer(
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_prettier_formatting_buffer(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -5036,7 +5036,7 @@ async fn test_prettier_formatting_buffer(
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_definition(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -5213,7 +5213,7 @@ async fn test_definition(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_definition(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -5316,7 +5316,7 @@ async fn test_edit_prediction_definition(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_references(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -5492,7 +5492,7 @@ async fn test_references(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_concurrent_guest_lsp_requests_do_not_cancel_each_other(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -5593,7 +5593,7 @@ async fn test_concurrent_guest_lsp_requests_do_not_cancel_each_other(
     assert_eq!(references_c.await.unwrap().unwrap(), Vec::new());
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_project_search(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -5699,7 +5699,7 @@ async fn test_project_search(
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_document_highlights(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -5817,7 +5817,7 @@ async fn test_document_highlights(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_lsp_hover(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -6034,7 +6034,7 @@ async fn test_lsp_hover(
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_project_symbols(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -6154,7 +6154,7 @@ async fn test_project_symbols(
     assert!(error.to_string().contains("invalid symbol signature"));
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_open_buffer_while_getting_definition_pointing_to_it(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -6259,7 +6259,7 @@ async fn test_open_buffer_while_getting_definition_pointing_to_it(
     assert_eq!(definitions[0].target.buffer, buffer_b2);
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_contacts(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -6677,7 +6677,7 @@ async fn test_contacts(
     }
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_contact_requests(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -6864,7 +6864,7 @@ async fn test_contact_requests(
     }
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_join_call_after_screen_was_shared(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -6906,7 +6906,7 @@ async fn test_join_call_after_screen_was_shared(
     assert_eq!(call_b.calling_user.username, "user_a");
 
     // User A shares their screen
-    let display = gpui::TestScreenCaptureSource::new();
+    let display = gpui_runtime::TestScreenCaptureSource::new();
     cx_a.set_screen_capture_sources(vec![display]);
     let screen_a = cx_a
         .update(|cx| cx.screen_capture_sources())
@@ -6970,7 +6970,7 @@ async fn test_join_call_after_screen_was_shared(
 }
 
 #[cfg(target_os = "linux")]
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_share_screen_wayland(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -7049,7 +7049,7 @@ async fn test_share_screen_wayland(
 }
 
 #[cfg(target_os = "linux")]
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_unshare_screen_wayland(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -7114,7 +7114,7 @@ async fn test_unshare_screen_wayland(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_right_click_menu_behind_collab_panel(cx: &mut TestAppContext) {
     let mut server = TestServer::start(cx.executor().clone()).await;
     let client_a = server.create_client(cx, "user_a").await;
@@ -7149,7 +7149,7 @@ async fn test_right_click_menu_behind_collab_panel(cx: &mut TestAppContext) {
     assert!(cx.debug_bounds("MENU_ITEM-Close").is_some());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_pane_split_left(cx: &mut TestAppContext) {
     let (_, client) = TestServer::start1(cx).await;
     let (workspace, cx) = client.build_test_workspace(cx).await;
@@ -7172,7 +7172,7 @@ async fn test_pane_split_left(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_join_after_restart(cx1: &mut TestAppContext, cx2: &mut TestAppContext) {
     let (mut server, client) = TestServer::start1(cx1).await;
     let channel1 = server.make_public_channel("channel1", &client, cx1).await;
@@ -7185,7 +7185,7 @@ async fn test_join_after_restart(cx1: &mut TestAppContext, cx2: &mut TestAppCont
     join_channel(channel2, &client2, cx2).await.unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_preview_tabs(cx: &mut TestAppContext) {
     let (_server, client) = TestServer::start1(cx).await;
     let (workspace, cx) = client.build_test_workspace(cx).await;
@@ -7468,7 +7468,7 @@ async fn test_preview_tabs(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_git_branches(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -7605,7 +7605,7 @@ async fn test_remote_git_branches(
     assert_eq!(default_branch_with_remote_b.as_deref(), Some("origin/main"));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_guest_can_rejoin_shared_project_after_leaving_call(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -7693,7 +7693,7 @@ async fn test_guest_can_rejoin_shared_project_after_leaving_call(
 
 /// Tests that a guest's project search does not return the contents of files the host has marked
 /// private.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_project_search_excludes_private_files(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,

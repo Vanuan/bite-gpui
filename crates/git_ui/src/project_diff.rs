@@ -460,7 +460,7 @@ impl Item for ProjectDiff {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.diff.read(cx).for_each_project_item(cx, f)
     }
@@ -548,7 +548,7 @@ impl Item for ProjectDiff {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<Editor>() {
@@ -996,7 +996,7 @@ mod tests {
     use buffer_diff::DiffHunkSecondaryStatus;
     use db::indoc;
     use editor::test::editor_test_context::{EditorTestContext, assert_state_with_diff};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use multi_buffer::PathKey;
     use project::FakeFs;
     use serde_json::json;
@@ -1090,7 +1090,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diff_action_follows_diff_base_setting(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1213,7 +1213,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_update_on_uncommit(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1273,7 +1273,7 @@ mod tests {
         cx.assert_excerpts_with_selections("[EXCERPT]\nˇ# My cool project\nDetails to come.\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deploy_at_respects_active_repository_selection(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1368,7 +1368,7 @@ mod tests {
         assert_eq!(*paths_b[0], *"b.txt");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_diff_actions_filter_mixed_staged_and_unstaged_hunks(
         cx: &mut TestAppContext,
     ) {
@@ -1541,7 +1541,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_to_prev_hunk_multibuffer(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1684,7 +1684,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_after_restore(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1743,7 +1743,7 @@ mod tests {
         assert_eq!(text, "foo\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scroll_to_beginning_with_deletion(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1819,7 +1819,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_hunks_after_restore_then_modify(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1935,7 +1935,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_hunk_in_modified_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2062,7 +2062,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sort_by_name_tie_breaks_on_path(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2114,7 +2114,7 @@ mod tests {
         assert_eq!(paths, vec!["lib/foo.rs", "src/foo.rs", "m.rs"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tree_view_orders_directories_before_files(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2167,7 +2167,7 @@ mod tests {
         assert_eq!(paths, vec!["src/sub/b.rs", "src/a.rs", "src/m.rs"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_excerpts_splitting_after_restoring_the_middle_excerpt(cx: &mut TestAppContext) {
         init_test(cx);
 

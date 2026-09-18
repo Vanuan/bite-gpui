@@ -2,7 +2,7 @@ use std::future::Future;
 use std::pin::Pin;
 
 use anyhow::Result;
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 
 /// A provider for credentials.
 ///

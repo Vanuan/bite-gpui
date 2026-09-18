@@ -152,7 +152,7 @@ fn terminal_program_to_report(
 /// Maximum number of idle threads kept in the agent panel's retained list.
 /// Set as a GPUI global to override; otherwise defaults to 5.
 pub struct MaxIdleRetainedThreads(pub usize);
-impl gpui::Global for MaxIdleRetainedThreads {}
+impl gpui_runtime::Global for MaxIdleRetainedThreads {}
 
 impl MaxIdleRetainedThreads {
     pub fn global(cx: &App) -> usize {
@@ -4753,11 +4753,11 @@ fn parse_provider_slash_model(input: &str) -> Option<language_model::SelectedMod
 /// thread is created.
 pub(crate) struct AgentPanelSiblingHost {
     panel: WeakEntity<AgentPanel>,
-    window: gpui::AnyWindowHandle,
+    window: gpui_runtime::AnyWindowHandle,
 }
 
 impl AgentPanelSiblingHost {
-    pub(crate) fn new(panel: WeakEntity<AgentPanel>, window: gpui::AnyWindowHandle) -> Self {
+    pub(crate) fn new(panel: WeakEntity<AgentPanel>, window: gpui_runtime::AnyWindowHandle) -> Self {
         Self { panel, window }
     }
 }
@@ -4766,7 +4766,7 @@ impl agent::SiblingThreadHost for AgentPanelSiblingHost {
     fn create_sibling_thread(
         &self,
         request: agent::SiblingThreadRequest,
-        cx: &mut gpui::AsyncApp,
+        cx: &mut gpui_runtime::AsyncApp,
     ) -> Task<Result<agent::SiblingThreadInfo>> {
         let panel = self.panel.clone();
         let window = self.window;
@@ -7120,7 +7120,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_clicking_tool_call_output_keeps_agent_panel_focused_and_zoomed(
         cx: &mut TestAppContext,
     ) {
@@ -7235,7 +7235,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resubmitting_edited_message_keeps_zoomed_agent_panel_open(
         cx: &mut TestAppContext,
     ) {
@@ -7318,7 +7318,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_active_thread_serialize_and_load_round_trip(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -7462,7 +7462,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_active_terminal_serialize_and_load_round_trip(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -7547,7 +7547,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_restore_working_directory_does_not_read_leased_workspace(
         cx: &mut TestAppContext,
     ) {
@@ -7615,7 +7615,7 @@ mod tests {
         assert_eq!(working_directory, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pending_terminal_restore_prevents_initial_terminal_creation(
         cx: &mut TestAppContext,
     ) {
@@ -7642,7 +7642,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_repeated_activation_only_creates_one_initial_terminal(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
 
@@ -7668,7 +7668,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restored_terminal_runs_init_command_once(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         cx.update(|_, cx| {
@@ -7747,7 +7747,7 @@ mod tests {
     /// display-only test terminal, where `write_to_pty` is a no-op) to verify the
     /// init command is actually delivered to the shell and executed.
     #[cfg(unix)]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_spawn_terminal_runs_init_command_in_real_shell(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         cx.executor().allow_parking();
@@ -7832,7 +7832,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restored_terminal_does_not_update_global_entry_kind(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         cx.update(|_, cx| {
@@ -7884,7 +7884,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_workspace_load_uses_global_terminal_entry_kind(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -7966,7 +7966,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_non_native_thread_without_metadata_is_not_restored(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -8031,7 +8031,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_serialize_preserves_session_id_in_load_error(cx: &mut TestAppContext) {
         use crate::conversation_view::tests::FlakyAgentServer;
         use crate::thread_metadata_store::{ThreadId, ThreadMetadata};
@@ -8163,7 +8163,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_draft_prompt_blocks_use_current_editor_snapshot(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -8253,7 +8253,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_draft_has_user_content_checks_all_live_copies(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -8636,7 +8636,7 @@ mod tests {
         (session_id, thread_id)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_draft_promotion_creates_metadata_and_new_session_on_reload(
         cx: &mut TestAppContext,
     ) {
@@ -8830,7 +8830,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_draft_survives_reload_when_real_thread_is_active(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -9059,7 +9059,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reloaded_ephemeral_draft_preserves_original_agent(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -9146,7 +9146,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_empty_workspace_does_not_create_agent_entries(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -9234,7 +9234,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_add_selection_to_terminal_thread_pastes_mention(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -9456,7 +9456,7 @@ mod tests {
         text
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_external_image_drop_writes_path(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         cx.update(|_, cx| {
@@ -9498,7 +9498,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_external_paths_drop_handler_writes_image_path(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         cx.update(|_, cx| {
@@ -9540,7 +9540,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_external_file_drop_on_thread_does_not_paste_into_later_terminal(
         cx: &mut TestAppContext,
     ) {
@@ -9615,7 +9615,7 @@ mod tests {
         assert_eq!(actual_text.as_deref(), Some(expected_text.as_str()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_entry_kind_controls_new_entry(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         panel.read_with(&cx, |panel, cx| {
@@ -9651,7 +9651,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skills_menu_entry_shows_manage_skills_shortcut(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -9705,7 +9705,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_title_omits_placeholder_title(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         let terminal_id = panel
@@ -9770,7 +9770,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_title_edit_affordance_matches_threads_and_terminals(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
 
@@ -9806,7 +9806,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restored_terminal_uses_metadata_title_until_shell_title_arrives(
         cx: &mut TestAppContext,
     ) {
@@ -9859,7 +9859,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restored_terminal_selects_without_focusing(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         let terminal_id = TerminalId::new();
@@ -9895,7 +9895,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_working_directory_uses_active_workspace_while_workspace_is_updating(
         cx: &mut TestAppContext,
     ) {
@@ -9928,7 +9928,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_title_editor_is_created_only_while_editing(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         let terminal_id = panel
@@ -9990,7 +9990,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_title_editor_does_not_set_custom_title_when_unchanged(
         cx: &mut TestAppContext,
     ) {
@@ -10077,7 +10077,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_custom_title_recomposes_with_live_spinner(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         let terminal_id = panel
@@ -10154,7 +10154,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_title_editor_excludes_spinner_prefix(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         let terminal_id = panel
@@ -10253,7 +10253,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_bell_marks_and_activation_clears_notification(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         let first_terminal_id = panel
@@ -10301,7 +10301,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_visible_terminal_bell_is_suppressed(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_visible_panel(cx).await;
         let terminal_id = panel
@@ -10336,7 +10336,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_visible_terminal_bell_is_suppressed_without_focus(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_visible_panel(cx).await;
         let terminal_id = panel
@@ -10384,7 +10384,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_bell_marks_without_popup_when_sidebar_open(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_visible_panel(cx).await;
         let first_terminal_id = panel
@@ -10433,7 +10433,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_bell_notifies_when_sidebar_history_open(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_visible_panel_with_sidebar(cx, false).await;
         let first_terminal_id = panel
@@ -10481,7 +10481,7 @@ mod tests {
             .expect("terminal bell should notify when the sidebar thread list is hidden");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_notification_dismissed_when_sidebar_opens(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_visible_panel(cx).await;
         let first_terminal_id = panel
@@ -10535,7 +10535,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_focused_terminal_bell_notifies_when_window_inactive(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_visible_panel(cx).await;
         let terminal_id = panel
@@ -10573,7 +10573,7 @@ mod tests {
             .expect("background terminal bell should show a notification");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_active_terminal_notification_clears_when_window_reactivates(
         cx: &mut TestAppContext,
     ) {
@@ -10624,7 +10624,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_notification_dismissed_when_active_terminal_becomes_visible(
         cx: &mut TestAppContext,
     ) {
@@ -10693,7 +10693,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_notification_closed_when_panel_dropped(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         cx.update(|_window, cx| {
@@ -10738,7 +10738,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_notification_view_activates_terminal_workspace(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -10839,7 +10839,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_running_thread_retained_when_navigating_away(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
 
@@ -10884,7 +10884,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_idle_non_loadable_thread_retained_when_navigating_away(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
 
@@ -10928,7 +10928,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_background_thread_promoted_via_load(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
 
@@ -10994,7 +10994,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reopening_visible_thread_keeps_thread_usable(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
         cx.run_until_parked();
@@ -11050,7 +11050,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initial_content_for_thread_summary_uses_own_session_id(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -11134,7 +11134,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cleanup_retained_threads_keeps_five_most_recent_idle_loadable_threads(
         cx: &mut TestAppContext,
     ) {
@@ -11197,7 +11197,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cleanup_retained_threads_preserves_idle_non_loadable_threads(
         cx: &mut TestAppContext,
     ) {
@@ -11322,7 +11322,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_resolve_worktree_branch_target() {
         let resolved = git_ui_core::worktree_service::resolve_worktree_branch_target(
             &NewWorktreeBranchTarget::ExistingBranch {
@@ -11345,7 +11345,7 @@ mod tests {
         assert_eq!(resolved, Some("refs/remotes/origin/main".to_string()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_work_dirs_update_when_worktrees_change(cx: &mut TestAppContext) {
         use crate::thread_metadata_store::ThreadMetadataStore;
 
@@ -11540,7 +11540,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_workspace_inherits_global_last_used_agent(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -11594,7 +11594,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_workspace_ignores_uninstalled_global_last_used_agent(
         cx: &mut TestAppContext,
     ) {
@@ -11648,7 +11648,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reopened_workspace_uses_installed_global_agent_when_selected_agent_was_uninstalled(
         cx: &mut TestAppContext,
     ) {
@@ -11709,7 +11709,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_opened_workspace_does_not_inherit_uninstalled_agent_from_source(
         cx: &mut TestAppContext,
     ) {
@@ -11772,7 +11772,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restored_thread_keeps_uninstalled_agent(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -11838,7 +11838,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restored_draft_drops_uninstalled_agent_but_keeps_text(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -11917,7 +11917,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 25)]
+    #[gpui_runtime::test(iterations = 25)]
     async fn test_select_agent_action_updates_visible_draft(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -11971,7 +11971,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_workspaces_maintain_independent_agent_selection(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -12067,7 +12067,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_thread_uses_workspace_selected_agent(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -12127,7 +12127,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_draft_replaced_when_selected_agent_changes(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -12217,7 +12217,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_activate_draft_preserves_typed_content(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -12312,7 +12312,7 @@ mod tests {
     /// sidebar) and presses `+`, the panel should just focus the
     /// ephemeral new-draft slot — not park it and create yet another
     /// empty draft. `+` is "go to my new-thread slot", not "reset state".
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_plus_with_parked_draft_active_focuses_ephemeral(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -12422,7 +12422,7 @@ mod tests {
     /// agent (B) from the dropdown menu, the panel should create a fresh
     /// draft for agent B — not reuse the existing ephemeral draft that
     /// was bound to agent A.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_external_agent_replaces_mismatched_ephemeral_draft(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -12521,7 +12521,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_typed_draft_is_parked_when_switching_agents(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -12623,7 +12623,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rollback_all_succeed_returns_ok(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -12685,7 +12685,7 @@ mod tests {
         assert_eq!(paths, vec![path_a, path_b]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rollback_on_failure_attempts_all_worktrees(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -12787,7 +12787,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rollback_on_canceled_receiver(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -12851,7 +12851,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rollback_cleans_up_orphan_directories(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -12924,7 +12924,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_selected_agent_syncs_when_navigating_between_threads(cx: &mut TestAppContext) {
         let (panel, mut cx) = setup_panel(cx).await;
 
@@ -12988,7 +12988,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_classify_worktrees_skips_non_git_root_with_nested_repo(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -13086,7 +13086,7 @@ mod tests {
             );
         });
     }
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_vim_search_does_not_steal_focus_from_agent_panel(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -13383,7 +13383,7 @@ mod tests {
     /// 7. A is eventually cleaned up → on_release → close_all_sessions →
     ///    removes session X.
     /// 8. C sends → "Session not found".
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_retained_thread_reset_race_disassociates_session(cx: &mut TestAppContext) {
         let (_workspace, panel, mut cx) = setup_workspace_panel(cx).await;
         cx.run_until_parked();
@@ -13563,7 +13563,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initialize_from_source_transfers_draft_to_fresh_panel(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -13662,7 +13662,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initialize_from_source_inherits_agent_without_draft_content(
         cx: &mut TestAppContext,
     ) {
@@ -13732,7 +13732,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initialize_from_source_retargets_empty_destination_draft_agent(
         cx: &mut TestAppContext,
     ) {
@@ -13818,7 +13818,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initialize_from_source_does_not_overwrite_existing_content(
         cx: &mut TestAppContext,
     ) {
@@ -13922,7 +13922,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_thread_with_options_retains_thread_and_restores_agent(
         cx: &mut TestAppContext,
     ) {

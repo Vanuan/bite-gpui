@@ -592,7 +592,7 @@ mod tests {
         rendered.text
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_html_block_rendering_smoke(cx: &mut TestAppContext) {
         let rendered = render_markdown_text(
             "<h1>Hello</h1><blockquote><p>world</p></blockquote><ul><li>item</li></ul>",
@@ -611,7 +611,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_html_block_rendering_can_be_enabled(cx: &mut TestAppContext) {
         struct TestWindow;
 

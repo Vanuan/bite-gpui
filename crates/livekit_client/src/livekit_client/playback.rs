@@ -438,7 +438,7 @@ impl AudioStream {
 
 pub(crate) async fn capture_local_video_track(
     capture_source: &dyn ScreenCaptureSource,
-    cx: &mut gpui::AsyncApp,
+    cx: &mut gpui_runtime::AsyncApp,
 ) -> Result<(crate::LocalVideoTrack, Box<dyn ScreenCaptureStream>)> {
     let metadata = capture_source.metadata()?;
     let track_source = gpui_tokio::Tokio::spawn(cx, async move {
@@ -710,11 +710,11 @@ fn video_frame_buffer_from_webrtc(
 }
 
 #[cfg(not(target_os = "macos"))]
-pub type RemoteVideoFrame = Arc<gpui::RenderImage>;
+pub type RemoteVideoFrame = Arc<gpui_runtime::RenderImage>;
 
 #[cfg(not(target_os = "macos"))]
 fn video_frame_buffer_from_webrtc(buffer: Box<dyn VideoBuffer>) -> Option<RemoteVideoFrame> {
-    use gpui::RenderImage;
+    use gpui_runtime::RenderImage;
     use image::{Frame, RgbaImage};
     use livekit::webrtc::prelude::VideoFormatType;
     use smallvec::SmallVec;

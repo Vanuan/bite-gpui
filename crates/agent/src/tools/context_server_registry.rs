@@ -36,7 +36,7 @@ impl EventEmitter<ContextServerRegistryEvent> for ContextServerRegistry {}
 pub struct ContextServerRegistry {
     server_store: Entity<ContextServerStore>,
     registered_servers: HashMap<ContextServerId, RegisteredContextServer>,
-    _subscription: gpui::Subscription,
+    _subscription: gpui_runtime::Subscription,
 }
 
 struct RegisteredContextServer {

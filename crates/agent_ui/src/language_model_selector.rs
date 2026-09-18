@@ -553,7 +553,7 @@ impl PickerDelegate for LanguageModelPickerDelegate {
         &self,
         _window: &mut Window,
         _cx: &mut Context<Picker<Self>>,
-    ) -> Option<gpui::AnyElement> {
+    ) -> Option<gpui_runtime::AnyElement> {
         let focus_handle = self.focus_handle.clone();
 
         if !self.popover_styles {
@@ -690,7 +690,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_exact_match(cx: &mut TestAppContext) {
         let models = create_models(vec![
             ("zed", "Claude 3.7 Sonnet"),
@@ -722,7 +722,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_fuzzy_match(cx: &mut TestAppContext) {
         let models = create_models(vec![
             ("zed", "Claude 3.7 Sonnet"),
@@ -757,7 +757,7 @@ mod tests {
         assert_models_eq(results, vec!["zed/Claude 3.7 Sonnet Thinking"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_recommended_models_also_appear_in_other(_cx: &mut TestAppContext) {
         let recommended_models = create_models(vec![("zed", "claude")]);
         let all_models = create_models(vec![
@@ -782,7 +782,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_models_from_different_providers(_cx: &mut TestAppContext) {
         let recommended_models = create_models(vec![("zed", "claude")]);
         let all_models = create_models(vec![
@@ -807,7 +807,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_favorites_section_appears_when_favorites_exist(_cx: &mut TestAppContext) {
         let recommended_models = create_models(vec![("zed", "claude")]);
         let all_models = create_models_with_favorites(
@@ -826,7 +826,7 @@ mod tests {
         assert_models_eq(grouped_models.favorites, vec!["zed/gemini"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_no_favorites_section_when_no_favorites(_cx: &mut TestAppContext) {
         let recommended_models = create_models(vec![("zed", "claude")]);
         let all_models = create_models(vec![("zed", "claude"), ("zed", "gemini")]);
@@ -842,7 +842,7 @@ mod tests {
         assert!(grouped_models.favorites.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_models_have_correct_actions(_cx: &mut TestAppContext) {
         let recommended_models =
             create_models_with_favorites(vec![("zed", "claude")], vec![("zed", "claude")]);
@@ -869,7 +869,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_favorites_appear_in_other_sections(_cx: &mut TestAppContext) {
         let favorites = vec![("zed", "gemini"), ("openai", "gpt-4")];
 

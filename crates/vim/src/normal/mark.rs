@@ -374,12 +374,12 @@ pub fn jump_motion(
 mod test {
     use crate::test::{NeovimBackedTestContext, VimTestContext};
     use editor::Editor;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use std::path::Path;
     use util::path;
     use workspace::{CloseActiveItem, OpenOptions};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_quote_mark(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -398,7 +398,7 @@ mod test {
         cx.shared_state().await.assert_eq("Hello, worldˇ!");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_global_mark_overwrite(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 

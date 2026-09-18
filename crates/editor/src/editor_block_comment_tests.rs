@@ -1,7 +1,7 @@
 use crate::ToggleBlockComments;
 use crate::editor_tests::init_test;
 use crate::test::editor_test_context::EditorTestContext;
-use gpui::TestAppContext;
+use gpui_runtime::TestAppContext;
 use indoc::indoc;
 use language::{BlockCommentConfig, Language, LanguageConfig};
 use std::sync::Arc;
@@ -32,7 +32,7 @@ async fn setup_rust_context(cx: &mut TestAppContext) -> EditorTestContext {
     cx
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 
@@ -63,7 +63,7 @@ async fn test_toggle_block_comments(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments_with_selection(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 
@@ -94,7 +94,7 @@ async fn test_toggle_block_comments_with_selection(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments_multiline(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 
@@ -125,7 +125,7 @@ async fn test_toggle_block_comments_multiline(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments_cursor_inside(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 
@@ -146,7 +146,7 @@ async fn test_toggle_block_comments_cursor_inside(cx: &mut TestAppContext) {
         "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments_multiple_cursors(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 
@@ -180,7 +180,7 @@ async fn test_toggle_block_comments_multiple_cursors(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments_selection_ending_on_empty_line(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 
@@ -214,7 +214,7 @@ async fn test_toggle_block_comments_selection_ending_on_empty_line(cx: &mut Test
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments_empty_selection_roundtrip(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 
@@ -241,7 +241,7 @@ async fn test_toggle_block_comments_empty_selection_roundtrip(cx: &mut TestAppCo
 
 // Multi-byte Unicode characters (√ is 3 bytes in UTF-8) must not cause
 // incorrect offset arithmetic or panics.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments_unicode_before_selection(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 
@@ -260,7 +260,7 @@ async fn test_toggle_block_comments_unicode_before_selection(cx: &mut TestAppCon
     cx.assert_editor_state("let √ = «42ˇ»;");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments_unicode_in_selection(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 
@@ -279,7 +279,7 @@ async fn test_toggle_block_comments_unicode_in_selection(cx: &mut TestAppContext
     cx.assert_editor_state("«√√√ˇ»");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comments_cursor_inside_unicode_comment(cx: &mut TestAppContext) {
     let mut cx = setup_rust_context(cx).await;
 

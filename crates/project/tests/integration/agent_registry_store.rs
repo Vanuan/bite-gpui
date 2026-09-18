@@ -1,14 +1,14 @@
 use std::{future, sync::Arc, time::Duration};
 
 use fs::FakeFs;
-use gpui::TestAppContext;
+use gpui_runtime::TestAppContext;
 use http_client::{AsyncBody, FakeHttpClient, HttpClient, Response};
 use project::{AgentRegistryStore, RegistryAgent};
 use serde_json::json;
 
 use crate::init_test;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn registry_refresh_times_out_when_fetch_never_completes(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -36,7 +36,7 @@ async fn registry_refresh_times_out_when_fetch_never_completes(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn registry_refresh_does_not_block_sequentially_on_hung_icon_downloads(
     cx: &mut TestAppContext,
 ) {
@@ -114,7 +114,7 @@ async fn registry_refresh_does_not_block_sequentially_on_hung_icon_downloads(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn registry_refresh_preserves_optional_binary_checksums(cx: &mut TestAppContext) {
     init_test(cx);
 

@@ -480,7 +480,7 @@ mod tests {
     use std::{collections::HashMap, sync::Arc};
 
     use editor::{Editor, MultiBufferOffset, SelectionEffects};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use language::{Language, LanguageConfig};
     use project::{BasicContextProvider, FakeFs, Project, task_store::TaskStore};
     use serde_json::json;
@@ -491,7 +491,7 @@ mod tests {
 
     use crate::task_contexts;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_default_language_context(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());

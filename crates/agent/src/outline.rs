@@ -170,11 +170,11 @@ fn render_entries(
 mod tests {
     use super::*;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::Project;
     use settings::SettingsStore;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_large_file_fallback_to_subset(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings = SettingsStore::test(cx);

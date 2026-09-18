@@ -26,7 +26,7 @@ pub struct DiagnosticSet {
 /// A single diagnostic in a set. Generic over its range type, because
 /// the diagnostics are stored internally as [`Anchor`]s, but can be
 /// resolved to different coordinates types like [`usize`] byte offsets or
-/// [`Point`](gpui::Point)s.
+/// [`Point`](gpui_types::Point)s.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct DiagnosticEntry<T> {
     /// The range of the buffer where the diagnostic applies.
@@ -72,7 +72,7 @@ impl<T: Clone> DiagnosticEntry<T> {
 /// A single diagnostic in a set. Generic over its range type, because
 /// the diagnostics are stored internally as [`Anchor`]s, but can be
 /// resolved to different coordinates types like [`usize`] byte offsets or
-/// [`Point`](gpui::Point)s.
+/// [`Point`](gpui_types::Point)s.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 pub struct DiagnosticEntryRef<'a, T> {
     /// The range of the buffer where the diagnostic applies.

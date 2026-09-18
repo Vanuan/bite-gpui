@@ -8,7 +8,7 @@ use std::sync::Arc;
 use std::time::Duration;
 
 use collections::HashSet;
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use parking_lot::Mutex;
 use rand::prelude::*;
 use sea_orm::ConnectionTrait;
@@ -121,8 +121,8 @@ impl TestDb {
 #[macro_export]
 macro_rules! test_both_dbs {
     ($test_name:ident, $postgres_test_name:ident, $sqlite_test_name:ident) => {
-        #[gpui::test]
-        async fn $postgres_test_name(cx: &mut gpui::TestAppContext) {
+        #[gpui_runtime::test]
+        async fn $postgres_test_name(cx: &mut gpui_runtime::TestAppContext) {
             // In CI, only run postgres tests on Linux (where we have the postgres service).
             // Locally, always run them (assuming postgres is available).
             if std::env::var("CI").is_ok() && !cfg!(target_os = "linux") {
@@ -132,8 +132,8 @@ macro_rules! test_both_dbs {
             $test_name(test_db.db()).await;
         }
 
-        #[gpui::test]
-        async fn $sqlite_test_name(cx: &mut gpui::TestAppContext) {
+        #[gpui_runtime::test]
+        async fn $sqlite_test_name(cx: &mut gpui_runtime::TestAppContext) {
             let test_db = $crate::db_tests::TestDb::sqlite(cx.executor().clone());
             $test_name(test_db.db()).await;
         }

@@ -1421,7 +1421,7 @@ impl Render for FailedToSpawnTerminal {
                 }))
             })
             .anchor(Anchor::TopRight)
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(2.0),
             });
@@ -1800,7 +1800,7 @@ impl Panel for TerminalPanel {
         Some("Terminal Panel")
     }
 
-    fn toggle_action(&self) -> Box<dyn gpui::Action> {
+    fn toggle_action(&self) -> Box<dyn gpui_runtime::Action> {
         Box::new(Toggle)
     }
 
@@ -1907,7 +1907,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bypass_max_tabs_limit(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -1984,7 +1984,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn renders_error_if_default_shell_fails(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2044,7 +2044,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_failed_task_spawn_does_not_leak_pending_terminal_count(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2087,7 +2087,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pending_terminal_count_tracks_spawn_lifecycle(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2128,7 +2128,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pending_terminal_count_resets_when_spawn_cancelled(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2168,7 +2168,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_without_serialized_state_does_not_persist_empty_state(
         cx: &mut TestAppContext,
     ) {
@@ -2211,7 +2211,7 @@ mod tests {
         assert_eq!(serialized_state, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_added_during_restore_is_serialized_after_restore(
         cx: &mut TestAppContext,
     ) {
@@ -2289,7 +2289,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_legacy_serialized_restore_keeps_interim_terminal_active(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2362,7 +2362,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_split_restore_grafts_interim_pane(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2448,7 +2448,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_local_terminal_in_local_project(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2488,17 +2488,17 @@ mod tests {
     }
 
     struct FocusOnlyModal {
-        focus_handle: gpui::FocusHandle,
+        focus_handle: gpui_runtime::FocusHandle,
     }
-    impl gpui::EventEmitter<gpui::DismissEvent> for FocusOnlyModal {}
-    impl gpui::Focusable for FocusOnlyModal {
-        fn focus_handle(&self, _: &gpui::App) -> gpui::FocusHandle {
+    impl gpui_runtime::EventEmitter<gpui_runtime::DismissEvent> for FocusOnlyModal {}
+    impl gpui_runtime::Focusable for FocusOnlyModal {
+        fn focus_handle(&self, _: &gpui_runtime::App) -> gpui_runtime::FocusHandle {
             self.focus_handle.clone()
         }
     }
     impl Render for FocusOnlyModal {
         fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-            gpui::div().track_focus(&self.focus_handle)
+            gpui_runtime::div().track_focus(&self.focus_handle)
         }
     }
     impl workspace::ModalView for FocusOnlyModal {}
@@ -2529,7 +2529,7 @@ mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_center_terminal_keeps_focus_on_active_modal(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2572,7 +2572,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_center_terminal_takes_focus_without_modal(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2605,7 +2605,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_panel_terminal_keeps_focus_on_active_modal(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2654,7 +2654,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_panel_terminal_takes_focus_without_modal(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2684,7 +2684,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_task_terminal_keeps_focus_on_active_modal(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2733,7 +2733,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_task_terminal_takes_focus_without_modal(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2763,7 +2763,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_finished_restoration_keeps_focus_on_active_modal(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2829,7 +2829,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_inline_assist_tooltip_shows_keybinding_of_active_terminal(
         cx: &mut TestAppContext,
     ) {
@@ -2837,7 +2837,7 @@ mod tests {
         init_test(cx);
 
         cx.update(|cx| {
-            cx.bind_keys([gpui::KeyBinding::new(
+            cx.bind_keys([gpui_runtime::KeyBinding::new(
                 "ctrl-enter",
                 InlineAssist::default(),
                 Some("Terminal"),
@@ -2886,7 +2886,7 @@ mod tests {
 
     async fn init_workspace_with_panel(
         cx: &mut TestAppContext,
-    ) -> (gpui::WindowHandle<MultiWorkspace>, Entity<TerminalPanel>) {
+    ) -> (gpui_runtime::WindowHandle<MultiWorkspace>, Entity<TerminalPanel>) {
         let fs = FakeFs::new(cx.executor());
         let project = Project::test(fs, [], cx).await;
         let window_handle =
@@ -2905,7 +2905,7 @@ mod tests {
         (window_handle, terminal_panel)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_panel_starts_open_follows_setting(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -2941,7 +2941,7 @@ mod tests {
             .expect("Failed to read configured terminal panel starts_open");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_terminal_opens_in_panel_by_default(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -3000,7 +3000,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_terminal_opens_in_center_when_center_terminal_focused(
         cx: &mut TestAppContext,
     ) {
@@ -3092,7 +3092,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_terminal_opens_in_panel_when_panel_focused(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         init_test(cx);
@@ -3169,7 +3169,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_local_terminal_opens_in_center_when_center_terminal_focused(
         cx: &mut TestAppContext,
     ) {
@@ -3259,7 +3259,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_terminal_opens_in_panel_when_panel_focused_and_center_has_terminal(
         cx: &mut TestAppContext,
     ) {

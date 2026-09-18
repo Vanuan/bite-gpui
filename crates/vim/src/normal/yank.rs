@@ -8,8 +8,8 @@ use crate::{
 };
 use collections::HashMap;
 use editor::{ClipboardSelection, Editor, HighlightKey, SelectionEffects};
-use gpui::Context;
-use gpui::Window;
+use gpui_runtime::Context;
+use gpui_runtime::Window;
 use language::Point;
 use settings::Settings;
 

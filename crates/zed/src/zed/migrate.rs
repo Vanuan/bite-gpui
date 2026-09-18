@@ -1,7 +1,7 @@
 use anyhow::{Context as _, Result};
 use editor::Editor;
 use fs::Fs;
-use gpui::WeakEntity;
+use gpui_runtime::WeakEntity;
 use migrator::{migrate_keymap, migrate_settings};
 use settings::{KeymapFile, Settings, SettingsStore};
 use util::ResultExt;

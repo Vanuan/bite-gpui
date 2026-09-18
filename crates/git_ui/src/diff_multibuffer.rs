@@ -782,7 +782,7 @@ impl DiffMultibuffer {
     pub(crate) fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.editor
             .read(cx)

@@ -21,7 +21,7 @@ pub struct TreeViewItem {
     on_toggle: Option<Arc<dyn Fn(&ClickEvent, &mut Window, &mut App) + 'static>>,
     on_secondary_mouse_down: Option<Box<dyn Fn(&MouseDownEvent, &mut Window, &mut App) + 'static>>,
     tab_index: Option<isize>,
-    focus_handle: Option<gpui::FocusHandle>,
+    focus_handle: Option<gpui_runtime::FocusHandle>,
 }
 
 impl TreeViewItem {
@@ -110,7 +110,7 @@ impl TreeViewItem {
         self
     }
 
-    pub fn track_focus(mut self, focus_handle: &gpui::FocusHandle) -> Self {
+    pub fn track_focus(mut self, focus_handle: &gpui_runtime::FocusHandle) -> Self {
         self.focus_handle = Some(focus_handle.clone());
         self
     }

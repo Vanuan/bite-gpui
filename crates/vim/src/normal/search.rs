@@ -798,8 +798,8 @@ mod test {
         assert!(parsed.flag_g);
     }
 
-    #[gpui::test]
-    async fn test_move_to_next(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_move_to_next(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇhi\nhigh\nhi\n", Mode::Normal);
 
@@ -835,8 +835,8 @@ mod test {
         cx.assert_state("hi\nˇhigh\nhi\n", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_move_to_next_with_no_search_wrap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_move_to_next_with_no_search_wrap(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {
@@ -873,8 +873,8 @@ mod test {
         cx.assert_state("hi\nˇhigh\nhi\n", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_search(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_search(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("aa\nbˇb\ncc\ncc\ncc\n", Mode::Normal);
@@ -981,8 +981,8 @@ mod test {
         cx.assert_state("aa\nbb\nˇcc\ncc\ncc\n", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_non_vim_search(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_non_vim_search(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, false).await;
         cx.cx.set_state("ˇone one one one");
         cx.run_until_parked();
@@ -996,8 +996,8 @@ mod test {
         cx.assert_editor_state("«oneˇ» one one one");
     }
 
-    #[gpui::test]
-    async fn test_non_vim_search_in_vim_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_non_vim_search_in_vim_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.cx.set_state("ˇone one one one");
         cx.run_until_parked();
@@ -1017,8 +1017,8 @@ mod test {
         cx.assert_state("«oneˇ» one one one", Mode::Visual);
     }
 
-    #[gpui::test]
-    async fn test_non_vim_search_in_vim_insert_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_non_vim_search_in_vim_insert_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇone one one one", Mode::Insert);
         cx.run_until_parked();
@@ -1035,8 +1035,8 @@ mod test {
         cx.assert_state("one «oneˇ» one one", Mode::Insert);
     }
 
-    #[gpui::test]
-    async fn test_n_after_cmd_f_search(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_n_after_cmd_f_search(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇone two one two one", Mode::Normal);
         cx.run_until_parked();
@@ -1057,8 +1057,8 @@ mod test {
         cx.assert_state("one two one two ˇone", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_star_after_cmd_f_search(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_star_after_cmd_f_search(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇone two one two one", Mode::Normal);
         cx.run_until_parked();
@@ -1075,8 +1075,8 @@ mod test {
         cx.assert_state("one two ˇone two one", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_visual_star_hash(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_star_hash(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇa.c. abcd a.c. abcd").await;
@@ -1084,8 +1084,8 @@ mod test {
         cx.shared_state().await.assert_eq("a.c. abcd ˇa.c. abcd");
     }
 
-    #[gpui::test]
-    async fn test_d_search(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_d_search(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇa.c. abcd a.c. abcd").await;
@@ -1094,8 +1094,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇcd a.c. abcd");
     }
 
-    #[gpui::test]
-    async fn test_backwards_n(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_backwards_n(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇa b a b a b a").await;
@@ -1108,8 +1108,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇa b a b a b a");
     }
 
-    #[gpui::test]
-    async fn test_v_search(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_v_search(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇa.c. abcd a.c. abcd").await;
@@ -1133,8 +1133,8 @@ mod test {
         cx.shared_state().await.assert_eq("a a a« a aˇ» a");
     }
 
-    #[gpui::test]
-    async fn test_v_search_aa(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_v_search_aa(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇaa aa").await;
@@ -1143,8 +1143,8 @@ mod test {
         cx.shared_state().await.assert_eq("«aa aˇ»a");
     }
 
-    #[gpui::test]
-    async fn test_visual_block_search(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_block_search(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1164,8 +1164,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_replace_with_range_at_start(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_with_range_at_start(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1206,8 +1206,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_search_skipping(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_search_skipping(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {
             "ˇaa aa aa"
@@ -1229,8 +1229,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_replace_n(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_n(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {
             "ˇaa
@@ -1263,8 +1263,8 @@ mod test {
         })
     }
 
-    #[gpui::test]
-    async fn test_replace_literal_dollar(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_literal_dollar(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {
             "ˇBase=hello
@@ -1284,8 +1284,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_replace_g(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_g(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {
             "ˇaa aa aa aa
@@ -1310,8 +1310,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_replace_gdefault(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_gdefault(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // Set the `gdefault` option in both Zed and Neovim.
@@ -1363,8 +1363,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_replace_c(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_c(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state(
             indoc! {
@@ -1418,8 +1418,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_replace_with_range(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_with_range(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1461,8 +1461,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_search_dismiss_restores_cursor(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_search_dismiss_restores_cursor(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇhello world\nfoo bar\nhello again\n", Mode::Normal);
 
@@ -1482,8 +1482,8 @@ mod test {
         cx.assert_state("hello world\nˇfoo bar\nhello again\n", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_search_dismiss_restores_cursor_no_matches(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_search_dismiss_restores_cursor_no_matches(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇapple\nbanana\ncherry\n", Mode::Normal);
 
@@ -1502,9 +1502,9 @@ mod test {
         cx.assert_state("apple\nˇbanana\ncherry\n", Mode::Normal);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_dismiss_after_editor_focus_does_not_restore(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇhello world\nfoo bar\nhello again\n", Mode::Normal);
@@ -1545,8 +1545,8 @@ mod test {
         cx.assert_state("hello world\nfoo bar\nhello ˇagain\n", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_vim_search_respects_search_settings(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_vim_search_respects_search_settings(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {

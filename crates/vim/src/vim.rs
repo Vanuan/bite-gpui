@@ -554,7 +554,7 @@ pub(crate) struct HelixAppendState {
 // to make Vim a "View" that is just never actually rendered.
 impl Render for Vim {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        gpui::Empty
+        gpui_runtime::Empty
     }
 }
 

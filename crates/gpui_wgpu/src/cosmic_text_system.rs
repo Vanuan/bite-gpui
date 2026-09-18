@@ -1089,11 +1089,11 @@ mod tests {
     #[test]
     fn shape_text_with_mixed_direction_paragraphs() -> Result<()> {
         let platform_text_system = Arc::new(text_system()?);
-        let text_system = Arc::new(gpui::TextSystem::new(platform_text_system));
-        let window_text_system = gpui::WindowTextSystem::new(text_system);
+        let text_system = Arc::new(gpui_backend::TextSystem::new(platform_text_system));
+        let window_text_system = gpui_backend::WindowTextSystem::new(text_system);
 
         let text: SharedString = "first line\n\u{05d0}\u{001c}A".into();
-        let runs = [gpui::TextRun {
+        let runs = [gpui_backend::TextRun {
             len: text.len(),
             font: gpui::font("IBM Plex Sans"),
             ..Default::default()

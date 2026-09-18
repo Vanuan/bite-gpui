@@ -84,7 +84,7 @@ fn display_ranges(editor: &Editor, cx: &mut Context<'_, Editor>) -> Vec<Range<Di
         .display_ranges(&editor.display_snapshot(cx))
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_highlighted_display_rows_in_range(cx: &mut TestAppContext) {
     struct FirstHighlight;
     struct SecondHighlight;
@@ -189,7 +189,7 @@ fn test_highlighted_display_rows_in_range(cx: &mut TestAppContext) {
 #[cfg(any(test, feature = "test-support"))]
 pub mod property_test;
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_edit_events(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -318,7 +318,7 @@ fn test_edit_events(cx: &mut TestAppContext) {
     assert_eq!(mem::take(&mut *events.borrow_mut()), []);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_undo_redo_with_selection_restoration(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -428,7 +428,7 @@ fn test_undo_redo_with_selection_restoration(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_undo_redo_with_empty_history_selections_does_not_panic(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -461,7 +461,7 @@ fn test_undo_redo_with_empty_history_selections_does_not_panic(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_accessibility_keyboard_word_completion(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -526,7 +526,7 @@ fn test_accessibility_keyboard_word_completion(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_ime_composition(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -635,7 +635,7 @@ fn test_ime_composition(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_selection_with_mouse(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -658,7 +658,7 @@ fn test_selection_with_mouse(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(3), 3),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -675,7 +675,7 @@ fn test_selection_with_mouse(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(1), 1),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -693,7 +693,7 @@ fn test_selection_with_mouse(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(3), 3),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -711,7 +711,7 @@ fn test_selection_with_mouse(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(0), 0),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -739,7 +739,7 @@ fn test_selection_with_mouse(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_multiple_cursor_removal(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -790,7 +790,7 @@ fn test_multiple_cursor_removal(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_canceling_pending_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -811,7 +811,7 @@ fn test_canceling_pending_selection(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(3), 3),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -826,7 +826,7 @@ fn test_canceling_pending_selection(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(1), 1),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -837,7 +837,7 @@ fn test_canceling_pending_selection(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_movement_actions_with_pending_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -873,7 +873,7 @@ fn test_movement_actions_with_pending_selection(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_extending_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -908,7 +908,7 @@ fn test_extending_selection(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(0), 1),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -936,7 +936,7 @@ fn test_extending_selection(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(0), 6),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -948,7 +948,7 @@ fn test_extending_selection(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(0), 1),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -960,7 +960,7 @@ fn test_extending_selection(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_extend_selection_after_collapsed_word_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -995,7 +995,7 @@ fn test_extend_selection_after_collapsed_word_selection(cx: &mut TestAppContext)
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_extend_selection_after_collapsed_word_selection_moved_via_offsets(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1036,7 +1036,7 @@ fn test_extend_selection_after_collapsed_word_selection_moved_via_offsets(cx: &m
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_extend_selection_from_empty_line_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1061,7 +1061,7 @@ fn test_extend_selection_from_empty_line_selection(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_clone(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1156,7 +1156,7 @@ fn test_clone(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_toggle_breadcrumb_does_not_change_settings(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     update_test_editor_settings(cx, &|settings| {
@@ -1199,7 +1199,7 @@ fn test_toggle_breadcrumb_does_not_change_settings(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_navigation_history(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1290,14 +1290,14 @@ async fn test_navigation_history(cx: &mut TestAppContext) {
             assert!(pop_history(&mut editor, cx).is_none());
 
             // Set scroll position to check later
-            editor.set_scroll_position(gpui::Point::<f64>::new(5.5, 5.5), window, cx);
+            editor.set_scroll_position(gpui_types::Point::<f64>::new(5.5, 5.5), window, cx);
             let original_scroll_position = editor
                 .scroll_manager
                 .native_anchor(&editor.display_snapshot(cx), cx);
 
             // Jump to the end of the document and adjust scroll
             editor.move_to_end(&MoveToEnd, window, cx);
-            editor.set_scroll_position(gpui::Point::<f64>::new(-2.5, -0.5), window, cx);
+            editor.set_scroll_position(gpui_types::Point::<f64>::new(-2.5, -0.5), window, cx);
             assert_ne!(
                 editor
                     .scroll_manager
@@ -1343,7 +1343,7 @@ async fn test_navigation_history(cx: &mut TestAppContext) {
             );
             assert_eq!(
                 editor.scroll_position(cx),
-                gpui::Point::new(0., editor.max_point(cx).row().as_f64())
+                gpui_types::Point::new(0., editor.max_point(cx).row().as_f64())
             );
 
             editor
@@ -1351,7 +1351,7 @@ async fn test_navigation_history(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_cancel(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1365,7 +1365,7 @@ fn test_cancel(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(1), 1),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -1375,7 +1375,7 @@ fn test_cancel(cx: &mut TestAppContext) {
         editor.update_selection(
             DisplayPoint::new(DisplayRow(0), 3),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -1406,7 +1406,7 @@ fn test_cancel(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fold_action(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1492,7 +1492,7 @@ async fn test_fold_action(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_fold_action_without_language(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1587,7 +1587,7 @@ fn test_fold_action_without_language(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_fold_action_whitespace_sensitive_language(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1669,7 +1669,7 @@ fn test_fold_action_whitespace_sensitive_language(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_fold_action_multiple_line_breaks(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1762,7 +1762,7 @@ fn test_fold_action_multiple_line_breaks(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fold_with_unindented_multiline_raw_string(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1812,7 +1812,7 @@ async fn test_fold_with_unindented_multiline_raw_string(cx: &mut TestAppContext)
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fold_with_unindented_multiline_raw_string_includes_closing_bracket(
     cx: &mut TestAppContext,
 ) {
@@ -1842,7 +1842,7 @@ async fn test_fold_with_unindented_multiline_raw_string_includes_closing_bracket
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fold_with_unindented_multiline_block_comment(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1891,7 +1891,7 @@ async fn test_fold_with_unindented_multiline_block_comment(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fold_with_unindented_multiline_block_comment_includes_closing_bracket(
     cx: &mut TestAppContext,
 ) {
@@ -1920,7 +1920,7 @@ async fn test_fold_with_unindented_multiline_block_comment_includes_closing_brac
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fold_preserves_top_level_comments_between_python_classes(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -1973,7 +1973,7 @@ async fn test_fold_preserves_top_level_comments_between_python_classes(cx: &mut 
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fold_preserves_top_level_comments_between_rust_functions(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2035,7 +2035,7 @@ async fn test_fold_preserves_top_level_comments_between_rust_functions(cx: &mut 
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fold_terminates_at_top_level_multiline_string_between_python_classes(
     cx: &mut TestAppContext,
 ) {
@@ -2096,7 +2096,7 @@ async fn test_fold_terminates_at_top_level_multiline_string_between_python_class
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_fold_at_level(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2266,7 +2266,7 @@ fn test_fold_at_level(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_fold_at_level_chain_fold(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2317,7 +2317,7 @@ fn test_fold_at_level_chain_fold(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_fold_at_level_with_single_row_crease(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2349,7 +2349,7 @@ fn test_fold_at_level_with_single_row_crease(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_fold_at_level_with_crease_on_boundary_row(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2384,7 +2384,7 @@ fn test_fold_at_level_with_crease_on_boundary_row(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_move_cursor(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2462,7 +2462,7 @@ fn test_move_cursor(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_move_cursor_multibyte(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2528,7 +2528,7 @@ fn test_move_cursor_multibyte(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_move_cursor_different_line_lengths(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2576,7 +2576,7 @@ fn test_move_cursor_different_line_lengths(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_beginning_end_of_line(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let move_to_beg = MoveToBeginningOfLine {
@@ -2758,7 +2758,7 @@ fn test_beginning_end_of_line(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_beginning_of_line_single_line_editor(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2808,7 +2808,7 @@ fn test_beginning_of_line_single_line_editor(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_only_focused_editor_blinks_across_window_activation(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -2847,7 +2847,7 @@ fn test_only_focused_editor_blinks_across_window_activation(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_beginning_end_of_line_ignore_soft_wrap(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let move_to_beg = MoveToBeginningOfLine {
@@ -2941,7 +2941,7 @@ fn test_beginning_end_of_line_ignore_soft_wrap(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_beginning_of_line_stop_at_indent(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -3042,7 +3042,7 @@ fn test_beginning_of_line_stop_at_indent(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_beginning_of_line_with_cursor_between_line_start_and_indent(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -3087,7 +3087,7 @@ fn test_beginning_of_line_with_cursor_between_line_start_and_indent(cx: &mut Tes
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_prev_next_word_boundary(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -3150,7 +3150,7 @@ fn test_prev_next_word_boundary(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_prev_next_word_bounds_with_soft_wrap(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -3210,7 +3210,7 @@ fn test_prev_next_word_bounds_with_soft_wrap(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_start_of_paragraph_end_of_paragraph(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -3260,7 +3260,7 @@ async fn test_move_start_of_paragraph_end_of_paragraph(cx: &mut TestAppContext) 
     cx.assert_editor_state(&"ˇone\ntwo\n \nthree\nfour\nfive\n\nsix");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_to_next_and_previous_comment_paragraph(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -3401,7 +3401,7 @@ async fn test_move_to_next_and_previous_comment_paragraph(cx: &mut TestAppContex
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_to_previous_comment_paragraph_skips_current_paragraph(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -3491,7 +3491,7 @@ async fn test_move_to_previous_comment_paragraph_skips_current_paragraph(cx: &mu
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_scroll_page_up_page_down(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -3521,38 +3521,38 @@ async fn test_scroll_page_up_page_down(cx: &mut TestAppContext) {
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 0.)
+            gpui_types::Point::new(0., 0.)
         );
         editor.scroll_screen(&ScrollAmount::Page(1.), window, cx);
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 3.)
+            gpui_types::Point::new(0., 3.)
         );
         editor.scroll_screen(&ScrollAmount::Page(1.), window, cx);
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 6.)
+            gpui_types::Point::new(0., 6.)
         );
         editor.scroll_screen(&ScrollAmount::Page(-1.), window, cx);
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 3.)
+            gpui_types::Point::new(0., 3.)
         );
 
         editor.scroll_screen(&ScrollAmount::Page(-0.5), window, cx);
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 1.)
+            gpui_types::Point::new(0., 1.)
         );
         editor.scroll_screen(&ScrollAmount::Page(0.5), window, cx);
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 3.)
+            gpui_types::Point::new(0., 3.)
         );
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newest_selection_on_screen_with_multibyte_chars(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -3590,7 +3590,7 @@ async fn test_newest_selection_on_screen_with_multibyte_chars(cx: &mut TestAppCo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_scroll_line_up_down_cursor_margin(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -3674,7 +3674,7 @@ async fn test_scroll_line_up_down_cursor_margin(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoscroll(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -3705,7 +3705,7 @@ async fn test_autoscroll(cx: &mut TestAppContext) {
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 0.0)
+            gpui_types::Point::new(0., 0.0)
         );
     });
 
@@ -3723,7 +3723,7 @@ async fn test_autoscroll(cx: &mut TestAppContext) {
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 3.0)
+            gpui_types::Point::new(0., 3.0)
         );
     });
 
@@ -3734,7 +3734,7 @@ async fn test_autoscroll(cx: &mut TestAppContext) {
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 4.0)
+            gpui_types::Point::new(0., 4.0)
         );
     });
 
@@ -3751,12 +3751,12 @@ async fn test_autoscroll(cx: &mut TestAppContext) {
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 1.0)
+            gpui_types::Point::new(0., 1.0)
         );
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoscroll_relative(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -3794,7 +3794,7 @@ async fn test_autoscroll_relative(cx: &mut TestAppContext) {
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 0.0)
+            gpui_types::Point::new(0., 0.0)
         );
     });
 
@@ -3811,7 +3811,7 @@ async fn test_autoscroll_relative(cx: &mut TestAppContext) {
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 5.0)
+            gpui_types::Point::new(0., 5.0)
         );
     });
 
@@ -3829,7 +3829,7 @@ async fn test_autoscroll_relative(cx: &mut TestAppContext) {
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 7.5)
+            gpui_types::Point::new(0., 7.5)
         );
     });
 
@@ -3847,12 +3847,12 @@ async fn test_autoscroll_relative(cx: &mut TestAppContext) {
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 0.0)
+            gpui_types::Point::new(0., 0.0)
         );
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoscroll_horizontally_long_selection_tracks_cursor(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -3867,7 +3867,7 @@ async fn test_autoscroll_horizontally_long_selection_tracks_cursor(cx: &mut Test
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 0.0)
+            gpui_types::Point::new(0., 0.0)
         );
     });
 
@@ -3897,7 +3897,7 @@ async fn test_autoscroll_horizontally_long_selection_tracks_cursor(cx: &mut Test
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoscroll_horizontally_padded_span_boundary_still_scrolls(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -3915,7 +3915,7 @@ async fn test_autoscroll_horizontally_padded_span_boundary_still_scrolls(cx: &mu
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 0.0)
+            gpui_types::Point::new(0., 0.0)
         );
     });
 
@@ -3944,7 +3944,7 @@ async fn test_autoscroll_horizontally_padded_span_boundary_still_scrolls(cx: &mu
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoscroll_horizontally_fitting_selection_reveals_full_span(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -4002,7 +4002,7 @@ async fn test_autoscroll_horizontally_fitting_selection_reveals_full_span(cx: &m
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_exclude_overscroll_margin_clamps_scroll_position(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     update_test_editor_settings(cx, &|settings| {
@@ -4047,16 +4047,16 @@ async fn test_exclude_overscroll_margin_clamps_scroll_position(cx: &mut TestAppC
             (snapshot.max_point().row().as_f64() - editor.visible_line_count().unwrap() + 1.)
                 .max(0.);
 
-        editor.set_scroll_position(gpui::Point::new(0., max_scroll_top + 10.), window, cx);
+        editor.set_scroll_position(gpui_types::Point::new(0., max_scroll_top + 10.), window, cx);
 
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., max_scroll_top)
+            gpui_types::Point::new(0., max_scroll_top)
         );
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_page_up_page_down(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -4180,7 +4180,7 @@ async fn test_move_page_up_page_down(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_delete_to_line_boundary(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -4206,7 +4206,7 @@ async fn test_delete_to_line_boundary(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_delete_to_word_boundary(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -4241,7 +4241,7 @@ async fn test_delete_to_word_boundary(cx: &mut TestAppContext) {
     cx.assert_editor_state("e tˇ te ˇour");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_delete_whitespaces(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -4427,7 +4427,7 @@ async fn test_delete_whitespaces(cx: &mut TestAppContext) {
     cx.assert_editor_state("ˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_delete_to_bracket(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -4582,7 +4582,7 @@ async fn test_delete_to_bracket(cx: &mut TestAppContext) {
     cx.assert_editor_state(r#"macroˇCOMMENT");"#);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_delete_to_previous_word_start_or_newline(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -4620,7 +4620,7 @@ fn test_delete_to_previous_word_start_or_newline(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_delete_to_previous_subword_start_or_newline(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -4662,7 +4662,7 @@ fn test_delete_to_previous_subword_start_or_newline(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_delete_to_next_word_end_or_newline(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -4711,7 +4711,7 @@ fn test_delete_to_next_word_end_or_newline(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_delete_to_next_subword_end_or_newline(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -4755,7 +4755,7 @@ fn test_delete_to_next_subword_end_or_newline(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_newline(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -4778,7 +4778,7 @@ fn test_newline(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_newline_trailing_whitespace(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.auto_indent = Some(settings::AutoIndentMode::PreserveIndent);
@@ -4853,7 +4853,7 @@ fn test_newline_trailing_whitespace(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_yaml(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -4924,7 +4924,7 @@ async fn test_newline_yaml(cx: &mut TestAppContext) {
         ˇ"});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_newline_with_old_selections(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -5006,7 +5006,7 @@ fn test_newline_with_old_selections(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_above(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4)
@@ -5054,7 +5054,7 @@ async fn test_newline_above(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_below(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4)
@@ -5102,7 +5102,7 @@ async fn test_newline_below(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_newline_respects_read_only(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -5142,7 +5142,7 @@ fn test_newline_respects_read_only(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_below_with_cursor_on_deleted_hunk(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -5189,7 +5189,7 @@ async fn test_newline_below_with_cursor_on_deleted_hunk(cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_newline_below_multibuffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -5267,7 +5267,7 @@ fn test_newline_below_multibuffer(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_newline_below_multibuffer_middle_of_excerpt(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -5332,7 +5332,7 @@ fn test_newline_below_multibuffer_middle_of_excerpt(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_newline_below_multibuffer_last_line_of_last_excerpt(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -5397,7 +5397,7 @@ fn test_newline_below_multibuffer_last_line_of_last_excerpt(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_newline_below_multibuffer_multiple_cursors(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -5464,7 +5464,7 @@ fn test_newline_below_multibuffer_multiple_cursors(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_comments(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4)
@@ -5536,7 +5536,7 @@ async fn test_newline_comments(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_comments_with_multiple_delimiters(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4)
@@ -5572,7 +5572,7 @@ async fn test_newline_comments_with_multiple_delimiters(cx: &mut TestAppContext)
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_comments_with_brackets(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4)
@@ -5609,7 +5609,7 @@ async fn test_newline_comments_with_brackets(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_comments_repl_separators(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4)
@@ -5654,7 +5654,7 @@ async fn test_newline_comments_repl_separators(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_documentation_comments(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4)
@@ -5872,7 +5872,7 @@ async fn test_newline_documentation_comments(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_closing_comment_indent_across_languages(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -5899,7 +5899,7 @@ async fn test_newline_closing_comment_indent_across_languages(cx: &mut TestAppCo
     cx.assert_editor_state("def test():\n    \"\"\"doc\n    \"\"\"\n    ˇ\n");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_after_closing_delimiter_lookalike_in_string(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -5917,7 +5917,7 @@ async fn test_newline_after_closing_delimiter_lookalike_in_string(cx: &mut TestA
     cx.assert_editor_state("func test() {\n\tvar s = `\n*/\nˇ\n`\n}");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_twice_inside_block(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -5937,7 +5937,7 @@ async fn test_newline_twice_inside_block(cx: &mut TestAppContext) {
     cx.assert_editor_state("func test() {\n\n    ˇ\n}");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_comments_with_block_comment(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4)
@@ -5981,7 +5981,7 @@ async fn test_newline_comments_with_block_comment(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_insert_with_old_selections(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -6036,7 +6036,7 @@ fn test_insert_with_old_selections(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tab(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(3)
@@ -6066,7 +6066,7 @@ async fn test_tab(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tab_in_leading_whitespace_auto_indents_lines(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -6262,7 +6262,7 @@ async fn test_tab_in_leading_whitespace_auto_indents_lines(cx: &mut TestAppConte
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tab_after_closing_comment_delimiter(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -6280,7 +6280,7 @@ async fn test_tab_after_closing_comment_delimiter(cx: &mut TestAppContext) {
     cx.assert_editor_state("func test() {\n\t/**\n\t * doc\n\t */\n\tˇ\n}");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tab_with_mixed_whitespace_txt(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(3)
@@ -6305,7 +6305,7 @@ async fn test_tab_with_mixed_whitespace_txt(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tab_with_mixed_whitespace_rust(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4)
@@ -6340,7 +6340,7 @@ async fn test_tab_with_mixed_whitespace_rust(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_outdent(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(4);
@@ -6413,7 +6413,7 @@ async fn test_indent_outdent(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_yaml_comments_with_multiple_cursors(cx: &mut TestAppContext) {
     // This is a regression test for issue #33761
     init_test(cx, |_| {});
@@ -6448,7 +6448,7 @@ async fn test_indent_yaml_comments_with_multiple_cursors(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_yaml_non_comments_with_multiple_cursors(cx: &mut TestAppContext) {
     // This is a test to make sure our fix for issue #33761 didn't break anything
     init_test(cx, |_| {});
@@ -6477,7 +6477,7 @@ async fn test_indent_yaml_non_comments_with_multiple_cursors(cx: &mut TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_outdent_with_hard_tabs(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.hard_tabs = Some(true);
@@ -6573,7 +6573,7 @@ async fn test_indent_outdent_with_hard_tabs(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_indent_outdent_with_excerpts(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.languages.0.extend([
@@ -6684,7 +6684,7 @@ fn test_indent_outdent_with_excerpts(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_backspace(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -6721,7 +6721,7 @@ async fn test_backspace(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_delete(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -6740,7 +6740,7 @@ async fn test_delete(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_delete_line(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -6804,7 +6804,7 @@ fn test_delete_line(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_join_lines_with_single_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -6944,7 +6944,7 @@ fn test_join_lines_with_single_selection(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_join_lines_with_multi_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -6977,7 +6977,7 @@ fn test_join_lines_with_multi_selection(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_join_lines_with_git_diff_base(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -7033,7 +7033,7 @@ async fn test_join_lines_with_git_diff_base(executor: BackgroundExecutor, cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_join_lines_strips_comment_prefix(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -7202,7 +7202,7 @@ async fn test_join_lines_strips_comment_prefix(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_join_lines_preserves_rust_operators(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -7237,7 +7237,7 @@ async fn test_join_lines_preserves_rust_operators(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_join_lines_rust_block_comments(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -7288,7 +7288,7 @@ async fn test_join_lines_rust_block_comments(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_custom_newlines_cause_no_false_positive_diffs(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -7312,7 +7312,7 @@ async fn test_custom_newlines_cause_no_false_positive_diffs(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_manipulate_immutable_lines_with_single_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -7486,7 +7486,7 @@ async fn test_manipulate_immutable_lines_with_single_selection(cx: &mut TestAppC
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unique_lines_multi_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -7544,7 +7544,7 @@ async fn test_unique_lines_multi_selection(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unique_lines_single_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -7576,7 +7576,7 @@ async fn test_unique_lines_single_selection(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_wrap_in_tag_single_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -7625,7 +7625,7 @@ async fn test_wrap_in_tag_single_selection(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_wrap_in_tag_multi_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -7674,7 +7674,7 @@ async fn test_wrap_in_tag_multi_selection(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_wrap_in_tag_does_nothing_in_unsupported_languages(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -7699,7 +7699,7 @@ async fn test_wrap_in_tag_does_nothing_in_unsupported_languages(cx: &mut TestApp
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_manipulate_immutable_lines_with_multi_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -7792,7 +7792,7 @@ async fn test_manipulate_immutable_lines_with_multi_selection(cx: &mut TestAppCo
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_convert_indentation_to_spaces(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(3)
@@ -7909,7 +7909,7 @@ async fn test_convert_indentation_to_spaces(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_convert_indentation_to_tabs(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = NonZeroU32::new(3)
@@ -8032,7 +8032,7 @@ async fn test_convert_indentation_to_tabs(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_case(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8067,7 +8067,7 @@ async fn test_toggle_case(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_convert_to_sentence_case(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8084,7 +8084,7 @@ async fn test_convert_to_sentence_case(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_convert_to_base64(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8118,7 +8118,7 @@ async fn test_convert_to_base64(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_manipulate_text_handles_cross_excerpt_edit_that_applies_differently(
     cx: &mut TestAppContext,
 ) {
@@ -8173,7 +8173,7 @@ fn test_manipulate_text_handles_cross_excerpt_edit_that_applies_differently(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_manipulate_text(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8388,7 +8388,7 @@ async fn test_manipulate_text(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_duplicate_line(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8513,7 +8513,7 @@ fn test_duplicate_line(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rotate_selections(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8623,7 +8623,7 @@ async fn test_rotate_selections(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rotate_selections_nonconsecutive_lines(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8657,7 +8657,7 @@ async fn test_rotate_selections_nonconsecutive_lines(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_move_line_up_down(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8757,7 +8757,7 @@ fn test_move_line_up_down(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_move_line_up_selection_at_end_of_fold(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let editor = cx.add_window(|window, cx| {
@@ -8784,7 +8784,7 @@ fn test_move_line_up_selection_at_end_of_fold(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_move_line_up_down_with_blocks(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8812,7 +8812,7 @@ fn test_move_line_up_down_with_blocks(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_selections_and_replace_blocks(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -8841,7 +8841,7 @@ async fn test_selections_and_replace_blocks(cx: &mut TestAppContext) {
                 placement,
                 height: Some(4),
                 style: BlockStyle::Sticky,
-                render: Arc::new(|_| gpui::div().into_any_element()),
+                render: Arc::new(|_| gpui_runtime::div().into_any_element()),
                 priority: 0,
             }],
             None,
@@ -8882,7 +8882,7 @@ async fn test_selections_and_replace_blocks(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_transpose(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -9052,7 +9052,7 @@ fn test_transpose(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rewrap(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.languages.0.extend([
@@ -9497,7 +9497,7 @@ async fn test_rewrap(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rewrap_block_comments(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.languages.0.extend([(
@@ -9902,7 +9902,7 @@ async fn test_rewrap_block_comments(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rewrap_line_comment_in_go(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.languages.0.extend([(
@@ -9930,7 +9930,7 @@ async fn test_rewrap_line_comment_in_go(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rewrap_line_comment_in_c(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.languages.0.extend([(
@@ -9958,7 +9958,7 @@ async fn test_rewrap_line_comment_in_c(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_hard_wrap(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -10047,7 +10047,7 @@ async fn test_hard_wrap(cx: &mut TestAppContext) {
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cut_line_ends(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10120,7 +10120,7 @@ async fn test_cut_line_ends(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_kill_ring_cut_accumulates_multi_line_kills(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10137,7 +10137,7 @@ async fn test_kill_ring_cut_accumulates_multi_line_kills(cx: &mut TestAppContext
     cx.assert_editor_state("one\nˇtwo");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_kill_ring_cut_matches_emacs_kill_line_sequence_at_end_of_buffer(
     cx: &mut TestAppContext,
 ) {
@@ -10161,7 +10161,7 @@ async fn test_kill_ring_cut_matches_emacs_kill_line_sequence_at_end_of_buffer(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_kill_ring_cut_accumulates_final_line_without_trailing_newline(
     cx: &mut TestAppContext,
 ) {
@@ -10187,7 +10187,7 @@ async fn test_kill_ring_cut_accumulates_final_line_without_trailing_newline(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_kill_ring_yank_breaks_kill_ring_cut_accumulation(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10208,7 +10208,7 @@ async fn test_kill_ring_yank_breaks_kill_ring_cut_accumulation(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_kill_ring_yank_pastes_accumulated_kill_at_each_cursor(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10224,7 +10224,7 @@ async fn test_kill_ring_yank_pastes_accumulated_kill_at_each_cursor(cx: &mut Tes
     cx.assert_editor_state("aone\nˇ bone\nˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_editing_untitled_buffer_redetects_language(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     update_test_editor_settings(cx, &|settings| {
@@ -10365,7 +10365,7 @@ async fn test_editing_untitled_buffer_redetects_language(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clipboard(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10451,7 +10451,7 @@ async fn test_clipboard(cx: &mut TestAppContext) {
         tˇhe lazy dog"});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_and_paste_non_empty_selection_followed_by_empty_selection(
     cx: &mut TestAppContext,
 ) {
@@ -10477,7 +10477,7 @@ async fn test_copy_and_paste_non_empty_selection_followed_by_empty_selection(
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_trim(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10681,7 +10681,7 @@ if is_entire_line {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_trim_line_mode(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10738,7 +10738,7 @@ async fn test_copy_trim_line_mode(cx: &mut TestAppContext) {
     assert!(clipboard_selections[0].is_entire_line);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clipboard_line_numbers_from_multibuffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10799,7 +10799,7 @@ async fn test_clipboard_line_numbers_from_multibuffer(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_file_location_from_multibuffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10874,7 +10874,7 @@ async fn test_copy_file_location_from_multibuffer(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_file_name_for_external_file(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10915,7 +10915,7 @@ async fn test_copy_file_name_for_external_file(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_file_location_across_buffers(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -10994,7 +10994,7 @@ async fn test_copy_file_location_across_buffers(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_file_location_with_deleted_hunk(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -11044,7 +11044,7 @@ async fn test_copy_file_location_with_deleted_hunk(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_file_location_in_singleton_buffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11094,7 +11094,7 @@ async fn test_copy_file_location_in_singleton_buffer(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_multiline(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11232,7 +11232,7 @@ async fn test_paste_multiline(cx: &mut TestAppContext) {
         )ˇ"});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_undo_does_not_include_preceding_edits(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11262,7 +11262,7 @@ async fn test_paste_undo_does_not_include_preceding_edits(cx: &mut TestAppContex
     cx.assert_editor_state("ˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_content_from_other_app(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11315,7 +11315,7 @@ async fn test_paste_content_from_other_app(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_after_closing_documentation_comment(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.write_to_clipboard(ClipboardItem::new_string(
@@ -11343,7 +11343,7 @@ async fn test_paste_after_closing_documentation_comment(cx: &mut TestAppContext)
     cx.assert_editor_state("package test\n\n/**\n * test\n */\nfunc find() {\n\treturn 1\n}ˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_shifts_block_by_first_line_delta(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11370,7 +11370,7 @@ async fn test_paste_shifts_block_by_first_line_delta(cx: &mut TestAppContext) {
     cx.assert_editor_state("func test() {\n    foo()\nbar()ˇ\n}");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_after_closing_comment_delimiter(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11390,7 +11390,7 @@ async fn test_paste_after_closing_comment_delimiter(cx: &mut TestAppContext) {
     cx.assert_editor_state("package test\n\n/*\n * test\n */x := 1\n y := 2ˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_multiline_from_other_app_into_matching_cursors(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11422,7 +11422,7 @@ async fn test_paste_multiline_from_other_app_into_matching_cursors(cx: &mut Test
     cx.assert_editor_state("xxˇ one yyˇ two zzˇ three");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_select_all(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11439,7 +11439,7 @@ fn test_select_all(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_select_line(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11492,7 +11492,7 @@ fn test_select_line(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_split_selection_into_lines(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -11553,7 +11553,7 @@ async fn test_split_selection_into_lines(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_split_selection_into_lines_does_not_scroll(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -11573,7 +11573,7 @@ async fn test_split_selection_into_lines_does_not_scroll(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_split_selection_into_lines_interacting_with_creases(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -11653,7 +11653,7 @@ async fn test_split_selection_into_lines_interacting_with_creases(cx: &mut TestA
 /// A different number of tabs can align the same column on each row, so a cursor has to
 /// be placed by the column the tabs expand to. Counting a tab as a single column lands it
 /// wherever that many characters happen to reach on the next row.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_selection_below_with_tab_aligned_columns(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.hard_tabs = Some(true);
@@ -11683,7 +11683,7 @@ async fn test_add_selection_below_with_tab_aligned_columns(cx: &mut TestAppConte
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 /// Regression test for a panic ("display point out of range"): with a multi-line fold,
 /// buffer rows below the fold exceed the fold map's max row, so they must be converted
 /// to tab map rows instead of being used directly.
@@ -11792,7 +11792,7 @@ async fn test_add_selection_above_below_with_fold(cx: &mut TestAppContext) {
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_selection_above_below(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -12148,7 +12148,7 @@ async fn test_add_selection_above_below(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_selection_above_below_multi_cursor(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -12320,7 +12320,7 @@ async fn test_add_selection_above_below_multi_cursor(cx: &mut TestAppContext) {
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_selection_above_below_multi_cursor_existing_state(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -12411,7 +12411,7 @@ async fn test_add_selection_above_below_multi_cursor_existing_state(cx: &mut Tes
         editor.update_selection(
             DisplayPoint::new(DisplayRow(2), 4),
             0,
-            gpui::Point::<f32>::default(),
+            gpui_types::Point::<f32>::default(),
             window,
             cx,
         );
@@ -12438,7 +12438,7 @@ async fn test_add_selection_above_below_multi_cursor_existing_state(cx: &mut Tes
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_selection_above_below_multibyte(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -12460,7 +12460,7 @@ async fn test_add_selection_above_below_multibyte(cx: &mut TestAppContext) {
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_next(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -12525,7 +12525,7 @@ async fn test_select_next(cx: &mut TestAppContext) {
     cx.assert_editor_state("«ˇfoo»\n«ˇFOO»\n«ˇFoo»");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_all_matches(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -12603,7 +12603,7 @@ async fn test_select_all_matches(cx: &mut TestAppContext) {
     cx.assert_editor_state("«fooˇ»\n«FOOˇ»\n«Fooˇ»");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_all_matches_does_not_scroll(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -12678,7 +12678,7 @@ async fn test_select_all_matches_does_not_scroll(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_undo_format_scrolls_to_last_edit_pos(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -12755,7 +12755,7 @@ async fn test_undo_format_scrolls_to_last_edit_pos(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_undo_edit_prediction_scrolls_to_edit_pos(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -12853,7 +12853,7 @@ async fn test_undo_edit_prediction_scrolls_to_edit_pos(cx: &mut TestAppContext) 
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_next_with_multiple_carets(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -12907,7 +12907,7 @@ let «ˇfoo» = 2;"#,
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_previous_multibuffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -12933,7 +12933,7 @@ async fn test_select_previous_multibuffer(cx: &mut TestAppContext) {
                 ccc"});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_previous_with_single_caret(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -12963,7 +12963,7 @@ async fn test_select_previous_with_single_caret(cx: &mut TestAppContext) {
     cx.assert_editor_state("«abcˇ»\n«abcˇ» «abcˇ»\ndefabc\n«abcˇ»");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_previous_empty_buffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -12978,7 +12978,7 @@ async fn test_select_previous_empty_buffer(cx: &mut TestAppContext) {
     cx.assert_editor_state("«aˇ»");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_previous_with_multiple_carets(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -13013,7 +13013,7 @@ let foo = «2ˇ»;"#,
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_previous_with_single_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -13077,7 +13077,7 @@ async fn test_select_previous_with_single_selection(cx: &mut TestAppContext) {
     cx.assert_editor_state("«ˇfoo»\n«ˇFOO»\n«ˇFoo»");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_larger_smaller_syntax_node(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -13294,7 +13294,7 @@ async fn test_select_larger_smaller_syntax_node(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_larger_syntax_node_for_cursor_at_end(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -13356,7 +13356,7 @@ async fn test_select_larger_syntax_node_for_cursor_at_end(cx: &mut TestAppContex
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_larger_syntax_node_for_cursor_at_symbol(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -13534,7 +13534,7 @@ async fn test_select_larger_syntax_node_for_cursor_at_symbol(cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_larger_smaller_syntax_node_for_string(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -13714,8 +13714,8 @@ async fn test_select_larger_smaller_syntax_node_for_string(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
-async fn test_unwrap_syntax_nodes(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_unwrap_syntax_nodes(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let mut cx = EditorTestContext::new(cx).await;
@@ -13795,7 +13795,7 @@ async fn test_unwrap_syntax_nodes(cx: &mut gpui::TestAppContext) {
               // method"});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fold_function_bodies(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -13898,7 +13898,7 @@ async fn test_fold_function_bodies(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoindent(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -13967,7 +13967,7 @@ async fn test_autoindent(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoindent_disabled(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.auto_indent = Some(settings::AutoIndentMode::None)
@@ -14049,7 +14049,7 @@ async fn test_autoindent_disabled(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoindent_none_does_not_preserve_indentation_on_newline(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.auto_indent = Some(settings::AutoIndentMode::None)
@@ -14075,7 +14075,7 @@ async fn test_autoindent_none_does_not_preserve_indentation_on_newline(cx: &mut 
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoindent_preserve_indent_maintains_indentation_on_newline(cx: &mut TestAppContext) {
     // When auto_indent is "preserve_indent", pressing Enter on an indented line
     // should preserve the indentation but not adjust based on syntax.
@@ -14104,7 +14104,7 @@ async fn test_autoindent_preserve_indent_maintains_indentation_on_newline(cx: &m
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoindent_preserve_indent_does_not_apply_syntax_indent(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.auto_indent = Some(settings::AutoIndentMode::PreserveIndent)
@@ -14152,7 +14152,7 @@ async fn test_autoindent_preserve_indent_does_not_apply_syntax_indent(cx: &mut T
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoindent_syntax_aware_applies_syntax_indent(cx: &mut TestAppContext) {
     // Companion test to show that SyntaxAware DOES apply tree-sitter indentation
     init_test(cx, |settings| {
@@ -14200,7 +14200,7 @@ async fn test_autoindent_syntax_aware_applies_syntax_indent(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ime_composition_keeps_manual_indent(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.auto_indent = Some(settings::AutoIndentMode::SyntaxAware)
@@ -14250,7 +14250,7 @@ async fn test_ime_composition_keeps_manual_indent(cx: &mut TestAppContext) {
     assert_eq!(cx.buffer_text(), "fn foo() {\n        nn\n}");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoindent_disabled_with_nested_language(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.auto_indent = Some(settings::AutoIndentMode::SyntaxAware);
@@ -14384,7 +14384,7 @@ async fn test_autoindent_disabled_with_nested_language(cx: &mut TestAppContext) 
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoindent_selections(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -14468,7 +14468,7 @@ async fn test_autoindent_selections(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoclose_nested_brackets_in_plain_text(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -14491,7 +14491,7 @@ async fn test_autoclose_nested_brackets_in_plain_text(cx: &mut TestAppContext) {
     cx.assert_editor_state("([{ˇ}])");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoclose_and_auto_surround_pairs(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -14699,7 +14699,7 @@ async fn test_autoclose_and_auto_surround_pairs(cx: &mut TestAppContext) {
     cx.assert_editor_state("<«aˇ»> b");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_always_treat_brackets_as_autoclosed_skip_over(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.always_treat_brackets_as_autoclosed = Some(true);
@@ -14801,7 +14801,7 @@ async fn test_always_treat_brackets_as_autoclosed_skip_over(cx: &mut TestAppCont
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoclose_with_embedded_language(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15042,7 +15042,7 @@ async fn test_autoclose_with_embedded_language(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoclose_with_overrides(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15138,7 +15138,7 @@ async fn test_autoclose_with_overrides(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoclose_quotes_with_scope_awareness(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15226,7 +15226,7 @@ async fn test_autoclose_quotes_with_scope_awareness(cx: &mut TestAppContext) {
     "#});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoclose_quotes_with_multibyte_characters(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15247,7 +15247,7 @@ async fn test_autoclose_quotes_with_multibyte_characters(cx: &mut TestAppContext
     "#});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_surround_backticks_in_rust(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15287,7 +15287,7 @@ async fn test_surround_backticks_in_rust(cx: &mut TestAppContext) {
     "#});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_surround_with_pair(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15445,7 +15445,7 @@ async fn test_surround_with_pair(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_delete_autoclose_pair(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15558,7 +15558,7 @@ async fn test_delete_autoclose_pair(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_always_treat_brackets_as_autoclosed_delete(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.always_treat_brackets_as_autoclosed = Some(true);
@@ -15661,7 +15661,7 @@ async fn test_always_treat_brackets_as_autoclosed_delete(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_replace_emoji_shortcode(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15730,7 +15730,7 @@ async fn test_auto_replace_emoji_shortcode(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_snippet_placeholder_choices(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15783,7 +15783,7 @@ async fn test_snippet_placeholder_choices(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_snippet_choices_menu_survives_completion_refresh(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15826,7 +15826,7 @@ async fn test_snippet_choices_menu_survives_completion_refresh(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_snippet_tabstop_navigation_with_placeholders(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -15958,7 +15958,7 @@ async fn test_snippet_tabstop_navigation_with_placeholders(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_snippets(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -16037,7 +16037,7 @@ async fn test_snippets(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_snippet_indentation(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -16081,7 +16081,7 @@ async fn test_snippet_indentation(cx: &mut TestAppContext) {
         ˇ"});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_snippet_with_multi_word_prefix(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -16128,7 +16128,7 @@ async fn test_snippet_with_multi_word_prefix(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_read_only_buffer_is_not_formatted_or_saved(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -16215,7 +16215,7 @@ async fn test_read_only_buffer_is_not_formatted_or_saved(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_read_only_buffer_can_be_saved_as(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -16269,7 +16269,7 @@ async fn test_read_only_buffer_can_be_saved_as(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_format_and_save_skip_read_only_buffers_in_multi_buffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -16408,7 +16408,7 @@ async fn test_format_and_save_skip_read_only_buffers_in_multi_buffer(cx: &mut Te
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_save_actions_are_hidden_for_read_only_files(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -16466,7 +16466,7 @@ async fn test_save_actions_are_hidden_for_read_only_files(cx: &mut TestAppContex
     assert_eq!(save_actions_visible(cx), (true, true, true, true));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_document_format_during_save(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -16625,7 +16625,7 @@ async fn test_document_format_during_save(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_formatter_skips_server_without_formatting(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -16716,7 +16716,7 @@ async fn test_auto_formatter_skips_server_without_formatting(cx: &mut TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_redo_after_noop_format(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.ensure_final_newline_on_save = Some(false);
@@ -16784,7 +16784,7 @@ async fn test_redo_after_noop_format(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multibuffer_format_during_save(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -17078,7 +17078,7 @@ async fn test_multibuffer_format_during_save(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autosave_with_dirty_buffers(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -17253,7 +17253,7 @@ async fn test_autosave_with_dirty_buffers(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_format_selections_action_available_when_range_formatting_is_supported(
     cx: &mut TestAppContext,
 ) {
@@ -17271,7 +17271,7 @@ async fn test_format_selections_action_available_when_range_formatting_is_suppor
     assert!(cx.update(|window, cx| { window.is_action_available(&FormatSelections, cx) }));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_format_selections_action_available_for_cursor_when_range_formatting_is_supported(
     cx: &mut TestAppContext,
 ) {
@@ -17289,7 +17289,7 @@ async fn test_format_selections_action_available_for_cursor_when_range_formattin
     assert!(cx.update(|window, cx| { window.is_action_available(&FormatSelections, cx) }));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_format_selections_action_hidden_without_range_formatting_support(
     cx: &mut TestAppContext,
 ) {
@@ -17315,7 +17315,7 @@ async fn test_format_selections_action_hidden_without_range_formatting_support(
     assert!(!cx.update(|window, cx| { window.is_action_available(&FormatSelections, cx) }));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_format_selections_action_hidden_without_range_capable_formatter(
     cx: &mut TestAppContext,
 ) {
@@ -17370,7 +17370,7 @@ async fn test_format_selections_action_hidden_without_range_capable_formatter(
     assert!(!cx.update(|window, cx| { window.is_action_available(&FormatSelections, cx) }));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_range_format_on_save_success(cx: &mut TestAppContext) {
     let (project, editor, cx, fake_server) = setup_range_format_test(cx).await;
 
@@ -17415,7 +17415,7 @@ async fn test_range_format_on_save_success(cx: &mut TestAppContext) {
     assert!(!cx.read(|cx| editor.is_dirty(cx)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_range_format_on_save_timeout(cx: &mut TestAppContext) {
     let (project, editor, cx, fake_server) = setup_range_format_test(cx).await;
 
@@ -17458,7 +17458,7 @@ async fn test_range_format_on_save_timeout(cx: &mut TestAppContext) {
     assert!(!cx.read(|cx| editor.is_dirty(cx)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_on_save(cx: &mut TestAppContext) {
     let (project, editor, cx, fake_server) = setup_range_format_test_with_git(cx, "", "").await;
 
@@ -17507,7 +17507,7 @@ async fn test_modifications_format_on_save(cx: &mut TestAppContext) {
     assert!(!cx.read(|cx| editor.is_dirty(cx)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_skips_without_git_diff(cx: &mut TestAppContext) {
     let (project, editor, cx, fake_server) = setup_range_format_test(cx).await;
 
@@ -17560,7 +17560,7 @@ async fn test_modifications_format_skips_without_git_diff(cx: &mut TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_lsp_no_range_support(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -17660,7 +17660,7 @@ async fn test_modifications_format_lsp_no_range_support(cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_lsp_returns_empty_edits(cx: &mut TestAppContext) {
     let (project, editor, cx, fake_server) = setup_range_format_test_with_git(cx, "", "").await;
 
@@ -17706,7 +17706,7 @@ async fn test_modifications_format_lsp_returns_empty_edits(cx: &mut TestAppConte
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_multiple_hunks(cx: &mut TestAppContext) {
     let head_content = "line0\nline1\nline2\nline3\nline4\nline5\n";
     let (project, editor, cx, fake_server) =
@@ -17772,7 +17772,7 @@ async fn test_modifications_format_multiple_hunks(cx: &mut TestAppContext) {
     assert!(!cx.read(|cx| editor.is_dirty(cx)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_overlapping_range_responses(cx: &mut TestAppContext) {
     assert_range_format_merge(
         cx,
@@ -17785,7 +17785,7 @@ async fn test_modifications_format_overlapping_range_responses(cx: &mut TestAppC
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_divergent_overlapping_responses(cx: &mut TestAppContext) {
     assert_range_format_merge(
         cx,
@@ -17801,7 +17801,7 @@ async fn test_modifications_format_divergent_overlapping_responses(cx: &mut Test
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_partially_overlapping_response_dropped_atomically(
     cx: &mut TestAppContext,
 ) {
@@ -17822,7 +17822,7 @@ async fn test_modifications_format_partially_overlapping_response_dropped_atomic
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_overlapping_edits_within_one_response(cx: &mut TestAppContext) {
     assert_range_format_merge(
         cx,
@@ -17838,7 +17838,7 @@ async fn test_modifications_format_overlapping_edits_within_one_response(cx: &mu
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_same_position_inserts_within_one_response(
     cx: &mut TestAppContext,
 ) {
@@ -17856,7 +17856,7 @@ async fn test_modifications_format_same_position_inserts_within_one_response(
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_divergent_same_position_inserts_across_responses(
     cx: &mut TestAppContext,
 ) {
@@ -17874,7 +17874,7 @@ async fn test_modifications_format_divergent_same_position_inserts_across_respon
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_insert_touching_kept_edit_across_responses(
     cx: &mut TestAppContext,
 ) {
@@ -17895,7 +17895,7 @@ async fn test_modifications_format_insert_touching_kept_edit_across_responses(
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_excludes_staged_changes(cx: &mut TestAppContext) {
     let head_content = "line0\nline1\nline2\nline3\nline4\n";
     let staged_content = "line0\nLINE1\nline2\nline3\nline4\n";
@@ -17948,7 +17948,7 @@ async fn test_modifications_format_excludes_staged_changes(cx: &mut TestAppConte
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_range_excludes_staged_hunk(cx: &mut TestAppContext) {
     let head_content = "a\nb\nc\n";
     let staged_content = "A\nb\nc\n";
@@ -18002,7 +18002,7 @@ async fn test_modifications_format_range_excludes_staged_hunk(cx: &mut TestAppCo
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_pure_unstaged_with_git(cx: &mut TestAppContext) {
     let head_content = "line0\nline1\nline2\nline3\nline4\n";
     let (project, editor, cx, fake_server) =
@@ -18052,7 +18052,7 @@ async fn test_modifications_format_pure_unstaged_with_git(cx: &mut TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_no_unstaged_changes_with_git(cx: &mut TestAppContext) {
     let head_content = "line0\nline1\nline2\nline3\nline4\n";
     let staged_content = "line0\nLINE1\nline2\nline3\nLINE4\n";
@@ -18092,7 +18092,7 @@ async fn test_modifications_format_no_unstaged_changes_with_git(cx: &mut TestApp
     cx.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_no_changes_with_git(cx: &mut TestAppContext) {
     let head_content = "line0\nline1\nline2\n";
     let (project, editor, cx, fake_server) =
@@ -18131,7 +18131,7 @@ async fn test_modifications_format_no_changes_with_git(cx: &mut TestAppContext) 
     cx.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_crlf_line_endings(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -18246,7 +18246,7 @@ async fn test_modifications_format_crlf_line_endings(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_format_merge_boundary_one_row_gap(cx: &mut TestAppContext) {
     let head_content = "line0\nline1\nline2\nline3\nline4\n";
     let (project, editor, cx, fake_server) =
@@ -18296,7 +18296,7 @@ async fn test_modifications_format_merge_boundary_one_row_gap(cx: &mut TestAppCo
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_if_available_empty_diff_skips_formatting(cx: &mut TestAppContext) {
     let head_content = "line0\nline1\nline2\n";
     let (project, editor, cx, fake_server) =
@@ -18344,7 +18344,7 @@ async fn test_modifications_if_available_empty_diff_skips_formatting(cx: &mut Te
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_if_available_no_git_falls_back_to_full_format(cx: &mut TestAppContext) {
     let (project, editor, cx, fake_server) = setup_range_format_test_with_capabilities(
         cx,
@@ -18402,7 +18402,7 @@ async fn test_modifications_if_available_no_git_falls_back_to_full_format(cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modifications_if_available_lsp_no_range_support_falls_back_to_full_format(
     cx: &mut TestAppContext,
 ) {
@@ -18515,7 +18515,7 @@ async fn test_modifications_if_available_lsp_no_range_support_falls_back_to_full
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_range_format_not_called_for_clean_buffer(cx: &mut TestAppContext) {
     let (project, editor, cx, fake_server) = setup_range_format_test(cx).await;
 
@@ -18543,7 +18543,7 @@ async fn test_range_format_not_called_for_clean_buffer(cx: &mut TestAppContext) 
     cx.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_range_format_respects_language_tab_size_override(cx: &mut TestAppContext) {
     let (project, editor, cx, fake_server) = setup_range_format_test(cx).await;
 
@@ -18590,7 +18590,7 @@ async fn test_range_format_respects_language_tab_size_override(cx: &mut TestAppC
     save.await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_document_format_manual_trigger(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.formatter = Some(FormatterList::Single(Formatter::LanguageServer(
@@ -18713,7 +18713,7 @@ async fn test_document_format_manual_trigger(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multiple_formatters(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.remove_trailing_whitespace_on_save = Some(true);
@@ -18973,7 +18973,7 @@ async fn test_multiple_formatters(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_markdown_save_respects_disabled_trailing_whitespace_removal(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.ensure_final_newline_on_save = Some(false);
@@ -19042,7 +19042,7 @@ async fn test_markdown_save_respects_disabled_trailing_whitespace_removal(cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_organize_imports_manual_trigger(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.formatter = Some(FormatterList::Vec(vec![Formatter::LanguageServer(
@@ -19188,7 +19188,7 @@ async fn test_organize_imports_manual_trigger(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_formatter_failure_does_not_abort_subsequent_formatters(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.formatter = Some(FormatterList::Vec(vec![
@@ -19289,7 +19289,7 @@ async fn test_formatter_failure_does_not_abort_subsequent_formatters(cx: &mut Te
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_explicit_formatter_failure_is_recorded(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.formatter = Some(FormatterList::Vec(vec![Formatter::LanguageServer(
@@ -19387,7 +19387,7 @@ async fn test_explicit_formatter_failure_is_recorded(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_formatter_failure_is_silent(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         // `formatter: "auto"` with prettier disallowed resolves to the primary language server.
@@ -19461,7 +19461,7 @@ async fn test_auto_formatter_failure_is_silent(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_external_formatter_with_no_output_leaves_buffer_unchanged(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         #[cfg(windows)]
@@ -19535,7 +19535,7 @@ async fn test_external_formatter_with_no_output_leaves_buffer_unchanged(cx: &mut
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_concurrent_format_requests(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -19590,7 +19590,7 @@ async fn test_concurrent_format_requests(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_strip_whitespace_and_format_via_lsp(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.formatter = Some(FormatterList::default())
@@ -19714,7 +19714,7 @@ async fn test_strip_whitespace_and_format_via_lsp(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_handle_input_for_show_signature_help_auto_signature_help_true(
     cx: &mut TestAppContext,
 ) {
@@ -19857,7 +19857,7 @@ async fn test_handle_input_for_show_signature_help_auto_signature_help_true(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_signature_help_delay_only_for_auto(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -19955,7 +19955,7 @@ async fn test_signature_help_delay_only_for_auto(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_signature_help_after_edits_no_delay(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -20036,7 +20036,7 @@ async fn test_signature_help_after_edits_no_delay(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_handle_input_with_different_show_signature_settings(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -20250,7 +20250,7 @@ async fn test_handle_input_with_different_show_signature_settings(cx: &mut TestA
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_signature_help(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update(|cx| {
@@ -20515,7 +20515,7 @@ async fn test_signature_help(cx: &mut TestAppContext) {
         .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_signature_help_multiple_signatures(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -20641,7 +20641,7 @@ async fn test_signature_help_multiple_signatures(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion_mode(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -20894,7 +20894,7 @@ async fn test_completion_mode(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion_with_mode_specified_by_action(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -20986,7 +20986,7 @@ async fn test_completion_with_mode_specified_by_action(cx: &mut TestAppContext) 
     apply_additional_edits.await.unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion_replacing_surrounding_text_with_multicursors(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -21175,7 +21175,7 @@ async fn test_completion_replacing_surrounding_text_with_multicursors(cx: &mut T
 }
 
 // This used to crash
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion_in_multibuffer_with_replace_range(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -21345,7 +21345,7 @@ async fn test_completion_in_multibuffer_with_replace_range(cx: &mut TestAppConte
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion_in_multibuffer_with_newest_selection_in_other_buffer(
     cx: &mut TestAppContext,
 ) {
@@ -21541,7 +21541,7 @@ async fn test_completion_in_multibuffer_with_newest_selection_in_other_buffer(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion_filter_text_need_not_be_label_substring(cx: &mut TestAppContext) {
     init_test(cx, |language_settings| {
         language_settings.defaults.completions = Some(CompletionSettingsContent {
@@ -21603,7 +21603,7 @@ async fn test_completion_filter_text_need_not_be_label_substring(cx: &mut TestAp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -21820,7 +21820,7 @@ async fn test_completion(cx: &mut TestAppContext) {
     apply_additional_edits.await.unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion_can_run_commands(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -21997,7 +21997,7 @@ async fn test_completion_can_run_commands(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion_reuse(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -22119,7 +22119,7 @@ async fn test_completion_reuse(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_completion(cx: &mut TestAppContext) {
     let lsp_fetch_timeout_ms = 10;
     init_test(cx, |language_settings| {
@@ -22216,7 +22216,7 @@ async fn test_word_completion(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_completions_do_not_duplicate_lsp_ones(cx: &mut TestAppContext) {
     init_test(cx, |language_settings| {
         language_settings.defaults.completions = Some(CompletionSettingsContent {
@@ -22279,7 +22279,7 @@ async fn test_word_completions_do_not_duplicate_lsp_ones(cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_completions_continue_on_typing(cx: &mut TestAppContext) {
     init_test(cx, |language_settings| {
         language_settings.defaults.completions = Some(CompletionSettingsContent {
@@ -22352,7 +22352,7 @@ async fn test_word_completions_continue_on_typing(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_use_selection_head(cx: &mut TestAppContext) {
     init_test(cx, |language_settings| {
         language_settings.defaults.completions = Some(CompletionSettingsContent {
@@ -22404,7 +22404,7 @@ async fn test_completions_use_selection_head(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_completions_usually_skip_digits(cx: &mut TestAppContext) {
     init_test(cx, |language_settings| {
         language_settings.defaults.completions = Some(CompletionSettingsContent {
@@ -22466,7 +22466,7 @@ async fn test_word_completions_usually_skip_digits(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_completions_do_not_show_before_threshold(cx: &mut TestAppContext) {
     init_test(cx, |language_settings| {
         language_settings.defaults.completions = Some(CompletionSettingsContent {
@@ -22535,7 +22535,7 @@ async fn test_word_completions_do_not_show_before_threshold(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_completions_disabled(cx: &mut TestAppContext) {
     init_test(cx, |language_settings| {
         language_settings.defaults.completions = Some(CompletionSettingsContent {
@@ -22578,7 +22578,7 @@ async fn test_word_completions_disabled(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_completions_disabled_with_no_provider(cx: &mut TestAppContext) {
     init_test(cx, |language_settings| {
         language_settings.defaults.completions = Some(CompletionSettingsContent {
@@ -22621,7 +22621,7 @@ fn gen_text_edit(params: &CompletionParams, text: &str) -> Option<lsp::Completio
     }))
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multiline_completion(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -22800,7 +22800,7 @@ async fn test_multiline_completion(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completion_page_up_down_keys(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -22867,7 +22867,7 @@ async fn test_completion_page_up_down_keys(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_as_is_completions(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -22917,7 +22917,7 @@ async fn test_as_is_completions(cx: &mut TestAppContext) {
     cx.assert_editor_state("fn a() {}\n  unsafeˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_panic_during_c_completions(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let language =
@@ -23089,7 +23089,7 @@ int fn_branch(bool do_branch1, bool do_branch2);
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_no_duplicated_completion_requests(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -23187,7 +23187,7 @@ async fn test_no_duplicated_completion_requests(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_comment(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -23308,7 +23308,7 @@ async fn test_toggle_comment(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_comment_ignore_indent(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -23433,7 +23433,7 @@ async fn test_toggle_comment_ignore_indent(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_advance_downward_on_toggle_comment(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -23565,7 +23565,7 @@ async fn test_advance_downward_on_toggle_comment(cx: &mut TestAppContext) {
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_block_comment(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -23705,7 +23705,7 @@ async fn test_toggle_block_comment(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_editing_disjoint_excerpts(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -23769,7 +23769,7 @@ fn test_editing_disjoint_excerpts(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_header_jump_data_uses_selection_excerpt(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -23875,7 +23875,7 @@ fn test_header_jump_data_uses_selection_excerpt(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_extra_newline_insertion(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -23952,7 +23952,7 @@ async fn test_extra_newline_insertion(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_highlighted_ranges(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -24031,7 +24031,7 @@ fn test_highlighted_ranges(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_highlight_json(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -24078,7 +24078,7 @@ async fn test_copy_highlight_json(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_highlight_json_selected_range(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -24120,7 +24120,7 @@ async fn test_copy_highlight_json_selected_range(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_highlight_json_selected_line_range(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -24170,7 +24170,7 @@ async fn test_copy_highlight_json_selected_line_range(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_highlight_json_single_line(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -24209,7 +24209,7 @@ async fn test_copy_highlight_json_single_line(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_following(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -24225,8 +24225,8 @@ async fn test_following(cx: &mut TestAppContext) {
         cx.open_window(
             WindowOptions {
                 window_bounds: Some(WindowBounds::Windowed(Bounds::from_corners(
-                    gpui::Point::new(px(0.), px(0.)),
-                    gpui::Point::new(px(10.), px(80.)),
+                    gpui_types::Point::new(px(0.), px(0.)),
+                    gpui_types::Point::new(px(10.), px(80.)),
                 ))),
                 ..Default::default()
             },
@@ -24307,7 +24307,7 @@ async fn test_following(cx: &mut TestAppContext) {
 
     // Update the scroll position only
     _ = leader.update(cx, |leader, window, cx| {
-        leader.set_scroll_position(gpui::Point::new(1.5, 3.5), window, cx);
+        leader.set_scroll_position(gpui_types::Point::new(1.5, 3.5), window, cx);
     });
     follower
         .update(cx, |follower, window, cx| {
@@ -24325,7 +24325,7 @@ async fn test_following(cx: &mut TestAppContext) {
         follower
             .update(cx, |follower, _, cx| follower.scroll_position(cx))
             .unwrap(),
-        gpui::Point::new(1.5, 3.5)
+        gpui_types::Point::new(1.5, 3.5)
     );
     assert!(*is_still_following.borrow());
     assert_eq!(*follower_edit_event_count.borrow(), 0);
@@ -24337,7 +24337,7 @@ async fn test_following(cx: &mut TestAppContext) {
             s.select_ranges([MultiBufferOffset(0)..MultiBufferOffset(0)])
         });
         leader.request_autoscroll(Autoscroll::newest(), cx);
-        leader.set_scroll_position(gpui::Point::new(1.5, 3.5), window, cx);
+        leader.set_scroll_position(gpui_types::Point::new(1.5, 3.5), window, cx);
     });
     follower
         .update(cx, |follower, window, cx| {
@@ -24352,7 +24352,7 @@ async fn test_following(cx: &mut TestAppContext) {
         .await
         .unwrap();
     _ = follower.update(cx, |follower, _, cx| {
-        assert_eq!(follower.scroll_position(cx), gpui::Point::new(1.5, 0.0));
+        assert_eq!(follower.scroll_position(cx), gpui_types::Point::new(1.5, 0.0));
         assert_eq!(
             follower.selections.ranges(&follower.display_snapshot(cx)),
             vec![MultiBufferOffset(0)..MultiBufferOffset(0)]
@@ -24423,7 +24423,7 @@ async fn test_following(cx: &mut TestAppContext) {
         follower.set_scroll_anchor(
             ScrollAnchor {
                 anchor: top_anchor,
-                offset: gpui::Point::new(0.0, 0.5),
+                offset: gpui_types::Point::new(0.0, 0.5),
             },
             window,
             cx,
@@ -24432,7 +24432,7 @@ async fn test_following(cx: &mut TestAppContext) {
     assert!(!(*is_still_following.borrow()));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_following_with_multiple_excerpts(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -24601,7 +24601,7 @@ async fn test_following_with_multiple_excerpts(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn go_to_prev_overlapping_diagnostic(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -24697,7 +24697,7 @@ async fn go_to_prev_overlapping_diagnostic(executor: BackgroundExecutor, cx: &mu
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn go_to_diagnostic(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -24821,7 +24821,7 @@ async fn go_to_diagnostic(executor: BackgroundExecutor, cx: &mut TestAppContext)
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_go_to_hunk(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -25037,7 +25037,7 @@ fn test_split_words_for_snippet_prefix() {
     assert_eq!(split("a.s"), &["s", ".s", "a.s"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_to_syntax_node_relative_jumps(tcx: &mut TestAppContext) {
     init_test(tcx, |_| {});
 
@@ -25206,7 +25206,7 @@ async fn test_move_to_syntax_node_relative_jumps(tcx: &mut TestAppContext) {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_to_syntax_node_relative_dead_zone(tcx: &mut TestAppContext) {
     init_test(tcx, |_| {});
 
@@ -25291,7 +25291,7 @@ async fn test_move_to_syntax_node_relative_dead_zone(tcx: &mut TestAppContext) {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_to_enclosing_bracket(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -25349,7 +25349,7 @@ async fn test_move_to_enclosing_bracket(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_to_enclosing_bracket_in_markdown_code_block(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let language_registry = Arc::new(language::LanguageRegistry::test(cx.executor()));
@@ -25432,7 +25432,7 @@ async fn test_move_to_enclosing_bracket_in_markdown_code_block(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_on_type_formatting_not_triggered(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -25551,7 +25551,7 @@ async fn test_on_type_formatting_not_triggered(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test(iterations = 20, seeds(31))]
+#[gpui_runtime::test(iterations = 20, seeds(31))]
 async fn test_on_type_formatting_is_applied_after_autoindent(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -25602,7 +25602,7 @@ async fn test_on_type_formatting_is_applied_after_autoindent(cx: &mut TestAppCon
     assert!(request.next().await.is_none());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_on_type_formatting_not_scheduled_without_server_support(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -25616,7 +25616,7 @@ async fn test_on_type_formatting_not_scheduled_without_server_support(cx: &mut T
     assert!(task.is_none());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_on_type_formatting_preserves_cursor_position(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -25653,7 +25653,7 @@ async fn test_on_type_formatting_preserves_cursor_position(cx: &mut TestAppConte
     assert!(request.next().await.is_some());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_on_type_formatting_does_not_rewind_over_intervening_edits(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -25697,7 +25697,7 @@ async fn test_on_type_formatting_does_not_rewind_over_intervening_edits(cx: &mut
     cx.assert_editor_state("let a = b.cxˇ;\n");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_language_server_restart_due_to_settings_change(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -25856,7 +25856,7 @@ async fn test_language_server_restart_due_to_settings_change(cx: &mut TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_with_additional_edits(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -26009,7 +26009,7 @@ async fn check_completion_additional_edits(
 // rust-analyzer's ref-match completions (`&some_str`) deliver the `&` as a
 // zero-width additionalTextEdit at the primary edit's start.
 // Ref: https://github.com/zed-industries/zed/issues/56973
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_with_zero_width_additional_edit_at_primary_edit_start(
     cx: &mut TestAppContext,
 ) {
@@ -26043,7 +26043,7 @@ async fn test_completions_with_zero_width_additional_edit_at_primary_edit_start(
 // Additional edits which overlap the primary completion edit must be skipped
 // while non-overlapping edits from the same completion are still applied.
 // Ref: https://github.com/zed-industries/zed/pull/1871
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_skip_additional_edits_overlapping_primary_edit(cx: &mut TestAppContext) {
     check_completion_additional_edits(
         "fˇ\nbar",
@@ -26082,7 +26082,7 @@ async fn test_completions_skip_additional_edits_overlapping_primary_edit(cx: &mu
 // treated as overlapping. This payload shape matches what
 // typescript-language-server actually sends for auto-imports at file start.
 // Ref: https://github.com/zed-industries/zed/issues/26136
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_with_file_start_auto_import_additional_edit(cx: &mut TestAppContext) {
     check_completion_additional_edits(
         "ˇ",
@@ -26108,7 +26108,7 @@ async fn test_completions_with_file_start_auto_import_additional_edit(cx: &mut T
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_with_additional_edits_undo(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -26205,7 +26205,7 @@ async fn test_completions_with_additional_edits_undo(cx: &mut TestAppContext) {
     cx.assert_editor_state("fn main() { let a = 2.ˇ; }");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_with_additional_edits_and_multiple_cursors(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -26299,7 +26299,7 @@ async fn test_completions_with_additional_edits_and_multiple_cursors(cx: &mut Te
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_resolve_updates_labels_if_filter_text_matches(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -26435,8 +26435,8 @@ async fn test_completions_resolve_updates_labels_if_filter_text_matches(cx: &mut
     });
 }
 
-#[gpui::test]
-async fn test_context_menus_hide_hover_popover(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_context_menus_hide_hover_popover(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
         lsp::ServerCapabilities {
@@ -26577,7 +26577,7 @@ async fn test_context_menus_hide_hover_popover(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_resolve_happens_once(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -26743,7 +26743,7 @@ async fn test_completions_resolve_happens_once(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_default_resolve_data_handling(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -26905,7 +26905,7 @@ async fn test_completions_default_resolve_data_handling(cx: &mut TestAppContext)
     resolved_items.lock().clear();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_completions_in_languages_with_extra_word_characters(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -27013,7 +27013,7 @@ fn completion_menu_entries(menu: &CompletionsMenu) -> Vec<String> {
         .collect()
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_document_format_with_prettier(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.formatter = Some(FormatterList::Single(Formatter::Prettier))
@@ -27103,7 +27103,7 @@ async fn test_document_format_with_prettier(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_document_format_with_prettier_explicit_language(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.formatter = Some(FormatterList::Single(Formatter::Prettier))
@@ -27207,7 +27207,7 @@ async fn test_document_format_with_prettier_explicit_language(cx: &mut TestAppCo
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_range_format_with_prettier(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.formatter = Some(FormatterList::Single(Formatter::Prettier))
@@ -27283,7 +27283,7 @@ async fn test_range_format_with_prettier(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_range_format_with_prettier_explicit_language(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.formatter = Some(FormatterList::Single(Formatter::Prettier))
@@ -27368,7 +27368,7 @@ async fn test_range_format_with_prettier_explicit_language(cx: &mut TestAppConte
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_addition_reverts(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(lsp::ServerCapabilities::default(), cx).await;
@@ -27510,7 +27510,7 @@ async fn test_addition_reverts(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_modification_reverts(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(lsp::ServerCapabilities::default(), cx).await;
@@ -27619,7 +27619,7 @@ async fn test_modification_reverts(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_deleting_over_diff_hunk(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(lsp::ServerCapabilities::default(), cx).await;
@@ -27652,7 +27652,7 @@ async fn test_deleting_over_diff_hunk(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_deletion_reverts(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(lsp::ServerCapabilities::default(), cx).await;
@@ -27772,7 +27772,7 @@ struct Row10;"#};
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multibuffer_reverts(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -27911,7 +27911,7 @@ async fn test_multibuffer_reverts(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multibuffer_in_navigation_history(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -28189,7 +28189,7 @@ async fn test_multibuffer_in_navigation_history(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_merge_base_diff_hunks_are_read_only(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -28271,7 +28271,7 @@ async fn test_merge_base_diff_hunks_are_read_only(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_selected_diff_hunks(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -28396,7 +28396,7 @@ async fn test_toggle_selected_diff_hunks(executor: BackgroundExecutor, cx: &mut 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diff_base_change_with_expanded_diff_hunks(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -28489,7 +28489,7 @@ async fn test_diff_base_change_with_expanded_diff_hunks(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_go_to_singleton_buffer_point_with_expanded_deleted_hunks(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -28540,7 +28540,7 @@ async fn test_go_to_singleton_buffer_point_with_expanded_deleted_hunks(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_diff_expand_in_multi_buffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -28673,7 +28673,7 @@ async fn test_toggle_diff_expand_in_multi_buffer(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_expand_diff_hunk_at_excerpt_boundary(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -28737,7 +28737,7 @@ async fn test_expand_diff_hunk_at_excerpt_boundary(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edits_around_expanded_insertion_hunks(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -28922,7 +28922,7 @@ async fn test_edits_around_expanded_insertion_hunks(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggling_adjacent_diff_hunks(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -29036,7 +29036,7 @@ async fn test_toggling_adjacent_diff_hunks(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggling_adjacent_diff_hunks_2(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -29096,7 +29096,7 @@ async fn test_toggling_adjacent_diff_hunks_2(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edits_around_expanded_deletion_hunks(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -29238,7 +29238,7 @@ async fn test_edits_around_expanded_deletion_hunks(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_backspace_after_deletion_hunk(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -29300,7 +29300,7 @@ async fn test_backspace_after_deletion_hunk(executor: BackgroundExecutor, cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_after_expanded_modification_hunk(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -29400,7 +29400,7 @@ async fn test_edit_after_expanded_modification_hunk(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_stage_and_unstage_added_file_hunk(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -29534,7 +29534,7 @@ fn indent_guide(buffer_id: BufferId, start_row: u32, end_row: u32, depth: u32) -
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_single_line(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29549,7 +29549,7 @@ async fn test_indent_guide_single_line(cx: &mut TestAppContext) {
     assert_indent_guides(0..3, vec![indent_guide(buffer_id, 1, 1, 0)], None, &mut cx);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_simple_block(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29565,7 +29565,7 @@ async fn test_indent_guide_simple_block(cx: &mut TestAppContext) {
     assert_indent_guides(0..4, vec![indent_guide(buffer_id, 1, 2, 0)], None, &mut cx);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_nested(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29594,7 +29594,7 @@ async fn test_indent_guide_nested(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_tab(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29619,7 +29619,7 @@ async fn test_indent_guide_tab(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_continues_on_empty_line(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29636,7 +29636,7 @@ async fn test_indent_guide_continues_on_empty_line(cx: &mut TestAppContext) {
     assert_indent_guides(0..5, vec![indent_guide(buffer_id, 1, 3, 0)], None, &mut cx);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_complex(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29668,7 +29668,7 @@ async fn test_indent_guide_complex(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_starts_off_screen(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29700,7 +29700,7 @@ async fn test_indent_guide_starts_off_screen(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_ends_off_screen(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29732,7 +29732,7 @@ async fn test_indent_guide_ends_off_screen(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_with_folds(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29797,7 +29797,7 @@ async fn test_indent_guide_with_folds(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_without_brackets(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29825,7 +29825,7 @@ async fn test_indent_guide_without_brackets(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_ends_before_empty_line(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29851,7 +29851,7 @@ async fn test_indent_guide_ends_before_empty_line(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_ignored_only_whitespace_lines(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29880,7 +29880,7 @@ async fn test_indent_guide_ignored_only_whitespace_lines(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_fallback_to_next_non_entirely_whitespace_line(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29909,7 +29909,7 @@ async fn test_indent_guide_fallback_to_next_non_entirely_whitespace_line(cx: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_continuing_off_screen(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29927,7 +29927,7 @@ async fn test_indent_guide_continuing_off_screen(cx: &mut TestAppContext) {
     assert_indent_guides(0..1, vec![indent_guide(buffer_id, 1, 1, 0)], None, &mut cx);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_tabs(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29954,7 +29954,7 @@ async fn test_indent_guide_tabs(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_active_indent_guide_single_line(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -29980,7 +29980,7 @@ async fn test_active_indent_guide_single_line(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_active_indent_guide_respect_indented_range(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -30046,7 +30046,7 @@ async fn test_active_indent_guide_respect_indented_range(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_active_indent_guide_empty_line(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -30074,7 +30074,7 @@ async fn test_active_indent_guide_empty_line(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_active_indent_guide_non_matching_indent(cx: &mut TestAppContext) {
     let (buffer_id, mut cx) = setup_indent_guides_editor(
         &"
@@ -30100,7 +30100,7 @@ async fn test_active_indent_guide_non_matching_indent(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_guide_with_expanded_diff_hunks(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -30193,7 +30193,7 @@ async fn test_indent_guide_with_expanded_diff_hunks(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_adjacent_diff_hunks(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -30362,7 +30362,7 @@ async fn test_adjacent_diff_hunks(executor: BackgroundExecutor, cx: &mut TestApp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_deletion_hunk_at_start_of_file(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -30440,7 +30440,7 @@ async fn test_toggle_deletion_hunk_at_start_of_file(
     cx.assert_state_with_diff(hunk_expanded);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_smaller_syntax_node_after_diff_hunk_collapse(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -30495,7 +30495,7 @@ async fn test_select_smaller_syntax_node_after_diff_hunk_collapse(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_expand_first_line_diff_hunk_keeps_deleted_lines_visible(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -30506,7 +30506,7 @@ async fn test_expand_first_line_diff_hunk_keeps_deleted_lines_visible(
     cx.set_state("ˇnew\nsecond\nthird\n");
     cx.set_head_text("old\nsecond\nthird\n");
     cx.update_editor(|editor, window, cx| {
-        editor.scroll(gpui::Point { x: 0., y: 0. }, window, cx);
+        editor.scroll(gpui_types::Point { x: 0., y: 0. }, window, cx);
     });
     executor.run_until_parked();
     assert_eq!(cx.update_editor(|e, _, cx| e.scroll_position(cx)).y, 0.0);
@@ -30534,7 +30534,7 @@ async fn test_expand_first_line_diff_hunk_keeps_deleted_lines_visible(
     assert_eq!(cx.update_editor(|e, _, cx| e.scroll_position(cx)).y, 0.0);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_display_diff_hunks(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -30616,7 +30616,7 @@ async fn test_display_diff_hunks(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_partially_staged_hunk(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -30690,7 +30690,7 @@ async fn test_partially_staged_hunk(cx: &mut TestAppContext) {
     "}));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_crease_insertion_and_rendering(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -30761,7 +30761,7 @@ fn test_crease_insertion_and_rendering(cx: &mut TestAppContext) {
     assert!(!snapshot.is_line_folded(MultiBufferRow(1)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_input_text(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -30805,7 +30805,7 @@ async fn test_input_text(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_scroll_cursor_center_top_bottom(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -30876,7 +30876,7 @@ let foo = 15;"#,
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_goto_definition_reveals_existing_editor_in_other_pane(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update(|cx| {
@@ -31005,7 +31005,7 @@ async fn test_goto_definition_reveals_existing_editor_in_other_pane(cx: &mut Tes
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_goto_definition_with_find_all_references_fallback(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -31143,7 +31143,7 @@ async fn test_goto_definition_with_find_all_references_fallback(cx: &mut TestApp
 /// reversal exceeded twice the excerpt context line count, the results
 /// multibuffer built an excerpt whose context anchors resolve backward,
 /// panicking the rope layer.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_all_references_with_reversed_server_range(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -31215,7 +31215,7 @@ async fn test_find_all_references_with_reversed_server_range(cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_goto_definition_no_fallback(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update(|cx| {
@@ -31280,7 +31280,7 @@ async fn test_goto_definition_no_fallback(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_goto_definition_close_ranges_open_singleton(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -31356,7 +31356,7 @@ async fn test_goto_definition_close_ranges_open_singleton(cx: &mut TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_goto_definition_far_ranges_open_multibuffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -31441,7 +31441,7 @@ async fn test_goto_definition_far_ranges_open_multibuffer(cx: &mut TestAppContex
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_goto_definition_contained_ranges(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -31492,7 +31492,7 @@ async fn test_goto_definition_contained_ranges(cx: &mut TestAppContext) {
     assert_eq!(navigated, Navigated::Yes);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_goto_definition_preserve_scroll_strategy(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     update_test_editor_settings(cx, &|settings| {
@@ -31581,7 +31581,7 @@ async fn test_goto_definition_preserve_scroll_strategy(cx: &mut TestAppContext) 
     // that same offset of 1.5.
     cx.set_state(&buffer);
     cx.update_editor(|editor, window, cx| {
-        editor.set_scroll_position(gpui::Point::new(0.0, caller_row - offset), window, cx);
+        editor.set_scroll_position(gpui_types::Point::new(0.0, caller_row - offset), window, cx);
     });
     cx.update_editor(|editor, window, cx| {
         editor.go_to_definition(&GoToDefinition::default(), window, cx)
@@ -31592,7 +31592,7 @@ async fn test_goto_definition_preserve_scroll_strategy(cx: &mut TestAppContext) 
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0.0, target_row - offset),
+            gpui_types::Point::new(0.0, target_row - offset),
         );
     });
 
@@ -31603,7 +31603,7 @@ async fn test_goto_definition_preserve_scroll_strategy(cx: &mut TestAppContext) 
     // should end up at 10 minus the offset from the center of the viewport.
     cx.set_state(&buffer);
     cx.update_editor(|editor, window, cx| {
-        editor.set_scroll_position(gpui::Point::new(0.0, 0.0), window, cx);
+        editor.set_scroll_position(gpui_types::Point::new(0.0, 0.0), window, cx);
         let snapshot = editor.display_snapshot(cx);
         let cursor_row = editor
             .selections
@@ -31627,12 +31627,12 @@ async fn test_goto_definition_preserve_scroll_strategy(cx: &mut TestAppContext) 
     cx.update_editor(|editor, window, cx| {
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0.0, (target_row - center_offset).max(0.0)),
+            gpui_types::Point::new(0.0, (target_row - center_offset).max(0.0)),
         );
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_all_references_editor_reuse(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -31786,7 +31786,7 @@ async fn test_find_all_references_editor_reuse(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_all_references_preserves_preview_tab(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update(|cx| {
@@ -31868,7 +31868,7 @@ async fn test_find_all_references_preserves_preview_tab(cx: &mut TestAppContext)
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_enclosing_node_with_task(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -31956,7 +31956,7 @@ async fn test_find_enclosing_node_with_task(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_code_actions_build_tasks_context_error_notifies(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -31968,7 +31968,7 @@ async fn test_toggle_code_actions_build_tasks_context_error_notifies(cx: &mut Te
             _: ContextLocation<'_>,
             _: Option<HashMap<String, String>>,
             _: Arc<dyn LanguageToolchainStore>,
-            _: &mut gpui::App,
+            _: &mut gpui_runtime::App,
         ) -> Task<anyhow::Result<TaskVariables>> {
             Task::ready(Err(anyhow::anyhow!("Task context provider failed")))
         }
@@ -32049,7 +32049,7 @@ async fn test_toggle_code_actions_build_tasks_context_error_notifies(cx: &mut Te
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_folding_buffers(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -32223,7 +32223,7 @@ async fn test_folding_buffers(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_folded_buffers_cleared_on_excerpts_removed(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -32294,7 +32294,7 @@ async fn test_folded_buffers_cleared_on_excerpts_removed(cx: &mut TestAppContext
     assert!(!editor.update(cx, |editor, cx| editor.has_any_buffer_folded(cx)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_folding_buffers_with_one_excerpt(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -32439,7 +32439,7 @@ async fn test_folding_buffers_with_one_excerpt(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_folding_buffer_when_multibuffer_has_only_one_excerpt(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -32517,7 +32517,7 @@ async fn test_folding_buffer_when_multibuffer_has_only_one_excerpt(cx: &mut Test
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multi_buffer_navigation_with_folded_buffers(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update(|cx| {
@@ -32708,7 +32708,7 @@ async fn test_multi_buffer_navigation_with_folded_buffers(cx: &mut TestAppContex
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_text(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -32807,7 +32807,7 @@ async fn test_edit_prediction_text(cx: &mut TestAppContext) {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_prediction_text_with_deletions(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -32977,7 +32977,7 @@ fn add_log_breakpoint_at_cursor(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_gutter_button_tooltip_updates_intent_with_secondary_modifier(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -33016,7 +33016,7 @@ fn test_gutter_button_tooltip_updates_intent_with_secondary_modifier(cx: &mut Te
     assert_eq!(meta, "right-click for more options");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_breakpoint_toggling(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -33210,7 +33210,7 @@ fn hover_over_gutter_row_zero(cx: &mut EditorTestContext) {
     cx.simulate_mouse_move(hover_position, None, Modifiers::none());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_gutter_hover_button_shown_for_saved_buffer(cx: &mut TestAppContext) {
     let mut cx = build_gutter_hover_test_editor(true, cx).await;
 
@@ -33237,7 +33237,7 @@ async fn test_gutter_hover_button_shown_for_saved_buffer(cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_gutter_hover_button_hidden_for_unsaved_buffer(cx: &mut TestAppContext) {
     let mut cx = build_gutter_hover_test_editor(false, cx).await;
 
@@ -33279,7 +33279,7 @@ fn right_click_gutter_row_zero(cx: &mut EditorTestContext) {
     cx.simulate_mouse_down(click_position, MouseButton::Right, Modifiers::none());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_gutter_context_menu_shown_for_saved_buffer(cx: &mut TestAppContext) {
     let mut cx = build_gutter_hover_test_editor(true, cx).await;
 
@@ -33292,7 +33292,7 @@ async fn test_gutter_context_menu_shown_for_saved_buffer(cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_gutter_context_menu_hidden_for_unsaved_buffer(cx: &mut TestAppContext) {
     let mut cx = build_gutter_hover_test_editor(false, cx).await;
 
@@ -33305,7 +33305,7 @@ async fn test_gutter_context_menu_hidden_for_unsaved_buffer(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_gutter_context_menu_anchor_in_multibuffer(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -33415,7 +33415,7 @@ async fn test_gutter_context_menu_anchor_in_multibuffer(cx: &mut TestAppContext)
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_breakpoint_after_save_as_existing_path(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -33519,7 +33519,7 @@ async fn test_breakpoint_after_save_as_existing_path(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_log_breakpoint_editing(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -33678,7 +33678,7 @@ async fn test_log_breakpoint_editing(cx: &mut TestAppContext) {
 /// This also tests that Editor::breakpoint_at_cursor_head is working properly
 /// we had some issues where we wouldn't find a breakpoint at Point {row: 0, col: 0}
 /// or when breakpoints were placed out of order. This tests for a regression too
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_breakpoint_enabling_and_disabling(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -34030,7 +34030,7 @@ impl BookmarkTestContext {
                         .center()
                         .x;
 
-                    gpui::Point {
+                    gpui_types::Point {
                         x: editor_center_x,
                         y: editor_origin.y
                             + relative_block_top.y
@@ -34039,7 +34039,7 @@ impl BookmarkTestContext {
                 });
 
         self.cx
-            .simulate_click(click_position, gpui::Modifiers::none());
+            .simulate_click(click_position, gpui_types::Modifiers::none());
         self.cx.run_until_parked();
 
         assert!(
@@ -34125,7 +34125,7 @@ impl BookmarkTestContext {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmark_toggling(cx: &mut TestAppContext) {
     let mut ctx =
         BookmarkTestContext::new("First line\nSecond line\nThird line\nFourth line", cx).await;
@@ -34153,7 +34153,7 @@ async fn test_bookmark_toggling(cx: &mut TestAppContext) {
     ctx.assert_bookmark_rows(vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmark_toggling_unnamed_with_multiple_selections(cx: &mut TestAppContext) {
     let mut ctx =
         BookmarkTestContext::new("First line\nSecond line\nThird line\nFourth line", cx).await;
@@ -34179,7 +34179,7 @@ async fn test_bookmark_toggling_unnamed_with_multiple_selections(cx: &mut TestAp
     ctx.assert_bookmark_rows(vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmark_toggling_with_label_with_multiple_selections(cx: &mut TestAppContext) {
     let mut ctx =
         BookmarkTestContext::new("First line\nSecond line\nThird line\nFourth line", cx).await;
@@ -34232,7 +34232,7 @@ async fn test_bookmark_toggling_with_label_with_multiple_selections(cx: &mut Tes
     ctx.assert_bookmark_rows(vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmark_toggle_deduplicates_by_row(cx: &mut TestAppContext) {
     let mut ctx =
         BookmarkTestContext::new("First line\nSecond line\nThird line\nFourth line", cx).await;
@@ -34260,7 +34260,7 @@ async fn test_bookmark_toggle_deduplicates_by_row(cx: &mut TestAppContext) {
     ctx.assert_bookmark_rows(vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmark_survives_edits(cx: &mut TestAppContext) {
     let mut ctx =
         BookmarkTestContext::new("First line\nSecond line\nThird line\nFourth line", cx).await;
@@ -34282,7 +34282,7 @@ async fn test_bookmark_survives_edits(cx: &mut TestAppContext) {
     ctx.assert_bookmark_rows(vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_active_bookmarks(cx: &mut TestAppContext) {
     let mut ctx = BookmarkTestContext::new(
         "Line 0\nLine 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nLine 9",
@@ -34316,7 +34316,7 @@ async fn test_active_bookmarks(cx: &mut TestAppContext) {
     assert!(!active.contains(&DisplayRow(8)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clearing_bookmark_store_notifies_editor(cx: &mut TestAppContext) {
     let mut ctx = BookmarkTestContext::new("Line 0\nLine 1\nLine 2\nLine 3", cx).await;
 
@@ -34360,7 +34360,7 @@ async fn test_clearing_bookmark_store_notifies_editor(cx: &mut TestAppContext) {
     assert!(active.is_empty());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clear_bookmarks_action_repaints_workspace_editor(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -34430,7 +34430,7 @@ async fn test_clear_bookmarks_action_repaints_workspace_editor(cx: &mut TestAppC
     assert!(active.is_empty());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmark_not_available_in_single_line_editor(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -34444,7 +34444,7 @@ async fn test_bookmark_not_available_in_single_line_editor(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_bookmark_does_not_open_prompt_without_existing_bookmark(
     cx: &mut TestAppContext,
 ) {
@@ -34462,7 +34462,7 @@ async fn test_edit_bookmark_does_not_open_prompt_without_existing_bookmark(
     ctx.assert_bookmark_rows(vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_bookmark_updates_label_after_confirmation(cx: &mut TestAppContext) {
     let mut ctx =
         BookmarkTestContext::new("First line\nSecond line\nThird line\nFourth line", cx).await;
@@ -34483,7 +34483,7 @@ async fn test_edit_bookmark_updates_label_after_confirmation(cx: &mut TestAppCon
     ctx.assert_bookmark_labels(vec![(0, "new label")]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmark_navigation_lands_at_column_zero(cx: &mut TestAppContext) {
     let mut ctx =
         BookmarkTestContext::new("First line\nSecond line\nThird line\nFourth line", cx).await;
@@ -34524,7 +34524,7 @@ async fn test_bookmark_navigation_lands_at_column_zero(cx: &mut TestAppContext) 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmark_set_from_nonzero_column_toggles_off_from_column_zero(
     cx: &mut TestAppContext,
 ) {
@@ -34563,7 +34563,7 @@ async fn test_bookmark_set_from_nonzero_column_toggles_off_from_column_zero(
     ctx.assert_bookmark_rows(vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_go_to_next_bookmark(cx: &mut TestAppContext) {
     let mut ctx = BookmarkTestContext::new(
         "Line 0\nLine 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nLine 9",
@@ -34604,7 +34604,7 @@ async fn test_go_to_next_bookmark(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_go_to_previous_bookmark(cx: &mut TestAppContext) {
     let mut ctx = BookmarkTestContext::new(
         "Line 0\nLine 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nLine 9",
@@ -34648,7 +34648,7 @@ async fn test_go_to_previous_bookmark(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_go_to_bookmark_when_cursor_on_bookmarked_line(cx: &mut TestAppContext) {
     let mut ctx = BookmarkTestContext::new(
         "Line 0\nLine 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nLine 9",
@@ -34681,7 +34681,7 @@ async fn test_go_to_bookmark_when_cursor_on_bookmarked_line(cx: &mut TestAppCont
     assert_eq!(ctx.cursor_row(), 3, "Next from row 7 should wrap to row 3");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_go_to_bookmark_with_out_of_order_bookmarks(cx: &mut TestAppContext) {
     let mut ctx = BookmarkTestContext::new(
         "Line 0\nLine 1\nLine 2\nLine 3\nLine 4\nLine 5\nLine 6\nLine 7\nLine 8\nLine 9",
@@ -34719,7 +34719,7 @@ async fn test_go_to_bookmark_with_out_of_order_bookmarks(cx: &mut TestAppContext
     assert_eq!(ctx.cursor_row(), 1, "Prev from row 5 should go to row 1");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_empty_rename_is_no_op(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let capabilities = lsp::ServerCapabilities {
@@ -34801,7 +34801,7 @@ async fn test_empty_rename_is_no_op(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_auto_refresh(cx: &mut TestAppContext) {
     let (workspace, _pane, project, editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -34862,7 +34862,7 @@ async fn test_bookmarks_tab_auto_refresh(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_selects_first_bookmark_despite_concurrent_change(
     cx: &mut TestAppContext,
 ) {
@@ -34891,7 +34891,7 @@ async fn test_bookmarks_tab_selects_first_bookmark_despite_concurrent_change(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_view_bookmarks_without_resolvable_bookmarks_opens_no_tab(cx: &mut TestAppContext) {
     let (workspace, _pane, project, _editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -34948,7 +34948,7 @@ async fn test_view_bookmarks_without_resolvable_bookmarks_opens_no_tab(cx: &mut 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_survives_split(cx: &mut TestAppContext) {
     let (workspace, pane, _project, editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -34994,7 +34994,7 @@ async fn test_bookmarks_tab_survives_split(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmark_resolution_drop_emits_store_event(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -35107,7 +35107,7 @@ async fn test_bookmark_resolution_drop_emits_store_event(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_highlights_bookmark_on_trailing_empty_line(cx: &mut TestAppContext) {
     let (workspace, _pane, _project, editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -35128,7 +35128,7 @@ async fn test_bookmarks_tab_highlights_bookmark_on_trailing_empty_line(cx: &mut 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_keeps_unopenable_paths(cx: &mut TestAppContext) {
     let (workspace, _pane, project, editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -35179,7 +35179,7 @@ async fn test_bookmarks_tab_keeps_unopenable_paths(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_view_bookmarks_activates_most_recent_tab(cx: &mut TestAppContext) {
     let (workspace, pane, _project, editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -35227,7 +35227,7 @@ async fn test_view_bookmarks_activates_most_recent_tab(cx: &mut TestAppContext) 
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_highlight_does_not_grow_past_last_row(cx: &mut TestAppContext) {
     let (workspace, _pane, _project, editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -35261,7 +35261,7 @@ async fn test_bookmarks_tab_highlight_does_not_grow_past_last_row(cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_trailing_line_highlight_does_not_grow_on_edit(cx: &mut TestAppContext) {
     let (workspace, _pane, _project, editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -35292,7 +35292,7 @@ async fn test_bookmarks_tab_trailing_line_highlight_does_not_grow_on_edit(cx: &m
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_last_line_highlight_does_not_cover_next_file_header(
     cx: &mut TestAppContext,
 ) {
@@ -35321,7 +35321,7 @@ async fn test_bookmarks_tab_last_line_highlight_does_not_cover_next_file_header(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_trailing_line_highlight_does_not_cover_next_file_header(
     cx: &mut TestAppContext,
 ) {
@@ -35350,7 +35350,7 @@ async fn test_bookmarks_tab_trailing_line_highlight_does_not_cover_next_file_hea
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_worktree_add_retries_only_contained_failed_paths(cx: &mut TestAppContext) {
     let (workspace, _pane, project, _editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -35440,7 +35440,7 @@ async fn test_worktree_add_retries_only_contained_failed_paths(cx: &mut TestAppC
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bookmarks_tab_retries_failed_path_when_file_appears(cx: &mut TestAppContext) {
     let (workspace, _pane, project, _editor, mut cx) = init_bookmarks_tab_test(
         cx,
@@ -35502,7 +35502,7 @@ async fn test_bookmarks_tab_retries_failed_path_when_file_appears(cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rename_with_duplicate_edits(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let capabilities = lsp::ServerCapabilities {
@@ -35583,7 +35583,7 @@ async fn test_rename_with_duplicate_edits(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rename_with_out_of_order_document_highlights(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let capabilities = lsp::ServerCapabilities {
@@ -35649,7 +35649,7 @@ async fn test_rename_with_out_of_order_document_highlights(cx: &mut TestAppConte
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rename_without_prepare(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     // These capabilities indicate that the server does not support prepare rename.
@@ -35711,7 +35711,7 @@ async fn test_rename_without_prepare(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tree_sitter_brackets_newline_insertion(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -35765,8 +35765,8 @@ async fn test_tree_sitter_brackets_newline_insertion(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_apply_code_lens_actions_with_commands(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_apply_code_lens_actions_with_commands(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
     update_test_editor_settings(cx, &|settings| {
         settings.code_lens = Some(settings::CodeLens::Menu);
@@ -35989,7 +35989,7 @@ async fn test_apply_code_lens_actions_with_commands(cx: &mut gpui::TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_reveal_if_open_uses_user_setting_for_loaded_editor(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update_global(|store: &mut SettingsStore, cx| {
@@ -36058,7 +36058,7 @@ async fn test_reveal_if_open_uses_user_setting_for_loaded_editor(cx: &mut TestAp
     assert_eq!(right_pane.read_with(cx, |pane, _| pane.items_len()), 1);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_editor_restore_data_different_in_panes(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -36329,7 +36329,7 @@ println!("5");
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_editor_does_not_restore_data_when_turned_off(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -36448,7 +36448,7 @@ println!("5");
 }
 
 struct EmptyModalView {
-    focus_handle: gpui::FocusHandle,
+    focus_handle: gpui_runtime::FocusHandle,
 }
 
 impl EventEmitter<DismissEvent> for EmptyModalView {}
@@ -36460,7 +36460,7 @@ impl Render for EmptyModalView {
 }
 
 impl Focusable for EmptyModalView {
-    fn focus_handle(&self, _cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _cx: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -36475,7 +36475,7 @@ impl EmptyModalView {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_hide_mouse_context_menu_on_modal_opened(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -36513,7 +36513,7 @@ async fn test_hide_mouse_context_menu_on_modal_opened(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_hide_pending_blame_popover_when_modal_opens(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -36613,7 +36613,7 @@ fn set_linked_edit_ranges(
     editor.linked_edit_ranges = LinkedEditingRanges(linked_ranges);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_html_linked_edits_on_completion(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -36743,7 +36743,7 @@ async fn test_html_linked_edits_on_completion(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_edits_on_typing_punctuation(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -36815,7 +36815,7 @@ async fn test_linked_edits_on_typing_punctuation(cx: &mut TestAppContext) {
     cx.assert_editor_state("<Animated.Vˇ></Animated.V>");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_edits_on_typing_dash_in_custom_element_name(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -36878,7 +36878,7 @@ async fn test_linked_edits_on_typing_dash_in_custom_element_name(cx: &mut TestAp
     cx.assert_editor_state("<custom-elˇ></custom-el>");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_edits_on_typing_dot_without_language_override(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -36921,7 +36921,7 @@ async fn test_linked_edits_on_typing_dot_without_language_override(cx: &mut Test
     cx.assert_editor_state("<Table.ˇ></Table.>");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_invisible_worktree_servers(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -37071,7 +37071,7 @@ async fn test_invisible_worktree_servers(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tab_in_leading_whitespace_auto_indents_for_python(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -37185,7 +37185,7 @@ async fn test_tab_in_leading_whitespace_auto_indents_for_python(cx: &mut TestApp
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_outdent_after_input_for_python(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -37426,7 +37426,7 @@ async fn test_outdent_after_input_for_python(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_on_newline_for_python(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     update_test_language_settings(cx, &|settings| {
@@ -37490,7 +37490,7 @@ async fn test_indent_on_newline_for_python(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_python_indent_in_markdown(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -37532,7 +37532,7 @@ async fn test_python_indent_in_markdown(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tab_in_leading_whitespace_auto_indents_for_bash(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -37629,7 +37629,7 @@ async fn test_tab_in_leading_whitespace_auto_indents_for_bash(cx: &mut TestAppCo
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_after_input_for_bash(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -37675,7 +37675,7 @@ async fn test_indent_after_input_for_bash(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_outdent_after_input_for_bash(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -37834,7 +37834,7 @@ async fn test_outdent_after_input_for_bash(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_indent_on_newline_for_bash(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     update_test_language_settings(cx, &|settings| {
@@ -38029,7 +38029,7 @@ pub fn check_displayed_completions(expected: Vec<&'static str>, cx: &mut EditorL
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_mixed_completions_with_multi_word_snippet(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -38466,7 +38466,7 @@ fn assert_hunk_revert(
     assert_eq!(actual_hunk_statuses_before, expected_hunk_statuses_before);
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_pulling_diagnostics(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -38622,7 +38622,7 @@ async fn test_pulling_diagnostics(cx: &mut TestAppContext) {
     ensure_result_id(Some(SharedString::new(final_requests.to_string())), cx);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_selection_after_moving_with_multiple_cursors(cx: &mut TestAppContext) {
     // Regression test for issue #11671
     // Previously, adding a cursor after moving multiple cursors would reset
@@ -38672,7 +38672,7 @@ async fn test_add_selection_after_moving_with_multiple_cursors(cx: &mut TestAppC
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_selection_skip_soft_wrap_option(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -38781,7 +38781,7 @@ async fn test_add_selection_skip_soft_wrap_option(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_insert_snippet(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -38857,7 +38857,7 @@ async fn test_insert_snippet(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_inlay_hints_request_timeout(cx: &mut TestAppContext) {
     use crate::inlays::inlay_hints::tests::{cached_hint_labels, init_test, visible_hint_labels};
     use settings::InlayHintSettingsContent;
@@ -39011,7 +39011,7 @@ async fn test_inlay_hints_request_timeout(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_click_on_parameter_inlay_hint_places_cursor_correctly(cx: &mut TestAppContext) {
     use crate::inlays::inlay_hints::tests::{cached_hint_labels, visible_hint_labels};
 
@@ -39089,7 +39089,7 @@ async fn test_click_on_parameter_inlay_hint_places_cursor_correctly(cx: &mut Tes
         cx.update_editor(|editor, _, _| editor.last_position_map.as_ref().unwrap().em_layout_width);
     // Click 3 characters to the left of the cursor, which lands inside the
     // "value: " inlay hint text.
-    let click_position = gpui::Point {
+    let click_position = gpui_types::Point {
         x: cursor_pixel.x - em_width * 3.0,
         y: cursor_pixel.y,
     };
@@ -39101,7 +39101,7 @@ async fn test_click_on_parameter_inlay_hint_places_cursor_correctly(cx: &mut Tes
     cx.assert_editor_state("fn foo(value: i32) {} fn main() { foo(ˇ42); }");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_replacement_in_single_line(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let (editor, cx) = cx.add_window_view(Editor::single_line);
@@ -39121,7 +39121,7 @@ async fn test_newline_replacement_in_single_line(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_non_utf_8_opens(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -39156,7 +39156,7 @@ async fn test_non_utf_8_opens(cx: &mut TestAppContext) {
     assert_eq!(handle.to_any_view().entity_type(), TypeId::of::<Editor>());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_next_prev_syntax_node(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -39259,7 +39259,7 @@ async fn test_select_next_prev_syntax_node(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_next_prev_document_highlight(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -39355,9 +39355,9 @@ let result = variable * 2;",
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_url_from_other_app_creates_markdown_link_over_selected_text(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
 
@@ -39385,8 +39385,8 @@ async fn test_paste_url_from_other_app_creates_markdown_link_over_selected_text(
     ));
 }
 
-#[gpui::test]
-async fn test_markdown_indents(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_markdown_indents(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx, |_| {});
 
     let markdown_language = languages::language("markdown", tree_sitter_md::LANGUAGE.into());
@@ -39513,9 +39513,9 @@ async fn test_markdown_indents(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_url_from_zed_copy_creates_markdown_link_over_selected_text(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
 
@@ -39552,9 +39552,9 @@ async fn test_paste_url_from_zed_copy_creates_markdown_link_over_selected_text(
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_url_from_other_app_replaces_existing_url_without_creating_markdown_link(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
 
@@ -39580,9 +39580,9 @@ async fn test_paste_url_from_other_app_replaces_existing_url_without_creating_ma
     cx.assert_editor_state(&format!("Please visit zed's homepage: {url}ˇ"));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_plain_text_from_other_app_replaces_selection_without_creating_markdown_link(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
 
@@ -39608,9 +39608,9 @@ async fn test_paste_plain_text_from_other_app_replaces_selection_without_creatin
     cx.assert_editor_state(&format!("Hello, {text}ˇ.\nZed is {text}ˇ"));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_text_with_scheme_like_prefix_replaces_selection_without_creating_markdown_link(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
 
@@ -39638,9 +39638,9 @@ async fn test_paste_text_with_scheme_like_prefix_replaces_selection_without_crea
     cx.assert_editor_state(&format!("{text}ˇ"));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_url_from_other_app_without_creating_markdown_link_in_non_markdown_language(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx, |_| {});
 
@@ -39668,7 +39668,7 @@ async fn test_paste_url_from_other_app_without_creating_markdown_link_in_non_mar
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_url_from_other_app_creates_markdown_link_selectively_in_multi_buffer(
     cx: &mut TestAppContext,
 ) {
@@ -39720,7 +39720,7 @@ async fn test_paste_url_from_other_app_creates_markdown_link_selectively_in_mult
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_image_in_markdown_saves_file_and_inserts_markdown(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -39788,7 +39788,7 @@ async fn test_paste_image_in_markdown_saves_file_and_inserts_markdown(cx: &mut T
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_multiple_images_in_markdown_increments_filename(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -39875,7 +39875,7 @@ async fn test_paste_multiple_images_in_markdown_increments_filename(cx: &mut Tes
     assert_eq!(fs.read_file_sync("/test/image_2.png").unwrap(), png_bytes_3);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_image_in_non_markdown_does_not_insert_markdown(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -39900,7 +39900,7 @@ async fn test_paste_image_in_non_markdown_does_not_insert_markdown(cx: &mut Test
     cx.assert_editor_state("ˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_image_in_markdown_without_open_file_falls_through(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -39933,7 +39933,7 @@ async fn test_paste_image_in_markdown_without_open_file_falls_through(cx: &mut T
     cx.assert_editor_state("ˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_paste_image_in_markdown_single_file_worktree_falls_through(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -39987,7 +39987,7 @@ async fn test_paste_image_in_markdown_single_file_worktree_falls_through(cx: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_format_echoing_received_line_endings_keeps_cursor(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.ensure_final_newline_on_save = Some(false);
@@ -40097,7 +40097,7 @@ async fn test_format_echoing_received_line_endings_keeps_cursor(cx: &mut TestApp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_race_in_multibuffer_save(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -40210,7 +40210,7 @@ async fn test_race_in_multibuffer_save(cx: &mut TestAppContext) {
     cx.update(|_, cx| assert!(editor.is_dirty(cx)));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_duplicate_line_up_on_last_line_without_newline(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -40246,7 +40246,7 @@ fn test_duplicate_line_up_on_last_line_without_newline(cx: &mut TestAppContext) 
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_line_without_trailing_newline(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -40273,7 +40273,7 @@ async fn test_copy_line_without_trailing_newline(cx: &mut TestAppContext) {
     cx.assert_editor_state("line1\nline2\nˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multi_selection_copy_with_newline_between_copied_lines(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -40300,7 +40300,7 @@ async fn test_multi_selection_copy_with_newline_between_copied_lines(cx: &mut Te
     cx.assert_editor_state("lineA\nline1\nline2\nline3\nˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multi_selection_cut_with_newline_between_copied_lines(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -40327,7 +40327,7 @@ async fn test_multi_selection_cut_with_newline_between_copied_lines(cx: &mut Tes
     cx.assert_editor_state("lineA\nline1\nline2\nline3\nˇ");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_end_of_editor_context(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -40381,7 +40381,7 @@ async fn test_end_of_editor_context(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sticky_scroll(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -40413,7 +40413,7 @@ async fn test_sticky_scroll(cx: &mut TestAppContext) {
 
     let mut sticky_headers = |offset: ScrollOffset| {
         cx.update_editor(|e, window, cx| {
-            e.scroll(gpui::Point { x: 0., y: offset }, window, cx);
+            e.scroll(gpui_types::Point { x: 0., y: offset }, window, cx);
         });
         cx.run_until_parked();
         cx.update_editor(|e, window, cx| {
@@ -40457,7 +40457,7 @@ async fn test_sticky_scroll(cx: &mut TestAppContext) {
     assert_eq!(sticky_headers(10.0), vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sticky_scroll_with_decoration_prefix_in_item(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -40502,7 +40502,7 @@ async fn test_sticky_scroll_with_decoration_prefix_in_item(cx: &mut TestAppConte
 
     let mut sticky_headers = |offset: ScrollOffset| {
         cx.update_editor(|e, window, cx| {
-            e.scroll(gpui::Point { x: 0., y: offset }, window, cx);
+            e.scroll(gpui_types::Point { x: 0., y: offset }, window, cx);
         });
         cx.run_until_parked();
         cx.update_editor(|e, window, cx| {
@@ -40529,7 +40529,7 @@ async fn test_sticky_scroll_with_decoration_prefix_in_item(cx: &mut TestAppConte
     assert_eq!(sticky_headers(7.0), vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sticky_scroll_anchors_multiline_c_signature_on_name_row(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -40565,7 +40565,7 @@ async fn test_sticky_scroll_anchors_multiline_c_signature_on_name_row(cx: &mut T
 
     let mut sticky_headers = |offset: ScrollOffset| {
         cx.update_editor(|editor, window, cx| {
-            editor.scroll(gpui::Point { x: 0., y: offset }, window, cx);
+            editor.scroll(gpui_types::Point { x: 0., y: offset }, window, cx);
         });
         cx.run_until_parked();
         cx.update_editor(|editor, window, cx| {
@@ -40589,7 +40589,7 @@ async fn test_sticky_scroll_anchors_multiline_c_signature_on_name_row(cx: &mut T
     assert_eq!(sticky_headers(5.0), vec![(function_name_row, 0.0)]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sticky_scroll_with_expanded_deleted_diff_hunks(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -40648,7 +40648,7 @@ async fn test_sticky_scroll_with_expanded_deleted_diff_hunks(
 
     let mut sticky_headers = |offset: ScrollOffset| {
         cx.update_editor(|e, window, cx| {
-            e.scroll(gpui::Point { x: 0., y: offset }, window, cx);
+            e.scroll(gpui_types::Point { x: 0., y: offset }, window, cx);
         });
         cx.run_until_parked();
         cx.update_editor(|e, window, cx| {
@@ -40678,7 +40678,7 @@ async fn test_sticky_scroll_with_expanded_deleted_diff_hunks(
     assert_eq!(sticky_headers(6.0), vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_no_duplicated_sticky_headers(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -40704,7 +40704,7 @@ async fn test_no_duplicated_sticky_headers(cx: &mut TestAppContext) {
 
     let mut sticky_headers = |offset: ScrollOffset| {
         cx.update_editor(|e, window, cx| {
-            e.scroll(gpui::Point { x: 0., y: offset }, window, cx);
+            e.scroll(gpui_types::Point { x: 0., y: offset }, window, cx);
         });
         cx.run_until_parked();
         cx.update_editor(|e, window, cx| {
@@ -40737,7 +40737,7 @@ async fn test_no_duplicated_sticky_headers(cx: &mut TestAppContext) {
     assert_eq!(sticky_headers(5.0), vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_autoscroll_keeps_cursor_visible_below_sticky_headers(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     update_test_editor_settings(cx, &|settings| {
@@ -40811,7 +40811,7 @@ async fn test_autoscroll_keeps_cursor_visible_below_sticky_headers(cx: &mut Test
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_relative_line_numbers(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -40943,7 +40943,7 @@ fn test_relative_line_numbers(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update(|cx| {
@@ -40996,7 +40996,7 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
     let mut scroll_and_click = |scroll_offset: ScrollOffset, click_offset: ScrollOffset| {
         cx.update_editor(|e, window, cx| {
             e.scroll(
-                gpui::Point {
+                gpui_types::Point {
                     x: 0.,
                     y: scroll_offset,
                 },
@@ -41006,7 +41006,7 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
         });
         cx.run_until_parked();
         cx.simulate_click(
-            gpui::Point {
+            gpui_types::Point {
                 x: px(0.),
                 y: click_offset as f32 * line_height,
             },
@@ -41021,7 +41021,7 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
             0.0  // click top of screen
         ),
         // scrolled to impl Bar
-        (gpui::Point { x: 0., y: 4. }, vec![impl_bar()])
+        (gpui_types::Point { x: 0., y: 4. }, vec![impl_bar()])
     );
 
     assert_eq!(
@@ -41030,7 +41030,7 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
             0.25  // click middle of impl Bar
         ),
         // scrolled to impl Bar
-        (gpui::Point { x: 0., y: 4. }, vec![impl_bar()])
+        (gpui_types::Point { x: 0., y: 4. }, vec![impl_bar()])
     );
 
     assert_eq!(
@@ -41039,7 +41039,7 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
             1.5  // click below impl Bar (e.g. fn new())
         ),
         // scrolled to fn new() - this is below the impl Bar header which has persisted
-        (gpui::Point { x: 0., y: 4. }, vec![fn_new()])
+        (gpui_types::Point { x: 0., y: 4. }, vec![fn_new()])
     );
 
     assert_eq!(
@@ -41047,7 +41047,7 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
             5.5,  // fn new is halfway underneath impl Bar
             0.75  // click on the overlap of impl Bar and fn new()
         ),
-        (gpui::Point { x: 0., y: 4. }, vec![impl_bar()])
+        (gpui_types::Point { x: 0., y: 4. }, vec![impl_bar()])
     );
 
     assert_eq!(
@@ -41055,7 +41055,7 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
             5.5,  // fn new is halfway underneath impl Bar
             1.25  // click on the visible part of fn new()
         ),
-        (gpui::Point { x: 0., y: 4. }, vec![fn_new()])
+        (gpui_types::Point { x: 0., y: 4. }, vec![fn_new()])
     );
 
     assert_eq!(
@@ -41063,7 +41063,7 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
             1.5, // fn foo is halfway off the screen
             0.0  // click top of screen
         ),
-        (gpui::Point { x: 0., y: 0. }, vec![fn_foo()])
+        (gpui_types::Point { x: 0., y: 0. }, vec![fn_foo()])
     );
 
     assert_eq!(
@@ -41074,7 +41074,7 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
         .0,
         // no change in scroll
         // we don't assert on the visible_range because if we clicked the gutter, our line is fully selected
-        (gpui::Point { x: 0., y: 1.5 })
+        (gpui_types::Point { x: 0., y: 1.5 })
     );
 
     // Verify clicking at a specific x position within a sticky header places
@@ -41091,11 +41091,11 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
     // The text "impl Bar {" starts at column 0, so column 5 = 'B'.
     let click_x = text_origin_x + em_width * 5.5;
     cx.update_editor(|e, window, cx| {
-        e.scroll(gpui::Point { x: 0., y: 4.5 }, window, cx);
+        e.scroll(gpui_types::Point { x: 0., y: 4.5 }, window, cx);
     });
     cx.run_until_parked();
     cx.simulate_click(
-        gpui::Point {
+        gpui_types::Point {
             x: click_x,
             y: 0.25 * line_height,
         },
@@ -41104,11 +41104,11 @@ async fn test_scroll_by_clicking_sticky_header(cx: &mut TestAppContext) {
     cx.run_until_parked();
     let (scroll_pos, selections) =
         cx.update_editor(|e, _, cx| (e.scroll_position(cx), display_ranges(e, cx)));
-    assert_eq!(scroll_pos, gpui::Point { x: 0., y: 4. });
+    assert_eq!(scroll_pos, gpui_types::Point { x: 0., y: 4. });
     assert_eq!(selections, vec![empty_range(4, 5)]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_clicking_sticky_header_sets_character_select_mode(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update(|cx| {
@@ -41165,13 +41165,13 @@ async fn test_clicking_sticky_header_sets_character_select_mode(cx: &mut TestApp
         editor.end_selection(window, cx);
 
         // Scroll down one row to make `fn foo() {` a sticky header
-        editor.scroll(gpui::Point { x: 0., y: 1. }, window, cx);
+        editor.scroll(gpui_types::Point { x: 0., y: 1. }, window, cx);
     });
     cx.run_until_parked();
 
     // Click at the start of the `fn foo() {` sticky header
     cx.simulate_click(
-        gpui::Point {
+        gpui_types::Point {
             x: text_origin_x,
             y: 0.5 * line_height,
         },
@@ -41193,7 +41193,7 @@ async fn test_clicking_sticky_header_sets_character_select_mode(cx: &mut TestApp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_next_prev_reference(cx: &mut TestAppContext) {
     const CYCLE_POSITIONS: &[&'static str] = &[
         indoc! {"
@@ -41313,7 +41313,7 @@ async fn test_next_prev_reference(cx: &mut TestAppContext) {
     cx.assert_editor_state(CYCLE_POSITIONS[1]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multibuffer_selections_with_folding(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -41527,7 +41527,7 @@ async fn test_multibuffer_selections_with_folding(cx: &mut TestAppContext) {
         "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multibuffer_scroll_cursor_top_margin(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -41593,7 +41593,7 @@ async fn test_multibuffer_scroll_cursor_top_margin(cx: &mut TestAppContext) {
         editor.scroll_cursor_top(&ScrollCursorTop, window, cx);
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 12.0)
+            gpui_types::Point::new(0., 12.0)
         );
     });
 
@@ -41606,12 +41606,12 @@ async fn test_multibuffer_scroll_cursor_top_margin(cx: &mut TestAppContext) {
         editor.scroll_cursor_top(&ScrollCursorTop, window, cx);
         assert_eq!(
             editor.snapshot(window, cx).scroll_position(),
-            gpui::Point::new(0., 9.0)
+            gpui_types::Point::new(0., 9.0)
         );
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_references_single_case(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -41696,7 +41696,7 @@ fn location_row_columns(
     rows
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_definition_locations_of_kind_excludes_self_link(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_rust(
@@ -41784,7 +41784,7 @@ fn test_open_results_in_action_argument_parsing() {
     assert!(references.always_open_multibuffer);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_task_list_continuation(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = Some(2.try_into().unwrap());
@@ -41919,7 +41919,7 @@ async fn test_newline_task_list_continuation(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_unordered_list_continuation(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = Some(2.try_into().unwrap());
@@ -42088,7 +42088,7 @@ async fn test_newline_unordered_list_continuation(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_ordered_list_continuation(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = Some(2.try_into().unwrap());
@@ -42211,7 +42211,7 @@ async fn test_newline_ordered_list_continuation(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_newline_should_not_autoindent_ordered_list(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = Some(2.try_into().unwrap());
@@ -42238,7 +42238,7 @@ async fn test_newline_should_not_autoindent_ordered_list(cx: &mut TestAppContext
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tab_list_indent(cx: &mut TestAppContext) {
     init_test(cx, |settings| {
         settings.defaults.tab_size = Some(2.try_into().unwrap());
@@ -42349,7 +42349,7 @@ async fn test_tab_list_indent(cx: &mut TestAppContext) {
     cx.assert_editor_state(expected);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_local_worktree_trust(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update(|cx| project::trusted_worktrees::init(HashMap::default(), cx));
@@ -42525,7 +42525,7 @@ async fn test_local_worktree_trust(cx: &mut TestAppContext) {
     assert!(can_trust_after, "worktree should be trusted after trust()");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_editor_rendering_when_positioned_above_viewport(cx: &mut TestAppContext) {
     // This test reproduces a bug where drawing an editor at a position above the viewport
     // (simulating what happens when an AutoHeight editor inside a List is scrolled past)
@@ -42538,14 +42538,14 @@ fn test_editor_rendering_when_positioned_above_viewport(cx: &mut TestAppContext)
     // but the while loop after seek never terminates because cursor.next() is a no-op at end.
     init_test(cx, |_| {});
 
-    let window = cx.add_window(|_, _| gpui::Empty);
+    let window = cx.add_window(|_, _| gpui_runtime::Empty);
     let mut cx = VisualTestContext::from_window(*window, cx);
 
     let buffer = cx.update(|_, cx| MultiBuffer::build_simple("a\nb\nc\nd\ne\nf\ng\nh\ni\nj\n", cx));
     let editor = cx.new_window_entity(|window, cx| build_editor(buffer, window, cx));
 
     // Simulate a small viewport (500x500 pixels at origin 0,0)
-    cx.simulate_resize(gpui::size(px(500.), px(500.)));
+    cx.simulate_resize(gpui_backend::size(px(500.), px(500.)));
 
     // Draw the editor at a very negative Y position, simulating an editor that's been
     // scrolled way above the visible viewport (like in a List that has scrolled past it).
@@ -42553,14 +42553,14 @@ fn test_editor_rendering_when_positioned_above_viewport(cx: &mut TestAppContext)
     // This should NOT hang - it should just render nothing.
     cx.draw(
         gpui::point(px(0.), px(-10000.)),
-        gpui::size(px(500.), px(3000.)),
+        gpui_backend::size(px(500.), px(3000.)),
         |_, _| editor.clone().into_any_element(),
     );
 
     // If we get here without hanging, the test passes
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diff_review_indicator_created_on_gutter_hover(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42603,7 +42603,7 @@ async fn test_diff_review_indicator_created_on_gutter_hover(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diff_review_button_hidden_when_ai_disabled(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42664,7 +42664,7 @@ async fn test_diff_review_button_hidden_when_ai_disabled(cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diff_review_button_shown_when_ai_enabled(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42760,7 +42760,7 @@ fn add_test_comment(
     editor.add_review_comment(key, comment.to_string(), Anchor::Min..Anchor::Max, cx)
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_review_comment_add_to_hunk(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42782,7 +42782,7 @@ fn test_review_comment_add_to_hunk(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_review_comments_are_per_hunk(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42814,7 +42814,7 @@ fn test_review_comments_are_per_hunk(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_review_comment_remove(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42837,7 +42837,7 @@ fn test_review_comment_remove(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_review_comment_update(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42858,7 +42858,7 @@ fn test_review_comment_update(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_review_comment_take_all(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42907,7 +42907,7 @@ fn test_review_comment_take_all(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_diff_review_overlay_show_and_dismiss(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42946,7 +42946,7 @@ fn test_diff_review_overlay_show_and_dismiss(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_diff_review_overlay_dismiss_via_cancel(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -42981,7 +42981,7 @@ fn test_diff_review_overlay_dismiss_via_cancel(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_diff_review_empty_comment_not_submitted(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43028,7 +43028,7 @@ fn test_diff_review_empty_comment_not_submitted(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_diff_review_inline_edit_flow(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43081,7 +43081,7 @@ fn test_diff_review_inline_edit_flow(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_orphaned_comments_are_cleaned_up(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43124,7 +43124,7 @@ fn test_orphaned_comments_are_cleaned_up(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_orphaned_comments_cleanup_called_on_buffer_edit(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43169,7 +43169,7 @@ fn test_orphaned_comments_cleanup_called_on_buffer_edit(cx: &mut TestAppContext)
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_comments_stored_for_multiple_hunks(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43241,7 +43241,7 @@ fn test_comments_stored_for_multiple_hunks(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_same_hunk_detected_by_matching_keys(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43289,7 +43289,7 @@ fn test_same_hunk_detected_by_matching_keys(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_overlay_comments_expanded_state(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43349,7 +43349,7 @@ fn test_overlay_comments_expanded_state(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_diff_review_multiline_selection(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43397,7 +43397,7 @@ fn test_diff_review_multiline_selection(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_diff_review_drag_state(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43475,7 +43475,7 @@ fn test_diff_review_drag_state(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_diff_review_drag_cancel(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43511,7 +43511,7 @@ fn test_diff_review_drag_cancel(cx: &mut TestAppContext) {
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_calculate_overlay_height(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43579,7 +43579,7 @@ fn test_calculate_overlay_height(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_to_start_end_of_larger_syntax_node_single_cursor(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43770,7 +43770,7 @@ async fn test_move_to_start_end_of_larger_syntax_node_single_cursor(cx: &mut Tes
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_to_start_end_of_larger_syntax_node_two_cursors(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -43915,7 +43915,7 @@ async fn test_move_to_start_end_of_larger_syntax_node_two_cursors(cx: &mut TestA
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_to_start_end_of_larger_syntax_node_with_selections_and_strings(
     cx: &mut TestAppContext,
 ) {
@@ -44051,7 +44051,7 @@ async fn test_move_to_start_end_of_larger_syntax_node_with_selections_and_string
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_to_start_end_of_larger_syntax_node(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -44494,7 +44494,7 @@ comment */ˇ»;"#},
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_restore_and_next(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -44557,7 +44557,7 @@ async fn test_restore_and_next(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_align_selections(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -44634,7 +44634,7 @@ async fn test_align_selections(cx: &mut TestAppContext) {
     cx.assert_editor_state(after);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_align_selections_multicolumn(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -44705,7 +44705,7 @@ async fn test_align_selections_multicolumn(cx: &mut TestAppContext) {
     cx.assert_editor_state(after);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_align_selections_with_multibyte_chars(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -44749,7 +44749,7 @@ async fn test_align_selections_with_multibyte_chars(cx: &mut TestAppContext) {
     cx.assert_editor_state(before);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_align_selections_with_soft_wrap(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -44765,7 +44765,7 @@ async fn test_align_selections_with_soft_wrap(cx: &mut TestAppContext) {
     cx.assert_editor_state(after);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_custom_fallback_highlights(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -44805,7 +44805,7 @@ async fn test_custom_fallback_highlights(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tsx_nested_jsx_member_expression_highlights(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -44898,7 +44898,7 @@ fn setup_syntax_highlighting_with_theme(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_diagnostics_persists_across_settings_change(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -44939,7 +44939,7 @@ async fn test_toggle_diagnostics_persists_across_settings_change(cx: &mut TestAp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_columnar_selection_with_multibyte_chars(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -44973,7 +44973,7 @@ async fn test_columnar_selection_with_multibyte_chars(cx: &mut TestAppContext) {
             SelectPhase::Update {
                 position: DisplayPoint::new(DisplayRow(4), 4),
                 goal_column: 4,
-                scroll_delta: gpui::Point::default(),
+                scroll_delta: gpui_types::Point::default(),
             },
             window,
             cx,
@@ -45005,7 +45005,7 @@ async fn test_columnar_selection_with_multibyte_chars(cx: &mut TestAppContext) {
             SelectPhase::Update {
                 position: DisplayPoint::new(DisplayRow(4), 1),
                 goal_column: 1,
-                scroll_delta: gpui::Point::default(),
+                scroll_delta: gpui_types::Point::default(),
             },
             window,
             cx,
@@ -45021,7 +45021,7 @@ async fn test_columnar_selection_with_multibyte_chars(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_columnar_selection_past_end_of_line(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -45053,7 +45053,7 @@ async fn test_columnar_selection_past_end_of_line(cx: &mut TestAppContext) {
             SelectPhase::Update {
                 position: DisplayPoint::new(DisplayRow(1), 2),
                 goal_column: 8,
-                scroll_delta: gpui::Point::default(),
+                scroll_delta: gpui_types::Point::default(),
             },
             window,
             cx,
@@ -45083,7 +45083,7 @@ async fn test_columnar_selection_past_end_of_line(cx: &mut TestAppContext) {
             SelectPhase::Update {
                 position: DisplayPoint::new(DisplayRow(2), 4),
                 goal_column: 4,
-                scroll_delta: gpui::Point::default(),
+                scroll_delta: gpui_types::Point::default(),
             },
             window,
             cx,
@@ -45097,7 +45097,7 @@ async fn test_columnar_selection_past_end_of_line(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_columnar_selection_with_soft_wrap(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -45137,7 +45137,7 @@ async fn test_columnar_selection_with_soft_wrap(cx: &mut TestAppContext) {
             SelectPhase::Update {
                 position: DisplayPoint::new(second_line_row, 1),
                 goal_column: 1,
-                scroll_delta: gpui::Point::default(),
+                scroll_delta: gpui_types::Point::default(),
             },
             window,
             cx,
@@ -45165,7 +45165,7 @@ async fn test_columnar_selection_with_soft_wrap(cx: &mut TestAppContext) {
             SelectPhase::Update {
                 position: DisplayPoint::new(second_line_row, 0),
                 goal_column: 0,
-                scroll_delta: gpui::Point::default(),
+                scroll_delta: gpui_types::Point::default(),
             },
             window,
             cx,
@@ -45178,7 +45178,7 @@ async fn test_columnar_selection_with_soft_wrap(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_markdown_block_quote(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
 
@@ -45287,7 +45287,7 @@ fn assert_select_delimiters(around: bool, before: &str, after: &str, cx: &mut Ed
     cx.assert_editor_state(after);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_delimiters(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_typescript(Default::default(), cx).await;
@@ -45340,7 +45340,7 @@ async fn test_select_delimiters(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_delimiters_in_markdown(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;
@@ -45423,7 +45423,7 @@ async fn test_select_delimiters_in_markdown(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_select_delimiters_expansion(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorLspTestContext::new_typescript(Default::default(), cx).await;
@@ -45451,7 +45451,7 @@ async fn test_select_delimiters_expansion(cx: &mut TestAppContext) {
     cx.assert_editor_state("foo(«x, { a: 1 }ˇ»);");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_in_preview_key_context(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     cx.update(|cx| {
@@ -45528,7 +45528,7 @@ async fn setup_range_format_test_with_capabilities(
 ) -> (
     Entity<Project>,
     Entity<Editor>,
-    &mut gpui::VisualTestContext,
+    &mut gpui_runtime::VisualTestContext,
     lsp::FakeLanguageServer,
 ) {
     init_test(cx, |_| {});
@@ -45573,7 +45573,7 @@ async fn setup_range_format_test(
 ) -> (
     Entity<Project>,
     Entity<Editor>,
-    &mut gpui::VisualTestContext,
+    &mut gpui_runtime::VisualTestContext,
     lsp::FakeLanguageServer,
 ) {
     setup_range_format_test_with_capabilities(
@@ -45598,7 +45598,7 @@ async fn setup_range_format_test_with_git<'a>(
 ) -> (
     Entity<Project>,
     Entity<Editor>,
-    &'a mut gpui::VisualTestContext,
+    &'a mut gpui_runtime::VisualTestContext,
     lsp::FakeLanguageServer,
 ) {
     init_test(cx, |_| {});
@@ -45987,7 +45987,7 @@ fn last_display_row(editor: &Entity<Editor>, cx: &mut VisualTestContext) -> Disp
     });
     display_row_for(editor, last_point, cx)
 }
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_scroll_range_hold_freezes_before_first_settled_frame(cx: &mut TestAppContext) {
     init_test(cx, |_| {});
     let mut cx = EditorTestContext::new(cx).await;

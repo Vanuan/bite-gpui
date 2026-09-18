@@ -1,5 +1,5 @@
 use criterion::{BenchmarkId, Criterion, black_box, criterion_group, criterion_main};
-use gpui::rgba;
+use gpui_types::rgba;
 use language::build_highlight_map;
 use theme::SyntaxTheme;
 

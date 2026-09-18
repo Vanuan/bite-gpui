@@ -402,11 +402,11 @@ mod test {
     use super::*;
     use std::path::PathBuf;
 
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::FakeFs;
     use serde_json::json;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_kernelspecs(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(

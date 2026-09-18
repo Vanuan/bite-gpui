@@ -2,7 +2,7 @@
 //!
 //! It deals with multiple hosts, distinguished by [`RemoteHostLocation`].
 //! Each [`crate::Project`] and `HeadlessProject` should call [`init_global`], if wants to establish the trust mechanism.
-//! This will set up a [`gpui::Global`] with [`TrustedWorktrees`] entity that will persist, restore and allow querying for worktree trust.
+//! This will set up a [`gpui_runtime::Global`] with [`TrustedWorktrees`] entity that will persist, restore and allow querying for worktree trust.
 //! It's also possible to subscribe on [`TrustedWorktreesEvent`] events of this entity to track trust changes dynamically.
 //!
 //! The implementation can synchronize trust information with the remote hosts: currently, WSL and SSH.

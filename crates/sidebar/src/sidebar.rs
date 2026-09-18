@@ -789,7 +789,7 @@ pub struct Sidebar {
     thread_last_accessed: HashMap<ThreadId, DateTime<Utc>>,
     terminal_last_accessed: HashMap<TerminalId, DateTime<Utc>>,
     thread_switcher: Option<Entity<ThreadSwitcher>>,
-    _thread_switcher_subscriptions: Vec<gpui::Subscription>,
+    _thread_switcher_subscriptions: Vec<gpui_runtime::Subscription>,
     pending_thread_activation: Option<agent_ui::ThreadId>,
     /// Persists live thread statuses across rebuilds so that Running→Completed
     /// transitions can be detected even when the group is collapsed (and
@@ -806,8 +806,8 @@ pub struct Sidebar {
     project_header_new_thread_menu_handles: HashMap<usize, PopoverMenuHandle<ContextMenu>>,
     project_header_menu_ix: Option<usize>,
     worktree_default_branches: HashMap<ProjectGroupKey, DefaultBranchCache>,
-    _subscriptions: Vec<gpui::Subscription>,
-    _draft_editor_observations: Vec<gpui::Subscription>,
+    _subscriptions: Vec<gpui_runtime::Subscription>,
+    _draft_editor_observations: Vec<gpui_runtime::Subscription>,
     update_task: Option<Task<()>>,
     /// For the thread import banners, if there is just one we show "Import
     /// Threads" but if we are showing both the external agents and other
@@ -921,7 +921,7 @@ impl Sidebar {
             focus_handle,
             filter_editor,
             rename_editor,
-            list_state: ListState::new(0, gpui::ListAlignment::Top, px(1000.)),
+            list_state: ListState::new(0, gpui_runtime::ListAlignment::Top, px(1000.)),
             contents: SidebarContents::default(),
             selection: None,
             active_entry: None,
@@ -2471,7 +2471,7 @@ impl Sidebar {
                 }
             })
             .on_click(
-                cx.listener(move |this, event: &gpui::ClickEvent, window, cx| {
+                cx.listener(move |this, event: &gpui_runtime::ClickEvent, window, cx| {
                     if event.modifiers().secondary() {
                         this.activate_or_open_workspace_for_group(&key_for_focus, window, cx);
                     } else if !this.has_filter_query(cx) {
@@ -2570,7 +2570,7 @@ impl Sidebar {
         .trigger_with_tooltip(button, move |_, cx| {
             Tooltip::for_action_in("Start New Agent Thread", &NewThread, &focus_handle, cx)
         })
-        .anchor(gpui::Anchor::TopLeft)
+        .anchor(gpui_types::Anchor::TopLeft)
         .on_open(Rc::new({
             let this = this.clone();
             move |_window, cx| {
@@ -2724,8 +2724,8 @@ impl Sidebar {
                 },
             ))
         })
-        .anchor(gpui::Anchor::TopRight)
-        .offset(gpui::Point {
+        .anchor(gpui_types::Anchor::TopRight)
+        .offset(gpui_types::Point {
             x: px(0.),
             y: px(1.),
         })
@@ -3149,7 +3149,7 @@ impl Sidebar {
                 let this = this.clone();
 
                 window
-                    .subscribe(&menu, cx, move |_, _: &gpui::DismissEvent, _window, cx| {
+                    .subscribe(&menu, cx, move |_, _: &gpui_runtime::DismissEvent, _window, cx| {
                         this.update(cx, |sidebar, cx| {
                             sidebar.project_header_menu_ix = None;
                             cx.notify();
@@ -3160,8 +3160,8 @@ impl Sidebar {
 
                 Some(menu)
             })
-            .anchor(gpui::Anchor::TopRight)
-            .offset(gpui::Point {
+            .anchor(gpui_types::Anchor::TopRight)
+            .offset(gpui_types::Point {
                 x: px(0.),
                 y: px(1.),
             })
@@ -4949,7 +4949,7 @@ impl Sidebar {
 
     async fn wait_for_archive_workspace_metadata(
         workspace: &Entity<Workspace>,
-        cx: &mut gpui::AsyncApp,
+        cx: &mut gpui_runtime::AsyncApp,
     ) {
         let scans_complete =
             workspace.read_with(cx, |workspace, cx| workspace.worktree_scans_complete(cx));
@@ -5645,7 +5645,7 @@ impl Sidebar {
     async fn archive_worktree_roots(
         roots: Vec<thread_worktree_archive::RootPlan>,
         cancel_rx: async_channel::Receiver<()>,
-        cx: &mut gpui::AsyncApp,
+        cx: &mut gpui_runtime::AsyncApp,
     ) -> anyhow::Result<ArchiveWorktreeOutcome> {
         let mut completed_persists: Vec<(i64, thread_worktree_archive::RootPlan)> = Vec::new();
 
@@ -6145,13 +6145,13 @@ impl Sidebar {
         subscriptions.push(cx.subscribe_in(
             &thread_switcher,
             window,
-            |this, _emitter, _event: &gpui::DismissEvent, _window, cx| {
+            |this, _emitter, _event: &gpui_runtime::DismissEvent, _window, cx| {
                 this.dismiss_thread_switcher(cx);
             },
         ));
 
         let focus = thread_switcher.focus_handle(cx);
-        let overlay_view = gpui::AnyView::from(thread_switcher.clone());
+        let overlay_view = gpui_runtime::AnyView::from(thread_switcher.clone());
 
         // Replay the initial preview that was emitted during construction
         // before subscriptions were wired up.
@@ -6713,11 +6713,11 @@ impl Sidebar {
                     .selected_style(ButtonStyle::Tinted(TintColor::Accent)),
                 |_window, cx| Tooltip::for_action("Add Project", &OpenRecent::default(), cx),
             )
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(-2.0),
                 y: px(-2.0),
             })
-            .anchor(gpui::Anchor::BottomRight)
+            .anchor(gpui_types::Anchor::BottomRight)
     }
 
     fn new_thread_in_group(
@@ -7403,14 +7403,14 @@ impl Sidebar {
 
         sidebar_side_context_menu("sidebar-toggle-menu", _cx)
             .anchor(if on_right {
-                gpui::Anchor::BottomRight
+                gpui_types::Anchor::BottomRight
             } else {
-                gpui::Anchor::BottomLeft
+                gpui_types::Anchor::BottomLeft
             })
             .attach(if on_right {
-                gpui::Anchor::TopRight
+                gpui_types::Anchor::TopRight
             } else {
-                gpui::Anchor::TopLeft
+                gpui_types::Anchor::TopLeft
             })
             .trigger(move |_is_active, _window, _cx| {
                 let icon = if on_right {
@@ -7861,7 +7861,7 @@ impl WorkspaceSidebar for Sidebar {
     }
 }
 
-impl gpui::EventEmitter<workspace::SidebarEvent> for Sidebar {}
+impl gpui_runtime::EventEmitter<workspace::SidebarEvent> for Sidebar {}
 
 impl Focusable for Sidebar {
     fn focus_handle(&self, _cx: &App) -> FocusHandle {
@@ -8077,8 +8077,8 @@ fn all_thread_infos_for_workspace(
 pub fn dump_workspace_info(
     workspace: &mut Workspace,
     _: &DumpWorkspaceInfo,
-    window: &mut gpui::Window,
-    cx: &mut gpui::Context<Workspace>,
+    window: &mut gpui_runtime::Window,
+    cx: &mut gpui_runtime::Context<Workspace>,
 ) {
     use std::fmt::Write;
 
@@ -8086,7 +8086,7 @@ pub fn dump_workspace_info(
     let this_entity = cx.entity();
 
     let multi_workspace = workspace.multi_workspace().and_then(|weak| weak.upgrade());
-    let workspaces: Vec<gpui::Entity<Workspace>> = match &multi_workspace {
+    let workspaces: Vec<gpui_runtime::Entity<Workspace>> = match &multi_workspace {
         Some(mw) => mw.read(cx).workspaces().cloned().collect(),
         None => vec![this_entity.clone()],
     };
@@ -8190,7 +8190,7 @@ pub fn dump_workspace_info(
     .detach_and_log_err(cx);
 }
 
-fn dump_single_workspace(workspace: &Workspace, output: &mut String, cx: &gpui::App) {
+fn dump_single_workspace(workspace: &Workspace, output: &mut String, cx: &gpui_runtime::App) {
     use std::fmt::Write;
 
     let workspace_db_id = workspace.database_id();

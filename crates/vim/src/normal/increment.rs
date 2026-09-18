@@ -435,8 +435,8 @@ mod test {
         test::{NeovimBackedTestContext, VimTestContext},
     };
 
-    #[gpui::test]
-    async fn test_increment(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -467,8 +467,8 @@ mod test {
             "});
     }
 
-    #[gpui::test]
-    async fn test_increment_with_dot(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_with_dot(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -491,8 +491,8 @@ mod test {
         cx.simulate("ctrl-x", "0.8ˇ1.46").await.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_increment_with_leading_zeros(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_with_leading_zeros(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -510,8 +510,8 @@ mod test {
             "});
     }
 
-    #[gpui::test]
-    async fn test_increment_with_leading_zeros_and_zero(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_with_leading_zeros_and_zero(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -529,8 +529,8 @@ mod test {
             "});
     }
 
-    #[gpui::test]
-    async fn test_increment_with_changing_leading_zeros(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_with_changing_leading_zeros(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -548,8 +548,8 @@ mod test {
             "});
     }
 
-    #[gpui::test]
-    async fn test_increment_with_two_dots(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_with_two_dots(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -567,8 +567,8 @@ mod test {
             "});
     }
 
-    #[gpui::test]
-    async fn test_increment_sign_change(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_sign_change(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
                 ˇ0
@@ -584,8 +584,8 @@ mod test {
                 "});
     }
 
-    #[gpui::test]
-    async fn test_increment_sign_change_with_leading_zeros(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_sign_change_with_leading_zeros(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
                 00ˇ1
@@ -605,8 +605,8 @@ mod test {
                 "});
     }
 
-    #[gpui::test]
-    async fn test_increment_bin_wrapping_and_padding(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_bin_wrapping_and_padding(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
                     0b111111111111111111111111111111111111111111111111111111111111111111111ˇ1
@@ -632,8 +632,8 @@ mod test {
                     "});
     }
 
-    #[gpui::test]
-    async fn test_increment_hex_wrapping_and_padding(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_hex_wrapping_and_padding(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
                     0xfffffffffffffffffffˇf
@@ -658,8 +658,8 @@ mod test {
                     "});
     }
 
-    #[gpui::test]
-    async fn test_increment_wrapping(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_wrapping(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
                     1844674407370955161ˇ9
@@ -688,8 +688,8 @@ mod test {
                     "});
     }
 
-    #[gpui::test]
-    async fn test_increment_inline(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_inline(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
                     inline0x3ˇ9u32
@@ -710,8 +710,8 @@ mod test {
                     "});
     }
 
-    #[gpui::test]
-    async fn test_increment_hex_casing(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_hex_casing(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
                         0xFˇa
@@ -728,8 +728,8 @@ mod test {
                     "});
     }
 
-    #[gpui::test]
-    async fn test_increment_radix(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_radix(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.simulate("ctrl-a", "ˇ total: 0xff")
@@ -747,8 +747,8 @@ mod test {
         cx.simulate("ctrl-a", "banˇana").await.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_increment_steps(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_steps(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -792,8 +792,8 @@ mod test {
             30"});
     }
 
-    #[gpui::test]
-    async fn test_increment_negative_numbers(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_negative_numbers(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // vim folds a leading '-' into the number, so ctrl-a on the `05` here
@@ -808,8 +808,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_increment_toggle(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_toggle(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("let enabled = trˇue;", Mode::Normal);
@@ -867,8 +867,8 @@ mod test {
         cx.assert_state("let enabled = ˇOff;", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_increment_order(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_order(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("aaˇa false 1 2 3", Mode::Normal);
@@ -892,8 +892,8 @@ mod test {
         cx.assert_state("⚡️ˇ⚡️", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_increment_visual_partial_number(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_visual_partial_number(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇ123").await;
@@ -906,8 +906,8 @@ mod test {
         cx.shared_state().await.assert_eq(indoc! {"ˇ144\n144\n144"});
     }
 
-    #[gpui::test]
-    async fn test_increment_markdown_list_markers_multiline(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_markdown_list_markers_multiline(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("# Title\nˇ1. item\n2. item\n3. item")
@@ -930,8 +930,8 @@ mod test {
             .assert_eq("# Title\n2. item\nˇ2. item\n3. item");
     }
 
-    #[gpui::test]
-    async fn test_increment_with_multibyte_characters(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_increment_with_multibyte_characters(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Test cursor after a multibyte character - this would panic before the fix

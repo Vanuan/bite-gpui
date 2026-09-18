@@ -304,7 +304,7 @@ impl Onboarding {
 impl Render for Onboarding {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         div()
-            .image_cache(gpui::retain_all("onboarding-page"))
+            .image_cache(gpui_runtime::retain_all("onboarding-page"))
             .key_context({
                 let mut ctx = KeyContext::new_with_defaults();
                 ctx.add("Onboarding");
@@ -388,7 +388,7 @@ impl Render for Onboarding {
 impl EventEmitter<ItemEvent> for Onboarding {}
 
 impl Focusable for Onboarding {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }

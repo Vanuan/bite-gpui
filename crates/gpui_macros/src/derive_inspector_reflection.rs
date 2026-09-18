@@ -46,7 +46,7 @@ fn generate_reflected_trait(trait_item: ItemTrait) -> TokenStream {
     let inspector_reflection_path = if is_called_from_gpui_crate(call_site) {
         quote! { crate::inspector_reflection }
     } else {
-        quote! { ::gpui::inspector_reflection }
+        quote! { ::gpui_runtime::inspector_reflection }
     };
 
     // Collect method information for methods of form fn name(self) -> Self or fn name(mut self) -> Self

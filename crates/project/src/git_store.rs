@@ -11398,7 +11398,7 @@ mod tests {
         (delegate, prompt_receiver)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn ending_remote_operation_cancels_active_askpass(cx: &mut TestAppContext) {
         let delegates = RemoteAskPassDelegates::default();
         let (delegate, mut prompts) = test_askpass_delegate(cx);
@@ -11423,7 +11423,7 @@ mod tests {
         drop(response_sender);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn successful_remote_askpass_allows_another_prompt(cx: &mut TestAppContext) {
         let delegates = RemoteAskPassDelegates::default();
         let (delegate, mut prompts) = test_askpass_delegate(cx);
@@ -11465,7 +11465,7 @@ mod tests {
         drop(operation);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn concurrent_remote_askpass_request_is_rejected(cx: &mut TestAppContext) {
         let delegates = RemoteAskPassDelegates::default();
         let (delegate, mut prompts) = test_askpass_delegate(cx);
@@ -11492,7 +11492,7 @@ mod tests {
         drop(response_sender);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn remote_askpass_is_rejected_after_operation_ends(cx: &mut TestAppContext) {
         let delegates = RemoteAskPassDelegates::default();
         let (delegate, mut prompts) = test_askpass_delegate(cx);
@@ -11508,7 +11508,7 @@ mod tests {
         assert!(prompts.next().now_or_never().is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn late_remote_askpass_response_does_not_restore_operation(cx: &mut TestAppContext) {
         let delegates = RemoteAskPassDelegates::default();
         let (delegate, mut prompts) = test_askpass_delegate(cx);
@@ -11555,7 +11555,7 @@ mod tests {
         assert!(!is_submodule_git_dir(Path::new("/Foo/modules/Bar")));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_permalink_for_file_without_selection(cx: &mut TestAppContext) {
         use util::rel_path::rel_path;
 
@@ -11614,7 +11614,7 @@ mod tests {
         assert!(permalink.fragment().is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolve_git_worktree_to_main_repo_ignores_submodule(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -11642,7 +11642,7 @@ mod tests {
         assert_eq!(resolved, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_decode_git_text_windows_1251_one_line_change(cx: &mut TestAppContext) {
         let old_text = "строка один\nстрока два\n";
         let new_text = "строка один\nстрока три\n";
@@ -11667,7 +11667,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_uncommitted_diff_skips_symlinks(cx: &mut TestAppContext) {
         use util::rel_path::rel_path;
 
@@ -11744,7 +11744,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_merge_base_status_uses_worktree_contents(cx: &mut TestAppContext) {
         use util::rel_path::rel_path;
 
@@ -11883,7 +11883,7 @@ mod tests {
         assert!(weak_display_diff_list.upgrade().is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_append_pattern_to_ignore_file_creates_and_deduplicates(cx: &mut TestAppContext) {
         let fs: Arc<dyn Fs> = FakeFs::new(cx.executor());
         let path = PathBuf::from("/root/.gitignore");
@@ -11907,7 +11907,7 @@ mod tests {
         assert_eq!(fs.load(&path).await.unwrap(), "build/\ntarget/\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_append_pattern_adds_newline_before_pattern_when_missing(cx: &mut TestAppContext) {
         let fs: Arc<dyn Fs> = FakeFs::new(cx.executor());
         let path = PathBuf::from("/root/.gitignore");

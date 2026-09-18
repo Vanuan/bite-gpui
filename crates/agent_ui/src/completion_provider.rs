@@ -2848,7 +2848,7 @@ fn completion_text_for_terminal_selections(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     #[test]
     fn test_prompt_completion_parse() {
@@ -3259,7 +3259,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_filter_sessions_by_query(cx: &mut TestAppContext) {
         let alpha = SessionMatch {
             session_id: acp::SessionId::new("session-alpha"),
@@ -3287,7 +3287,7 @@ mod tests {
         assert_eq!(results[0].session_id, alpha.session_id);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_files_path_distance_ordering(cx: &mut TestAppContext) {
         use project::Project;
         use serde_json::json;
@@ -3365,7 +3365,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_source_read_selection_editor_whole_line(cx: &mut TestAppContext) {
         use editor::Editor;
         use project::Project;

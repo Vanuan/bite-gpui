@@ -18,7 +18,7 @@ impl EventEmitter<DismissEvent> for OpenUrlModal {}
 impl ModalView for OpenUrlModal {}
 
 impl Focusable for OpenUrlModal {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.editor.focus_handle(cx)
     }
 }

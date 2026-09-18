@@ -232,8 +232,8 @@ mod test {
         test::{NeovimBackedTestContext, VimTestContext},
     };
 
-    #[gpui::test]
-    async fn test_digraph_insert_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_digraph_insert_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("Hellˇo").await;
@@ -249,8 +249,8 @@ mod test {
         cx.shared_state().await.assert_eq("Hellˇöo");
     }
 
-    #[gpui::test]
-    async fn test_digraph_insert_multicursor(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_digraph_insert_multicursor(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: VimTestContext = VimTestContext::new(cx, true).await;
 
         cx.set_state("Hellˇo wˇorld", Mode::Normal);
@@ -258,8 +258,8 @@ mod test {
         cx.assert_state("Helloˇö woˇörld", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_digraph_replace(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_digraph_replace(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("Hellˇo").await;
@@ -267,8 +267,8 @@ mod test {
         cx.shared_state().await.assert_eq("Hellˇö");
     }
 
-    #[gpui::test]
-    async fn test_digraph_find(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_digraph_find(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇHellö world").await;
@@ -280,8 +280,8 @@ mod test {
         cx.shared_state().await.assert_eq("Helˇlö world");
     }
 
-    #[gpui::test]
-    async fn test_digraph_replace_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_digraph_replace_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇHello").await;
@@ -292,8 +292,8 @@ mod test {
         cx.shared_state().await.assert_eq("áèïõˇū");
     }
 
-    #[gpui::test]
-    async fn test_digraph_custom(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_digraph_custom(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: VimTestContext = VimTestContext::new(cx, true).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {
@@ -315,8 +315,8 @@ mod test {
         cx.assert_state("ˇ👨‍💻", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_digraph_keymap_conflict(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_digraph_keymap_conflict(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("Hellˇo").await;
@@ -324,8 +324,8 @@ mod test {
         cx.shared_state().await.assert_eq("Helloˇş");
     }
 
-    #[gpui::test]
-    async fn test_ctrl_v(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_ctrl_v(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇ").await;
@@ -341,8 +341,8 @@ mod test {
         cx.shared_state().await.assert_eq("\x00je🙀 ˇ");
     }
 
-    #[gpui::test]
-    async fn test_ctrl_v_escape(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_ctrl_v_escape(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state("ˇ").await;
         cx.simulate_shared_keystrokes("i ctrl-v 9 escape").await;
@@ -351,8 +351,8 @@ mod test {
         cx.shared_state().await.assert_eq("\x1bˇ\t");
     }
 
-    #[gpui::test]
-    async fn test_ctrl_v_control(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_ctrl_v_control(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx: NeovimBackedTestContext = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state("ˇ").await;
         cx.simulate_shared_keystrokes("i ctrl-v ctrl-d").await;

@@ -3,7 +3,7 @@ use acp_thread::{AcpThread, AgentThreadEntry, ToolCall, ToolCallStatus};
 use agent_client_protocol::schema::v1 as acp;
 use client::RefreshLlmTokenListener;
 use futures::{FutureExt, StreamExt, channel::mpsc, select};
-use gpui::AppContext;
+use gpui_runtime::AppContext;
 use gpui::{Entity, TestAppContext};
 use indoc::indoc;
 use project::{FakeFs, Project};
@@ -356,27 +356,27 @@ macro_rules! common_e2e_tests {
         mod common_e2e {
             use super::*;
 
-            #[::gpui::test]
+            #[::gpui_runtime::test]
             #[cfg_attr(not(feature = "e2e"), ignore)]
-            async fn basic(cx: &mut ::gpui::TestAppContext) {
+            async fn basic(cx: &mut ::gpui_runtime::TestAppContext) {
                 $crate::e2e_tests::test_basic($server, cx).await;
             }
 
-            #[::gpui::test]
+            #[::gpui_runtime::test]
             #[cfg_attr(not(feature = "e2e"), ignore)]
-            async fn path_mentions(cx: &mut ::gpui::TestAppContext) {
+            async fn path_mentions(cx: &mut ::gpui_runtime::TestAppContext) {
                 $crate::e2e_tests::test_path_mentions($server, cx).await;
             }
 
-            #[::gpui::test]
+            #[::gpui_runtime::test]
             #[cfg_attr(not(feature = "e2e"), ignore)]
-            async fn tool_call(cx: &mut ::gpui::TestAppContext) {
+            async fn tool_call(cx: &mut ::gpui_runtime::TestAppContext) {
                 $crate::e2e_tests::test_tool_call($server, cx).await;
             }
 
-            #[::gpui::test]
+            #[::gpui_runtime::test]
             #[cfg_attr(not(feature = "e2e"), ignore)]
-            async fn tool_call_with_permission(cx: &mut ::gpui::TestAppContext) {
+            async fn tool_call_with_permission(cx: &mut ::gpui_runtime::TestAppContext) {
                 $crate::e2e_tests::test_tool_call_with_permission(
                     $server,
                     ::agent_client_protocol::schema::v1::PermissionOptionId::new($allow_option_id),
@@ -385,15 +385,15 @@ macro_rules! common_e2e_tests {
                 .await;
             }
 
-            #[::gpui::test]
+            #[::gpui_runtime::test]
             #[cfg_attr(not(feature = "e2e"), ignore)]
-            async fn cancel(cx: &mut ::gpui::TestAppContext) {
+            async fn cancel(cx: &mut ::gpui_runtime::TestAppContext) {
                 $crate::e2e_tests::test_cancel($server, cx).await;
             }
 
-            #[::gpui::test]
+            #[::gpui_runtime::test]
             #[cfg_attr(not(feature = "e2e"), ignore)]
-            async fn thread_drop(cx: &mut ::gpui::TestAppContext) {
+            async fn thread_drop(cx: &mut ::gpui_runtime::TestAppContext) {
                 $crate::e2e_tests::test_thread_drop($server, cx).await;
             }
         }

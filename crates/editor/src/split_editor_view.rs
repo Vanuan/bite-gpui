@@ -137,7 +137,7 @@ fn render_resize_handle(
                     }
                     cx.stop_propagation();
                 })
-                .on_drag(DraggedSplitHandle, |_, _, _, cx| cx.new(|_| gpui::Empty)),
+                .on_drag(DraggedSplitHandle, |_, _, _, cx| cx.new(|_| gpui_runtime::Empty)),
         )
         .into_any_element()
 }
@@ -273,7 +273,7 @@ impl Element for SplitBufferHeadersElement {
     type RequestLayoutState = ();
     type PrepaintState = SplitBufferHeadersPrepaintState;
 
-    fn id(&self) -> Option<gpui::ElementId> {
+    fn id(&self) -> Option<gpui_runtime::ElementId> {
         Some("split-buffer-headers".into())
     }
 
@@ -288,8 +288,8 @@ impl Element for SplitBufferHeadersElement {
         window: &mut Window,
         _cx: &mut App,
     ) -> (LayoutId, Self::RequestLayoutState) {
-        let mut style = gpui::Style::default();
-        style.position = gpui::Position::Absolute;
+        let mut style = gpui_runtime::Style::default();
+        style.position = gpui_runtime::Position::Absolute;
         style.inset.top = DefiniteLength::Fraction(0.0).into();
         style.inset.left = DefiniteLength::Fraction(0.0).into();
         style.size.width = Length::Definite(DefiniteLength::Fraction(1.0));
@@ -530,7 +530,7 @@ impl SplitBufferHeadersElement {
         &self,
         StickyHeaderExcerpt { excerpt }: StickyHeaderExcerpt<'_>,
         snapshot: &EditorSnapshot,
-        scroll_position: gpui::Point<ScrollOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
         bounds: Bounds<Pixels>,
         available_width: Pixels,
         line_height: Pixels,
@@ -616,7 +616,7 @@ impl SplitBufferHeadersElement {
     fn build_non_sticky_headers(
         &self,
         snapshot: &EditorSnapshot,
-        scroll_position: gpui::Point<ScrollOffset>,
+        scroll_position: gpui_types::Point<ScrollOffset>,
         bounds: Bounds<Pixels>,
         available_width: Pixels,
         line_height: Pixels,
@@ -682,8 +682,8 @@ impl SplitBufferHeadersElement {
 
     fn prepaint_header(
         header: &mut AnyElement,
-        origin: gpui::Point<Pixels>,
-        available_size: gpui::Size<AvailableSpace>,
+        origin: gpui_types::Point<Pixels>,
+        available_size: gpui_types::Size<AvailableSpace>,
         bounds: Bounds<Pixels>,
         window: &mut Window,
         cx: &mut App,

@@ -6,7 +6,7 @@ use http_client::FakeHttpClient;
 use rpc::proto::{self};
 use settings::SettingsStore;
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_update_channels(cx: &mut App) {
     let channel_store = init_test(cx);
 
@@ -78,7 +78,7 @@ fn test_update_channels(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_update_channels_order_independent(cx: &mut App) {
     /// Based on: https://stackoverflow.com/a/59939809
     fn unique_permutations<T: Clone>(items: Vec<T>) -> Vec<Vec<T>> {
@@ -174,7 +174,7 @@ fn test_update_channels_order_independent(cx: &mut App) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_dangling_channel_paths(cx: &mut App) {
     let channel_store = init_test(cx);
 

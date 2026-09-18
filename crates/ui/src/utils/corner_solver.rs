@@ -1,4 +1,4 @@
-use gpui::Pixels;
+use gpui_types::Pixels;
 
 /// Calculates the child’s content-corner radius for a single nested level.
 ///

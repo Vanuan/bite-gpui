@@ -278,7 +278,7 @@ mod tests {
     use std::future::Future;
     use std::pin::Pin;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_authenticate_awaits_initial_load(cx: &mut TestAppContext) {
         let creds_json = serde_json::json!({
             "access_token": "fresh_access",

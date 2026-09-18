@@ -51,7 +51,7 @@ impl DiffHunkRenderer for StagedDiffHunkRenderer {
             .git
             .show_stage_restore_buttons
         {
-            return gpui::Empty.into_any_element();
+            return gpui_runtime::Empty.into_any_element();
         }
         let hunk_range = hunk_range.start..hunk_range.start;
         h_flex()
@@ -321,7 +321,7 @@ impl Item for StagedDiff {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.diff.read(cx).for_each_project_item(cx, f);
     }
@@ -407,7 +407,7 @@ impl Item for StagedDiff {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<DiffMultibuffer>() {
@@ -718,7 +718,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_staged_changes_deploy_as_a_separate_staged_diff_item(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -817,7 +817,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_staged_unstages_from_staged_view(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -945,7 +945,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_staged_diff_restores_as_staged_diff(cx: &mut TestAppContext) {
         init_test(cx);
 

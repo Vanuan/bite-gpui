@@ -404,7 +404,7 @@ mod tests {
         Editor, LSP_REQUEST_DEBOUNCE_TIMEOUT, actions::MoveToEnd, editor_tests::init_test,
     };
 
-    fn extract_color_inlays(editor: &Editor, cx: &gpui::App) -> Vec<Rgba> {
+    fn extract_color_inlays(editor: &Editor, cx: &gpui_runtime::App) -> Vec<Rgba> {
         editor
             .all_inlays(cx)
             .into_iter()
@@ -413,7 +413,7 @@ mod tests {
             .collect()
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_document_colors(cx: &mut TestAppContext) {
         let expected_color = Rgba {
             r: 0.33,

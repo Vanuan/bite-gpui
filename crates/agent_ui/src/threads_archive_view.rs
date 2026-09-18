@@ -146,7 +146,7 @@ pub struct ThreadsArchiveView {
     hovered_index: Option<usize>,
     preserve_selection_on_next_update: bool,
     filter_editor: Entity<Editor>,
-    _subscriptions: Vec<gpui::Subscription>,
+    _subscriptions: Vec<gpui_runtime::Subscription>,
     _refresh_history_task: Task<()>,
     workspace: WeakEntity<Workspace>,
     agent_connection_store: WeakEntity<AgentConnectionStore>,
@@ -211,7 +211,7 @@ impl ThreadsArchiveView {
         let mut this = Self {
             _history_subscription: Subscription::new(|| {}),
             focus_handle,
-            list_state: ListState::new(0, gpui::ListAlignment::Top, px(1000.)),
+            list_state: ListState::new(0, gpui_runtime::ListAlignment::Top, px(1000.)),
             items: Vec::new(),
             selection: None,
             hovered_index: None,
@@ -1353,7 +1353,7 @@ impl PickerDelegate for ProjectPickerDelegate {
             })
             .collect();
 
-        let mut sibling_matches = gpui::block_on(fuzzy::match_strings(
+        let mut sibling_matches = gpui_platform::block_on(fuzzy::match_strings(
             &sibling_candidates,
             query,
             smart_case,
@@ -1389,7 +1389,7 @@ impl PickerDelegate for ProjectPickerDelegate {
             })
             .collect();
 
-        let mut recent_matches = gpui::block_on(fuzzy::match_strings(
+        let mut recent_matches = gpui_platform::block_on(fuzzy::match_strings(
             &recent_candidates,
             query,
             smart_case,

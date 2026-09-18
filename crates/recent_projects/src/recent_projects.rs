@@ -581,7 +581,7 @@ pub fn add_wsl_distro(
     connection_options: &remote::WslConnectionOptions,
     cx: &App,
 ) {
-    use gpui::ReadGlobal;
+    use gpui_runtime::ReadGlobal;
     use settings::SettingsStore;
 
     let distro_name = connection_options.distro_name.clone();
@@ -1907,8 +1907,8 @@ impl PickerDelegate for RecentProjectsDelegate {
                 .child(
                     PopoverMenu::new("actions-menu-popover")
                         .with_handle(self.actions_menu_handle.clone())
-                        .anchor(gpui::Anchor::BottomRight)
-                        .offset(gpui::Point {
+                        .anchor(gpui_types::Anchor::BottomRight)
+                        .offset(gpui_types::Point {
                             x: px(0.0),
                             y: px(-2.0),
                         })
@@ -2668,7 +2668,7 @@ mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn this_window_project_icons_use_each_project_group_host(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2708,7 +2708,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn is_open_folder_distinguishes_local_and_remote(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2755,7 +2755,7 @@ mod tests {
         assert!(!delegate.is_open_folder(&remote_workspace));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn deleting_top_recent_project_preserves_scroll_position(cx: &mut TestAppContext) {
         let target = FIRST_RECENT_PROJECT;
         let (picker, cx) = build_picker(cx);
@@ -2774,7 +2774,7 @@ mod tests {
         assert_scroll_top_is(&picker, cx, scroll_top, "after redraw");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn deleting_middle_recent_project_preserves_scroll_position(cx: &mut TestAppContext) {
         let target = FIRST_RECENT_PROJECT + RECENT_PROJECT_COUNT / 2;
         let (picker, cx) = build_picker(cx);
@@ -2791,7 +2791,7 @@ mod tests {
         assert_scroll_top_is(&picker, cx, scroll_top, "after redraw");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn deleting_last_recent_project_preserves_scroll_position(cx: &mut TestAppContext) {
         let target = LAST_RECENT_PROJECT;
         let (picker, cx) = build_picker(cx);
@@ -2812,7 +2812,7 @@ mod tests {
         assert_pinned_to_bottom(&picker, cx, "after redraw");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_dev_container_action_with_single_config(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2877,7 +2877,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_dev_container_action_with_multiple_configs(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -2934,7 +2934,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_local_project_reuses_multi_workspace_window(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -3010,7 +3010,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_local_project_new_window_creates_new_window(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -3096,7 +3096,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remote_project_group_confirm_does_not_create_local_workspace(
         cx: &mut TestAppContext,
     ) {
@@ -3205,7 +3205,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_open_folder_rekeys_this_window_group(cx: &mut TestAppContext) {
         // Regression test: removing a folder from the active project while the
         // picker is open must update the "This Window" group so it no longer

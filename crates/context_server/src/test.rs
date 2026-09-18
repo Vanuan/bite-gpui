@@ -1,7 +1,7 @@
 use anyhow::Context as _;
 use collections::HashMap;
 use futures::{FutureExt, Stream, StreamExt as _, future::BoxFuture, lock::Mutex};
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use std::{pin::Pin, sync::Arc};
 
 use crate::{

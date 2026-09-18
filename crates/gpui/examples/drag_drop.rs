@@ -7,7 +7,7 @@ use gpui::{
     App, Bounds, Context, Half, Hsla, Pixels, Point, Window, WindowBounds, WindowOptions, div,
     prelude::*, px, rgb, size,
 };
-use gpui_platform::application;
+use gpui::application;
 
 #[derive(Clone, Copy)]
 struct DragInfo {
@@ -33,7 +33,7 @@ impl DragInfo {
 
 impl Render for DragInfo {
     fn render(&mut self, _: &mut Window, _: &mut Context<'_, Self>) -> impl IntoElement {
-        let size = gpui::size(px(120.), px(50.));
+        let size = gpui_backend::size(px(120.), px(50.));
 
         div()
             .pl(self.position.x - size.width.half())
@@ -153,6 +153,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

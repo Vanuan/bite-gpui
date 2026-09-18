@@ -1062,8 +1062,8 @@ mod tests {
         assert!(result.is_none());
     }
 
-    #[gpui::test]
-    fn test_terminal_init_command_filters_empty_without_trimming(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_terminal_init_command_filters_empty_without_trimming(cx: &mut gpui_runtime::App) {
         let store = SettingsStore::test(cx);
         cx.set_global(store);
         project::DisableAiSettings::register(cx);
@@ -1705,8 +1705,8 @@ mod tests {
         assert_eq!(permissions.default, ToolPermissionMode::Deny);
     }
 
-    #[gpui::test]
-    fn test_get_layout(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_get_layout(cx: &mut gpui_runtime::App) {
         let store = SettingsStore::test(cx);
         cx.set_global(store);
         project::DisableAiSettings::register(cx);
@@ -1760,8 +1760,8 @@ mod tests {
         assert_eq!(user_layout.project_panel_dock, Some(DockSide::Left));
     }
 
-    #[gpui::test]
-    fn test_set_layout_round_trip(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_set_layout_round_trip(cx: &mut gpui_runtime::App) {
         let store = SettingsStore::test(cx);
         cx.set_global(store);
         project::DisableAiSettings::register(cx);
@@ -1822,7 +1822,7 @@ mod tests {
         assert_eq!(restored_user_layout.outline_panel_dock, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_layout_minimal_diff(cx: &mut TestAppContext) {
         let fs = fs::FakeFs::new(cx.background_executor.clone());
         fs.save(
@@ -1892,7 +1892,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_backfill_editor_layout(cx: &mut TestAppContext) {
         let fs = fs::FakeFs::new(cx.background_executor.clone());
         // User has only customized project_panel to "right".

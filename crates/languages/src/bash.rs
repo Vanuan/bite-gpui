@@ -1,7 +1,7 @@
 use anyhow::Result;
 use async_trait::async_trait;
 use collections::HashMap;
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use language::{LanguageServerName, LspAdapter, LspAdapterDelegate, LspInstaller, Toolchain};
 use lsp::{LanguageServerBinary, Uri};
 use node_runtime::{NodeRuntime, VersionStrategy};
@@ -80,7 +80,7 @@ impl LspInstaller for BashLspAdapter {
         &self,
         delegate: &Arc<dyn LspAdapterDelegate>,
         _: Option<Toolchain>,
-        _: &gpui::AsyncApp,
+        _: &gpui_runtime::AsyncApp,
     ) -> Option<lsp::LanguageServerBinary> {
         let path = delegate.which(Self::PACKAGE_NAME.as_ref()).await?;
         let env = delegate.shell_env().await;
@@ -134,7 +134,7 @@ impl LspInstaller for BashLspAdapter {
         &self,
         _: &Arc<dyn LspAdapterDelegate>,
         _: bool,
-        _: &mut gpui::AsyncApp,
+        _: &mut gpui_runtime::AsyncApp,
     ) -> Result<Self::BinaryVersion> {
         self.node
             .npm_package_latest_version(Self::PACKAGE_NAME)
@@ -199,7 +199,7 @@ mod tests {
     use unindent::Unindent;
     use util::test::marked_text_offsets;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bash_autoindent(cx: &mut TestAppContext) {
         cx.executor().set_block_on_ticks(usize::MAX..=usize::MAX);
         let language = crate::language("bash", tree_sitter_bash::LANGUAGE.into());

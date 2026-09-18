@@ -1,6 +1,6 @@
 #![allow(missing_docs)]
 
-use gpui::Hsla;
+use gpui_types::Hsla;
 use serde::Deserialize;
 
 use crate::{amber, blue, jade, lime, orange, pink, purple, red};

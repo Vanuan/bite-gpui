@@ -5,7 +5,7 @@ use std::{
 
 use anyhow::Context;
 use collections::{BTreeMap, HashMap};
-use gpui::Rgba;
+use gpui_types::Rgba;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use settings_json::parse_json_with_comments;

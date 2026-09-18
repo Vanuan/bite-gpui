@@ -3054,10 +3054,10 @@ impl EntityInputHandler for Editor {
     fn bounds_for_range(
         &mut self,
         range_utf16: Range<usize>,
-        element_bounds: gpui::Bounds<Pixels>,
+        element_bounds: gpui_types::Bounds<Pixels>,
         window: &mut Window,
         cx: &mut Context<Self>,
-    ) -> Option<gpui::Bounds<Pixels>> {
+    ) -> Option<gpui_types::Bounds<Pixels>> {
         let text_layout_details = self.text_layout_details(window, cx);
         let CharacterDimensions {
             em_width,
@@ -3087,7 +3087,7 @@ impl EntityInputHandler for Editor {
 
     fn character_index_for_point(
         &mut self,
-        point: gpui::Point<Pixels>,
+        point: gpui_types::Point<Pixels>,
         _window: &mut Window,
         _cx: &mut Context<Self>,
     ) -> Option<usize> {

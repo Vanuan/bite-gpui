@@ -1685,7 +1685,7 @@ mod tests {
         AgentRegistryStore, RegistryAgent, RegistryAgentMetadata, RegistryNpxAgent,
     };
     use crate::worktree_store::{WorktreeIdCounter, WorktreeStore};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     #[cfg(feature = "test-support")]
     use http_client::{AsyncBody, FakeHttpClient, Response};
     use node_runtime::NodeRuntime;
@@ -1783,7 +1783,7 @@ mod tests {
     fn init_registry(
         cx: &mut TestAppContext,
         agents: Vec<RegistryAgent>,
-    ) -> gpui::Entity<AgentRegistryStore> {
+    ) -> gpui_runtime::Entity<AgentRegistryStore> {
         cx.update(|cx| AgentRegistryStore::init_test_global(cx, agents))
     }
 
@@ -1812,7 +1812,7 @@ mod tests {
         });
     }
 
-    fn create_agent_server_store(cx: &mut TestAppContext) -> gpui::Entity<AgentServerStore> {
+    fn create_agent_server_store(cx: &mut TestAppContext) -> gpui_runtime::Entity<AgentServerStore> {
         cx.update(|cx| {
             let fs: Arc<dyn Fs> = fs::FakeFs::new(cx.background_executor().clone());
             let worktree_store =
@@ -2028,7 +2028,7 @@ mod tests {
     }
 
     #[cfg(feature = "test-support")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn registry_raw_binary_checksum_invalidates_unverified_cache_and_blocks_mismatch(
         cx: &mut TestAppContext,
     ) {
@@ -2070,7 +2070,7 @@ mod tests {
     }
 
     #[cfg(feature = "test-support")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn registry_raw_binary_with_checksum_installs(cx: &mut TestAppContext) {
         init_test_settings(cx);
         cx.executor().allow_parking();
@@ -2104,7 +2104,7 @@ mod tests {
     }
 
     #[cfg(feature = "test-support")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn registry_raw_binary_without_checksum_installs(cx: &mut TestAppContext) {
         init_test_settings(cx);
         cx.executor().allow_parking();
@@ -2127,7 +2127,7 @@ mod tests {
         assert_eq!(std::fs::read(command.path).unwrap(), contents);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_stale_versioned_archive_cache_dirs(cx: &mut TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let base_dir = Path::new("/cache");
@@ -2184,7 +2184,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_version_change_sends_notification(cx: &mut TestAppContext) {
         init_test_settings(cx);
         let registry = init_registry(cx, vec![make_npx_agent("test-agent", "1.0.0")]);
@@ -2223,7 +2223,7 @@ mod tests {
         assert_eq!(rx.borrow().as_deref(), Some("2.0.0"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_same_version_preserves_tx(cx: &mut TestAppContext) {
         init_test_settings(cx);
         let registry = init_registry(cx, vec![make_npx_agent("test-agent", "1.0.0")]);
@@ -2261,7 +2261,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_no_tx_stored_does_not_panic_on_version_change(cx: &mut TestAppContext) {
         init_test_settings(cx);
         let registry = init_registry(cx, vec![make_npx_agent("test-agent", "1.0.0")]);
@@ -2275,7 +2275,7 @@ mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_multiple_agents_independent_notifications(cx: &mut TestAppContext) {
         init_test_settings(cx);
         let registry = init_registry(

@@ -510,7 +510,7 @@ mod tests {
     use util::path;
     use workspace::find_existing_workspace;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_remote_project_with_mock_connection(
         cx: &mut TestAppContext,
         server_cx: &mut TestAppContext,
@@ -591,7 +591,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reuse_existing_remote_workspace_window(
         cx: &mut TestAppContext,
         server_cx: &mut TestAppContext,
@@ -717,7 +717,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reopen_existing_remote_root_treats_root_as_directory(
         cx: &mut TestAppContext,
         server_cx: &mut TestAppContext,
@@ -812,7 +812,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reconnect_when_server_not_running(
         cx: &mut TestAppContext,
         server_cx: &mut TestAppContext,

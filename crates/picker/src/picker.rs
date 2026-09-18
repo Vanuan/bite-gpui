@@ -1,5 +1,5 @@
 use anyhow::Result;
-use gpui::Action;
+use gpui_runtime::Action;
 use gpui::{
     AnyElement, App, Bounds, ClickEvent, Context, DismissEvent, EventEmitter, FocusHandle,
     Focusable, ListSizingBehavior, ListState, MouseButton, MouseUpEvent, Pixels, ScrollStrategy,
@@ -454,7 +454,7 @@ enum ContainerKind {
 }
 
 impl<D: PickerDelegate> Picker<D> {
-    /// A picker, which displays its matches using `gpui::uniform_list`, all matches should have the same height.
+    /// A picker, which displays its matches using `gpui_runtime::uniform_list`, all matches should have the same height.
     /// The picker allows the user to perform search items by text.
     /// If `PickerDelegate::render_match` can return items with different heights, use `Picker::list`.
     pub fn uniform_list(delegate: D, window: &mut Window, cx: &mut Context<Self>) -> Self {
@@ -548,7 +548,7 @@ impl<D: PickerDelegate> Picker<D> {
         )
     }
 
-    /// A picker, which displays its matches using `gpui::uniform_list`, all matches should have the same height.
+    /// A picker, which displays its matches using `gpui_runtime::uniform_list`, all matches should have the same height.
     /// If `PickerDelegate::render_match` can return items with different heights, use `Picker::list`.
     pub fn nonsearchable_uniform_list(
         delegate: D,
@@ -560,7 +560,7 @@ impl<D: PickerDelegate> Picker<D> {
         Self::new(delegate, ContainerKind::UniformList, head, None, window, cx)
     }
 
-    /// A picker, which displays its matches using `gpui::list`, matches can have different heights.
+    /// A picker, which displays its matches using `gpui_runtime::list`, matches can have different heights.
     /// The picker allows the user to perform search items by text.
     /// If `PickerDelegate::render_match` only returns items with the same height, use `Picker::uniform_list` as its implementation is optimized for that.
     pub fn nonsearchable_list(delegate: D, window: &mut Window, cx: &mut Context<Self>) -> Self {
@@ -569,7 +569,7 @@ impl<D: PickerDelegate> Picker<D> {
         Self::new(delegate, ContainerKind::List, head, None, window, cx)
     }
 
-    /// A picker, which displays its matches using `gpui::list`, matches can have different heights.
+    /// A picker, which displays its matches using `gpui_runtime::list`, matches can have different heights.
     /// The picker allows the user to perform search items by text.
     /// If `PickerDelegate::render_match` only returns items with the same height, use `Picker::uniform_list` as its implementation is optimized for that.
     pub fn list(delegate: D, window: &mut Window, cx: &mut Context<Self>) -> Self {
@@ -665,7 +665,7 @@ impl<D: PickerDelegate> Picker<D> {
                 ElementContainer::UniformList(UniformListScrollHandle::new())
             }
             ContainerKind::List => {
-                ElementContainer::List(ListState::new(0, gpui::ListAlignment::Top, px(1000.)))
+                ElementContainer::List(ListState::new(0, gpui_runtime::ListAlignment::Top, px(1000.)))
             }
         }
     }
@@ -1587,7 +1587,7 @@ impl<D: PickerDelegate> Picker<D> {
     }
 
     #[cfg(any(test, feature = "test-support"))]
-    pub fn results_width(&self, window: &Window) -> gpui::Pixels {
+    pub fn results_width(&self, window: &Window) -> gpui_types::Pixels {
         let layout = self
             .preview_layout_rendered(window)
             .unwrap_or(preview::Layout::Hidden);
@@ -1641,7 +1641,7 @@ impl<D: PickerDelegate> Picker<D> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use std::cell::Cell;
 
     struct TestDelegate {
@@ -1808,7 +1808,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_refresh_waits_for_latest_matches_before_confirming(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1857,7 +1857,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_clicking_non_selectable_item_does_not_confirm(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1890,7 +1890,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_keyboard_navigation_skips_non_selectable_items(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1925,7 +1925,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multi_select_mode_routes_clicks(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1991,7 +1991,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multi_select_next_starts_multi_select_mode(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2032,7 +2032,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_exiting_multi_select_mode_clears_selection(cx: &mut TestAppContext) {
         init_test(cx);
 

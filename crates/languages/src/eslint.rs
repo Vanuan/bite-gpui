@@ -1,6 +1,6 @@
 use anyhow::{Context as _, Result};
 use async_trait::async_trait;
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use http_client::{
     github::{AssetKind, GitHubLspBinaryVersion, build_asset_url},
     github_download::download_server_binary,
@@ -790,7 +790,7 @@ mod tests {
     mod eslint_settings {
         use super::*;
         use ::fs::FakeFs;
-        use gpui::TestAppContext;
+        use gpui_runtime::TestAppContext;
 
         #[test]
         fn test_ancestor_directories_for_package_local_file() {
@@ -861,7 +861,7 @@ mod tests {
             assert_eq!(settings, EslintSettingsOverrides::default());
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_eslint_8_56_does_not_treat_cjs_as_flat_config(cx: &mut TestAppContext) {
             let fs = FakeFs::new(cx.executor());
             fs.insert_tree(
@@ -884,7 +884,7 @@ mod tests {
             assert_eq!(config_kind, None);
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_eslint_8_57_treats_cjs_as_flat_config(cx: &mut TestAppContext) {
             let fs = FakeFs::new(cx.executor());
             fs.insert_tree(
@@ -907,7 +907,7 @@ mod tests {
             assert_eq!(config_kind, Some(EslintConfigKind::Flat));
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_eslint_10_treats_typescript_config_as_flat_config(cx: &mut TestAppContext) {
             let fs = FakeFs::new(cx.executor());
             fs.insert_tree(
@@ -930,7 +930,7 @@ mod tests {
             assert_eq!(config_kind, Some(EslintConfigKind::Flat));
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_package_local_flat_config_is_preferred_for_monorepo_file(
             cx: &mut TestAppContext,
         ) {
@@ -964,7 +964,7 @@ mod tests {
             assert_eq!(config_kind, Some(EslintConfigKind::Flat));
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_package_local_legacy_config_is_detected_for_eslint_9(
             cx: &mut TestAppContext,
         ) {

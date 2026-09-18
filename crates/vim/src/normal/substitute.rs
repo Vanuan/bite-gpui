@@ -117,8 +117,8 @@ mod test {
     };
     use indoc::indoc;
 
-    #[gpui::test]
-    async fn test_substitute(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_substitute(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // supports a single cursor
@@ -171,8 +171,8 @@ mod test {
             gamma"});
     }
 
-    #[gpui::test]
-    async fn test_visual_change(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_change(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("The quick ˇbrown").await;
@@ -209,8 +209,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_visual_line_change(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_line_change(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "shift-v c",
@@ -258,8 +258,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_substitute_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_substitute_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         let initial_state = indoc! {"

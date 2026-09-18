@@ -10,7 +10,7 @@ use async_compat::Compat;
 #[cfg(feature = "neovim")]
 use async_trait::async_trait;
 #[cfg(feature = "neovim")]
-use gpui::Keystroke;
+use gpui_types::Keystroke;
 
 #[cfg(feature = "neovim")]
 use language::Point;

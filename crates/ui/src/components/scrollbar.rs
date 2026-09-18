@@ -232,7 +232,7 @@ impl<T: ScrollableHandle> UniformListDecoration for ScrollbarStateWrapper<T> {
         _item_count: usize,
         _window: &mut Window,
         _cx: &mut App,
-    ) -> gpui::AnyElement {
+    ) -> gpui_runtime::AnyElement {
         ScrollbarElement {
             origin: -scroll_offset,
             state: self.0.clone(),
@@ -625,7 +625,7 @@ struct TrackColors {
     has_border: bool,
 }
 
-pub fn on_new_scrollbars<T: gpui::Global>(cx: &mut App) {
+pub fn on_new_scrollbars<T: gpui_runtime::Global>(cx: &mut App) {
     cx.observe_new::<ScrollbarState>(|_, window, cx| {
         if let Some(window) = window {
             cx.observe_global_in::<T>(window, ScrollbarState::settings_changed)
@@ -1197,7 +1197,7 @@ impl<T: ScrollableHandle> Element for ScrollbarElement<T> {
     fn request_layout(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (LayoutId, Self::RequestLayoutState) {
@@ -1214,7 +1214,7 @@ impl<T: ScrollableHandle> Element for ScrollbarElement<T> {
     fn prepaint(
         &mut self,
         id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -1400,7 +1400,7 @@ impl<T: ScrollableHandle> Element for ScrollbarElement<T> {
     fn paint(
         &mut self,
         _id: Option<&GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         Bounds { origin, size }: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         prepaint_state: &mut Self::PrepaintState,

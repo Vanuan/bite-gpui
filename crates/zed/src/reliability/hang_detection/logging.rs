@@ -39,8 +39,8 @@ impl Reporter {
     }
     pub fn check_and_report(
         &mut self,
-        task_stats: &[gpui::ThreadTaskStatistics],
-        action_stats: &gpui::ActionStatistics,
+        task_stats: &[gpui_runtime::ThreadTaskStatistics],
+        action_stats: &gpui_runtime::ActionStatistics,
     ) -> ReportMade {
         let mut reported_task_hangs = false;
         reported_task_hangs |= self.report_hanging_foreground(&task_stats);
@@ -73,7 +73,7 @@ impl Reporter {
 impl Reporter {
     fn report_hanging_foreground(
         &mut self,
-        task_stats: &[gpui::ThreadTaskStatistics],
+        task_stats: &[gpui_runtime::ThreadTaskStatistics],
     ) -> ReportMade {
         let foreground = self.foreground_thread;
         let Some(foreground) = task_stats.iter().find(|t| t.thread_id == foreground) else {
@@ -101,7 +101,7 @@ impl Reporter {
 
     fn report_hanging_background(
         &mut self,
-        task_stats: &[gpui::ThreadTaskStatistics],
+        task_stats: &[gpui_runtime::ThreadTaskStatistics],
     ) -> ReportMade {
         let foreground = self.foreground_thread;
         let background = task_stats.iter().filter(move |t| t.thread_id != foreground);
@@ -136,7 +136,7 @@ impl Reporter {
         report_made
     }
 
-    fn report_hanging_actions(&mut self, action_stats: &gpui::ActionStatistics) {
+    fn report_hanging_actions(&mut self, action_stats: &gpui_runtime::ActionStatistics) {
         let hangs: Vec<_> = action_stats
             .longest_runtimes(true)
             .filter(|action| action.runtime() > self.report_longer_then)
@@ -150,8 +150,8 @@ impl Reporter {
     }
 }
 
-struct DisplayActions(Vec<gpui::profiler::ActionTiming>);
-struct DisplayTasks<'a>(&'a [gpui::TaskTiming]);
+struct DisplayActions(Vec<gpui_runtime::profiler::ActionTiming>);
+struct DisplayTasks<'a>(&'a [gpui_runtime::TaskTiming]);
 
 impl Display for DisplayActions {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

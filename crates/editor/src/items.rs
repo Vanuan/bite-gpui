@@ -632,7 +632,7 @@ impl Item for Editor {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if TypeId::of::<Self>() == type_id {
             Some(self_handle.clone().into())
         } else if TypeId::of::<MultiBuffer>() == type_id {
@@ -1075,7 +1075,7 @@ impl Item for Editor {
         Some(Box::new(handle.clone()))
     }
 
-    fn pixel_position_of_cursor(&self, _: &App) -> Option<gpui::Point<Pixels>> {
+    fn pixel_position_of_cursor(&self, _: &App) -> Option<gpui_types::Point<Pixels>> {
         self.pixel_position_of_newest_cursor
     }
 
@@ -1103,7 +1103,7 @@ impl Item for Editor {
         &self,
         _window: &mut Window,
         cx: &mut Context<Self>,
-    ) -> Option<gpui::AnyElement> {
+    ) -> Option<gpui_runtime::AnyElement> {
         (!TabBarSettings::get_global(cx).show && ItemSettings::get_global(cx).file_icons)
             .then(|| {
                 path_for_buffer(&self.buffer, 0, true, cx)
@@ -1207,7 +1207,7 @@ impl Item for Editor {
         &self,
         _window: &mut Window,
         cx: &mut Context<Self>,
-    ) -> Vec<(SharedString, Box<dyn gpui::Action>)> {
+    ) -> Vec<(SharedString, Box<dyn gpui_runtime::Action>)> {
         let mut actions = Vec::new();
 
         let is_markdown = self
@@ -1231,14 +1231,14 @@ impl Item for Editor {
         if is_markdown {
             actions.push((
                 "Open Markdown Preview".into(),
-                Box::new(OpenMarkdownPreview) as Box<dyn gpui::Action>,
+                Box::new(OpenMarkdownPreview) as Box<dyn gpui_runtime::Action>,
             ));
         }
 
         if is_svg {
             actions.push((
                 "Open SVG Preview".into(),
-                Box::new(OpenSvgPreview) as Box<dyn gpui::Action>,
+                Box::new(OpenSvgPreview) as Box<dyn gpui_runtime::Action>,
             ));
         }
 
@@ -1552,7 +1552,7 @@ struct EditorRestorationData {
 
 #[derive(Default, Debug)]
 pub struct RestorationData {
-    pub scroll_position: (BufferRow, gpui::Point<ScrollOffset>),
+    pub scroll_position: (BufferRow, gpui_types::Point<ScrollOffset>),
     pub folds: Vec<Range<Point>>,
     pub selections: Vec<Range<Point>>,
 }
@@ -2520,7 +2520,7 @@ mod tests {
     use util::{path, paths::PathWithPosition, rel_path::RelPath};
     use workspace::path_link::{OpenTarget, OpenTargetFoundBy};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_path_for_file(cx: &mut App) {
         let file: Arc<dyn language::File> = Arc::new(TestFile {
             path: RelPath::empty_arc(),
@@ -2530,7 +2530,7 @@ mod tests {
         assert_eq!(path_for_file(&file, 0, false, cx), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_chunk_search_range_multi_line(cx: &mut App) {
         let text = "line one\nline two\nline three\nline four\nline five\nline six\n";
         let buffer = cx.new(|cx| Buffer::local(text, cx));
@@ -2553,7 +2553,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_chunk_search_range_single_line(cx: &mut App) {
         let text = "hello world hello again";
         let buffer = cx.new(|cx| Buffer::local(text, cx));
@@ -2563,7 +2563,7 @@ mod tests {
         assert_chunks_are_contiguous(&chunks, 0..text.len());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_chunk_search_range_empty_range(cx: &mut App) {
         let buffer = cx.new(|cx| Buffer::local("hello world", cx));
         let snapshot = buffer.read(cx).snapshot();
@@ -2572,7 +2572,7 @@ mod tests {
         assert!(chunks.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_chunk_search_range_does_not_start_at_zero(cx: &mut App) {
         let line = "abcdefghij\n";
         let text = line.repeat(20);
@@ -2639,9 +2639,9 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggested_filename_uses_language_extension_for_untitled_buffer(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 
@@ -2656,9 +2656,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggested_filename_appends_extension_to_content_title(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 
@@ -2676,8 +2676,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_suggested_filename_does_not_duplicate_extension(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_suggested_filename_does_not_duplicate_extension(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let buffer = cx.update(|cx| {
@@ -2693,9 +2693,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggested_filename_keeps_content_title_for_plain_text(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 
@@ -2713,9 +2713,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggested_filename_keeps_content_title_without_language(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 
@@ -2753,8 +2753,8 @@ mod tests {
             .unwrap()
     }
 
-    #[gpui::test]
-    async fn test_deserialize(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_deserialize(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let fs = FakeFs::new(cx.executor());
@@ -3018,8 +3018,8 @@ mod tests {
 
     // Verify that renaming an open file emits EditorEvent::FileHandleChanged so that
     // the workspace re-serializes the editor with the updated path.
-    #[gpui::test]
-    async fn test_file_handle_changed_on_rename(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_file_handle_changed_on_rename(cx: &mut gpui_runtime::TestAppContext) {
         use serde_json::json;
         use std::cell::RefCell;
         use std::rc::Rc;
@@ -3094,9 +3094,9 @@ mod tests {
     // Regression test for https://github.com/zed-industries/zed/issues/35947
     // Verifies that deserializing a non-worktree editor does not add the item
     // to any pane as a side effect.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deserialize_non_worktree_file_does_not_add_to_pane(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 
@@ -3162,8 +3162,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_open_resolved_target_at_non_ascii_column(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_open_resolved_target_at_non_ascii_column(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let fs = FakeFs::new(cx.executor());
@@ -3218,8 +3218,8 @@ mod tests {
         assert_eq!(cursor, language::Point::new(1, 5));
     }
 
-    #[gpui::test]
-    fn test_compute_modified_ranges_git_diff(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_compute_modified_ranges_git_diff(cx: &mut gpui_runtime::TestAppContext) {
         let base_text = "line0\nline1\nline2\nline3\nline4\nline5\nline6\n";
         // Modify line1 and line5 to create two non-adjacent hunks.
         let buffer_text = "line0\nMOD1\nline2\nline3\nline4\nMOD5\nline6\n";
@@ -3249,8 +3249,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    fn test_compute_modified_ranges_unchanged_buffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_compute_modified_ranges_unchanged_buffer(cx: &mut gpui_runtime::TestAppContext) {
         let buffer_text = "line0\nline1\nline2\n";
         let buffer = cx.new(|cx| language::Buffer::local(buffer_text, cx));
         let diff_snapshot = buffer.update(cx, |buffer, cx| {
@@ -3275,8 +3275,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_compute_modified_ranges_deletion_only(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_compute_modified_ranges_deletion_only(cx: &mut gpui_runtime::TestAppContext) {
         let base_text = "line0\nline1\nline2\n";
         // Buffer has line1 deleted (pure deletion).
         let buffer_text = "line0\nline2\n";
@@ -3307,8 +3307,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_compute_modified_ranges_adjacent_hunks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_compute_modified_ranges_adjacent_hunks(cx: &mut gpui_runtime::TestAppContext) {
         let base_text = "line0\nline1\nline2\nline3\nline4\n";
         // Modify lines 2 and 3 which are adjacent; they should merge into one range.
         let buffer_text = "line0\nline1\nMOD2\nMOD3\nline4\n";
@@ -3341,9 +3341,9 @@ mod tests {
     // Regression test for a multi-buffer (e.g. project search results) that excerpts
     // an untitled buffer alongside a file-backed one. Saving used to error out with
     // "buffer doesn't have a file", which aborted `workspace: reload` and quit flows.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_multi_buffer_with_untitled_buffer_skips_untitled(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 

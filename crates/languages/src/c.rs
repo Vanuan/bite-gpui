@@ -421,7 +421,7 @@ mod tests {
     use std::num::NonZeroU32;
     use unindent::Unindent;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_c_autoindent_basic(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -451,7 +451,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_c_autoindent_switch_case(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);
@@ -515,7 +515,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_c_autoindent_if_else(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let test_settings = SettingsStore::test(cx);

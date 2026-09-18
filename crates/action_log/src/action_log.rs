@@ -1315,7 +1315,7 @@ pub struct ChangedBuffer {
 mod tests {
     use super::*;
     use buffer_diff::DiffHunkStatusKind;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use indoc::indoc;
     use language::Point;
     use project::{FakeFs, Fs, Project, RemoveOptions};
@@ -1337,7 +1337,7 @@ mod tests {
         });
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_keep_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1415,7 +1415,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_deletions(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1500,7 +1500,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_overlapping_user_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1597,7 +1597,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_creating_files(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1656,7 +1656,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_overwriting_files(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1715,7 +1715,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_overwriting_file_counts_removed_lines(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1759,7 +1759,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_overwriting_previously_edited_files(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1840,7 +1840,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_deleting_files(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1950,7 +1950,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reject_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2091,7 +2091,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reject_multiple_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2168,7 +2168,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reject_deleted_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2225,7 +2225,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reject_created_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2281,7 +2281,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reject_created_file_with_user_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2349,7 +2349,7 @@ mod tests {
         assert_eq!(content, "ai content\nuser added this line");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reject_after_accepting_hunk_on_created_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2425,7 +2425,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reject_edits_on_previously_accepted_created_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2486,7 +2486,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     async fn test_random_diffs(mut rng: StdRng, cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2580,8 +2580,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_keep_edits_on_commit(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_keep_edits_on_commit(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -2742,7 +2742,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_keep_edits_on_commit_with_shifted_diff_boundaries(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2826,7 +2826,7 @@ mod tests {
     /// text does, an intermediate DiffChanged (e.g. from a buffer-edit diff
     /// recalculation) must NOT consume the commit signal.  The subscription
     /// should only fire once the base text itself has changed.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_keep_edits_on_commit_with_stale_diff_changed(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2924,7 +2924,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_undo_last_reject(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3003,7 +3003,7 @@ mod tests {
         assert!(!action_log.read_with(cx, |log, _| log.has_pending_undo()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_action_log_buffer_read(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3073,7 +3073,7 @@ mod tests {
         assert_eq!(parent_stale, vec![buffer]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_action_log_buffer_edited(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3124,7 +3124,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_action_log_buffer_created(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3176,7 +3176,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_action_log_will_delete_buffer(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3229,7 +3229,7 @@ mod tests {
     /// Simulates the subagent scenario: two child logs linked to the same parent, each
     /// editing a different file. The parent accumulates all edits while each child
     /// only sees its own.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_action_log_independent_tracking(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3322,7 +3322,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_read_time_recorded_on_buffer_read(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3356,7 +3356,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_read_time_recorded_on_buffer_edited(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3390,7 +3390,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_read_time_recorded_on_buffer_created(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3424,7 +3424,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_read_time_removed_on_delete(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3461,7 +3461,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_read_time_not_forwarded_to_linked_action_log(cx: &mut TestAppContext) {
         init_test(cx);
 

@@ -7,7 +7,7 @@ use futures::io::{BufReader, BufWriter};
 use futures::{
     AsyncBufReadExt as _, AsyncRead, AsyncWrite, AsyncWriteExt as _, Stream, StreamExt as _,
 };
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 
 use util::TryFutureExt as _;
 use util::process::Child;

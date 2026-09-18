@@ -38,7 +38,7 @@ impl ScreenCaptureStream for WaylandScreenCaptureStream {
             id: self.id,
             label: None,
             is_main: None,
-            resolution: gpui::size(gpui::DevicePixels(1), gpui::DevicePixels(1)),
+            resolution: gpui_backend::size(gpui_types::DevicePixels(1), gpui_types::DevicePixels(1)),
         })
     }
 }
@@ -58,7 +58,7 @@ pub(crate) async fn start_wayland_desktop_capture(
     oneshot::Receiver<()>,
 )> {
     use futures::channel::mpsc;
-    use gpui::FutureExt as _;
+    use gpui_runtime::FutureExt as _;
     use libwebrtc::desktop_capturer::{
         CaptureError, DesktopCaptureSourceType, DesktopCapturer, DesktopCapturerOptions,
         DesktopFrame,

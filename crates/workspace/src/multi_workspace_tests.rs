@@ -46,7 +46,7 @@ fn setup_multi_workspace<'a>(
     (multi_workspace, cx)
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sidebar_disabled_when_disable_ai_is_enabled(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -117,7 +117,7 @@ async fn test_sidebar_disabled_when_disable_ai_is_enabled(cx: &mut TestAppContex
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multi_workspace_collapses_when_agent_is_disabled(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -154,7 +154,7 @@ async fn test_multi_workspace_collapses_when_agent_is_disabled(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_project_group_keys_initial(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -177,7 +177,7 @@ async fn test_project_group_keys_initial(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_project_group_keys_add_workspace(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -221,7 +221,7 @@ async fn test_project_group_keys_add_workspace(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_active_project_group_actions(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -271,7 +271,7 @@ async fn test_move_active_project_group_actions(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_new_window_does_not_open_sidebar_on_existing_window(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -316,7 +316,7 @@ async fn test_open_new_window_does_not_open_sidebar_on_existing_window(cx: &mut 
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_directory_in_empty_workspace_does_not_open_sidebar(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -372,7 +372,7 @@ async fn test_open_directory_in_empty_workspace_does_not_open_sidebar(cx: &mut T
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_project_group_keys_duplicate_not_added(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -406,7 +406,7 @@ async fn test_project_group_keys_duplicate_not_added(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_adding_worktree_updates_project_group_key(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -456,7 +456,7 @@ async fn test_adding_worktree_updates_project_group_key(cx: &mut TestAppContext)
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_or_create_local_workspace_reuses_active_workspace_when_sidebar_closed(
     cx: &mut TestAppContext,
 ) {
@@ -512,7 +512,7 @@ async fn test_find_or_create_local_workspace_reuses_active_workspace_when_sideba
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_or_create_workspace_uses_project_group_key_when_paths_are_missing(
     cx: &mut TestAppContext,
 ) {
@@ -582,7 +582,7 @@ async fn test_find_or_create_workspace_uses_project_group_key_when_paths_are_mis
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remove_fallback_via_find_or_create_skips_removed_workspaces(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -630,7 +630,7 @@ async fn test_remove_fallback_via_find_or_create_skips_removed_workspaces(cx: &m
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remove_keeping_the_project_does_not_switch_projects(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -676,7 +676,7 @@ async fn test_remove_keeping_the_project_does_not_switch_projects(cx: &mut TestA
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_or_create_local_workspace_reuses_active_workspace_after_sidebar_open(
     cx: &mut TestAppContext,
 ) {
@@ -733,7 +733,7 @@ async fn test_find_or_create_local_workspace_reuses_active_workspace_after_sideb
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_close_workspace_prefers_already_loaded_neighboring_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -829,7 +829,7 @@ async fn test_close_workspace_prefers_already_loaded_neighboring_workspace(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_close_workspace_prefers_workspace_in_same_project_group(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -893,7 +893,7 @@ async fn test_close_workspace_prefers_workspace_in_same_project_group(cx: &mut T
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_close_workspace_opens_unloaded_local_neighbor(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -939,7 +939,7 @@ async fn test_close_workspace_opens_unloaded_local_neighbor(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remove_project_group_opens_unloaded_local_neighbor(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -982,7 +982,7 @@ async fn test_remove_project_group_opens_unloaded_local_neighbor(cx: &mut TestAp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remove_project_group_replaces_unretained_active_workspace(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1057,7 +1057,7 @@ async fn test_remove_project_group_replaces_unretained_active_workspace(cx: &mut
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_switching_projects_with_sidebar_closed_retains_old_active_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -1108,7 +1108,7 @@ async fn test_switching_projects_with_sidebar_closed_retains_old_active_workspac
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_project_root_dir_changes_update_groups(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -1212,7 +1212,7 @@ async fn test_remote_project_root_dir_changes_update_groups(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_project_closes_empty_workspace_but_not_non_empty_ones(cx: &mut TestAppContext) {
     init_test(cx);
     let app_state = cx.update(AppState::test);
@@ -1347,7 +1347,7 @@ async fn test_open_project_closes_empty_workspace_but_not_non_empty_ones(cx: &mu
     assert!(workspace_a.read_with(cx, |workspace, _cx| workspace.session_id().is_some()),);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_close_workspace_with_remote_neighbor_does_not_create_local_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -1416,7 +1416,7 @@ async fn test_close_workspace_with_remote_neighbor_does_not_create_local_workspa
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remove_project_group_with_remote_neighbor_does_not_create_local_workspace(
     cx: &mut TestAppContext,
 ) {
@@ -1477,7 +1477,7 @@ async fn test_remove_project_group_with_remote_neighbor_does_not_create_local_wo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_nearest_retained_workspace(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1612,7 +1612,7 @@ async fn test_nearest_retained_workspace(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_nearest_retained_workspace_skips_disconnected_workspace(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());

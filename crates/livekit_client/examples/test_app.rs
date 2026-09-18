@@ -23,7 +23,7 @@ actions!(livekit_client, [Quit]);
 fn main() {
     SimpleLogger::init(LevelFilter::Info, Default::default()).expect("could not initialize logger");
 
-    gpui_platform::application().run(|cx| {
+    gpui::application().run(|cx| {
         #[cfg(any(test, feature = "test-support"))]
         println!("USING TEST LIVEKIT");
 
@@ -63,7 +63,7 @@ fn main() {
     });
 }
 
-fn quit(_: &Quit, cx: &mut gpui::App) {
+fn quit(_: &Quit, cx: &mut gpui_runtime::App) {
     cx.quit();
 }
 
@@ -308,7 +308,7 @@ impl LivekitWindow {
 
 impl Render for LivekitWindow {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        fn button() -> gpui::Div {
+        fn button() -> gpui_runtime::Div {
             div()
                 .w(px(180.0))
                 .h(px(30.0))

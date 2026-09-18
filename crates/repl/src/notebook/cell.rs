@@ -92,7 +92,7 @@ impl CellControl {
 impl Clickable for CellControl {
     fn on_click(
         self,
-        handler: impl Fn(&gpui::ClickEvent, &mut Window, &mut App) + 'static,
+        handler: impl Fn(&gpui_runtime::ClickEvent, &mut Window, &mut App) + 'static,
     ) -> Self {
         let button = self.button.on_click(handler);
         Self { button }
@@ -392,7 +392,7 @@ pub struct MarkdownCell {
     editing: bool,
     selected: bool,
     cell_position: Option<CellPosition>,
-    _editor_subscription: gpui::Subscription,
+    _editor_subscription: gpui_runtime::Subscription,
 }
 
 impl EventEmitter<MarkdownCellEvent> for MarkdownCell {}

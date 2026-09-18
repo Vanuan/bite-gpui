@@ -38,7 +38,7 @@ pub fn appearance_to_mode(appearance: Appearance) -> ThemeAppearanceMode {
 #[derive(Clone, PartialEq, RegisterSetting)]
 pub struct ThemeSettings {
     /// The UI font size. Determines the size of text in the UI,
-    /// as well as the size of a [gpui::Rems] unit.
+    /// as well as the size of a [gpui_types::Rems] unit.
     ///
     /// Changing this will impact the size of all UI elements.
     ui_font_size: Pixels,

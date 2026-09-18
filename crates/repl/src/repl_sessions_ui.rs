@@ -318,7 +318,7 @@ mod tests {
     use async_trait::async_trait;
     use collections::HashMap;
     use editor::EditorMode;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use language::{
         Language, LanguageConfig, LanguageMatcher, LanguageName, ManifestName, Toolchain,
         ToolchainList, ToolchainLister, ToolchainMetadata,
@@ -374,7 +374,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_refreshes_python_kernelspecs_when_buffer_language_changes(
         cx: &mut TestAppContext,
     ) {

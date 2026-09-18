@@ -4,7 +4,7 @@
 //! links appropriate for the environment (e.g., by linking to a local copy of
 //! zed.dev in development).
 
-use gpui::App;
+use gpui_runtime::App;
 use release_channel::ReleaseChannel;
 use settings::Settings;
 

@@ -18,7 +18,7 @@ fn init_logger() {
     zlog::init_test();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_empty_singleton(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local("", cx));
     let buffer_id = buffer.read(cx).remote_id();
@@ -38,7 +38,7 @@ fn test_empty_singleton(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_singleton(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local(sample_text(6, 6, 'a'), cx));
     let multibuffer = cx.new(|cx| MultiBuffer::singleton(buffer.clone(), cx));
@@ -73,7 +73,7 @@ fn test_singleton(cx: &mut App) {
     assert_consistent_line_numbers(&snapshot);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_buffer_point_to_anchor_at_end_of_singleton_buffer(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local("abc", cx));
     let multibuffer = cx.new(|cx| MultiBuffer::singleton(buffer.clone(), cx));
@@ -94,7 +94,7 @@ fn test_buffer_point_to_anchor_at_end_of_singleton_buffer(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_remote(cx: &mut App) {
     let host_buffer = cx.new(|cx| Buffer::local("a", cx));
     let guest_buffer = cx.new(|cx| {
@@ -130,7 +130,7 @@ fn test_remote(cx: &mut App) {
     assert_eq!(snapshot.text(), "abc");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_excerpt_boundaries_and_clipping(cx: &mut App) {
     let buffer_1 = cx.new(|cx| Buffer::local(sample_text(7, 6, 'a'), cx));
     let buffer_2 = cx.new(|cx| Buffer::local(sample_text(7, 6, 'g'), cx));
@@ -386,7 +386,7 @@ fn test_excerpt_boundaries_and_clipping(cx: &mut App) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diff_boundary_anchors(cx: &mut TestAppContext) {
     let base_text = "one\ntwo\nthree\n";
     let text = "one\nthree\n";
@@ -429,7 +429,7 @@ async fn test_diff_boundary_anchors(cx: &mut TestAppContext) {
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diff_hunks_in_range(cx: &mut TestAppContext) {
     let base_text = "one\ntwo\nthree\nfour\nfive\nsix\nseven\neight\n";
     let text = "one\nfour\nseven\n";
@@ -510,7 +510,7 @@ async fn test_diff_hunks_in_range(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diff_hunks_in_range_query_starting_at_added_row(cx: &mut TestAppContext) {
     let base_text = "one\ntwo\nthree\n";
     let text = "one\nTWO\nthree\n";
@@ -551,7 +551,7 @@ async fn test_diff_hunks_in_range_query_starting_at_added_row(cx: &mut TestAppCo
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_inverted_diff_hunks_in_range(cx: &mut TestAppContext) {
     let base_text = "one\ntwo\nthree\nfour\nfive\nsix\nseven\neight\n";
     let text = "ZERO\none\nTHREE\nfour\nseven\nEIGHT\nNINE\n";
@@ -608,7 +608,7 @@ async fn test_inverted_diff_hunks_in_range(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_editing_text_in_diff_hunks(cx: &mut TestAppContext) {
     let base_text = "one\ntwo\nfour\nfive\nsix\nseven\n";
     let text = "one\ntwo\nTHREE\nfour\nfive\nseven\n";
@@ -755,7 +755,7 @@ async fn test_editing_text_in_diff_hunks(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_excerpt_events(cx: &mut App) {
     let buffer_1 = cx.new(|cx| Buffer::local(sample_text(10, 3, 'a'), cx));
     let buffer_2 = cx.new(|cx| Buffer::local(sample_text(10, 3, 'm'), cx));
@@ -861,7 +861,7 @@ fn test_excerpt_events(cx: &mut App) {
     assert_eq!(*follower_edit_event_count.read(), 5);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_set_excerpts_for_path_reuses_excerpts_when_only_primary_changes(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local(sample_text(10, 6, 'a'), cx));
     let multibuffer = cx.new(|_| MultiBuffer::new(Capability::ReadWrite));
@@ -943,7 +943,7 @@ fn test_set_excerpts_for_path_reuses_excerpts_when_only_primary_changes(cx: &mut
     assert_eq!(*ranges_updated_event_count.read(), 3);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_set_excerpts_for_path_reuses_excerpts_after_edits_shift_anchors(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local(sample_text(20, 6, 'a'), cx));
     let multibuffer = cx.new(|_| MultiBuffer::new(Capability::ReadWrite));
@@ -1010,7 +1010,7 @@ fn test_set_excerpts_for_path_reuses_excerpts_after_edits_shift_anchors(cx: &mut
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_ranges_grouped_by_excerpt_path_skips_stale_ranges(cx: &mut App) {
     let buffer_a = cx.new(|cx| Buffer::local(sample_text(6, 6, 'a'), cx));
     let buffer_b = cx.new(|cx| Buffer::local(sample_text(6, 6, 'g'), cx));
@@ -1070,7 +1070,7 @@ fn test_ranges_grouped_by_excerpt_path_skips_stale_ranges(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_remove_excerpts_for_paths(cx: &mut App) {
     let buffers = (0u64..4)
         .map(|index| {
@@ -1170,7 +1170,7 @@ fn test_remove_excerpts_for_paths(cx: &mut App) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_ordered_buffer_anchor_ranges_to_anchor_ranges(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local(sample_text(12, 3, 'a'), cx));
     let multibuffer = cx.new(|_| MultiBuffer::new(Capability::ReadWrite));
@@ -1240,7 +1240,7 @@ fn test_ordered_buffer_anchor_ranges_to_anchor_ranges(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_expand_excerpts(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local(sample_text(20, 3, 'a'), cx));
     let multibuffer = cx.new(|_| MultiBuffer::new(Capability::ReadWrite));
@@ -1322,7 +1322,7 @@ fn test_expand_excerpts(cx: &mut App) {
     );
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 async fn test_set_anchored_excerpts_for_path(cx: &mut TestAppContext) {
     let buffer_1 = cx.new(|cx| Buffer::local(sample_text(20, 3, 'a'), cx));
     let buffer_2 = cx.new(|cx| Buffer::local(sample_text(15, 4, 'a'), cx));
@@ -1421,7 +1421,7 @@ async fn test_set_anchored_excerpts_for_path(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_empty_multibuffer(cx: &mut App) {
     let multibuffer = cx.new(|_| MultiBuffer::new(Capability::ReadWrite));
 
@@ -1443,7 +1443,7 @@ fn test_empty_multibuffer(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_empty_diff_excerpt(cx: &mut TestAppContext) {
     let multibuffer = cx.new(|_| MultiBuffer::new(Capability::ReadWrite));
     let buffer = cx.new(|cx| Buffer::local("", cx));
@@ -1510,7 +1510,7 @@ async fn test_empty_diff_excerpt(cx: &mut TestAppContext) {
     assert_eq!(snapshot.text(), "a\nb\nc\n\nX");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_singleton_multibuffer_anchors(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local("abcd", cx));
     let multibuffer = cx.new(|cx| MultiBuffer::singleton(buffer.clone(), cx));
@@ -1550,7 +1550,7 @@ fn test_singleton_multibuffer_anchors(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_multibuffer_anchors(cx: &mut App) {
     let buffer_1 = cx.new(|cx| Buffer::local("abcd", cx));
     let buffer_2 = cx.new(|cx| Buffer::local("efghi", cx));
@@ -1666,7 +1666,7 @@ fn test_multibuffer_anchors(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_basic_diff_hunks(cx: &mut TestAppContext) {
     let text = indoc!(
         "
@@ -1912,7 +1912,7 @@ async fn test_basic_diff_hunks(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_text_for_range_with_diff_transform_boundary_inside_multibyte_character(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local("タx", cx));
     let multibuffer = cx.new(|cx| MultiBuffer::singleton(buffer, cx));
@@ -1948,7 +1948,7 @@ fn test_text_for_range_with_diff_transform_boundary_inside_multibyte_character(c
     assert_eq!(text, "タx");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repeatedly_expand_a_diff_hunk(cx: &mut TestAppContext) {
     let text = indoc!(
         "
@@ -2086,7 +2086,7 @@ async fn test_repeatedly_expand_a_diff_hunk(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_set_excerpts_for_buffer_ordering(cx: &mut TestAppContext) {
     let buf1 = cx.new(|cx| {
         Buffer::local(
@@ -2186,7 +2186,7 @@ fn test_set_excerpts_for_buffer_ordering(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_set_excerpts_for_buffer(cx: &mut TestAppContext) {
     let buf1 = cx.new(|cx| {
         Buffer::local(
@@ -2382,7 +2382,7 @@ fn test_set_excerpts_for_buffer(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_update_excerpt_ranges_for_path(cx: &mut TestAppContext) {
     let buffer = cx.new(|cx| {
         Buffer::local(
@@ -2579,7 +2579,7 @@ fn test_update_excerpt_ranges_for_path(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_set_excerpts_for_buffer_rename(cx: &mut TestAppContext) {
     let buf1 = cx.new(|cx| {
         Buffer::local(
@@ -2660,7 +2660,7 @@ fn test_set_excerpts_for_buffer_rename(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_set_excerpts_for_path_replaces_previous_buffer(cx: &mut TestAppContext) {
     let buffer_a = cx.new(|cx| {
         Buffer::local(
@@ -2815,7 +2815,7 @@ fn test_set_excerpts_for_path_replaces_previous_buffer(cx: &mut TestAppContext) 
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_stale_anchor_after_buffer_removal_and_path_reuse(cx: &mut TestAppContext) {
     let buffer_a = cx.new(|cx| Buffer::local("aaa\nbbb\nccc\n", cx));
     let buffer_b = cx.new(|cx| Buffer::local("xxx\nyyy\nzzz\n", cx));
@@ -2890,7 +2890,7 @@ fn test_stale_anchor_after_buffer_removal_and_path_reuse(cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_map_excerpt_ranges(cx: &mut TestAppContext) {
     let base_text = indoc!(
         "
@@ -3059,7 +3059,7 @@ async fn test_map_excerpt_ranges(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diff_hunks_with_multiple_excerpts(cx: &mut TestAppContext) {
     let base_text_1 = indoc!(
         "
@@ -3933,7 +3933,7 @@ impl ReferenceMultibuffer {
     }
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 async fn test_random_set_ranges(cx: &mut TestAppContext, mut rng: StdRng) {
     let base_text = "a\n".repeat(100);
     let buf = cx.update(|cx| cx.new(|cx| Buffer::local(base_text, cx)));
@@ -4009,7 +4009,7 @@ async fn test_random_set_ranges(cx: &mut TestAppContext, mut rng: StdRng) {
     }
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 async fn test_random_multibuffer(cx: &mut TestAppContext, mut rng: StdRng) {
     let operations = env::var("OPERATIONS")
         .map(|i| i.parse().expect("invalid `OPERATIONS` variable"))
@@ -4564,7 +4564,7 @@ fn check_multibuffer_edits(
     pretty_assertions::assert_eq!(text, snapshot.text());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_history(cx: &mut App) {
     let test_settings = SettingsStore::test(cx);
     cx.set_global(test_settings);
@@ -4719,7 +4719,7 @@ fn test_history(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_enclosing_indent(cx: &mut TestAppContext) {
     async fn enclosing_indent(
         text: &str,
@@ -4812,7 +4812,7 @@ async fn test_enclosing_indent(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_summaries_for_anchors(cx: &mut TestAppContext) {
     let base_text_1 = indoc!(
         "
@@ -4906,7 +4906,7 @@ async fn test_summaries_for_anchors(cx: &mut TestAppContext) {
     assert_eq!(point_2, Point::new(3, 0));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_trailing_deletion_without_newline(cx: &mut TestAppContext) {
     let base_text_1 = "one\ntwo".to_owned();
     let text_1 = "one\n".to_owned();
@@ -5094,7 +5094,7 @@ fn format_diff(
 //         .join("\n")
 // }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_singleton_with_inverted_diff(cx: &mut TestAppContext) {
     let text = indoc!(
         "
@@ -5257,7 +5257,7 @@ async fn test_singleton_with_inverted_diff(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_inverted_diff_base_text_change(cx: &mut TestAppContext) {
     let base_text = "aaa\nbbb\nccc\n";
     let text = "ddd\n";
@@ -5305,7 +5305,7 @@ async fn test_inverted_diff_base_text_change(cx: &mut TestAppContext) {
         .collect();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_inverted_diff_secondary_version_mismatch(cx: &mut TestAppContext) {
     let base_text = "one\ntwo\nthree\nfour\nfive\n";
     let index_text = "one\nTWO\nthree\nfour\nfive\n";
@@ -5628,7 +5628,7 @@ fn assert_line_indents(snapshot: &MultiBufferSnapshot) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_new_empty_buffer_uses_untitled_title(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local("", cx));
     let multibuffer = cx.new(|cx| MultiBuffer::singleton(buffer.clone(), cx));
@@ -5636,7 +5636,7 @@ fn test_new_empty_buffer_uses_untitled_title(cx: &mut App) {
     assert_eq!(multibuffer.read(cx).title(cx), "untitled");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_new_empty_buffer_uses_untitled_title_when_only_contains_whitespace(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local("\n ", cx));
     let multibuffer = cx.new(|cx| MultiBuffer::singleton(buffer.clone(), cx));
@@ -5644,7 +5644,7 @@ fn test_new_empty_buffer_uses_untitled_title_when_only_contains_whitespace(cx: &
     assert_eq!(multibuffer.read(cx).title(cx), "untitled");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_new_empty_buffer_takes_first_line_for_title(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local("Hello World\nSecond line", cx));
     let multibuffer = cx.new(|cx| MultiBuffer::singleton(buffer.clone(), cx));
@@ -5652,7 +5652,7 @@ fn test_new_empty_buffer_takes_first_line_for_title(cx: &mut App) {
     assert_eq!(multibuffer.read(cx).title(cx), "Hello World");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_new_empty_buffer_takes_trimmed_first_line_for_title(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local("\nHello, World ", cx));
     let multibuffer = cx.new(|cx| MultiBuffer::singleton(buffer.clone(), cx));
@@ -5660,7 +5660,7 @@ fn test_new_empty_buffer_takes_trimmed_first_line_for_title(cx: &mut App) {
     assert_eq!(multibuffer.read(cx).title(cx), "Hello, World");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_new_empty_buffer_uses_truncated_first_line_for_title(cx: &mut App) {
     let title = "aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeee";
     let title_after = "aaaaaaaaaabbbbbbbbbbccccccccccdddddddddd";
@@ -5670,7 +5670,7 @@ fn test_new_empty_buffer_uses_truncated_first_line_for_title(cx: &mut App) {
     assert_eq!(multibuffer.read(cx).title(cx), title_after);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_new_empty_buffer_uses_truncated_first_line_for_title_after_merging_adjacent_spaces(
     cx: &mut App,
 ) {
@@ -5682,7 +5682,7 @@ fn test_new_empty_buffer_uses_truncated_first_line_for_title_after_merging_adjac
     assert_eq!(multibuffer.read(cx).title(cx), title_after);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_new_empty_buffers_title_can_be_set(cx: &mut App) {
     let buffer = cx.new(|cx| Buffer::local("Hello World", cx));
     let multibuffer = cx.new(|cx| MultiBuffer::singleton(buffer.clone(), cx));
@@ -5694,7 +5694,7 @@ fn test_new_empty_buffers_title_can_be_set(cx: &mut App) {
     assert_eq!(multibuffer.read(cx).title(cx), "Hey");
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 fn test_random_chunk_bitmaps(cx: &mut App, mut rng: StdRng) {
     let multibuffer = if rng.random() {
         let len = rng.random_range(0..10000);
@@ -5775,7 +5775,7 @@ fn test_random_chunk_bitmaps(cx: &mut App, mut rng: StdRng) {
     }
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 fn test_random_chunk_bitmaps_with_diffs(cx: &mut App, mut rng: StdRng) {
     let settings_store = SettingsStore::test(cx);
     cx.set_global(settings_store);
@@ -5976,7 +5976,7 @@ fn collect_word_diffs(
         .collect()
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_diff_simple_replacement(cx: &mut TestAppContext) {
     let settings_store = cx.update(|cx| SettingsStore::test(cx));
     cx.set_global(settings_store);
@@ -5989,7 +5989,7 @@ async fn test_word_diff_simple_replacement(cx: &mut TestAppContext) {
     assert_eq!(word_diffs, vec!["world", "bar", "WORLD", "BAR"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_diff_white_space(cx: &mut TestAppContext) {
     let settings_store = cx.update(|cx| SettingsStore::test(cx));
     cx.set_global(settings_store);
@@ -6002,7 +6002,7 @@ async fn test_word_diff_white_space(cx: &mut TestAppContext) {
     assert_eq!(word_diffs, vec!["    "]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_diff_consecutive_modified_lines(cx: &mut TestAppContext) {
     let settings_store = cx.update(|cx| SettingsStore::test(cx));
     cx.set_global(settings_store);
@@ -6019,7 +6019,7 @@ async fn test_word_diff_consecutive_modified_lines(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_diff_modified_lines_with_deletion_between(cx: &mut TestAppContext) {
     let settings_store = cx.update(|cx| SettingsStore::test(cx));
     cx.set_global(settings_store);
@@ -6036,7 +6036,7 @@ async fn test_word_diff_modified_lines_with_deletion_between(cx: &mut TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_word_diff_disabled(cx: &mut TestAppContext) {
     let settings_store = cx.update(|cx| {
         let mut settings_store = SettingsStore::test(cx);
@@ -6060,7 +6060,7 @@ async fn test_word_diff_disabled(cx: &mut TestAppContext) {
 }
 
 /// Tests `excerpt_containing` and `excerpts_for_range` (functions mapping multi-buffer text-coordinates to excerpts)
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_excerpts_containment_functions(cx: &mut App) {
     // Multibuffer content for these tests:
     //    0123
@@ -6185,7 +6185,7 @@ fn test_excerpts_containment_functions(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_range_to_buffer_ranges(cx: &mut App) {
     let buffer_1 = cx.new(|cx| Buffer::local("aaa\nbbb", cx));
     let buffer_2 = cx.new(|cx| Buffer::local("ccc", cx));
@@ -6265,7 +6265,7 @@ fn test_range_to_buffer_ranges(cx: &mut App) {
     assert_eq!(ranges_half_open_max[1].1, BufferOffset(0)..BufferOffset(0));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_range_to_buffer_ranges_zero_length_at_excerpt_boundary(cx: &mut App) {
     let buffer_1 = cx.new(|cx| Buffer::local("aaa\nbbb", cx));
     let buffer_2 = cx.new(|cx| Buffer::local("ccc\nddd", cx));
@@ -6307,7 +6307,7 @@ fn test_range_to_buffer_ranges_zero_length_at_excerpt_boundary(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_buffer_range_to_excerpt_ranges(cx: &mut TestAppContext) {
     let base_text = indoc!(
         "
@@ -6427,7 +6427,7 @@ async fn test_buffer_range_to_excerpt_ranges(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_cannot_seek_backward_after_excerpt_replacement(cx: &mut TestAppContext) {
     let buffer_b_text: String = (0..50).map(|i| format!("line_b {i}\n")).collect();
     let buffer_b = cx.new(|cx| Buffer::local(buffer_b_text, cx));
@@ -6507,7 +6507,7 @@ fn test_cannot_seek_backward_after_excerpt_replacement(cx: &mut TestAppContext) 
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_resolving_max_anchor_for_buffer(cx: &mut TestAppContext) {
     let dock_base_text = indoc! {"
         0
@@ -6608,7 +6608,7 @@ fn test_resolving_max_anchor_for_buffer(cx: &mut TestAppContext) {
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_is_valid_anchor_past_last_excerpt_for_buffer(cx: &mut TestAppContext) {
     let buffer_a = cx.new(|cx| Buffer::local("aaa\nbbb\nccc\n", cx));
     buffer_a.update(cx, |buffer, cx| {
@@ -6920,7 +6920,7 @@ async fn test_anchor_comparison_tracks_resolution(
 /// order (it always chose the end), sorted-input consumers feeding
 /// comparison-sorted anchors to forward-only cursors walked backward in
 /// offset space — the "cannot seek backward" crash family (e.g. ZED-95K).
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_stale_path_anchor_comparison_tracks_resolution(cx: &mut TestAppContext) {
     let old_buffer = cx.new(|cx| Buffer::local("bbb\nccc\nddd\n", cx));
     let multibuffer = cx.new(|_| MultiBuffer::new(Capability::ReadWrite));
@@ -6984,7 +6984,7 @@ async fn test_stale_path_anchor_comparison_tracks_resolution(cx: &mut TestAppCon
 /// after — so `to_offset` and a shared-cursor `summaries_for_anchors`
 /// disagreed about the same anchor, and comparison-sorted consumers fed
 /// forward-only cursors positions that moved backward.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_collapsed_plain_anchor_resolves_past_deleted_hunk_rows(cx: &mut TestAppContext) {
     let base_text = "DEL1\nDEL2\nbbb\nccc\nddd\n";
     let buffer_a = cx.new(|cx| Buffer::local("bbb\nccc\nddd\n", cx));

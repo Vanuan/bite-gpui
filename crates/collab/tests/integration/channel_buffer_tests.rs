@@ -15,7 +15,7 @@ use std::ops::Range;
 use util::rel_path::rel_path;
 use workspace::CollaboratorId;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_core_channel_buffers(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -120,7 +120,7 @@ async fn test_core_channel_buffers(
     // - Test interaction with channel deletion while buffer is open
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_notes_participant_indices(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -333,7 +333,7 @@ fn assert_remote_selections(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_multiple_handles_to_channel_buffer(
     deterministic: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -392,7 +392,7 @@ async fn test_multiple_handles_to_channel_buffer(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_buffer_disconnect(
     deterministic: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -455,7 +455,7 @@ async fn test_channel_buffer_disconnect(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rejoin_channel_buffer(
     deterministic: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -535,7 +535,7 @@ async fn test_rejoin_channel_buffer(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_buffers_and_server_restarts(
     deterministic: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -622,7 +622,7 @@ async fn test_channel_buffers_and_server_restarts(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_buffer_changes(
     deterministic: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -680,7 +680,7 @@ async fn test_channel_buffer_changes(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_buffer_changes_persist(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -704,7 +704,7 @@ async fn test_channel_buffer_changes_persist(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_channel_buffer_operations_lost_on_reconnect(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,

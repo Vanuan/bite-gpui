@@ -735,7 +735,7 @@ impl PickerDelegate for OpenPathDelegate {
                                     if let Some(tx) = picker.delegate.tx.take() {
                                         tx.send(Some(vec![prompted_path])).ok();
                                     }
-                                    cx.emit(gpui::DismissEvent);
+                                    cx.emit(gpui_runtime::DismissEvent);
                                 })
                                 .ok();
                         });
@@ -747,7 +747,7 @@ impl PickerDelegate for OpenPathDelegate {
             },
         }
 
-        cx.emit(gpui::DismissEvent);
+        cx.emit(gpui_runtime::DismissEvent);
     }
 
     fn should_dismiss(&self) -> bool {
@@ -759,7 +759,7 @@ impl PickerDelegate for OpenPathDelegate {
         if let Some(tx) = self.tx.take() {
             tx.send(None).ok();
         }
-        cx.emit(gpui::DismissEvent)
+        cx.emit(gpui_runtime::DismissEvent)
     }
 
     fn render_match(

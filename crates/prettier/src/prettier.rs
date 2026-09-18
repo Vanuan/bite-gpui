@@ -707,8 +707,8 @@ mod tests {
 
     use super::*;
 
-    #[gpui::test]
-    async fn test_prettier_lookup_finds_nothing(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_prettier_lookup_finds_nothing(cx: &mut gpui_runtime::TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
             "/root",
@@ -780,8 +780,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_prettier_lookup_in_simple_npm_projects(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_prettier_lookup_in_simple_npm_projects(cx: &mut gpui_runtime::TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
             "/root",
@@ -845,8 +845,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_prettier_lookup_for_not_installed(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_prettier_lookup_for_not_installed(cx: &mut gpui_runtime::TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
             "/root",
@@ -937,8 +937,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_prettier_lookup_in_npm_workspaces(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_prettier_lookup_in_npm_workspaces(cx: &mut gpui_runtime::TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
             "/root",
@@ -1016,9 +1016,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prettier_lookup_in_npm_workspaces_for_not_installed(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1071,8 +1071,8 @@ mod tests {
         };
     }
 
-    #[gpui::test]
-    async fn test_prettier_ignore_with_editor_prettier(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_prettier_ignore_with_editor_prettier(cx: &mut gpui_runtime::TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
             "/root",
@@ -1104,9 +1104,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prettier_ignore_in_monorepo_with_only_child_ignore(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1154,9 +1154,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prettier_ignore_in_monorepo_with_root_and_child_ignores(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(

@@ -412,7 +412,7 @@ mod test {
     use gpui::{App, div};
     use multi_buffer::MultiBuffer;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_insert_and_remove_creases(cx: &mut App) {
         let text = "line1\nline2\nline3\nline4\nline5";
         let buffer = MultiBuffer::build_simple(text, cx);
@@ -467,7 +467,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     #[ztracing::instrument(skip_all)]
     fn test_creases_in_range(cx: &mut App) {
         let text = "line1\nline2\nline3\nline4\nline5\nline6\nline7";

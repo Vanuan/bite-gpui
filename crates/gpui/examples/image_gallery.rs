@@ -146,7 +146,7 @@ struct SimpleLruCacheProvider {
 }
 
 impl ImageCacheProvider for SimpleLruCacheProvider {
-    fn provide(&mut self, window: &mut Window, cx: &mut App) -> gpui::AnyImageCache {
+    fn provide(&mut self, window: &mut Window, cx: &mut App) -> gpui_runtime::AnyImageCache {
         window
             .with_global_id(self.id.clone(), |global_id, window| {
                 window.with_element_state::<Entity<SimpleLruCache>, _>(
@@ -169,7 +169,7 @@ impl ImageCacheProvider for SimpleLruCacheProvider {
 struct SimpleLruCache {
     max_items: usize,
     usages: Vec<u64>,
-    cache: HashMap<u64, gpui::ImageCacheItem>,
+    cache: HashMap<u64, gpui_runtime::ImageCacheItem>,
 }
 
 impl SimpleLruCache {
@@ -194,10 +194,10 @@ impl SimpleLruCache {
 impl ImageCache for SimpleLruCache {
     fn load(
         &mut self,
-        resource: &gpui::Resource,
+        resource: &gpui_runtime::Resource,
         window: &mut Window,
         cx: &mut App,
-    ) -> Option<Result<Arc<gpui::RenderImage>, gpui::ImageCacheError>> {
+    ) -> Option<Result<Arc<gpui_runtime::RenderImage>, gpui_runtime::ImageCacheError>> {
         assert_eq!(self.usages.len(), self.cache.len());
         assert!(self.cache.len() <= self.max_items);
 
@@ -225,7 +225,7 @@ impl ImageCache for SimpleLruCache {
                 cx.drop_image(image, Some(window));
             }
         }
-        let item = gpui::ImageCacheItem::new(resource, cx);
+        let item = gpui_runtime::ImageCacheItem::new(resource, cx);
         let result = item.use_image(window);
         self.cache.insert(hash, item);
         self.usages.insert(0, hash);
@@ -238,9 +238,9 @@ actions!(image, [Quit]);
 
 fn run_example() {
     #[cfg(not(target_family = "wasm"))]
-    let app = gpui_platform::application();
+    let app = gpui::application();
     #[cfg(target_family = "wasm")]
-    let app = gpui_platform::single_threaded_web();
+    let app = gpui::single_threaded_web();
 
     app.run(move |cx: &mut App| {
         if !example_support::load_fonts(cx) {
@@ -294,6 +294,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

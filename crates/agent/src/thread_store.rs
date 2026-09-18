@@ -142,7 +142,7 @@ mod tests {
     use super::*;
     use chrono::{DateTime, TimeZone, Utc};
     use collections::HashMap;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use std::sync::Arc;
 
     fn session_id(value: &str) -> acp::SessionId {
@@ -171,7 +171,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_entries_are_sorted_by_updated_at(cx: &mut TestAppContext) {
         let thread_store = cx.new(|cx| ThreadStore::new(cx));
         cx.run_until_parked();
@@ -206,7 +206,7 @@ mod tests {
         assert_eq!(entries[1].id, older_id);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_threads_clears_entries(cx: &mut TestAppContext) {
         let thread_store = cx.new(|cx| ThreadStore::new(cx));
         cx.run_until_parked();
@@ -232,7 +232,7 @@ mod tests {
         assert!(thread_store.read_with(cx, |store, _cx| store.is_empty()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_thread_removes_only_target(cx: &mut TestAppContext) {
         let thread_store = cx.new(|cx| ThreadStore::new(cx));
         cx.run_until_parked();
@@ -269,7 +269,7 @@ mod tests {
         assert_eq!(entries[0].id, second_id);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_thread_refreshes_ordering(cx: &mut TestAppContext) {
         let thread_store = cx.new(|cx| ThreadStore::new(cx));
         cx.run_until_parked();

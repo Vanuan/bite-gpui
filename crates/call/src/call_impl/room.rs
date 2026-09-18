@@ -88,7 +88,7 @@ pub struct Room {
     user_store: Entity<UserStore>,
     follows_by_leader_id_project_id: HashMap<(PeerId, u64), Vec<PeerId>>,
     client_subscriptions: Vec<client::Subscription>,
-    _subscriptions: Vec<gpui::Subscription>,
+    _subscriptions: Vec<gpui_runtime::Subscription>,
     room_update_completed_tx: watch::Sender<Option<()>>,
     room_update_completed_rx: watch::Receiver<Option<()>>,
     pending_room_update: Option<Task<()>>,

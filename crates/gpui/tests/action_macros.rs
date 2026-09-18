@@ -19,18 +19,18 @@ fn test_action_macros() {
     #[serde(deny_unknown_fields)]
     struct AnotherAction;
 
-    #[derive(PartialEq, Clone, gpui::private::serde::Deserialize)]
+    #[derive(PartialEq, Clone, gpui_runtime::private::serde::Deserialize)]
     #[serde(deny_unknown_fields)]
     struct RegisterableAction {}
 
     register_action!(RegisterableAction);
 
-    impl gpui::Action for RegisterableAction {
-        fn boxed_clone(&self) -> Box<dyn gpui::Action> {
+    impl gpui_runtime::Action for RegisterableAction {
+        fn boxed_clone(&self) -> Box<dyn gpui_runtime::Action> {
             unimplemented!()
         }
 
-        fn partial_eq(&self, _action: &dyn gpui::Action) -> bool {
+        fn partial_eq(&self, _action: &dyn gpui_runtime::Action) -> bool {
             unimplemented!()
         }
 
@@ -45,7 +45,7 @@ fn test_action_macros() {
             unimplemented!()
         }
 
-        fn build(_value: serde_json::Value) -> anyhow::Result<Box<dyn gpui::Action>>
+        fn build(_value: serde_json::Value) -> anyhow::Result<Box<dyn gpui_runtime::Action>>
         where
             Self: Sized,
         {

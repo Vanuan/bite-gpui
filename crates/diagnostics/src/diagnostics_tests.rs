@@ -35,7 +35,7 @@ fn init_logger() {
     zlog::init_test();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostics(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -332,7 +332,7 @@ async fn test_diagnostics(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostics_with_folds(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -442,7 +442,7 @@ async fn test_diagnostics_with_folds(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostics_multiple_servers(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -664,7 +664,7 @@ async fn test_diagnostics_multiple_servers(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test(iterations = 20)]
+#[gpui_runtime::test(iterations = 20)]
 async fn test_random_diagnostics_blocks(cx: &mut TestAppContext, mut rng: StdRng) {
     init_test(cx);
 
@@ -839,7 +839,7 @@ async fn test_random_diagnostics_blocks(cx: &mut TestAppContext, mut rng: StdRng
 }
 
 // similar to above, but with inlays. Used to find panics when mixing diagnostics and inlays.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_random_diagnostics_with_inlays(cx: &mut TestAppContext, mut rng: StdRng) {
     init_test(cx);
 
@@ -999,7 +999,7 @@ async fn test_random_diagnostics_with_inlays(cx: &mut TestAppContext, mut rng: S
     cx.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn active_diagnostics_dismiss_after_invalidation(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1134,7 +1134,7 @@ async fn active_diagnostics_dismiss_after_invalidation(cx: &mut TestAppContext) 
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn cycle_through_same_place_diagnostics(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1303,7 +1303,7 @@ async fn cycle_through_same_place_diagnostics(cx: &mut TestAppContext) {
     "});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostics_with_links(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1347,7 +1347,7 @@ async fn test_diagnostics_with_links(cx: &mut TestAppContext) {
     cx.update_editor(|editor, _, _| assert!(editor.hover_state.diagnostic_popover.is_some()))
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_markup_content_diagnostic_messages_render_as_markdown(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1489,7 +1489,7 @@ async fn test_markup_content_diagnostic_messages_render_as_markdown(cx: &mut Tes
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostics_views_update_when_only_markdown_changes(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1625,8 +1625,8 @@ async fn test_diagnostics_views_update_when_only_markdown_changes(cx: &mut TestA
     );
 }
 
-#[gpui::test]
-async fn test_hover_diagnostic_and_info_popovers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_hover_diagnostic_and_info_popovers(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let mut cx = EditorLspTestContext::new_rust(
@@ -1704,7 +1704,7 @@ async fn test_hover_diagnostic_and_info_popovers(cx: &mut gpui::TestAppContext) 
         hover_state.diagnostic_popover.is_some() && hover_state.info_task.is_some()
     });
 }
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostics_with_code(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1805,7 +1805,7 @@ async fn test_diagnostics_with_code(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn go_to_diagnostic_with_severity(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1929,7 +1929,7 @@ async fn go_to_diagnostic_with_severity(cx: &mut TestAppContext) {
     cx.assert_editor_state(indoc! {"error ˇwarning info hint"});
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_buffer_diagnostics(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2101,7 +2101,7 @@ async fn test_buffer_diagnostics(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_buffer_diagnostics_without_warnings(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2234,7 +2234,7 @@ async fn test_buffer_diagnostics_without_warnings(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_buffer_diagnostics_multiple_servers(cx: &mut TestAppContext) {
     init_test(cx);
 

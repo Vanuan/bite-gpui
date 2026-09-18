@@ -514,7 +514,7 @@ impl Render for WelcomePage {
 impl EventEmitter<ItemEvent> for WelcomePage {}
 
 impl Focusable for WelcomePage {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -561,7 +561,7 @@ impl crate::SerializableItem for WelcomePage {
 
     fn deserialize(
         _project: Entity<project::Project>,
-        workspace: gpui::WeakEntity<Workspace>,
+        workspace: gpui_runtime::WeakEntity<Workspace>,
         workspace_id: crate::WorkspaceId,
         item_id: crate::ItemId,
         window: &mut Window,

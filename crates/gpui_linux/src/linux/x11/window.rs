@@ -1475,7 +1475,7 @@ impl PlatformWindow for X11Window {
             .unwrap_or_default()
     }
 
-    fn capslock(&self) -> gpui::Capslock {
+    fn capslock(&self) -> gpui_types::Capslock {
         self.0
             .state
             .borrow()

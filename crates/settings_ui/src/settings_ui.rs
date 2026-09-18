@@ -876,7 +876,7 @@ fn open_settings_editor_with(
         let default_bounds = DEFAULT_ADDITIONAL_WINDOW_SIZE;
         let default_rem_size = 16.0;
         let scale_factor = current_rem_size / default_rem_size;
-        let scaled_bounds: gpui::Size<Pixels> = default_bounds.map(|axis| axis * scale_factor);
+        let scaled_bounds: gpui_types::Size<Pixels> = default_bounds.map(|axis| axis * scale_factor);
 
         let app_id = ReleaseChannel::global(cx).app_id();
         let window_decorations = match std::env::var("ZED_WINDOW_DECORATIONS") {
@@ -902,7 +902,7 @@ fn open_settings_editor_with(
                 window_background: cx.theme().window_background_appearance(),
                 app_id: Some(app_id.to_owned()),
                 window_decorations: Some(window_decorations),
-                window_min_size: Some(gpui::Size {
+                window_min_size: Some(gpui_types::Size {
                     // Do not make the settings window thinner than this,
                     // otherwise, the space used to display the actual content
                     // gets so small that certain sections grow too tall due
@@ -967,7 +967,7 @@ pub struct SettingsWindow {
     /// [page_index][page_item_index] will be false
     /// when the item is filtered out either by searches
     /// or by the current file
-    navbar_focus_subscriptions: Vec<gpui::Subscription>,
+    navbar_focus_subscriptions: Vec<gpui_runtime::Subscription>,
     filter_table: Vec<Vec<bool>>,
     has_query: bool,
     content_handles: Vec<Vec<Entity<NonFocusableHandle>>>,
@@ -984,7 +984,7 @@ pub struct SettingsWindow {
     last_copied_link_path: Option<&'static str>,
     /// Cached configuration views per provider, created lazily.
     pub(crate) provider_configuration_views:
-        HashMap<language_model::LanguageModelProviderId, gpui::AnyView>,
+        HashMap<language_model::LanguageModelProviderId, gpui_runtime::AnyView>,
     /// The provider whose configuration sub-page is currently open, if any.
     pub(crate) configuring_provider: Option<language_model::LanguageModelProviderId>,
     /// Directory path of the skill whose share link was most recently copied,
@@ -1973,7 +1973,7 @@ impl SettingsWindow {
             None
         };
 
-        let list_state = gpui::ListState::new(0, gpui::ListAlignment::Top, px(0.0)).measure_all();
+        let list_state = gpui_runtime::ListState::new(0, gpui_runtime::ListAlignment::Top, px(0.0)).measure_all();
         list_state.set_scroll_handler(|_, _, _| {});
 
         let mut this = Self {
@@ -2095,7 +2095,7 @@ impl SettingsWindow {
     fn toggle_navbar_entry_on_double_click(
         &mut self,
         nav_entry_index: usize,
-        event: &gpui::ClickEvent,
+        event: &gpui_runtime::ClickEvent,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) -> bool {
@@ -2693,7 +2693,7 @@ impl SettingsWindow {
         if let Some((logical_index, navbar_entry_index)) = best_match.or(first_entry) {
             self.open_navbar_entry_page(navbar_entry_index);
             self.navbar_scroll_handle
-                .scroll_to_item(logical_index + 1, gpui::ScrollStrategy::Top);
+                .scroll_to_item(logical_index + 1, gpui_runtime::ScrollStrategy::Top);
         }
     }
 
@@ -2714,7 +2714,7 @@ impl SettingsWindow {
             })
             .map(|(position, _)| position);
         if let Some(position) = position {
-            self.list_state.scroll_to(gpui::ListOffset {
+            self.list_state.scroll_to(gpui_runtime::ListOffset {
                 item_ix: position + 1,
                 offset_in_item: px(0.),
             });
@@ -2844,7 +2844,7 @@ impl SettingsWindow {
                 .track_focus(focus_handle)
                 .on_click(cx.listener({
                     let focus_handle = focus_handle.clone();
-                    move |this, _: &gpui::ClickEvent, window, cx| {
+                    move |this, _: &gpui_runtime::ClickEvent, window, cx| {
                         this.change_file(ix, window, cx);
                         focus_handle.focus(window, cx);
                     }
@@ -2938,8 +2938,8 @@ impl SettingsWindow {
                                     .style(DropdownStyle::Subtle)
                                     .trigger_tooltip(Tooltip::text("View Other Projects"))
                                     .trigger_icon(IconName::ChevronDown)
-                                    .attach(gpui::Anchor::BottomLeft)
-                                    .offset(gpui::Point {
+                                    .attach(gpui_types::Anchor::BottomLeft)
+                                    .offset(gpui_types::Point {
                                         x: px(0.0),
                                         y: px(2.0),
                                     })
@@ -3168,7 +3168,7 @@ impl SettingsWindow {
                 };
                 this.open_and_scroll_to_navbar_entry(
                     next_entry_index,
-                    Some(gpui::ScrollStrategy::Bottom),
+                    Some(gpui_runtime::ScrollStrategy::Bottom),
                     false,
                     window,
                     cx,
@@ -3190,7 +3190,7 @@ impl SettingsWindow {
                 };
                 this.open_and_scroll_to_navbar_entry(
                     prev_entry_index,
-                    Some(gpui::ScrollStrategy::Top),
+                    Some(gpui_runtime::ScrollStrategy::Top),
                     false,
                     window,
                     cx,
@@ -3248,7 +3248,7 @@ impl SettingsWindow {
                                             let subcategory =
                                                 (!entry.is_root).then_some(entry.title);
 
-                                            cx.listener(move |this, event: &gpui::ClickEvent, window, cx| {
+                                            cx.listener(move |this, event: &gpui_runtime::ClickEvent, window, cx| {
                                                 if this.toggle_navbar_entry_on_double_click(
                                                         entry_index,
                                                         event,
@@ -3309,7 +3309,7 @@ impl SettingsWindow {
     fn open_and_scroll_to_navbar_entry(
         &mut self,
         navbar_entry_index: usize,
-        scroll_strategy: Option<gpui::ScrollStrategy>,
+        scroll_strategy: Option<gpui_runtime::ScrollStrategy>,
         focus_content: bool,
         window: &mut Window,
         cx: &mut Context<Self>,
@@ -3400,13 +3400,13 @@ impl SettingsWindow {
                 scroll_handle.set_offset(point(px(0.), px(0.)));
             }
 
-            self.list_state.scroll_to(gpui::ListOffset {
+            self.list_state.scroll_to(gpui_runtime::ListOffset {
                 item_ix: 0,
                 offset_in_item: px(0.),
             });
             return;
         }
-        self.list_state.scroll_to(gpui::ListOffset {
+        self.list_state.scroll_to(gpui_runtime::ListOffset {
             item_ix: index + 1,
             offset_in_item: px(0.),
         });
@@ -3442,7 +3442,7 @@ impl SettingsWindow {
             return;
         };
         self.navbar_scroll_handle
-            .scroll_to_item(position, gpui::ScrollStrategy::Top);
+            .scroll_to_item(position, gpui_runtime::ScrollStrategy::Top);
         window.focus(&self.navbar_entries[nav_entry_index].focus_handle, cx);
         cx.notify();
     }
@@ -3523,8 +3523,8 @@ impl SettingsWindow {
             )
             .style(DropdownStyle::Subtle)
             .trigger_tooltip(Tooltip::text("Change Scope"))
-            .attach(gpui::Anchor::BottomLeft)
-            .offset(gpui::Point {
+            .attach(gpui_types::Anchor::BottomLeft)
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(2.0),
             })
@@ -3626,7 +3626,7 @@ impl SettingsWindow {
 
                     let mut visible_items = this.visible_page_items();
                     let Some((actual_item_index, item)) = visible_items.nth(index - 1) else {
-                        return gpui::Empty.into_any_element();
+                        return gpui_runtime::Empty.into_any_element();
                     };
 
                     let next_is_header = visible_items
@@ -3857,7 +3857,7 @@ impl SettingsWindow {
 
         let current_sub_page = self.sub_page_stack.last();
 
-        let mut warning_banner = gpui::Empty.into_any_element();
+        let mut warning_banner = gpui_runtime::Empty.into_any_element();
         if let Some(error) =
             SettingsStore::global(cx).error_for_file(self.current_file.to_settings())
         {
@@ -3926,7 +3926,7 @@ impl SettingsWindow {
                 .into_any_element()
         }
 
-        let mut restricted_banner = gpui::Empty.into_any_element();
+        let mut restricted_banner = gpui_runtime::Empty.into_any_element();
         if let SettingsUiFile::Project((worktree_id, _)) = &self.current_file {
             let worktree_id = *worktree_id;
             let is_restricted = all_projects(self.original_window.as_ref(), cx)
@@ -5108,7 +5108,7 @@ fn render_picker_trigger_button(id: SharedString, label: SharedString) -> Button
 /// Wires the Expand/Collapse accessibility actions on a picker trigger button to
 /// the popover handle, so assistive technology can open and close the picker
 /// (used by UIA on Windows and AX on macOS; Linux/AT-SPI uses the click action).
-fn wire_picker_trigger_a11y<M: gpui::ManagedView>(
+fn wire_picker_trigger_a11y<M: gpui_runtime::ManagedView>(
     button: Button,
     handle: ui::PopoverMenuHandle<M>,
 ) -> Button {
@@ -5175,8 +5175,8 @@ fn render_font_picker(
                 )
             }))
         })
-        .anchor(gpui::Anchor::TopLeft)
-        .offset(gpui::Point {
+        .anchor(gpui_types::Anchor::TopLeft)
+        .offset(gpui_types::Point {
             x: px(0.0),
             y: px(2.0),
         })
@@ -5236,8 +5236,8 @@ fn render_theme_picker(
                 )
             }))
         })
-        .anchor(gpui::Anchor::TopLeft)
-        .offset(gpui::Point {
+        .anchor(gpui_types::Anchor::TopLeft)
+        .offset(gpui_types::Point {
             x: px(0.0),
             y: px(2.0),
         })
@@ -5297,8 +5297,8 @@ fn render_icon_theme_picker(
                 )
             }))
         })
-        .anchor(gpui::Anchor::TopLeft)
-        .offset(gpui::Point {
+        .anchor(gpui_types::Anchor::TopLeft)
+        .offset(gpui_types::Point {
             x: px(0.0),
             y: px(2.0),
         })
@@ -5357,7 +5357,7 @@ pub mod test {
                 ),
                 files_focus_handle: cx.focus_handle(),
                 search_index: None,
-                list_state: ListState::new(0, gpui::ListAlignment::Top, px(0.0)),
+                list_state: ListState::new(0, gpui_runtime::ListAlignment::Top, px(0.0)),
                 shown_errors: HashSet::default(),
                 hidden_deleted_skill_directory_paths: HashSet::default(),
                 regex_validation_error: None,
@@ -5496,7 +5496,7 @@ pub mod test {
             ),
             files_focus_handle: cx.focus_handle(),
             search_index: None,
-            list_state: ListState::new(0, gpui::ListAlignment::Top, px(0.0)),
+            list_state: ListState::new(0, gpui_runtime::ListAlignment::Top, px(0.0)),
             shown_errors: HashSet::default(),
             hidden_deleted_skill_directory_paths: HashSet::default(),
             regex_validation_error: None,
@@ -5567,8 +5567,8 @@ pub mod test {
 
     macro_rules! check_navbar_toggle {
         ($name:ident, before: $before:expr, toggle_page: $toggle_page:expr, after: $after:expr) => {
-            #[gpui::test]
-            fn $name(cx: &mut gpui::TestAppContext) {
+            #[gpui_runtime::test]
+            fn $name(cx: &mut gpui_runtime::TestAppContext) {
                 let window = cx.add_empty_window();
                 window.update(|window, cx| {
                     register_settings(cx);
@@ -5702,8 +5702,8 @@ pub mod test {
         "
     );
 
-    #[gpui::test]
-    fn navbar_double_click_toggle(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn navbar_double_click_toggle(cx: &mut gpui_runtime::TestAppContext) {
         let (settings_window, cx) = cx.add_window_view(|window, cx| {
             register_settings(cx);
             let mut settings_window = parse(
@@ -5734,7 +5734,7 @@ pub mod test {
                 .expect("Privacy nested entry should exist");
 
             let click_event = |click_count| {
-                gpui::ClickEvent::Mouse(gpui::MouseClickEvent {
+                gpui_runtime::ClickEvent::Mouse(gpui_runtime::MouseClickEvent {
                     down: gpui::MouseDownEvent {
                         button: gpui::MouseButton::Left,
                         click_count,
@@ -5787,9 +5787,9 @@ pub mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_settings_window_shows_worktrees_from_multiple_workspaces(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         use project::Project;
         use serde_json::json;
@@ -5961,9 +5961,9 @@ pub mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_settings_window_updates_when_new_workspace_created(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         use project::Project;
         use serde_json::json;
@@ -6131,8 +6131,8 @@ pub mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_skills_page_scope_switch_updates_displayed_skills(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_skills_page_scope_switch_updates_displayed_skills(cx: &mut gpui_runtime::TestAppContext) {
         use agent_skills::{
             ProjectSkillGroup, Skill, SkillScopeId, SkillSource, load_skills_from_directory,
         };
@@ -6306,8 +6306,8 @@ pub mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_open_skill_creator_navigates_to_sub_page(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_open_skill_creator_navigates_to_sub_page(cx: &mut gpui_runtime::TestAppContext) {
         use project::Project;
 
         cx.update(|cx| {
@@ -6394,9 +6394,9 @@ pub mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_skill_creator_action_opens_settings_window_at_sub_page(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         use project::Project;
 
@@ -6489,7 +6489,7 @@ pub mod test {
 mod project_settings_update_tests {
     use super::*;
     use fs::{FakeFs, Fs as _};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::Project;
     use serde_json::json;
     use std::sync::atomic::{AtomicUsize, Ordering};
@@ -6552,7 +6552,7 @@ mod project_settings_update_tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_creates_settings_file_if_missing(cx: &mut TestAppContext) {
         let setup = init_test(cx, None).await;
 
@@ -6586,7 +6586,7 @@ mod project_settings_update_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_updates_existing_settings_file(cx: &mut TestAppContext) {
         let setup = init_test(cx, Some(r#"{ "tab_size": 2 }"#)).await;
 
@@ -6620,7 +6620,7 @@ mod project_settings_update_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_updates_are_serialized(cx: &mut TestAppContext) {
         let setup = init_test(cx, Some("{}")).await;
 
@@ -6664,7 +6664,7 @@ mod project_settings_update_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_queue_continues_after_failure(cx: &mut TestAppContext) {
         let setup = init_test(cx, Some("{}")).await;
 
@@ -6743,7 +6743,7 @@ mod project_settings_update_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_handles_dropped_worktree(cx: &mut TestAppContext) {
         let setup = init_test(cx, Some("{}")).await;
 
@@ -6773,7 +6773,7 @@ mod project_settings_update_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reloads_conflicted_buffer(cx: &mut TestAppContext) {
         let setup = init_test(cx, Some(r#"{ "tab_size": 2 }"#)).await;
 

@@ -1361,7 +1361,7 @@ pub struct PreviousWorkspaceState {
 }
 
 pub struct WorkspaceStore {
-    workspaces: HashSet<(gpui::AnyWindowHandle, WeakEntity<Workspace>)>,
+    workspaces: HashSet<(gpui_runtime::AnyWindowHandle, WeakEntity<Workspace>)>,
     client: Arc<Client>,
     _subscriptions: Vec<client::Subscription>,
 }
@@ -5951,7 +5951,7 @@ impl Workspace {
 
     pub fn resize_pane(
         &mut self,
-        axis: gpui::Axis,
+        axis: gpui_types::Axis,
         amount: Pixels,
         window: &mut Window,
         cx: &mut Context<Self>,
@@ -9554,7 +9554,7 @@ struct DraggedDock(DockPosition);
 
 impl Render for DraggedDock {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        gpui::Empty
+        gpui_runtime::Empty
     }
 }
 
@@ -10137,7 +10137,7 @@ impl WorkspaceStore {
 
     pub fn workspaces_with_windows(
         &self,
-    ) -> impl Iterator<Item = (gpui::AnyWindowHandle, &WeakEntity<Workspace>)> {
+    ) -> impl Iterator<Item = (gpui_runtime::AnyWindowHandle, &WeakEntity<Workspace>)> {
         self.workspaces.iter().map(|(window, weak)| (*window, weak))
     }
 }
@@ -11949,7 +11949,7 @@ pub fn client_side_decorations(
                         .when(!tiling.right, |div| div.border_r(BORDER_SIZE))
                         .when(!tiling.is_tiled(), |div| {
                             div.shadow(vec![
-                                gpui::BoxShadow::new(
+                                gpui_runtime::BoxShadow::new(
                                     px(0.),
                                     px(0.),
                                     Hsla {
@@ -12533,7 +12533,7 @@ mod tests {
         assert!(!noise.branch);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tab_disambiguation(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12582,7 +12582,7 @@ mod tests {
         item3.read_with(cx, |item, _| assert_eq!(item.tab_detail.get(), Some(3)));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tracking_active_path(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12676,7 +12676,7 @@ mod tests {
         assert_eq!(cx.window_title().as_deref(), Some("root2 — one.txt"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_document_path_updates_with_active_item(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12756,7 +12756,7 @@ mod tests {
         assert_eq!(cx.document_path(), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_window_title_format_setting(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12862,7 +12862,7 @@ mod tests {
         assert_eq!(cx.window_title().as_deref(), Some("root1 | one.txt"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_window_title_format_path_variables(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12914,7 +12914,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_window_title_format_empty_project(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12934,7 +12934,7 @@ mod tests {
         assert_eq!(cx.window_title().as_deref(), Some("empty project"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_window_title_format_branch(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12990,7 +12990,7 @@ mod tests {
         assert_eq!(cx.window_title().as_deref(), Some("root1 — a.txt"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_window_title_collab_indicator_remains_appended(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13020,7 +13020,7 @@ mod tests {
         assert_eq!(cx.window_title().as_deref(), Some("root1 — one.txt ↙"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_window(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13063,7 +13063,7 @@ mod tests {
         assert!(!task.await.unwrap());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multi_workspace_close_window_multiple_workspaces_cancel(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13150,7 +13150,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_workspace_prompts_for_unsaved_changes(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13267,7 +13267,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_window_with_worktrees_hot_exits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13311,7 +13311,7 @@ mod tests {
     // `save_last_workspace`, which preserves the session (same as `Quit`),
     // so hot-exit is safe there.
     #[cfg(target_os = "macos")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_window_without_worktrees_prompts(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13350,7 +13350,7 @@ mod tests {
     }
 
     #[cfg(target_os = "macos")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancelled_close_window_resets_removing(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13387,7 +13387,7 @@ mod tests {
         assert_eq!(remaining_windows, 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_failed_close_window_resets_removing(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13421,7 +13421,7 @@ mod tests {
         assert_eq!(remaining_windows, 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_quit_without_worktrees_hot_exits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13457,7 +13457,7 @@ mod tests {
     }
 
     // See https://github.com/zed-industries/zed/issues/55726.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_window_without_worktrees_prompts(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13495,7 +13495,7 @@ mod tests {
         assert!(task.await.unwrap());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_window_with_worktrees_hot_exits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13532,7 +13532,7 @@ mod tests {
         assert!(task.await.unwrap());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_window_with_failing_serialize_prompts(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13575,7 +13575,7 @@ mod tests {
         assert!(task.await.unwrap());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_pane_items(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13671,7 +13671,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prompting_to_save_only_on_last_item_for_entry(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13830,8 +13830,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_autosave(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_autosave(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -13988,8 +13988,8 @@ mod tests {
         item.read_with(cx, |item, _| assert_eq!(item.save_count, 6));
     }
 
-    #[gpui::test]
-    async fn test_autosave_on_focus_change_in_multibuffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_autosave_on_focus_change_in_multibuffer(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -14071,8 +14071,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_autosave_deferred_for_modals(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_autosave_deferred_for_modals(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -14151,8 +14151,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_autosave_deferred_until_pane_focus(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_autosave_deferred_until_pane_focus(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -14206,8 +14206,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_pane_navigation(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_pane_navigation(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -14273,8 +14273,8 @@ mod tests {
     ///
     /// This behavior prevents the navigation history from growing unnecessarily large and provides
     /// a better user experience by eliminating redundant navigation steps when jumping between files.
-    #[gpui::test]
-    async fn test_navigation_history_deduplication(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_navigation_history_deduplication(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -14385,9 +14385,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_clear_navigation_history_clears_persisted_recent_paths(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -14416,8 +14416,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_activate_last_pane(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_activate_last_pane(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
         let project = Project::test(fs, [], cx).await;
@@ -14468,8 +14468,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_reset_pane_sizes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_reset_pane_sizes(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
         let project = Project::test(fs, [], cx).await;
@@ -14536,8 +14536,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_toggle_docks_and_panels(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_toggle_docks_and_panels(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -14688,9 +14688,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_panel_activation_and_region_navigation_focus_activation_handle(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -14731,8 +14731,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_close_panel_on_toggle(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_close_panel_on_toggle(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -14843,7 +14843,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pane_zoom_in_out(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -14942,7 +14942,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_editor_zoom(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -15011,8 +15011,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_toggle_all_docks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_toggle_all_docks(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -15052,8 +15052,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_toggle_all_with_manual_close(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_toggle_all_with_manual_close(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -15094,8 +15094,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_toggle_all_docks_after_dock_move(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_toggle_all_docks_after_dock_move(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
         let project = Project::test(fs, [], cx).await;
@@ -15244,8 +15244,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_join_pane_into_next(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_join_pane_into_next(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -15471,8 +15471,8 @@ mod tests {
         )
     }
 
-    #[gpui::test]
-    async fn test_active_pane_decorations_follow_window_focus(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_active_pane_decorations_follow_window_focus(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
         let project = Project::test(fs, None, cx).await;
@@ -15532,8 +15532,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_join_all_panes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_join_all_panes(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
         let project = Project::test(fs, None, cx).await;
@@ -15582,8 +15582,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_flexible_dock_sizing(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_flexible_dock_sizing(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -15650,7 +15650,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_clamp_panel_size_only_skips_flexible_width(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -15684,8 +15684,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_panel_size_state_persistence(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_panel_size_state_persistence(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -15813,8 +15813,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_default_size_change_resets_saved_size(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_default_size_change_resets_saved_size(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -15882,8 +15882,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_reset_all_panel_sizes_in_dock(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_reset_all_panel_sizes_in_dock(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         cx.update_global(|store: &mut SettingsStore, cx| {
             store.update_user_settings(cx, |settings| {
@@ -15996,8 +15996,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_reset_panel_mixed_modes(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_reset_panel_mixed_modes(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         cx.update_global(|store: &mut SettingsStore, cx| {
             store.update_user_settings(cx, |settings| {
@@ -16128,8 +16128,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_flexible_panel_left_dock_sizing(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_flexible_panel_left_dock_sizing(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -16358,8 +16358,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_reopen_last_picker(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_reopen_last_picker(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -16475,8 +16475,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_reopen_last_picker_with_active_leader_modal(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_reopen_last_picker_with_active_leader_modal(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -16519,8 +16519,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_panels(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_panels(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -16758,8 +16758,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_zoomed_panel_stays_open_when_focus_is_lost(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_zoomed_panel_stays_open_when_focus_is_lost(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
 
@@ -16797,9 +16797,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_focus_restores_to_panel_when_focused_child_is_removed(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -16850,7 +16850,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_save_prompt_when_multi_buffer_dirty_items_closed(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -16993,7 +16993,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_prompt_when_dirty_multi_buffer_closed_with_some_of_its_dirty_items_not_present_in_the_pane(
         cx: &mut TestAppContext,
     ) {
@@ -17083,7 +17083,7 @@ mod tests {
 
     /// Tests that when `close_on_file_delete` is enabled, files are automatically
     /// closed when they are deleted from disk.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_on_disk_deletion_enabled(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -17151,7 +17151,7 @@ mod tests {
 
     /// Tests that when `close_on_file_delete` is disabled (default), files remain
     /// open with a strikethrough when they are deleted from disk.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_on_disk_deletion_disabled(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -17228,7 +17228,7 @@ mod tests {
     /// Tests that dirty files are not automatically closed when deleted from disk,
     /// even when `close_on_file_delete` is enabled. This ensures users don't lose
     /// unsaved changes without being prompted.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_on_disk_deletion_with_dirty_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -17301,7 +17301,7 @@ mod tests {
 
     /// Tests that navigation history is cleaned up when files are auto-closed
     /// due to deletion from disk.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_on_disk_deletion_cleans_navigation_history(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -17407,7 +17407,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reopen_closed_item_skips_items_without_paths(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -17485,7 +17485,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_save_prompt_when_dirty_multi_buffer_closed_with_all_of_its_dirty_items_present_in_the_pane(
         cx: &mut TestAppContext,
     ) {
@@ -17602,8 +17602,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_move_focused_panel_to_next_position(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_move_focused_panel_to_next_position(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
         let project = Project::test(fs, [], cx).await;
@@ -17666,12 +17666,12 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_active_pane_updates_to_focus_target_on_removal(cx: &mut TestAppContext) {
         assert_active_pane_is_replaced_after_removal(cx, true).await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_active_pane_updates_to_fallback_on_removal(cx: &mut TestAppContext) {
         assert_active_pane_is_replaced_after_removal(cx, false).await;
     }
@@ -17707,7 +17707,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_moving_items_create_panes(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -17822,7 +17822,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_moving_items_can_clone_panes(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -17883,7 +17883,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_item_in_all_panes(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -17978,7 +17978,7 @@ mod tests {
         assert_eq!(item_count_c, 0, "Unpinned item in pane C should be closed");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restoring_pinned_tabs_when_items_fail_to_deserialize(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -18040,7 +18040,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restoring_active_and_preview_tabs_when_items_fail_to_deserialize(
         cx: &mut TestAppContext,
     ) {
@@ -18104,7 +18104,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_serializing_pinned_tabs_when_items_are_not_serializable(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -18422,7 +18422,7 @@ mod tests {
             }
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_register_project_item(cx: &mut TestAppContext) {
             init_test(cx);
 
@@ -18486,7 +18486,7 @@ mod tests {
             assert!(handle.is_err());
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_reveal_if_open(cx: &mut TestAppContext) {
             init_test(cx);
             cx.update(register_project_item::<TestPngItemView>);
@@ -18607,7 +18607,7 @@ mod tests {
             });
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_open_url_or_file_resolves_remote_base_path(cx: &mut TestAppContext) {
             init_test(cx);
             cx.update(register_project_item::<TestPngItemView>);
@@ -18644,7 +18644,7 @@ mod tests {
             assert_eq!(project_path.path.as_ref(), rel_path("docs/sibling.png"));
         }
 
-        #[gpui::test]
+        #[gpui_runtime::test]
         async fn test_register_project_item_two_enter_one_leaves(cx: &mut TestAppContext) {
             init_test(cx);
 
@@ -18694,7 +18694,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_status_bar_visibility(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -18734,7 +18734,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pane_close_active_item(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -18796,7 +18796,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pane_close_active_item_from_dock_with_all_tabs_pinned(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -18847,7 +18847,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_panel_zoom_preserved_across_workspace_switch(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -18952,7 +18952,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_window_title_follows_active_workspace(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -18996,7 +18996,7 @@ mod tests {
         assert_eq!(cx.window_title().as_deref(), Some("root1"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_background_workspace_does_not_clobber_window_title(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -19059,7 +19059,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_theme_mode_persists_and_updates_active_theme(cx: &mut TestAppContext) {
         use settings::{ThemeName, ThemeSelection};
         use theme::SystemAppearance;
@@ -19150,9 +19150,9 @@ mod tests {
         item
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_zoomed_panel_without_pane_preserved_on_center_focus(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -19213,9 +19213,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_panels_stay_open_after_position_change_and_settings_update(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -19281,7 +19281,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_most_recent_active_path_skips_read_only_paths(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -19328,9 +19328,9 @@ mod tests {
         assert_eq!(path, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_recent_navigation_history_includes_persisted_paths(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -19390,8 +19390,8 @@ mod tests {
         assert_eq!(history, vec![PathBuf::from("a.rs"), PathBuf::from("b.rs")]);
     }
 
-    #[gpui::test]
-    async fn test_active_project_path_changes_are_persisted(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_active_project_path_changes_are_persisted(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         cx.update(register_serializable_item::<TestItem>);
 
@@ -19512,9 +19512,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_persisted_recent_navigation_history_is_bounded_mru(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -19575,9 +19575,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_rename_updates_persisted_navigation_history(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -19637,7 +19637,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_url_or_file_routes_urls(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -19682,9 +19682,9 @@ mod tests {
         assert_eq!(cx.opened_url(), Some("nonexistent.txt".to_string()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_serialized_dock_state_not_replayed_over_manual_panel_changes(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -19756,8 +19756,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_closed_dock_not_reopened_by_late_serialized_panel(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_closed_dock_not_reopened_by_late_serialized_panel(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
         let project = Project::test(fs, [], cx).await;
@@ -19800,9 +19800,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stale_serialized_dock_state_discarded_when_panel_loading_finishes(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -19848,9 +19848,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_serialized_state_for_missing_panel_dropped_after_restoration_finishes(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -19898,9 +19898,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_serialized_zoom_not_applied_while_waiting_for_serialized_panel(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());

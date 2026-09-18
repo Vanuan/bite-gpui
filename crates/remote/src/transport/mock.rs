@@ -9,7 +9,7 @@
 //! ```rust,ignore
 //! use remote::{MockConnection, RemoteClient};
 //!
-//! #[gpui::test]
+//! #[gpui_runtime::test]
 //! async fn test_remote_editing(cx: &mut TestAppContext, server_cx: &mut TestAppContext) {
 //!     let (opts, server_session) = MockConnection::new(cx, server_cx);
 //!

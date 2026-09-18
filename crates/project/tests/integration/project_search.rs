@@ -12,8 +12,8 @@ use util::{
 };
 use worktree::{Entry, EntryKind, WorktreeSettings};
 
-#[gpui::test]
-async fn test_path_inclusion_matcher(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_path_inclusion_matcher(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.background_executor.clone());

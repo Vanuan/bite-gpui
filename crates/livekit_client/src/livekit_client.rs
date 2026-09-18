@@ -155,7 +155,7 @@ impl Room {
     ///
     /// LiveKit's SDK is Tokio-based, so the stats fetch must run within
     /// a Tokio context rather than on GPUI's smol-based background executor.
-    pub fn stats_task(&self, cx: &impl gpui::AppContext) -> Task<Result<livekit::SessionStats>> {
+    pub fn stats_task(&self, cx: &impl gpui_runtime::AppContext) -> Task<Result<livekit::SessionStats>> {
         let inner = self.room.clone();
         Tokio::spawn_result(cx, async move {
             inner.get_stats().await.map_err(anyhow::Error::from)

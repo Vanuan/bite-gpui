@@ -1561,8 +1561,8 @@ pub async fn open_remote_worktree(
     connection_options: remote::RemoteConnectionOptions,
     paths: Vec<PathBuf>,
     app_state: Arc<workspace::AppState>,
-    workspace: gpui::WeakEntity<Workspace>,
-    cx: &mut gpui::AsyncWindowContext,
+    workspace: gpui_runtime::WeakEntity<Workspace>,
+    cx: &mut gpui_runtime::AsyncWindowContext,
 ) -> anyhow::Result<()> {
     let connect_task = workspace.update_in(cx, |workspace, window, cx| {
         workspace.toggle_modal(window, cx, |window, cx| {
@@ -1825,7 +1825,7 @@ mod tests {
             .any(|worktree| worktree.path == *worktree_path)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_worktree_marks_row_pending_immediately(cx: &mut TestAppContext) {
         let (_, worktree_picker, _repository, worktree_path, mut cx) =
             init_worktree_picker_test(cx).await;
@@ -1844,7 +1844,7 @@ mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_worktree_clears_pending_and_removes_row_on_success(
         cx: &mut TestAppContext,
     ) {
@@ -1873,7 +1873,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remote_default_branch_is_preferred_create_target(cx: &mut TestAppContext) {
         let (_fs, worktree_picker, _repository, _worktree_path, mut cx) =
             init_worktree_picker_test(cx).await;
@@ -1915,7 +1915,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_current_branch_create_target_is_shown_without_default_branch(
         cx: &mut TestAppContext,
     ) {
@@ -1946,7 +1946,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_dirty_worktree_prompts_for_force_delete(cx: &mut TestAppContext) {
         let (fs, worktree_picker, repository, worktree_path, mut cx) =
             init_worktree_picker_test(cx).await;
@@ -1989,7 +1989,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_duplicate_delete_worktree_is_ignored_while_pending(cx: &mut TestAppContext) {
         let (fs, worktree_picker, _repository, worktree_path, mut cx) =
             init_worktree_picker_test(cx).await;
@@ -2028,7 +2028,7 @@ mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_selected_deleting_worktree_cannot_be_opened(cx: &mut TestAppContext) {
         let (_, worktree_picker, _repository, worktree_path, mut cx) =
             init_worktree_picker_test(cx).await;
@@ -2054,7 +2054,7 @@ mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_force_delete_worktree_deletes_without_prompt(cx: &mut TestAppContext) {
         let (fs, worktree_picker, repository, worktree_path, mut cx) =
             init_worktree_picker_test(cx).await;
@@ -2090,7 +2090,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_worktrees_are_grouped_under_section_header(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2189,7 +2189,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_open_worktree_workspace_from_window(cx: &mut TestAppContext) {
         init_test(cx);
 

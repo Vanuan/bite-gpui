@@ -41,7 +41,7 @@ pub use tables::*;
 
 #[cfg(feature = "test-support")]
 pub struct DatabaseTestOptions {
-    pub executor: gpui::BackgroundExecutor,
+    pub executor: gpui_platform::BackgroundExecutor,
     pub runtime: tokio::runtime::Runtime,
     pub query_failure_probability: parking_lot::Mutex<f64>,
 }

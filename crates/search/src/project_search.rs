@@ -1099,7 +1099,7 @@ impl Render for ProjectSearchView {
 }
 
 impl Focusable for ProjectSearchView {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -1121,7 +1121,7 @@ impl Item for ProjectSearchView {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         _: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<Editor>() {
@@ -3487,7 +3487,7 @@ fn is_buffer_stale(
 pub fn perform_project_search(
     search_view: &Entity<ProjectSearchView>,
     text: impl Into<std::sync::Arc<str>>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) {
     cx.run_until_parked();
     search_view.update_in(cx, |search_view, window, cx| {
@@ -3551,7 +3551,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_ignored_dot_git_directory_results_follow_include_ignored_option(
         cx: &mut TestAppContext,
     ) {
@@ -3624,7 +3624,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_unignored_dot_git_directory_results_are_included(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -3664,7 +3664,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_nested_gitignore_results_follow_include_ignored_option(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -3720,7 +3720,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_search(cx: &mut TestAppContext) {
         fn dp(row: u32, col: u32) -> DisplayPoint {
             DisplayPoint::new(DisplayRow(row), col)
@@ -3990,7 +3990,7 @@ pub mod tests {
         assert!(!results_collapsed);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_results_do_not_read_closed_untitled_buffer(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4085,7 +4085,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_results_keep_peer_shared_untitled_buffers(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4169,7 +4169,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_collapse_state_syncs_after_manual_buffer_fold(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4314,7 +4314,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deploy_project_search_focus(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4552,7 +4552,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_filters_consider_toggle_state(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4673,7 +4673,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_project_search_focus(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4965,7 +4965,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_project_search_in_directory(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5102,7 +5102,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_query_history(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5504,7 +5504,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_query_history_with_multiple_views(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5724,7 +5724,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deploy_search_with_multiple_panes(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5875,7 +5875,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scroll_search_results_to_top(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5953,7 +5953,7 @@ pub mod tests {
             .expect("unable to update search view");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_seeded_project_search_query_is_escaped_in_regex_mode(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -6057,7 +6057,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_buffer_search_query_reused(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6137,7 +6137,7 @@ pub mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_dismisses_modal(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6158,16 +6158,16 @@ pub mod tests {
         let cx = &mut VisualTestContext::from_window(window.into(), cx);
 
         struct EmptyModalView {
-            focus_handle: gpui::FocusHandle,
+            focus_handle: gpui_runtime::FocusHandle,
         }
-        impl EventEmitter<gpui::DismissEvent> for EmptyModalView {}
+        impl EventEmitter<gpui_runtime::DismissEvent> for EmptyModalView {}
         impl Render for EmptyModalView {
             fn render(&mut self, _: &mut Window, _: &mut Context<'_, Self>) -> impl IntoElement {
                 div()
             }
         }
         impl Focusable for EmptyModalView {
-            fn focus_handle(&self, _cx: &App) -> gpui::FocusHandle {
+            fn focus_handle(&self, _cx: &App) -> gpui_runtime::FocusHandle {
                 self.focus_handle.clone()
             }
         }
@@ -6198,7 +6198,7 @@ pub mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_with_inlays(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -6417,7 +6417,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deleted_file_removed_from_search_results(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6502,7 +6502,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deploy_search_applies_and_resets_options(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6671,7 +6671,7 @@ pub mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_all_with_shared_heading_prefix_does_not_loop(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6748,7 +6748,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_smartcase_overrides_explicit_case_sensitive(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6886,7 +6886,7 @@ pub mod tests {
         cx.background_executor.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_incremental_search_narrows_and_widens(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6951,7 +6951,7 @@ pub mod tests {
         assert_all_highlights_match_query(&search, "ONE", cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_incremental_search_gutter_width_never_shrinks(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6997,7 +6997,7 @@ pub mod tests {
         assert_eq!(reserved_gutter_digits(search_view, cx), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_on_type_keeps_focus_confirm_shifts_it(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -7074,7 +7074,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_confirm_while_reusing_search_pending_defers_focus(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -7168,7 +7168,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_incremental_search_reuses_unchanged_excerpts(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7273,7 +7273,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_on_type_history_navigation(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -7413,7 +7413,7 @@ pub mod tests {
         assert_eq!(read_query_text(cx), "ONE");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_select_next_match_during_pending_incremental_search(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7467,7 +7467,7 @@ pub mod tests {
         assert_eq!(match_count(&search, cx), 5);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_incremental_search_preserves_scroll_position(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7539,7 +7539,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_on_type_resets_scroll_after_empty_results(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -7645,7 +7645,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_on_type_surfaces_query_errors(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -7726,7 +7726,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_results_verdict_lifecycle(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7795,7 +7795,7 @@ pub mod tests {
         assert!(match_count(&search, cx) > 0);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_on_type_confirm_after_filter_change_researches(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -7863,7 +7863,7 @@ pub mod tests {
         assert_eq!(matched_file_names(&search, cx), vec!["one.rs", "two.rs"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_on_type_confirm_after_erasing_query_researches(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -7934,7 +7934,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_option_cancels_pending_debounced_search(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -7993,7 +7993,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_option_toggle_keeps_confirmed_phase_and_defers_replace_all(
         cx: &mut TestAppContext,
     ) {
@@ -8090,7 +8090,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_opened_only_search_is_ordered_and_reuses_excerpts(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8181,7 +8181,7 @@ pub mod tests {
         assert_eq!(*removed_buffers.borrow(), Vec::<language::BufferId>::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_opened_only_search_deduplicates_buffers(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8220,7 +8220,7 @@ pub mod tests {
         assert_eq!(match_texts(&search, cx), vec!["needle"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pruning_stale_excerpts_keeps_scroll_at_seam(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8280,7 +8280,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_erase_and_retype_within_debounce_keeps_results(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -8368,7 +8368,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_confirm_from_filter_editor_keeps_focus_there(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -8437,7 +8437,7 @@ pub mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggling_filters_panel_researches_on_type(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -8494,7 +8494,7 @@ pub mod tests {
         assert_eq!(matched_file_names(&search, cx), vec!["one.rs", "two.rs"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_focusing_results_records_history(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -8581,7 +8581,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_confirm_ignores_filter_text_while_filters_are_disabled(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -8635,7 +8635,7 @@ pub mod tests {
         assert_eq!(matched_file_names(&search, cx), vec!["one.rs"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_confirm_researches_the_same_query(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -8696,7 +8696,7 @@ pub mod tests {
         assert_eq!(matched_file_names(&search, cx), vec!["one.rs", "two.rs"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_debounced_search_skips_unchanged_query(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -8757,7 +8757,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_next_defers_while_search_is_pending(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8840,7 +8840,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_on_type_pauses_while_results_are_dirty(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -8928,7 +8928,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dirtying_results_within_erase_debounce_keeps_them(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -8989,7 +8989,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_incremental_search_merges_chunks_larger_than_a_foreground_batch(
         cx: &mut TestAppContext,
     ) {
@@ -9039,7 +9039,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scroll_range_held_while_search_is_pending(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9098,7 +9098,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_incremental_search_prunes_excerpts_without_recorded_matches(
         cx: &mut TestAppContext,
     ) {
@@ -9156,7 +9156,7 @@ pub mod tests {
         assert_eq!(match_texts(&search, cx), vec!["needle"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_with_open_excluded_file_stays_path_key_sorted(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -9255,7 +9255,7 @@ pub mod tests {
         assert_eq!(*updated_paths.borrow(), Vec::<PathKey>::new());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reusing_search_tolerates_out_of_order_results(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9347,7 +9347,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deploy_search_with_query_searches_on_type(cx: &mut TestAppContext) {
         init_test(cx);
         enable_search_on_type(cx);
@@ -9430,7 +9430,7 @@ pub mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_on_type_search_keeps_selection_on_first_match(cx: &mut TestAppContext) {
         init_test(cx);
 

@@ -547,7 +547,7 @@ mod test {
     use std::sync::Arc;
     use util::path;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_directory_path(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -580,7 +580,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_nonexistent_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -607,7 +607,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_small_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -642,7 +642,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_large_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -728,7 +728,7 @@ mod test {
     // Otherwise the markdown renderer routes the fenced block through
     // `CodeBlockKind::FencedSrc`, resolves the file's language, and runs
     // tree-sitter against pseudo-code outline text on every paint.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_response_uses_untagged_code_block(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -799,7 +799,7 @@ mod test {
     // The full-file (non-outline) response should still tag the code block
     // with the file path so the markdown renderer can resolve the file's
     // language for syntax highlighting.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_full_file_response_keeps_path_tag(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -851,7 +851,7 @@ mod test {
     // When a worktree is named "foo" and contains a subdirectory also named "foo",
     // read_file({"path": "foo/test.txt"}) should return the file at the worktree
     // root (as the tool schema promises), not the one inside the foo/ subdirectory.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_file_worktree_root_not_shadowed_by_subdir(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -889,7 +889,7 @@ mod test {
         assert_eq!(result.unwrap(), "     1\troot content".into());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_file_with_line_range(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -925,7 +925,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_file_line_range_edge_cases(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1017,7 +1017,7 @@ mod test {
         ]
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_file_security(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1047,7 +1047,7 @@ mod test {
         .await;
 
         cx.update(|cx| {
-            use gpui::UpdateGlobal;
+            use gpui_runtime::UpdateGlobal;
             use settings::SettingsStore;
             SettingsStore::update_global(cx, |store, cx| {
                 store.update_user_settings(cx, |settings| {
@@ -1247,7 +1247,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_image_symlink_requires_authorization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1301,7 +1301,7 @@ mod test {
         assert!(result.is_ok());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_file_with_multiple_worktree_settings(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1533,7 +1533,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_file_symlink_escape_requests_authorization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1595,7 +1595,7 @@ mod test {
         assert!(result.is_ok(), "should succeed after approval: {result:?}");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_file_symlink_escape_denied(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1649,7 +1649,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_file_symlink_escape_private_path_no_authorization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1724,7 +1724,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_global_skill_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1778,7 +1778,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_global_skill_file_with_line_range(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1825,7 +1825,7 @@ mod test {
         assert_eq!(text.as_ref(), "     2\tline two\n     3\tline three\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_global_skill_file_line_range_zero_start(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1870,7 +1870,7 @@ mod test {
         assert_eq!(text.as_ref(), "     1\tLine 1\n     2\tLine 2\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_global_skill_file_line_range_zero_end(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1915,7 +1915,7 @@ mod test {
         assert_eq!(text.as_ref(), "     1\tLine 1\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_global_skill_file_line_range_inverted(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1960,7 +1960,7 @@ mod test {
         assert_eq!(text.as_ref(), "     3\tLine 3\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_global_skill_file_line_range_crlf(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2005,7 +2005,7 @@ mod test {
         assert_eq!(text.as_ref(), "     1\tline one\r\n     2\tline two\r\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_outside_skills_dir_still_rejected(cx: &mut TestAppContext) {
         init_test(cx);
 

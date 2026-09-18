@@ -163,7 +163,7 @@ impl GlobalSnippetWatcher {
     }
 }
 
-impl gpui::Global for GlobalSnippetWatcher {}
+impl gpui_runtime::Global for GlobalSnippetWatcher {}
 
 impl SnippetProvider {
     pub fn new(fs: Arc<dyn Fs>, dirs_to_watch: BTreeSet<PathBuf>, cx: &mut App) -> Entity<Self> {
@@ -272,10 +272,10 @@ mod tests {
     use super::*;
     use fs::FakeFs;
     use gpui;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use indoc::indoc;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_lookup_snippets_dup_registry_snippets(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.background_executor.clone());
         cx.update(|cx| {

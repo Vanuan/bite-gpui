@@ -22,6 +22,35 @@ wayland = ["gpui_linux/wayland"]
 x11 = ["gpui_linux/x11"]
 
 [dependencies]
+accesskit.workspace = true
+anyhow.workspace = true
+bitflags.workspace = true
+channel.workspace = true
+chrono.workspace = true
+collections.workspace = true
+futures.workspace = true
+gpui_shared_string.workspace = true
+gpui_types.workspace = true
+gpui_util.workspace = true
+http_client.workspace = true
+image.workspace = true
+journal.workspace = true
+log.workspace = true
+menu.workspace = true
+parking_lot.workspace = true
+rand.workspace = true
+scap.workspace = true
+scheduler.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+slotmap.workspace = true
+smallvec.workspace = true
+strum.workspace = true
+task.workspace = true
+thiserror.workspace = true
+time.workspace = true
+uuid.workspace = true
 gpui.workspace = true
 
 [target.'cfg(target_os = "macos")'.dependencies]

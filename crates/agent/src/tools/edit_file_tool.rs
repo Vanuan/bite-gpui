@@ -298,7 +298,7 @@ mod tests {
     use util::path;
     use util::rel_path::{RelPath, rel_path};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_granular_edits(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "line 1\nline 2\nline 3\n"})).await;
@@ -324,7 +324,7 @@ mod tests {
         assert_eq!(new_text, "line 1\nmodified line 2\nline 3\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_exact_fragments(cx: &mut TestAppContext) {
         let content = concat!(
             "fn spaces() {\n",
@@ -397,7 +397,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_first_line_missing_indent(cx: &mut TestAppContext) {
         // Reproduces https://github.com/zed-industries/zed/issues/60302: the
         // first line of the multi-line `old_text` omits its leading
@@ -468,7 +468,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_multiple_edits(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) = setup_test(
             cx,
@@ -506,7 +506,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_adjacent_edits(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) = setup_test(
             cx,
@@ -544,7 +544,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_ascending_order_edits(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) = setup_test(
             cx,
@@ -582,7 +582,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_nonexistent_file(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) = setup_test(cx, json!({})).await;
         let result = cx
@@ -614,7 +614,7 @@ mod tests {
         assert_eq!(input_path, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_global_skill_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -671,7 +671,7 @@ mod tests {
         assert_eq!(fs.load(&skill_file).await.unwrap(), "new content\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_failed_match(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "hello world"})).await;
@@ -700,7 +700,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_rejects_overlapping_matches(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "aaaaa"})).await;
@@ -730,7 +730,7 @@ mod tests {
     /// When the edit fails after a session is created but before any edits are
     /// actually applied (e.g., the first `old_text` doesn't match), the empty
     /// diff placeholder in the UI should be replaced with the error message.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_surfaces_error_when_no_edits_applied(cx: &mut TestAppContext) {
         async fn find_first_text_content_in_events(
             receiver: &mut crate::ToolCallEventStreamReceiver,
@@ -790,7 +790,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_early_buffer_open(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "line 1\nline 2\nline 3\n"})).await;
@@ -826,7 +826,7 @@ mod tests {
         assert_eq!(new_text, "line 1\nmodified line 2\nline 3\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_cancellation_during_partials(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "hello world"})).await;
@@ -857,7 +857,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_with_multiple_partials(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) = setup_test(
             cx,
@@ -916,7 +916,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_no_partials_direct_final(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "line 1\nline 2\nline 3\n"})).await;
@@ -937,7 +937,7 @@ mod tests {
         assert_eq!(new_text, "line 1\nmodified line 2\nline 3\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_incremental_edit_application(cx: &mut TestAppContext) {
         let (edit_tool, project, _action_log, _fs, _thread) = setup_test(
             cx,
@@ -1030,7 +1030,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_incremental_three_edits(cx: &mut TestAppContext) {
         let (edit_tool, project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "aaa\nbbb\nccc\nddd\neee\n"})).await;
@@ -1129,7 +1129,7 @@ mod tests {
         assert_eq!(new_text, "AAA\nbbb\nCCC\nddd\nEEE\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_failure_mid_stream(cx: &mut TestAppContext) {
         let (edit_tool, project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "line 1\nline 2\nline 3\n"})).await;
@@ -1215,7 +1215,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_single_edit_no_incremental(cx: &mut TestAppContext) {
         let (edit_tool, project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "hello world\n"})).await;
@@ -1270,7 +1270,7 @@ mod tests {
         assert_eq!(new_text, "goodbye world\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_input_partials_then_final(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "line 1\nline 2\nline 3\n"})).await;
@@ -1307,7 +1307,7 @@ mod tests {
         assert_eq!(new_text, "line 1\nmodified line 2\nline 3\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_input_sender_dropped_before_final(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "hello world\n"})).await;
@@ -1329,7 +1329,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_resolve_path_for_editing_file(cx: &mut TestAppContext) {
         let mode = EditSessionMode::Edit;
 
@@ -1381,7 +1381,7 @@ mod tests {
         assert_eq!(actual.as_ref(), expected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_authorize(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) = setup_test(cx, json!({})).await;
 
@@ -1528,7 +1528,7 @@ mod tests {
     /// `skills` aren't consecutive once `..` sits between them), but it
     /// canonicalizes to a path inside `.agents/skills/`, so it has to
     /// still prompt with the agent-skills tag.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_authorize_blocks_dotdot_skills_bypass(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = project::FakeFs::new(cx.executor());
@@ -1570,7 +1570,7 @@ mod tests {
     /// component scan for `.zed/`, so the canonical-path recheck has to
     /// catch it. (We escape *out* of `.zed/` here and back in via `..`,
     /// just to confirm the recheck doesn't naively trust the raw scan.)
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_authorize_blocks_dotdot_settings_bypass(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = project::FakeFs::new(cx.executor());
@@ -1611,7 +1611,7 @@ mod tests {
     /// target stays inside the worktree. The canonical-path recheck is
     /// the only thing standing between the agent and a silent settings
     /// rewrite, so verify it fires.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_authorize_blocks_intra_project_symlink_bypass(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = project::FakeFs::new(cx.executor());
@@ -1650,7 +1650,7 @@ mod tests {
 
     /// Same as the previous test but for the agent-skills sensitive
     /// path, via an intra-project symlink `safe -> .agents/skills`.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_authorize_blocks_intra_project_symlink_skills_bypass(
         cx: &mut TestAppContext,
     ) {
@@ -1691,7 +1691,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_authorize_create_under_symlink_with_allow(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1734,7 +1734,7 @@ mod tests {
         authorize_task.await.unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_file_symlink_escape_requests_authorization(
         cx: &mut TestAppContext,
     ) {
@@ -1781,7 +1781,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_file_symlink_escape_denied(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1825,7 +1825,7 @@ mod tests {
         assert!(result.is_err(), "should fail when denied");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_file_symlink_escape_honors_deny_policy(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -1885,7 +1885,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_authorize_global_config(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = project::FakeFs::new(cx.executor());
@@ -1929,7 +1929,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_needs_confirmation_with_multiple_worktrees(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = project::FakeFs::new(cx.executor());
@@ -2005,7 +2005,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_needs_confirmation_edge_cases(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = project::FakeFs::new(cx.executor());
@@ -2065,7 +2065,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_needs_confirmation_with_different_modes(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = project::FakeFs::new(cx.executor());
@@ -2112,7 +2112,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_initial_title_with_partial_input(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = project::FakeFs::new(cx.executor());
@@ -2146,7 +2146,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_consecutive_edits_work(cx: &mut TestAppContext) {
         let (edit_tool, project, action_log, _fs, _thread) =
             setup_test(cx, json!({"test.txt": "original content"})).await;
@@ -2216,7 +2216,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_external_modification_matching_edit_succeeds(cx: &mut TestAppContext) {
         let (edit_tool, project, action_log, fs, _thread) =
             setup_test(cx, json!({"test.txt": "original content"})).await;
@@ -2299,7 +2299,7 @@ mod tests {
         assert_eq!(input_path, PathBuf::from("root/test.txt"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_external_modification_mentioned_when_match_fails(
         cx: &mut TestAppContext,
     ) {
@@ -2391,7 +2391,7 @@ mod tests {
     /// When the buffer has unsaved changes and the user picks "Save", the
     /// pending edits are flushed to disk and the agent's edit then proceeds
     /// against the just-saved content.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_dirty_buffer_save(cx: &mut TestAppContext) {
         let (edit_tool, project, action_log, fs, _thread) =
             setup_test(cx, json!({"test.txt": "original content"})).await;
@@ -2482,7 +2482,7 @@ mod tests {
     /// When the buffer has unsaved changes and the user picks "Discard", the
     /// pending edits are reverted to match disk and the agent's edit then
     /// proceeds against the on-disk content.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_dirty_buffer_discard(cx: &mut TestAppContext) {
         let (edit_tool, project, action_log, fs, _thread) =
             setup_test(cx, json!({"test.txt": "original content"})).await;
@@ -2560,7 +2560,7 @@ mod tests {
     /// pressing `cmd-s` while the prompt is visible — the prompt is
     /// dismissed automatically and the edit proceeds against the saved
     /// content. The user shouldn't have to also click a button.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_dirty_buffer_resolved_externally(cx: &mut TestAppContext) {
         let (edit_tool, project, action_log, fs, _thread) =
             setup_test(cx, json!({"test.txt": "original content"})).await;
@@ -2642,7 +2642,7 @@ mod tests {
         assert_eq!(on_disk, "replaced content");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_overlapping_edits_resolved_sequentially(cx: &mut TestAppContext) {
         // Edit 1's replacement introduces text that contains edit 2's
         // old_text as a substring. Because edits resolve sequentially
@@ -2692,7 +2692,7 @@ mod tests {
         assert_eq!(new_text, "aaa\nXXX\nZZZ\nddd\nDUMMY\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_json_fixer_escape_corruption(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "hello\nworld\nfoo\n"})).await;
@@ -2736,7 +2736,7 @@ mod tests {
         assert_eq!(new_text, "HELLO\nWORLD\nfoo\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_final_input_stringified_edits_succeeds(cx: &mut TestAppContext) {
         let (edit_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "hello\nworld\n"})).await;
@@ -2763,7 +2763,7 @@ mod tests {
 
     // Verifies that after streaming_edit_file_tool edits a file, the action log
     // reports changed buffers so that the Accept All / Reject All review UI appears.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_file_tool_registers_changed_buffers(cx: &mut TestAppContext) {
         let (edit_tool, _project, action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "line 1\nline 2\nline 3\n"})).await;
@@ -2804,7 +2804,7 @@ mod tests {
 
     // Same test but for Write mode (overwrite entire file).
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_file_tool_fields_out_of_order_in_edit_mode(
         cx: &mut TestAppContext,
     ) {
@@ -2844,7 +2844,7 @@ mod tests {
         assert_eq!(new_text, "new_content");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_file_tool_new_and_old_text_appear_together(
         cx: &mut TestAppContext,
     ) {
@@ -2888,7 +2888,7 @@ mod tests {
         assert_eq!(new_text, "new_content");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_file_tool_new_text_before_old_text(cx: &mut TestAppContext) {
         let (tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "old_content"})).await;
@@ -2937,7 +2937,7 @@ mod tests {
         assert_eq!(new_text, "new_content");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_partial_last_line(cx: &mut TestAppContext) {
         let file_content = indoc::indoc! {r#"
             fn on_query_change(&mut self, cx: &mut Context<Self>) {
@@ -2987,7 +2987,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_edit_preserves_blank_line_after_trailing_newline_replacement(
         cx: &mut TestAppContext,
     ) {

@@ -5,7 +5,7 @@ use fuzzy_nucleo::StringMatchCandidate;
 use collections::{HashMap, HashSet};
 use git::repository::{Branch, delete_branch_flag};
 use git::{GitHostingProviderRegistry, parse_git_remote_url};
-use gpui::http_client::Url;
+use gpui_runtime::http_client::Url;
 use gpui::{
     Action, App, Context, DismissEvent, Entity, EventEmitter, FocusHandle, Focusable, Global,
     InteractiveElement, IntoElement, Modifiers, ModifiersChangedEvent, ParentElement, PromptLevel,
@@ -1030,7 +1030,7 @@ impl BranchListDelegate {
             })
     }
 
-    fn branch_filter_tooltip(&self) -> impl Fn(&mut Window, &mut App) -> gpui::AnyView + 'static {
+    fn branch_filter_tooltip(&self) -> impl Fn(&mut Window, &mut App) -> gpui_runtime::AnyView + 'static {
         let focus_handle = self.focus_handle.clone();
         move |_, cx| {
             Tooltip::for_action_in(
@@ -1315,16 +1315,16 @@ impl PickerDelegate for BranchListDelegate {
                                     })
                                     .map(|this| {
                                         if editor_bottom {
-                                            this.anchor(gpui::Anchor::BottomRight)
-                                                .attach(gpui::Anchor::TopRight)
-                                                .offset(gpui::Point {
+                                            this.anchor(gpui_types::Anchor::BottomRight)
+                                                .attach(gpui_types::Anchor::TopRight)
+                                                .offset(gpui_types::Point {
                                                     x: px(0.0),
                                                     y: px(-1.0),
                                                 })
                                         } else {
-                                            this.anchor(gpui::Anchor::TopRight)
-                                                .attach(gpui::Anchor::BottomRight)
-                                                .offset(gpui::Point {
+                                            this.anchor(gpui_types::Anchor::TopRight)
+                                                .attach(gpui_types::Anchor::BottomRight)
+                                                .offset(gpui_types::Point {
                                                     x: px(1.0),
                                                     y: px(1.0),
                                                 })
@@ -2381,7 +2381,7 @@ mod tests {
         (project, repository)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_update_branch_matches_with_query(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2506,7 +2506,7 @@ mod tests {
         cx.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_branch(cx: &mut TestAppContext) {
         init_test(cx);
         let (_project, repository) = init_fake_repository(cx).await;
@@ -2583,7 +2583,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_unmerged_branch_prompts_for_force_delete(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, _project, repository) = init_fake_repository_with_fs(cx).await;
@@ -2656,7 +2656,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_unmerged_branch_cancel_keeps_branch(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, _project, repository) = init_fake_repository_with_fs(cx).await;
@@ -2747,7 +2747,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_force_delete_click_deletes_branch_without_prompt(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, _project, repository) = init_fake_repository_with_fs(cx).await;
@@ -2818,7 +2818,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_remote_branch(cx: &mut TestAppContext) {
         init_test(cx);
         let (_project, repository) = init_fake_repository(cx).await;
@@ -2911,7 +2911,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_branch_filter_shows_all_local_and_remote_branches(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3040,7 +3040,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_branch_filter_is_restored_for_new_pickers(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| cx.set_global(GlobalBranchFilter(BranchFilter::Local)));
@@ -3060,7 +3060,7 @@ mod tests {
         assert!(BranchFilter::Remote.next() == BranchFilter::All);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_select_picker_lists_remote_branch_tracked_by_local_branch(
         cx: &mut TestAppContext,
     ) {
@@ -3159,7 +3159,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_branch_creation_with_query(cx: &mut TestAppContext) {
         const MAIN_BRANCH: &str = "main";
         const FEATURE_BRANCH: &str = "feature";
@@ -3236,7 +3236,7 @@ mod tests {
         assert_eq!(normalize_branch_name("  branch  name  "), "branch--name");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remote_url_detection_https(cx: &mut TestAppContext) {
         init_test(cx);
         let (_project, repository) = init_fake_repository(cx).await;
@@ -3315,7 +3315,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_confirm_remote_url_transitions(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -3376,7 +3376,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_confirm_remote_url_does_not_dismiss(cx: &mut TestAppContext) {
         const REMOTE_URL: &str = "https://github.com/user/repo.git";
 
@@ -3438,7 +3438,7 @@ mod tests {
         drop(subscription);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_empty_query_displays_all_branches(mut rng: StdRng, cx: &mut TestAppContext) {
         init_test(cx);
         let branch_count = rng.random_range(13..540);

@@ -2,7 +2,7 @@ use super::{latest, since_v0_6_0};
 use crate::wasm_host::WasmState;
 use anyhow::Result;
 use extension::WorktreeDelegate;
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use semver::Version;
 use std::sync::{Arc, OnceLock};
 use wasmtime::component::{Linker, Resource};

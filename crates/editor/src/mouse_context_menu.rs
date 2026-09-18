@@ -6,7 +6,7 @@ use crate::{
     actions::{Format, FormatSelections},
     selections_collection::SelectionsCollection,
 };
-use gpui::prelude::FluentBuilder;
+use gpui_runtime::prelude::FluentBuilder;
 use gpui::{Context, DismissEvent, Entity, Focusable as _, Pixels, Point, Subscription, Window};
 use project::DisableAiSettings;
 use std::ops::Range;
@@ -371,8 +371,8 @@ mod tests {
     };
     use indoc::indoc;
 
-    #[gpui::test]
-    async fn test_mouse_context_menu(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_mouse_context_menu(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -417,9 +417,9 @@ mod tests {
         cx.editor(|editor, _window, _app| assert!(editor.mouse_context_menu.is_some()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_mouse_context_menu_at_pixel_snapped_scroll_position(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 

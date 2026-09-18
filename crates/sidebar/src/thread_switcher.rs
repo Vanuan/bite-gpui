@@ -200,7 +200,7 @@ impl ThreadSwitcher {
     pub fn new(
         entries: Vec<ThreadSwitcherEntry>,
         select_last: bool,
-        window: &mut gpui::Window,
+        window: &mut gpui_runtime::Window,
         cx: &mut Context<Self>,
     ) -> Self {
         let init_modifiers = window.modifiers().modified().then_some(window.modifiers());
@@ -276,7 +276,7 @@ impl ThreadSwitcher {
         }
     }
 
-    fn confirm(&mut self, _: &menu::Confirm, _window: &mut gpui::Window, cx: &mut Context<Self>) {
+    fn confirm(&mut self, _: &menu::Confirm, _window: &mut gpui_runtime::Window, cx: &mut Context<Self>) {
         self.confirm_selected(cx);
     }
 
@@ -304,7 +304,7 @@ impl ThreadSwitcher {
         cx.notify();
     }
 
-    fn cancel(&mut self, _: &menu::Cancel, _window: &mut gpui::Window, cx: &mut Context<Self>) {
+    fn cancel(&mut self, _: &menu::Cancel, _window: &mut gpui_runtime::Window, cx: &mut Context<Self>) {
         cx.emit(ThreadSwitcherEvent::Dismissed);
         cx.emit(DismissEvent);
     }
@@ -312,7 +312,7 @@ impl ThreadSwitcher {
     fn toggle(
         &mut self,
         action: &ToggleThreadSwitcher,
-        _window: &mut gpui::Window,
+        _window: &mut gpui_runtime::Window,
         cx: &mut Context<Self>,
     ) {
         if action.select_last {
@@ -325,7 +325,7 @@ impl ThreadSwitcher {
     fn handle_modifiers_changed(
         &mut self,
         event: &ModifiersChangedEvent,
-        window: &mut gpui::Window,
+        window: &mut gpui_runtime::Window,
         cx: &mut Context<Self>,
     ) {
         let Some(init_modifiers) = self.init_modifiers else {
@@ -348,13 +348,13 @@ impl EventEmitter<DismissEvent> for ThreadSwitcher {}
 impl EventEmitter<ThreadSwitcherEvent> for ThreadSwitcher {}
 
 impl Focusable for ThreadSwitcher {
-    fn focus_handle(&self, _cx: &gpui::App) -> FocusHandle {
+    fn focus_handle(&self, _cx: &gpui_runtime::App) -> FocusHandle {
         self.focus_handle.clone()
     }
 }
 
 impl Render for ThreadSwitcher {
-    fn render(&mut self, window: &mut gpui::Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, window: &mut gpui_runtime::Window, cx: &mut Context<Self>) -> impl IntoElement {
         let selected_index = self.selected_index;
 
         v_flex()
@@ -409,7 +409,7 @@ impl Render for ThreadSwitcher {
                             }))
                             // TODO: This is not properly propagating to the tread item.
                             .on_click(cx.listener(
-                                move |this, _event: &gpui::ClickEvent, _window, cx| {
+                                move |this, _event: &gpui_runtime::ClickEvent, _window, cx| {
                                     this.select_and_confirm(ix, cx);
                                 },
                             ))

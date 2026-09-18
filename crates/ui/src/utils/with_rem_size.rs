@@ -23,7 +23,7 @@ impl WithRemSize {
     /// Block the mouse from interacting with this element or any of its children
     /// The fluent API equivalent to [`Interactivity::occlude_mouse`]
     ///
-    /// [`Interactivity::occlude_mouse`]: gpui::Interactivity::occlude_mouse
+    /// [`Interactivity::occlude_mouse`]: gpui_runtime::Interactivity::occlude_mouse
     pub fn occlude(mut self) -> Self {
         self.div = self.div.occlude();
         self
@@ -57,7 +57,7 @@ impl Element for WithRemSize {
     fn request_layout(
         &mut self,
         id: Option<&GlobalElementId>,
-        inspector_id: Option<&gpui::InspectorElementId>,
+        inspector_id: Option<&gpui_runtime::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (LayoutId, Self::RequestLayoutState) {
@@ -69,7 +69,7 @@ impl Element for WithRemSize {
     fn prepaint(
         &mut self,
         id: Option<&GlobalElementId>,
-        inspector_id: Option<&gpui::InspectorElementId>,
+        inspector_id: Option<&gpui_runtime::InspectorElementId>,
         bounds: Bounds<Pixels>,
         request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -84,7 +84,7 @@ impl Element for WithRemSize {
     fn paint(
         &mut self,
         id: Option<&GlobalElementId>,
-        inspector_id: Option<&gpui::InspectorElementId>,
+        inspector_id: Option<&gpui_runtime::InspectorElementId>,
         bounds: Bounds<Pixels>,
         request_layout: &mut Self::RequestLayoutState,
         prepaint: &mut Self::PrepaintState,

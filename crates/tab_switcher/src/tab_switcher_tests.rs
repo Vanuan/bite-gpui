@@ -12,9 +12,9 @@ fn init_logger() {
     zlog::init_test();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_with_prev_tab_selected_and_cycle_on_toggle_action(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let app_state = init_test(cx);
 
@@ -72,8 +72,8 @@ async fn test_open_with_prev_tab_selected_and_cycle_on_toggle_action(
     });
 }
 
-#[gpui::test]
-async fn test_open_with_last_tab_selected(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_open_with_last_tab_selected(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -108,8 +108,8 @@ async fn test_open_with_last_tab_selected(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_open_item_on_modifiers_release(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_open_item_on_modifiers_release(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -148,8 +148,8 @@ async fn test_open_item_on_modifiers_release(cx: &mut gpui::TestAppContext) {
     assert_tab_switcher_is_closed(workspace, cx);
 }
 
-#[gpui::test]
-async fn test_open_on_empty_pane(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_open_on_empty_pane(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
     app_state.fs.as_fake().insert_tree("/root", json!({})).await;
 
@@ -168,8 +168,8 @@ async fn test_open_on_empty_pane(cx: &mut gpui::TestAppContext) {
     assert_tab_switcher_is_closed(workspace, cx);
 }
 
-#[gpui::test]
-async fn test_open_with_single_item(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_open_with_single_item(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
     app_state
         .fs
@@ -191,8 +191,8 @@ async fn test_open_with_single_item(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_close_selected_item(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_close_selected_item(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
     app_state
         .fs
@@ -255,8 +255,8 @@ async fn test_close_selected_item(cx: &mut gpui::TestAppContext) {
     assert_tab_switcher_is_closed(workspace, cx);
 }
 
-#[gpui::test]
-async fn test_quick_switch_before_popover_visible(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_quick_switch_before_popover_visible(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
 
     app_state
@@ -348,7 +348,7 @@ fn get_active_tab_switcher(
 async fn open_buffer(
     file_path: &str,
     workspace: &Entity<Workspace>,
-    cx: &mut gpui::VisualTestContext,
+    cx: &mut gpui_runtime::VisualTestContext,
 ) -> Box<dyn ItemHandle> {
     let project = workspace.read_with(cx, |workspace, _| workspace.project().clone());
     let worktree_id = project.update(cx, |project, cx| {
@@ -414,8 +414,8 @@ fn open_tab_switcher_for_active_pane(
     get_active_tab_switcher(workspace, cx)
 }
 
-#[gpui::test]
-async fn test_open_in_active_pane_deduplicates_files_by_path(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_open_in_active_pane_deduplicates_files_by_path(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
     app_state
         .fs
@@ -458,8 +458,8 @@ async fn test_open_in_active_pane_deduplicates_files_by_path(cx: &mut gpui::Test
     });
 }
 
-#[gpui::test]
-async fn test_open_in_active_pane_clones_files_to_current_pane(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_open_in_active_pane_clones_files_to_current_pane(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
     app_state
         .fs
@@ -512,8 +512,8 @@ async fn test_open_in_active_pane_clones_files_to_current_pane(cx: &mut gpui::Te
     );
 }
 
-#[gpui::test]
-async fn test_open_in_active_pane_moves_terminals_to_current_pane(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_open_in_active_pane_moves_terminals_to_current_pane(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
     let project = Project::test(app_state.fs.clone(), [], cx).await;
     let (multi_workspace, cx) =
@@ -560,8 +560,8 @@ async fn test_open_in_active_pane_moves_terminals_to_current_pane(cx: &mut gpui:
     );
 }
 
-#[gpui::test]
-async fn test_open_in_active_pane_closes_file_in_all_panes(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_open_in_active_pane_closes_file_in_all_panes(cx: &mut gpui_runtime::TestAppContext) {
     let app_state = init_test(cx);
     app_state
         .fs
@@ -605,9 +605,9 @@ async fn test_open_in_active_pane_closes_file_in_all_panes(cx: &mut gpui::TestAp
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_toggle_all_stays_open_after_closing_last_tab_in_active_pane(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let app_state = init_test(cx);
     app_state

@@ -23,7 +23,7 @@ pub struct AskPassModal {
 impl EventEmitter<DismissEvent> for AskPassModal {}
 impl ModalView for AskPassModal {}
 impl Focusable for AskPassModal {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.editor.focus_handle(cx)
     }
 }
@@ -157,12 +157,12 @@ impl Render for AskPassModal {
 mod tests {
     use std::sync::{Arc, atomic::AtomicBool};
 
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use settings::SettingsStore;
 
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn dismisses_when_password_request_is_cancelled(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);

@@ -32,7 +32,7 @@ use util::{
     test::TempTree,
 };
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_traversal(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -89,7 +89,7 @@ async fn test_traversal(cx: &mut TestAppContext) {
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_entry_id_is_reused_when_rename_events_are_split(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -143,7 +143,7 @@ async fn test_entry_id_is_reused_when_rename_events_are_split(cx: &mut TestAppCo
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rescan_requests_processed_before_root_creation_events(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -223,7 +223,7 @@ async fn test_rescan_requests_processed_before_root_creation_events(cx: &mut Tes
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_circular_symlinks(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -308,7 +308,7 @@ async fn test_circular_symlinks(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_symlinks_pointing_outside(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -612,7 +612,7 @@ async fn test_symlinks_pointing_outside(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_renaming_subdir_under_symlinked_root_keeps_children(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -688,7 +688,7 @@ async fn test_renaming_subdir_under_symlinked_root_keeps_children(cx: &mut TestA
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_symlinked_dir_inside_project(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -796,7 +796,7 @@ async fn test_symlinked_dir_inside_project(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_scan_symlinks_always(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -869,7 +869,7 @@ async fn test_scan_symlinks_always(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_scan_symlinks_expanded(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -999,7 +999,7 @@ async fn test_scan_symlinks_expanded(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_circular_symlinks_always(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1074,7 +1074,7 @@ async fn test_circular_symlinks_always(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_scan_symlinks_always_respects_gitignore(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1168,7 +1168,7 @@ async fn test_scan_symlinks_always_respects_gitignore(cx: &mut TestAppContext) {
 // These tests use a real temp directory and a real symlink to exercise the
 // production path on the host platform.
 #[cfg(unix)]
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_real_fs_scan_symlinks_always(cx: &mut TestAppContext) {
     cx.executor().allow_parking();
     init_test(cx);
@@ -1239,7 +1239,7 @@ async fn test_real_fs_scan_symlinks_always(cx: &mut TestAppContext) {
 }
 
 #[cfg(unix)]
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_real_fs_scan_symlinks_expanded(cx: &mut TestAppContext) {
     cx.executor().allow_parking();
     init_test(cx);
@@ -1334,7 +1334,7 @@ async fn test_real_fs_scan_symlinks_expanded(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_internal_symlink_updates_preserve_entry_ids(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -1427,7 +1427,7 @@ async fn test_internal_symlink_updates_preserve_entry_ids(cx: &mut TestAppContex
 }
 
 #[cfg(target_os = "macos")]
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_renaming_case_only(cx: &mut TestAppContext) {
     cx.executor().allow_parking();
     init_test(cx);
@@ -1487,7 +1487,7 @@ async fn test_renaming_case_only(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_root_rescan_reconciles_stale_state(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -1552,7 +1552,7 @@ async fn test_root_rescan_reconciles_stale_state(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_root_rescan_keeps_root_watcher_registered(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -1586,7 +1586,7 @@ async fn test_root_rescan_keeps_root_watcher_registered(cx: &mut TestAppContext)
     assert_eq!(root_watch_calls, 1);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subtree_rescan_reports_unchanged_descendants_as_updated(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -1679,7 +1679,7 @@ async fn test_subtree_rescan_reports_unchanged_descendants_as_updated(cx: &mut T
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_gitignored_files(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -1843,7 +1843,7 @@ async fn test_open_gitignored_files(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dirs_no_longer_ignored(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -1968,7 +1968,7 @@ async fn test_dirs_no_longer_ignored(cx: &mut TestAppContext) {
     assert_eq!(read_dir_count_3 - read_dir_count_2, 2);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_write_file(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -2033,7 +2033,7 @@ async fn test_write_file(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_inclusions(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -2108,7 +2108,7 @@ async fn test_file_scan_inclusions(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_exclusions_overrules_inclusions(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -2172,7 +2172,7 @@ async fn test_file_scan_exclusions_overrules_inclusions(cx: &mut TestAppContext)
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_inclusions_reindexes_on_setting_change(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -2256,7 +2256,7 @@ async fn test_file_scan_inclusions_reindexes_on_setting_change(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_exclusions(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -2362,7 +2362,7 @@ async fn test_file_scan_exclusions(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_hidden_files(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -2450,7 +2450,7 @@ async fn test_hidden_files(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fs_events_in_exclusions(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -2599,7 +2599,7 @@ async fn test_fs_events_in_exclusions(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fs_events_in_dot_git_worktree(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -2649,7 +2649,7 @@ async fn test_fs_events_in_dot_git_worktree(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test(iterations = 30)]
+#[gpui_runtime::test(iterations = 30)]
 async fn test_create_directory_during_initial_scan(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -2718,7 +2718,7 @@ async fn test_create_directory_during_initial_scan(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_create_dir_all_on_create_entry(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -2868,7 +2868,7 @@ async fn test_create_dir_all_on_create_entry(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_create_file_in_expanded_gitignored_dir(cx: &mut TestAppContext) {
     // Tests the behavior of our worktree refresh when a file in a gitignored directory
     // is created.
@@ -2965,7 +2965,7 @@ async fn test_create_file_in_expanded_gitignored_dir(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fs_event_for_gitignored_dir_does_not_lose_contents(cx: &mut TestAppContext) {
     // Tests the behavior of our worktree refresh when a directory modification for a gitignored directory
     // is triggered.
@@ -3041,7 +3041,7 @@ async fn test_fs_event_for_gitignored_dir_does_not_lose_contents(cx: &mut TestAp
     });
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 async fn test_random_worktree_operations_during_initial_scan(
     cx: &mut TestAppContext,
     mut rng: StdRng,
@@ -3136,7 +3136,7 @@ async fn test_random_worktree_operations_during_initial_scan(
     }
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 async fn test_random_worktree_changes(cx: &mut TestAppContext, mut rng: StdRng) {
     init_test(cx);
     let operations = env::var("OPERATIONS")
@@ -3300,7 +3300,7 @@ async fn test_random_worktree_changes(cx: &mut TestAppContext, mut rng: StdRng) 
     }
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 async fn test_random_git_updates_with_watcher_overflows(cx: &mut TestAppContext, mut rng: StdRng) {
     // Property: every git state change is eventually signaled via
     // `UpdatedGitRepositories`, no matter how the events reporting it are
@@ -3677,7 +3677,7 @@ fn random_filename(rng: &mut impl Rng) -> String {
         .collect()
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_private_single_file_worktree(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -3702,7 +3702,7 @@ async fn test_private_single_file_worktree(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repository_above_root(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3753,7 +3753,7 @@ async fn test_repository_above_root(executor: BackgroundExecutor, cx: &mut TestA
     pretty_assertions::assert_eq!(repos, [Path::new(path!("/root")).into()]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_global_gitignore(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3872,7 +3872,7 @@ async fn test_global_gitignore(executor: BackgroundExecutor, cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_global_gitignore_without_repository(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -3931,7 +3931,7 @@ async fn test_global_gitignore_without_repository(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repo_exclude_in_worktree(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3997,7 +3997,7 @@ async fn test_repo_exclude_in_worktree(executor: BackgroundExecutor, cx: &mut Te
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repo_exclude_naming_a_worktree_ancestor(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -4053,7 +4053,7 @@ async fn test_repo_exclude_naming_a_worktree_ancestor(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repo_exclude(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -4133,7 +4133,7 @@ async fn test_repo_exclude(executor: BackgroundExecutor, cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repo_exclude_anchored_pattern(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -4196,7 +4196,7 @@ async fn test_repo_exclude_anchored_pattern(executor: BackgroundExecutor, cx: &m
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repo_exclude_applies_within_nested_repos(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -4397,7 +4397,7 @@ fn check_worktree_entries(tree: &Worktree, expectations: WorktreeExpectations) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_root_repo_common_dir_for_relative_gitdir(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -4525,7 +4525,7 @@ async fn test_root_repo_common_dir_for_relative_gitdir(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_root_repo_common_dir(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -4617,7 +4617,7 @@ async fn test_root_repo_common_dir(executor: BackgroundExecutor, cx: &mut TestAp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_invisible_worktree_does_not_track_ancestor_git_repository(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -4661,7 +4661,7 @@ async fn test_invisible_worktree_does_not_track_ancestor_git_repository(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_worktree_gitfile_event_preserves_repo(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -4729,7 +4729,7 @@ async fn test_linked_worktree_gitfile_event_preserves_repo(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_shared_common_dir_event_updates_all_repositories(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -4809,7 +4809,7 @@ async fn test_shared_common_dir_event_updates_all_repositories(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_noisy_dot_git_events_do_not_emit_git_repo_update(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -4941,7 +4941,7 @@ async fn test_noisy_dot_git_events_do_not_emit_git_repo_update(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_watcher_overflow_rescan_reloads_git_state(cx: &mut TestAppContext) {
     // When the OS watch queue overflows, pending events are dropped and the
     // watcher reports only a `Rescan` event for the worktree root. The dropped
@@ -5006,7 +5006,7 @@ async fn test_watcher_overflow_rescan_reloads_git_state(cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_git_update_in_same_batch_as_rescan_is_not_lost(cx: &mut TestAppContext) {
     // When a `.git` event and a watcher rescan arrive in the same batch,
     // `update_git_repositories` stamps the repository's `git_dir_scan_id`, but
@@ -5072,7 +5072,7 @@ async fn test_git_update_in_same_batch_as_rescan_is_not_lost(cx: &mut TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_worktree_event_in_unregistered_common_git_dir_does_not_panic(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -5144,7 +5144,7 @@ async fn test_linked_worktree_event_in_unregistered_common_git_dir_does_not_pani
     tree.flush_fs_events(cx).await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dot_git_dir_event_does_not_suppress_children(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -5281,7 +5281,7 @@ async fn test_dot_git_dir_event_does_not_suppress_children(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dot_git_event_explained_by_filtered_sibling_does_not_emit_git_repo_update(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -5399,7 +5399,7 @@ async fn test_dot_git_event_explained_by_filtered_sibling_does_not_emit_git_repo
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_ref_updates_in_dot_git_subdirectories_are_detected(cx: &mut TestAppContext) {
     // On Linux and FreeBSD the native file watcher is non-recursive: watching `.git`
     // does not deliver events for files nested below it, like the loose refs that git
@@ -5492,7 +5492,7 @@ fn drain_git_repo_updates(events: &mut futures::channel::mpsc::UnboundedReceiver
     found
 }
 
-fn init_test(cx: &mut gpui::TestAppContext) {
+fn init_test(cx: &mut gpui_runtime::TestAppContext) {
     zlog::init_test();
 
     cx.update(|cx| {
@@ -5517,7 +5517,7 @@ async fn wait_for_condition(
     panic!("timed out waiting for test condition");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_load_file_encoding(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -5670,8 +5670,8 @@ async fn test_load_file_encoding(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
-async fn test_write_file_encoding(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_write_file_encoding(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
 
@@ -5799,7 +5799,7 @@ async fn test_write_file_encoding(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_refresh_entries_for_paths_creates_ancestors(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -5881,7 +5881,7 @@ async fn test_refresh_entries_for_paths_creates_ancestors(cx: &mut TestAppContex
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_single_file_worktree_deleted(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -5945,7 +5945,7 @@ async fn test_single_file_worktree_deleted(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_root_ancestor_rename_is_detected_without_fs_events(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -6009,7 +6009,7 @@ async fn test_root_ancestor_rename_is_detected_without_fs_events(cx: &mut TestAp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_worktree_without_git_emits_root_repo_event_after_first_update(
     cx: &mut TestAppContext,
 ) {
@@ -6107,7 +6107,7 @@ async fn test_remote_worktree_without_git_emits_root_repo_event_after_first_upda
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_worktree_with_git_emits_root_repo_event_when_repo_info_arrives(
     cx: &mut TestAppContext,
 ) {
@@ -6205,7 +6205,7 @@ async fn test_remote_worktree_with_git_emits_root_repo_event_when_repo_info_arri
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_worktree_root_repo_metadata_cleared_only_by_completed_scan(
     cx: &mut TestAppContext,
 ) {
@@ -6303,7 +6303,7 @@ async fn test_remote_worktree_root_repo_metadata_cleared_only_by_completed_scan(
 // worktree scans the filesystem and produces `UpdateWorktree` messages via
 // `observe_updates`, which we relay into a remote worktree exactly as the
 // collab server does.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_worktree_update_entries_carry_changed_paths(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -6452,7 +6452,7 @@ async fn test_remote_worktree_update_entries_carry_changed_paths(cx: &mut TestAp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_deferred_watch_repository_above_root(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -6504,7 +6504,7 @@ async fn test_deferred_watch_repository_above_root(
     pretty_assertions::assert_eq!(repos, [Path::new(path!("/root")).into()]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_deferred_watch_symlinks_pointing_outside(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -6641,7 +6641,7 @@ fn test_repo_exclude_does_not_match_outside_its_work_directory() {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_outside_repo(cx: &mut TestAppContext) {
     init_test(cx);
     set_file_scan_depth(cx, Some(2));
@@ -6702,7 +6702,7 @@ async fn test_file_scan_depth_outside_repo(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_settings_change(cx: &mut TestAppContext) {
     init_test(cx);
     set_file_scan_depth(cx, Some(1));
@@ -6744,7 +6744,7 @@ async fn test_file_scan_depth_settings_change(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_inside_repo(cx: &mut TestAppContext) {
     init_test(cx);
     set_file_scan_depth(cx, Some(1));
@@ -6776,7 +6776,7 @@ async fn test_file_scan_depth_inside_repo(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_inside_ancestor_repo(cx: &mut TestAppContext) {
     init_test(cx);
     set_file_scan_depth(cx, Some(1));
@@ -6810,7 +6810,7 @@ async fn test_file_scan_depth_inside_ancestor_repo(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_pierced_by_inclusions(cx: &mut TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
@@ -6859,7 +6859,7 @@ async fn test_file_scan_depth_pierced_by_inclusions(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_expansion(cx: &mut TestAppContext) {
     init_test(cx);
     set_file_scan_depth(cx, Some(1));
@@ -6915,7 +6915,7 @@ async fn test_file_scan_depth_expansion(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_fs_event_below_horizon(cx: &mut TestAppContext) {
     init_test(cx);
     set_file_scan_depth(cx, Some(1));
@@ -6953,7 +6953,7 @@ async fn test_file_scan_depth_fs_event_below_horizon(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_settings_tightening(cx: &mut TestAppContext) {
     init_test(cx);
     set_file_scan_depth(cx, Some(0));
@@ -7003,7 +7003,7 @@ async fn test_file_scan_depth_settings_tightening(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_from_project_settings(cx: &mut TestAppContext) {
     init_test(cx);
     let worktree_id = WorktreeId::from_proto(0);
@@ -7048,7 +7048,7 @@ async fn test_file_scan_depth_from_project_settings(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_file_scan_depth_git_init_above_deferred_dirs(cx: &mut TestAppContext) {
     init_test(cx);
     set_file_scan_depth(cx, Some(2));

@@ -55,7 +55,7 @@ pub(crate) fn bindings_for_which_key(
 fn collect_bindings_for_pending_input(
     window: &Window,
     pending_keystrokes: &[Keystroke],
-    mut include_binding: impl FnMut(&gpui::KeyBinding) -> bool,
+    mut include_binding: impl FnMut(&gpui_runtime::KeyBinding) -> bool,
 ) -> Vec<PendingBinding> {
     window
         .possible_bindings_for_input(pending_keystrokes)
@@ -163,7 +163,7 @@ mod tests {
     use std::cell::Cell;
 
     use collections::HashMap;
-    use gpui::PlatformKeyboardMapper;
+    use gpui_platform::PlatformKeyboardMapper;
 
     use super::*;
 
@@ -184,7 +184,7 @@ mod tests {
             {
                 KeybindingKeystroke::new(
                     keystroke,
-                    gpui::Modifiers::control_shift(),
+                    gpui_types::Modifiers::control_shift(),
                     "2".to_owned(),
                 )
             }
@@ -199,7 +199,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_map_pending_keystrokes_uses_platform_mapper(cx: &mut App) {
         let keyboard_mapper = TestKeyboardMapper {
             call_count: Cell::new(0),
@@ -217,7 +217,7 @@ mod tests {
         {
             assert_eq!(
                 mapped_keystroke.modifiers(),
-                &gpui::Modifiers::control_shift()
+                &gpui_types::Modifiers::control_shift()
             );
             assert_eq!(mapped_keystroke.key(), "2");
         }

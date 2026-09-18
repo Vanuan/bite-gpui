@@ -277,7 +277,7 @@ pub(crate) fn render_add_agent_popover(
                 )
                 .label_size(LabelSize::Small),
         )
-        .anchor(gpui::Anchor::TopRight)
+        .anchor(gpui_types::Anchor::TopRight)
         .menu(move |window, cx| {
             let settings_window = settings_window.clone();
             Some(ContextMenu::build(window, cx, move |menu, _window, _cx| {
@@ -708,7 +708,7 @@ fn render_form_actions(
 
 /// Returns the border color for a button's focus ring: visible when focused
 /// (keyboard or programmatic), transparent otherwise.
-fn focus_ring_color(handle: &FocusHandle, window: &Window, cx: &App) -> gpui::Hsla {
+fn focus_ring_color(handle: &FocusHandle, window: &Window, cx: &App) -> gpui_types::Hsla {
     if handle.is_focused(window) {
         cx.theme().colors().border_focused
     } else {

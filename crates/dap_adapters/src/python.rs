@@ -4,7 +4,7 @@ use collections::HashMap;
 use dap::{DebugRequest, StartDebuggingRequestArguments, adapters::DebugTaskDefinition};
 use fs::RemoveOptions;
 use futures::{StreamExt, TryStreamExt};
-use gpui::http_client::AsyncBody;
+use gpui_runtime::http_client::AsyncBody;
 use gpui::{AsyncApp, SharedString};
 use json_dotpath::DotPaths;
 use language::{LanguageName, Toolchain};
@@ -928,7 +928,7 @@ mod tests {
     use super::*;
     use task::TcpArgumentsTemplate;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tcp_connection_conflict_with_connect_args() {
         let adapter = PythonDebugAdapter {
             base_venv_path: OnceCell::new(),
@@ -1016,7 +1016,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_attach_with_connect_mode_generates_correct_arguments() {
         let host = IpAddr::V4(std::net::Ipv4Addr::LOCALHOST);
         let port = 5678;
@@ -1069,7 +1069,7 @@ mod tests {
         assert!(!args_normal.contains(&"connect".to_string()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_debugpy_install_path_cases() {
         let host = IpAddr::V4(std::net::Ipv4Addr::LOCALHOST);
         let port = 5678;

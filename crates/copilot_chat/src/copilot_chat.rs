@@ -10,7 +10,7 @@ use anyhow::Context as _;
 use anyhow::{Result, anyhow};
 use credentials_provider::CredentialsProvider;
 use futures::{AsyncBufReadExt, AsyncReadExt, StreamExt, io::BufReader, stream::BoxStream};
-use gpui::WeakEntity;
+use gpui_runtime::WeakEntity;
 use gpui::{App, AsyncApp, Entity, Global, Task, prelude::*};
 use http_client::HttpRequestExt;
 use http_client::{AsyncBody, HttpClient, Method, Request as HttpRequest};
@@ -505,7 +505,7 @@ pub struct FunctionChunk {
     pub thought_signature: Option<String>,
 }
 
-struct GlobalCopilotChat(gpui::Entity<CopilotChat>);
+struct GlobalCopilotChat(gpui_runtime::Entity<CopilotChat>);
 
 impl Global for GlobalCopilotChat {}
 
@@ -564,7 +564,7 @@ async fn load_stored_token(
 }
 
 impl CopilotChat {
-    pub fn global(cx: &App) -> Option<gpui::Entity<Self>> {
+    pub fn global(cx: &App) -> Option<gpui_runtime::Entity<Self>> {
         cx.try_global::<GlobalCopilotChat>()
             .map(|model| model.0.clone())
     }

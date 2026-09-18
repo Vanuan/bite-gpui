@@ -188,7 +188,7 @@ impl RenderOnce for AiSettingItem {
                     )
                     .size(px(12.))
                     .color(color.color(cx))
-                    .position(gpui::Point {
+                    .position(gpui_types::Point {
                         x: px(-3.),
                         y: px(-3.),
                     }),

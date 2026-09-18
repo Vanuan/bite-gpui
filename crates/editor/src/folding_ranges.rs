@@ -125,7 +125,7 @@ impl Editor {
 #[cfg(test)]
 mod tests {
     use futures::StreamExt as _;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use lsp::FoldingRange;
     use multi_buffer::MultiBufferRow;
     use pretty_assertions::assert_eq;
@@ -136,7 +136,7 @@ mod tests {
         test::editor_lsp_test_context::EditorLspTestContext,
     };
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_folding_ranges_populates_creases(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -240,7 +240,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_folding_ranges_disabled_by_default(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -264,7 +264,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_folding_ranges_toggling_off_removes_creases(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -331,7 +331,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_folding_ranges_nested_folds(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -421,7 +421,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_folding_ranges_unsorted_from_server(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -501,7 +501,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_folding_ranges_switch_between_treesitter_and_lsp(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -668,7 +668,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_folding_ranges_collapsed_text(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1079,7 +1079,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_folding_ranges_with_multibyte_characters(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 

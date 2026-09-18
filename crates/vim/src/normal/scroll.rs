@@ -305,8 +305,8 @@ mod test {
         text
     }
 
-    #[gpui::test]
-    async fn test_scroll(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_scroll(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         let (line_height, visible_line_count) = cx.update_editor(|editor, window, cx| {
@@ -406,8 +406,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_ctrl_d_u(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_ctrl_d_u(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_scroll_height(10).await;
@@ -437,8 +437,8 @@ mod test {
         cx.shared_state().await.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_ctrl_f_b(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_ctrl_f_b(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         let visible_lines = 10;
@@ -491,8 +491,8 @@ mod test {
         cx.shared_state().await.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_scroll_beyond_last_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_scroll_beyond_last_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_scroll_height(10).await;
@@ -519,8 +519,8 @@ mod test {
         cx.shared_state().await.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_ctrl_y_e(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_ctrl_y_e(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_scroll_height(10).await;
@@ -539,8 +539,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_scroll_jumps(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_scroll_jumps(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_scroll_height(20).await;
@@ -555,8 +555,8 @@ mod test {
         cx.shared_state().await.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_horizontal_scroll(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_horizontal_scroll(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_scroll_height(20).await;

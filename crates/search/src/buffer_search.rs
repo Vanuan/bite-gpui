@@ -508,7 +508,7 @@ impl Render for BufferSearchBar {
 }
 
 impl Focusable for BufferSearchBar {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.query_editor.focus_handle(cx)
     }
 }
@@ -1741,7 +1741,7 @@ impl BufferSearchBar {
         }
     }
 
-    fn focus(&self, handle: &gpui::FocusHandle, window: &mut Window, cx: &mut App) {
+    fn focus(&self, handle: &gpui_runtime::FocusHandle, window: &mut Window, cx: &mut App) {
         window.invalidate_character_coordinates();
         window.focus(handle, cx);
     }
@@ -2020,7 +2020,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_simple(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_test(cx);
         let display_points_of = |background_highlights: Vec<(Range<DisplayPoint>, Hsla)>| {
@@ -2321,7 +2321,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_option_handling(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_test(cx);
 
@@ -2382,7 +2382,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_select_all_matches(cx: &mut TestAppContext) {
         init_globals(cx);
         let buffer_text = r#"
@@ -2401,7 +2401,7 @@ mod tests {
             "Should pick a query with multiple results"
         );
         let buffer = cx.new(|cx| Buffer::local(buffer_text, cx));
-        let window = cx.add_window(|_, _| gpui::Empty);
+        let window = cx.add_window(|_, _| gpui_runtime::Empty);
 
         let editor = window.build_entity(cx, |window, cx| {
             Editor::for_buffer(buffer.clone(), None, window, cx)
@@ -2597,7 +2597,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_query_with_match_whole_word(cx: &mut TestAppContext) {
         init_globals(cx);
         let buffer_text = r#"
@@ -2689,7 +2689,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_query_history(cx: &mut TestAppContext) {
         let (_editor, search_bar, cx) = init_test(cx);
 
@@ -2839,7 +2839,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_query_history_autoscroll(cx: &mut TestAppContext) {
         let (_editor, search_bar, cx) = init_test(cx);
 
@@ -2899,7 +2899,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_simple(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_test(cx);
 
@@ -3015,7 +3015,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_focus(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_test(cx);
 
@@ -3053,7 +3053,7 @@ mod tests {
         let button_bounds = cx
             .debug_bounds("ICON-ReplaceNext")
             .expect("'Replace Next Match' button should be visible");
-        cx.simulate_click(button_bounds.center(), gpui::Modifiers::none());
+        cx.simulate_click(button_bounds.center(), gpui_types::Modifiers::none());
 
         assert_eq!(
             editor.read_with(cx, |editor, cx| editor.text(cx)),
@@ -3113,7 +3113,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_special_characters(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_test(cx);
 
@@ -3176,7 +3176,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_with_lookaround(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_test(cx);
 
@@ -3229,7 +3229,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_with_lookaround_in_multibuffer(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_multibuffer_test(cx);
 
@@ -3253,7 +3253,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deploy_replace_focuses_replacement_editor(cx: &mut TestAppContext) {
         init_globals(cx);
         let (editor, search_bar, cx) = init_test(cx);
@@ -3295,7 +3295,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_soft_wrap_relays_to_searched_editor(cx: &mut TestAppContext) {
         init_globals(cx);
         let (editor, search_bar, cx) = init_test(cx);
@@ -3345,7 +3345,7 @@ mod tests {
     }
 
     #[cfg(target_os = "macos")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cmd_e_then_cmd_g_uses_selection_for_find(cx: &mut TestAppContext) {
         init_globals(cx);
         let app_state = cx.update(AppState::test);
@@ -3468,7 +3468,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_matches_in_selections_singleton_buffer_multiple_selections(
         cx: &mut TestAppContext,
     ) {
@@ -3535,7 +3535,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_matches_in_selections_multiple_excerpts_buffer_multiple_selections(
         cx: &mut TestAppContext,
     ) {
@@ -3622,7 +3622,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_hides_and_uses_secondary_when_in_singleton_buffer(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_test(cx);
 
@@ -3654,7 +3654,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_uses_primary_left_when_in_multi_buffer(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_multibuffer_test(cx);
 
@@ -3686,7 +3686,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_expand_collapse_option_when_item_is_not_buffer_backed(
         cx: &mut TestAppContext,
     ) {
@@ -3824,7 +3824,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_hides_and_uses_secondary_when_part_of_project_search(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_multibuffer_test(cx);
 
@@ -3860,7 +3860,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sets_collapsed_when_editor_fold_events_emitted(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_multibuffer_test(cx);
 
@@ -3886,7 +3886,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_collapse_state_syncs_after_manual_buffer_fold(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_multibuffer_test(cx);
 
@@ -3965,7 +3965,7 @@ mod tests {
     }
 
     #[perf]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_options_changes(cx: &mut TestAppContext) {
         let (_editor, search_bar, cx) = init_test(cx);
         update_search_settings(
@@ -4096,7 +4096,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_select_occurrence_case_sensitivity(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_test(cx);
         let mut editor_cx = EditorTestContext::for_editor_in(editor, cx).await;
@@ -4151,7 +4151,7 @@ mod tests {
         editor_cx.assert_editor_state("«ˇfoo»\n«ˇFOO»\nFoo\nfoo");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_regex_search_does_not_highlight_non_matching_occurrences(
         cx: &mut TestAppContext,
     ) {
@@ -4225,7 +4225,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_replace_with_non_ascii_characters(cx: &mut TestAppContext) {
         let (editor, search_bar, cx) = init_test(cx);
 
@@ -4253,7 +4253,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_seeded_query_is_escaped_in_regex_mode(cx: &mut TestAppContext) {
         init_globals(cx);
         let buffer = cx.new(|cx| Buffer::local("z.d\nzed\n", cx));

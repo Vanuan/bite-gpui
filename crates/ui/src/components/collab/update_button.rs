@@ -316,7 +316,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_downloading_tooltip_shows_in_preview_like_layout(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = settings::SettingsStore::test(cx);
@@ -334,9 +334,9 @@ mod tests {
             }
         });
 
-        cx.simulate_mouse_move(point(px(30.), px(30.)), None, gpui::Modifiers::default());
+        cx.simulate_mouse_move(point(px(30.), px(30.)), None, gpui_types::Modifiers::default());
         cx.run_until_parked();
-        cx.simulate_mouse_move(point(px(31.), px(30.)), None, gpui::Modifiers::default());
+        cx.simulate_mouse_move(point(px(31.), px(30.)), None, gpui_types::Modifiers::default());
         cx.run_until_parked();
 
         cx.executor().advance_clock(Duration::from_millis(600));

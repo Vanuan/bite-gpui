@@ -24,8 +24,8 @@ mod ui_density;
 
 use std::sync::Arc;
 
-use gpui::BorrowAppContext;
-use gpui::Global;
+use gpui_runtime::BorrowAppContext;
+use gpui_runtime::Global;
 use gpui::{
     App, AssetSource, Hsla, Pixels, SharedString, Styled, Tiling, WindowAppearance,
     WindowBackgroundAppearance, px,

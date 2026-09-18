@@ -1,4 +1,4 @@
-use gpui::Transformation;
+use gpui_runtime::Transformation;
 
 /// A trait for components that can be transformed.
 pub trait Transformable {

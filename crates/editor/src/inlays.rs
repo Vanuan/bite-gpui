@@ -184,7 +184,7 @@ impl Editor {
     }
 
     #[cfg(any(test, feature = "test-support"))]
-    pub fn inline_value_inlays(&self, cx: &gpui::App) -> Vec<Inlay> {
+    pub fn inline_value_inlays(&self, cx: &gpui_runtime::App) -> Vec<Inlay> {
         self.display_map
             .read(cx)
             .current_inlays()
@@ -194,7 +194,7 @@ impl Editor {
     }
 
     #[cfg(any(test, feature = "test-support"))]
-    pub fn all_inlays(&self, cx: &gpui::App) -> Vec<Inlay> {
+    pub fn all_inlays(&self, cx: &gpui_runtime::App) -> Vec<Inlay> {
         self.display_map
             .read(cx)
             .current_inlays()

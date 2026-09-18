@@ -42,7 +42,7 @@ impl ToolPicker {
 impl EventEmitter<DismissEvent> for ToolPicker {}
 
 impl Focusable for ToolPicker {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.picker.focus_handle(cx)
     }
 }

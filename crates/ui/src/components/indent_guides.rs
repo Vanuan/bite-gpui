@@ -203,7 +203,7 @@ pub struct IndentGuideLayout {
 
 /// Implements the necessary functionality for rendering indent guides inside a uniform list.
 mod uniform_list {
-    use gpui::UniformListDecoration;
+    use gpui_runtime::UniformListDecoration;
 
     use super::*;
 
@@ -289,18 +289,18 @@ impl Element for IndentGuidesElement {
 
     fn request_layout(
         &mut self,
-        _id: Option<&gpui::GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _id: Option<&gpui_runtime::GlobalElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (gpui::LayoutId, Self::RequestLayoutState) {
-        (window.request_layout(gpui::Style::default(), [], cx), ())
+        (window.request_layout(gpui_runtime::Style::default(), [], cx), ())
     }
 
     fn prepaint(
         &mut self,
-        _id: Option<&gpui::GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _id: Option<&gpui_runtime::GlobalElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -327,8 +327,8 @@ impl Element for IndentGuidesElement {
 
     fn paint(
         &mut self,
-        _id: Option<&gpui::GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
+        _id: Option<&gpui_runtime::GlobalElementId>,
+        _inspector_id: Option<&gpui_runtime::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         prepaint: &mut Self::PrepaintState,

@@ -50,7 +50,7 @@ fn create_table_cell(
     cell_content: SharedString,
     vertical_alignment: VerticalAlignment,
     cx: &Context<'_, TabularDataPreviewPane>,
-) -> gpui::Stateful<Div> {
+) -> gpui_runtime::Stateful<Div> {
     let cell = div()
         .id(ElementId::NamedInteger(
             format!("table-display-cell-{}", *display_cell_id.row).into(),

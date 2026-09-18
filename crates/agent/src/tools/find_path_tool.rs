@@ -214,12 +214,12 @@ fn search_paths(glob: &str, project: Entity<Project>, cx: &mut App) -> Task<Resu
 #[cfg(test)]
 mod test {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::{FakeFs, Project};
     use settings::SettingsStore;
     use util::path;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_path_tool(cx: &mut TestAppContext) {
         init_test(cx);
 

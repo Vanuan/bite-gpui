@@ -194,7 +194,7 @@ mod tests {
         sync::atomic::{AtomicBool, AtomicUsize, Ordering::SeqCst},
     };
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_basic_watch() {
         let (mut sender, mut receiver) = channel(0);
         assert_eq!(sender.send(1), Ok(()));
@@ -223,7 +223,7 @@ mod tests {
         assert_eq!(receiver.recv().await, Err(NoSenderError));
     }
 
-    #[gpui::test(iterations = 1000)]
+    #[gpui_runtime::test(iterations = 1000)]
     async fn test_watch_random(cx: &mut TestAppContext) {
         let next_id = Arc::new(AtomicUsize::new(1));
         let closed = Arc::new(AtomicBool::new(false));

@@ -2,7 +2,7 @@ use crate::prelude::*;
 use gpui::{AnimationElement, AnimationExt, Styled};
 use std::time::Duration;
 
-use gpui::ease_out_quint;
+use gpui_runtime::ease_out_quint;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum AnimationDuration {
@@ -51,7 +51,7 @@ pub trait DefaultAnimations: Styled + Sized + Element {
 
         self.with_animation(
             animation_id,
-            gpui::Animation::new(AnimationDuration::Fast.into()).with_easing(ease_out_quint()),
+            gpui_runtime::Animation::new(AnimationDuration::Fast.into()).with_easing(ease_out_quint()),
             move |mut this, delta| {
                 let start_opacity = 0.4;
                 let start_pos = 0.0;

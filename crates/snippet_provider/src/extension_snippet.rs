@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use anyhow::Result;
 use extension::{ExtensionHostProxy, ExtensionSnippetProxy};
-use gpui::App;
+use gpui_runtime::App;
 
 use crate::SnippetRegistry;
 

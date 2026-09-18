@@ -893,7 +893,7 @@ fn ensure_opaque(color: Hsla) -> Hsla {
 }
 
 fn try_parse_color(color: &str) -> anyhow::Result<Hsla> {
-    let rgba = gpui::Rgba::try_from(color)?;
+    let rgba = gpui_types::Rgba::try_from(color)?;
     let rgba = palette::rgb::Srgba::from_components((rgba.r, rgba.g, rgba.b, rgba.a));
     let hsla = palette::Hsla::from_color(rgba);
 
@@ -1062,7 +1062,7 @@ mod tests {
         assert_eq!(refinement.editor_diff_hunk_deleted_hollow_border, None);
     }
 
-    fn parse_color(color: &str) -> gpui::Hsla {
+    fn parse_color(color: &str) -> gpui_types::Hsla {
         match try_parse_color(color) {
             Ok(color) => color,
             Err(error) => panic!("failed to parse color {color}: {error}"),

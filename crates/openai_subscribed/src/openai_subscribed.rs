@@ -1363,7 +1363,7 @@ mod tests {
     use std::pin::Pin;
     use std::sync::atomic::{AtomicUsize, Ordering};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_concurrent_refresh_deduplicates(cx: &mut TestAppContext) {
         let refresh_count = Arc::new(AtomicUsize::new(0));
         let refresh_count_clone = refresh_count.clone();
@@ -1411,7 +1411,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_fresh_credentials_skip_refresh(cx: &mut TestAppContext) {
         let refresh_count = Arc::new(AtomicUsize::new(0));
         let refresh_count_clone = refresh_count.clone();
@@ -1447,7 +1447,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_credentials_returns_no_api_key(cx: &mut TestAppContext) {
         let http_client = FakeHttpClient::create(|_| async {
             Ok(http_client::Response::builder()
@@ -1472,7 +1472,7 @@ mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_fatal_refresh_clears_auth_state(cx: &mut TestAppContext) {
         let http_client = FakeHttpClient::create(move |_request| async move {
             Ok(http_client::Response::builder()
@@ -1507,7 +1507,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_transient_refresh_keeps_credentials(cx: &mut TestAppContext) {
         let http_client = FakeHttpClient::create(move |_request| async move {
             Ok(http_client::Response::builder()
@@ -1542,7 +1542,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancel_sign_in_drops_pending_task(cx: &mut TestAppContext) {
         let http: Arc<dyn HttpClient> = FakeHttpClient::create(|_| async {
             Ok(http_client::Response::builder()
@@ -1570,7 +1570,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sign_in_task_remains_alive_while_persisting_credentials(cx: &mut TestAppContext) {
         let http: Arc<dyn HttpClient> = FakeHttpClient::create(|_| async {
             Ok(http_client::Response::builder()
@@ -1619,7 +1619,7 @@ mod tests {
         cx.read(|cx| assert!(!state.read(cx).is_signing_in()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sign_out_during_refresh_discards_result(cx: &mut TestAppContext) {
         let (gate_tx, gate_rx) = futures::channel::oneshot::channel::<()>();
         let gate_rx = Arc::new(Mutex::new(Some(gate_rx)));
@@ -1675,7 +1675,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sign_out_completes_fully(cx: &mut TestAppContext) {
         let creds_provider = Arc::new(FakeCredentialsProvider::new());
         // Pre-populate the credential store
@@ -1713,7 +1713,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initial_load_restores_persisted_credentials(cx: &mut TestAppContext) {
         let creds = make_fresh_credentials();
         let creds_json = serde_json::to_vec(&creds).unwrap();
@@ -1773,7 +1773,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_model_catalog_uses_account_visible_models(cx: &mut TestAppContext) {
         let http_client = FakeHttpClient::create(|request| async move {
             assert_eq!(request.method(), Method::GET);
@@ -1904,7 +1904,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_model_catalog_failure_preserves_fallback_models(cx: &mut TestAppContext) {
         let http_client = FakeHttpClient::create(|_| async move {
             Ok(http_client::Response::builder()
@@ -1944,7 +1944,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_model_catalog_request_times_out(cx: &mut TestAppContext) {
         let http_client = FakeHttpClient::create(|_| {
             futures::future::pending::<Result<http_client::Response<AsyncBody>>>()
@@ -1965,7 +1965,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_obsolete_model_catalog_cannot_replace_newer_models(cx: &mut TestAppContext) {
         let (release_obsolete_request, obsolete_request) =
             futures::channel::oneshot::channel::<()>();
@@ -2040,7 +2040,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_server_side_compaction_streams_from_codex_responses(cx: &mut TestAppContext) {
         let compaction_request_count = Arc::new(AtomicUsize::new(0));
         let http_client = FakeHttpClient::create({
@@ -2158,7 +2158,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_explicit_compaction_streams_with_codex_compaction_trigger(
         cx: &mut TestAppContext,
     ) {

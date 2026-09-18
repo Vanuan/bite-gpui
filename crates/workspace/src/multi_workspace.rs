@@ -184,7 +184,7 @@ pub struct DraggedSidebar;
 
 impl Render for DraggedSidebar {
     fn render(&mut self, _window: &mut Window, _cx: &mut Context<Self>) -> impl IntoElement {
-        gpui::Empty
+        gpui_runtime::Empty
     }
 }
 
@@ -1536,7 +1536,7 @@ impl MultiWorkspace {
         cx: &mut Context<Self>,
         build: B,
     ) where
-        B: FnOnce(&mut Window, &mut gpui::Context<V>) -> V,
+        B: FnOnce(&mut Window, &mut gpui_runtime::Context<V>) -> V,
     {
         self.workspace().update(cx, |workspace, cx| {
             workspace.toggle_modal(window, cx, build);

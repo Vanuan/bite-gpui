@@ -632,7 +632,7 @@ pub(crate) fn request_prediction_with_zeta(
 fn handle_api_response<T>(
     this: &WeakEntity<EditPredictionStore>,
     response: Result<(T, Option<client::EditPredictionUsage>)>,
-    cx: &mut gpui::AsyncApp,
+    cx: &mut gpui_runtime::AsyncApp,
 ) -> Result<T> {
     match response {
         Ok((data, usage)) => {

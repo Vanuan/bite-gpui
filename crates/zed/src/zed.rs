@@ -115,7 +115,7 @@ const MERCH_URL: &str = "https://merch.zed.dev/";
 
 pub struct CrashHandler(pub Arc<crashes::Client>);
 
-impl gpui::Global for CrashHandler {}
+impl gpui_runtime::Global for CrashHandler {}
 
 actions!(
     zed,
@@ -332,7 +332,7 @@ pub fn init(cx: &mut App) {
     });
 }
 
-fn bind_on_window_closed(cx: &mut App) -> Option<gpui::Subscription> {
+fn bind_on_window_closed(cx: &mut App) -> Option<gpui_runtime::Subscription> {
     #[cfg(target_os = "macos")]
     {
         WorkspaceSettings::get_global(cx)
@@ -412,7 +412,7 @@ pub fn build_window_options(display_uuid: Option<Uuid>, cx: &mut App) -> WindowO
         #[cfg(any(target_os = "linux", target_os = "freebsd"))]
         icon: APP_ICON.as_ref().cloned(),
         window_decorations: Some(window_decorations),
-        window_min_size: Some(gpui::Size {
+        window_min_size: Some(gpui_types::Size {
             width: px(360.0),
             height: px(240.0),
         }),
@@ -786,7 +786,7 @@ fn initialize_panels(window: &mut Window, cx: &mut Context<Workspace>) -> Task<a
         async fn add_panel_when_ready(
             panel_task: impl Future<Output = anyhow::Result<Entity<impl workspace::Panel>>> + 'static,
             workspace_handle: WeakEntity<Workspace>,
-            mut cx: gpui::AsyncWindowContext,
+            mut cx: gpui_runtime::AsyncWindowContext,
         ) {
             if let Some(panel) = panel_task.await.context("failed to load panel").log_err()
             {
@@ -2024,14 +2024,14 @@ fn init_global_config_error_notifications(cx: &mut App) {
 }
 
 #[derive(Copy, Clone, Debug, settings::RegisterSetting)]
-struct CursorHideModeSetting(gpui::CursorHideMode);
+struct CursorHideModeSetting(gpui_runtime::CursorHideMode);
 
 impl Settings for CursorHideModeSetting {
     fn from_settings(content: &settings::SettingsContent) -> Self {
         Self(match content.hide_mouse.unwrap_or_default() {
-            settings::HideMouseMode::Never => gpui::CursorHideMode::Never,
-            settings::HideMouseMode::OnTyping => gpui::CursorHideMode::OnTyping,
-            settings::HideMouseMode::OnTypingAndAction => gpui::CursorHideMode::OnTypingAndAction,
+            settings::HideMouseMode::Never => gpui_runtime::CursorHideMode::Never,
+            settings::HideMouseMode::OnTyping => gpui_runtime::CursorHideMode::OnTyping,
+            settings::HideMouseMode::OnTypingAndAction => gpui_runtime::CursorHideMode::OnTypingAndAction,
         })
     }
 }
@@ -2333,7 +2333,7 @@ fn reload_keymaps(cx: &mut App, mut user_key_bindings: Vec<KeyBinding>) {
     reload_menus(cx);
     // On Windows, this is set in the `update_jump_list` method of the `HistoryManager`.
     #[cfg(not(target_os = "windows"))]
-    cx.set_dock_menu(vec![gpui::MenuItem::action(
+    cx.set_dock_menu(vec![gpui_runtime::MenuItem::action(
         "New Window",
         workspace::NewWindow,
     )]);
@@ -2928,7 +2928,7 @@ mod tests {
         futures::future::join_all(all_tasks).await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_partial_file_index_status_bar_message(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         set_file_scan_depth(cx, 1);
@@ -3008,7 +3008,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_non_existing_file(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3045,7 +3045,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_remote_from_existing_connection_reuses_window(
         cx: &mut TestAppContext,
         server_cx: &mut TestAppContext,
@@ -3155,7 +3155,7 @@ mod tests {
         executor.run_until_parked();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_paths_action(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3285,7 +3285,7 @@ mod tests {
         assert_eq!(cx.read(|cx| cx.windows().len()), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_add_new(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3357,7 +3357,7 @@ mod tests {
         assert_eq!(cx.update(|cx| cx.windows().len()), 3);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_file_in_many_spaces(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3440,7 +3440,7 @@ mod tests {
         assert_eq!(cx.update(|cx| cx.windows().len()), 3);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_window_edit_state_restoring_disabled(cx: &mut TestAppContext) {
         let executor = cx.executor();
         let app_state = init_test(cx);
@@ -3612,7 +3612,7 @@ mod tests {
     }
 
     #[ignore = "This test has timing issues across platforms."]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_window_edit_state_restoring_enabled(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3731,7 +3731,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_empty_workspace(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(|cx| {
@@ -3791,7 +3791,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_window_launchpad_opens_without_items(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(|cx| {
@@ -3835,7 +3835,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_entry(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3984,7 +3984,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_paths(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -4267,7 +4267,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_opening_excluded_paths(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(|cx| {
@@ -4404,7 +4404,7 @@ mod tests {
             });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_conflicting_item(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -4480,7 +4480,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_and_save_new_file(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -4646,7 +4646,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_setting_language_when_saving_as_single_file_worktree(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state.fs.create_dir(Path::new("/root")).await.unwrap();
@@ -4718,7 +4718,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pane_actions(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -4810,7 +4810,7 @@ mod tests {
         buffer.assert_released();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_editor_zoom_with_scroll_wheel(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -4963,7 +4963,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_navigation(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -5324,7 +5324,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reopening_closed_items(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -5528,10 +5528,10 @@ mod tests {
             }
             bindings.extend(emacs_bindings);
 
-            gpui::Keymap::new(bindings)
+            gpui_runtime::Keymap::new(bindings)
                 .bindings_for_input(
-                    &[gpui::Keystroke::parse(keystroke).unwrap()],
-                    &[gpui::KeyContext::parse(context).unwrap()],
+                    &[gpui_types::Keystroke::parse(keystroke).unwrap()],
+                    &[gpui_runtime::KeyContext::parse(context).unwrap()],
                 )
                 .0
                 .iter()
@@ -5543,7 +5543,7 @@ mod tests {
     /// `editor::MoveDown` and `editor::MoveUp` propagate when the cursor doesn't move, which at the
     /// ends of a buffer let `ctrl-n` and `ctrl-p` fall through to the default bindings and open a
     /// new file / the file finder.
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_emacs_cursor_keys_do_not_fall_back_to_default_bindings(cx: &mut TestAppContext) {
         init_keymap_test(cx);
 
@@ -5570,7 +5570,7 @@ mod tests {
 
     /// The unbind above only targets `workspace::NewFile` / `file_finder::Toggle`, so the narrower
     /// `ctrl-n` and `ctrl-p` bindings still win where they apply.
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_emacs_cursor_keys_keep_narrower_bindings(cx: &mut TestAppContext) {
         init_keymap_test(cx);
 
@@ -5595,8 +5595,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_base_keymap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_base_keymap(cx: &mut gpui_runtime::TestAppContext) {
         let executor = cx.executor();
         let app_state = init_keymap_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -5736,8 +5736,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_disabled_keymap_binding(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_disabled_keymap_binding(cx: &mut gpui_runtime::TestAppContext) {
         let executor = cx.executor();
         let app_state = init_keymap_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -5839,9 +5839,9 @@ mod tests {
         assert_key_bindings_for(window.into(), cx, vec![("6", &Deploy)], line!());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_generate_keymap_json_schema_for_registered_actions(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_keymap_test(cx);
         cx.update(|cx| {
@@ -5852,8 +5852,8 @@ mod tests {
 
     /// Checks that action namespaces are the expected set. The purpose of this is to prevent typos
     /// and let you know when introducing a new namespace.
-    #[gpui::test]
-    async fn test_action_namespaces(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_action_namespaces(cx: &mut gpui_runtime::TestAppContext) {
         use itertools::Itertools;
 
         init_keymap_test(cx);
@@ -5992,7 +5992,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_bundled_settings_and_themes(cx: &mut App) {
         cx.text_system()
             .add_fonts(vec![
@@ -6021,7 +6021,7 @@ mod tests {
         assert!(has_default_theme);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bundled_files_editor(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(init);
@@ -6060,7 +6060,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bundled_files_reuse_existing_editor(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(init);
@@ -6108,7 +6108,7 @@ mod tests {
         assert_eq!(item_count, 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bundled_languages(cx: &mut TestAppContext) {
         let fs = fs::FakeFs::new(cx.background_executor.clone());
         env_logger::builder().is_test(true).try_init().ok();
@@ -6265,8 +6265,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_opening_project_settings_when_excluded(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_opening_project_settings_when_excluded(cx: &mut gpui_runtime::TestAppContext) {
         // Use the proper initialization for runtime state
         let app_state = init_keymap_test(cx);
 
@@ -6381,8 +6381,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_disable_ai_crash(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_disable_ai_crash(cx: &mut gpui_runtime::TestAppContext) {
         let app_state = init_test(cx);
         cx.update(init);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -6403,9 +6403,9 @@ mod tests {
         // If this panics, the test has failed
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_invalid_global_tasks_file_shows_notification_on_startup(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let app_state = init_test(cx);
         let tasks_file_path = paths::tasks_file().as_path();
@@ -6468,8 +6468,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_disable_ai_filters_keybindings(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_disable_ai_filters_keybindings(cx: &mut gpui_runtime::TestAppContext) {
         let _app_state = init_keymap_test(cx);
 
         // With AI enabled, the default keymap should include the assistant
@@ -6529,8 +6529,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_prefer_focused_window(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_prefer_focused_window(cx: &mut gpui_runtime::TestAppContext) {
         let app_state = init_test(cx);
         let paths = [PathBuf::from(path!("/dir/document.txt"))];
 
@@ -6594,7 +6594,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_paths_switches_to_best_workspace(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -6794,7 +6794,7 @@ mod tests {
         assert_eq!(cx.windows().len(), 1, "Should still have only 1 window");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_paths_in_gitignored_dir_opens_new_workspace(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
 
@@ -6883,7 +6883,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_quit_checks_all_workspaces_for_dirty_items(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(init);
@@ -7186,7 +7186,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reload_checks_all_workspaces_for_dirty_items(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(init);
@@ -7321,7 +7321,7 @@ mod tests {
             .expect("reload should restart the app after the dirty item is resolved");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multi_workspace_session_restore(cx: &mut TestAppContext) {
         use collections::HashMap;
         use session::Session;
@@ -7539,7 +7539,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_quit_preserves_focused_workspace_for_restore(cx: &mut TestAppContext) {
         use session::Session;
         use workspace::{OpenMode, Workspace};
@@ -7675,7 +7675,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reload_restores_project_windows_and_tabs(cx: &mut TestAppContext) {
         use session::Session;
 
@@ -7808,7 +7808,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restored_project_groups_survive_workspace_key_change(cx: &mut TestAppContext) {
         use session::Session;
         use util::path_list::PathList;
@@ -7965,7 +7965,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_project_removes_project_group(cx: &mut TestAppContext) {
         use util::path_list::PathList;
         use workspace::{OpenMode, ProjectGroupKey};
@@ -8016,7 +8016,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_project_switches_to_neighbor_in_multi_project(cx: &mut TestAppContext) {
         use workspace::OpenMode;
 
@@ -8154,7 +8154,7 @@ mod tests {
         window
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_reload_keymaps_rebuilds_menus(cx: &mut TestAppContext) {
         init_keymap_test(cx);
 
@@ -8211,7 +8211,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_disable_ai_menu_update_with_malformed_keymap(cx: &mut TestAppContext) {
         let executor = cx.executor();
         let app_state = init_keymap_test(cx);

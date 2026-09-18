@@ -698,7 +698,7 @@ pub fn init(
 
     // Kick off the one-time migration of non-Default Rules to global
     // Skills. Test builds keep the old feature-flag deferral because
-    // server flags are never received in `gpui::test` contexts, avoiding
+    // server flags are never received in `gpui_runtime::test` contexts, avoiding
     // sqlite worker activity that can race with the deterministic scheduler.
     #[cfg(any(test, feature = "test-support"))]
     {
@@ -744,7 +744,7 @@ fn rerun_rules_to_skills_migration(
 }
 
 fn show_rules_to_skills_migration_toast(
-    workspace: &gpui::WeakEntity<Workspace>,
+    workspace: &gpui_runtime::WeakEntity<Workspace>,
     message: &'static str,
     cx: &mut App,
 ) {
@@ -957,7 +957,7 @@ mod tests {
         DockPosition, NotifyWhenAgentWaiting, PlaySoundWhenAgentDone, Settings, SettingsStore,
     };
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_agent_command_palette_visibility(cx: &mut TestAppContext) {
         // Init settings
         cx.update(|cx| {
@@ -1176,7 +1176,7 @@ mod tests {
         fs
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_backfill_sets_kvp_flag(cx: &mut TestAppContext) {
         let fs = setup_backfill_test(cx).await;
 
@@ -1202,7 +1202,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_backfill_new_install_sets_flag_without_writing_settings(cx: &mut TestAppContext) {
         let fs = setup_backfill_test(cx).await;
 
@@ -1224,7 +1224,7 @@ mod tests {
         assert_eq!(written.trim(), "{}", "settings file should be unchanged");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_backfill_is_idempotent(cx: &mut TestAppContext) {
         let fs = setup_backfill_test(cx).await;
 

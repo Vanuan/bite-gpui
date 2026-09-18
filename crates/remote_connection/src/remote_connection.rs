@@ -417,7 +417,7 @@ impl Render for RemoteConnectionModal {
 }
 
 impl Focusable for RemoteConnectionModal {
-    fn focus_handle(&self, cx: &gpui::App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &gpui_runtime::App) -> gpui_runtime::FocusHandle {
         self.prompt.read(cx).editor.focus_handle(cx)
     }
 }
@@ -594,7 +594,7 @@ pub fn connect_with_modal(
 /// outlive the connection flow — for example, when the modal is shown
 /// on a local workspace before switching to a newly-created remote
 /// workspace.
-pub fn dismiss_connection_modal(workspace: &Entity<Workspace>, cx: &mut gpui::AsyncWindowContext) {
+pub fn dismiss_connection_modal(workspace: &Entity<Workspace>, cx: &mut gpui_runtime::AsyncWindowContext) {
     workspace
         .update_in(cx, |workspace, _window, cx| {
             if let Some(modal) = workspace.active_modal::<RemoteConnectionModal>(cx) {
@@ -744,12 +744,12 @@ use anyhow::Context as _;
 #[cfg(test)]
 mod tests {
     use editor::Editor;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use settings::SettingsStore;
 
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn clears_prompt_when_password_request_is_cancelled(cx: &mut TestAppContext) {
         initialize_test(cx);
 
@@ -791,7 +791,7 @@ mod tests {
         assert!(prompt.read_with(cx, |prompt, _| prompt.prompt.is_none()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn stale_cancellation_does_not_clear_replacement_prompt(cx: &mut TestAppContext) {
         initialize_test(cx);
 

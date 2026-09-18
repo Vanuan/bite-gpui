@@ -1,7 +1,7 @@
 use std::{future::Future, time::Duration};
 
 #[cfg(feature = "test-support")]
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 
 #[derive(Clone)]
 pub enum Executor {

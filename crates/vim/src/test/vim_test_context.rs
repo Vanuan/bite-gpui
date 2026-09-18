@@ -12,7 +12,7 @@ pub struct VimTestContext {
 }
 
 impl VimTestContext {
-    pub fn init(cx: &mut gpui::TestAppContext) {
+    pub fn init(cx: &mut gpui_runtime::TestAppContext) {
         if cx.has_global::<VimGlobals>() {
             return;
         }
@@ -34,23 +34,23 @@ impl VimTestContext {
         });
     }
 
-    pub async fn new(cx: &mut gpui::TestAppContext, enabled: bool) -> VimTestContext {
+    pub async fn new(cx: &mut gpui_runtime::TestAppContext, enabled: bool) -> VimTestContext {
         Self::init(cx);
         let lsp = EditorLspTestContext::new_rust(Default::default(), cx).await;
         Self::new_with_lsp(lsp, enabled)
     }
 
-    pub async fn new_html(cx: &mut gpui::TestAppContext) -> VimTestContext {
+    pub async fn new_html(cx: &mut gpui_runtime::TestAppContext) -> VimTestContext {
         Self::init(cx);
         Self::new_with_lsp(EditorLspTestContext::new_html(cx).await, true)
     }
 
-    pub async fn new_markdown_with_rust(cx: &mut gpui::TestAppContext) -> VimTestContext {
+    pub async fn new_markdown_with_rust(cx: &mut gpui_runtime::TestAppContext) -> VimTestContext {
         Self::init(cx);
         Self::new_with_lsp(EditorLspTestContext::new_markdown_with_rust(cx).await, true)
     }
 
-    pub async fn new_typescript(cx: &mut gpui::TestAppContext) -> VimTestContext {
+    pub async fn new_typescript(cx: &mut gpui_runtime::TestAppContext) -> VimTestContext {
         Self::init(cx);
         Self::new_with_lsp(
             EditorLspTestContext::new_typescript(
@@ -73,7 +73,7 @@ impl VimTestContext {
         )
     }
 
-    pub async fn new_tsx(cx: &mut gpui::TestAppContext) -> VimTestContext {
+    pub async fn new_tsx(cx: &mut gpui_runtime::TestAppContext) -> VimTestContext {
         Self::init(cx);
         Self::new_with_lsp(
             EditorLspTestContext::new_tsx(

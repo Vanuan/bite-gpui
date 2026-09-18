@@ -508,7 +508,7 @@ impl LspLocationsDelegate {
 }
 
 fn build_location_matches(locations: &[Location], cx: &App) -> Vec<LocationMatch> {
-    use gpui::EntityId;
+    use gpui_runtime::EntityId;
     let mut snapshots: HashMap<EntityId, language::BufferSnapshot> = HashMap::default();
     let mut matches = Vec::with_capacity(locations.len());
 
@@ -809,7 +809,7 @@ fn render_matched_line(location_match: &LocationMatch, cx: &App) -> StyledText {
     };
     let match_highlight = (location_match.match_range.clone(), match_style);
 
-    let highlights = gpui::combine_highlights(syntax_highlights, [match_highlight]);
+    let highlights = gpui_runtime::combine_highlights(syntax_highlights, [match_highlight]);
     StyledText::new(location_match.display_text.clone())
         .with_default_highlights(&text_style, highlights)
 }
@@ -818,7 +818,7 @@ fn render_matched_line(location_match: &LocationMatch, cx: &App) -> StyledText {
 mod tests {
     use super::*;
     use editor::test::editor_lsp_test_context::EditorLspTestContext;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use indoc::indoc;
     use workspace::Item as _;
 
@@ -865,7 +865,7 @@ mod tests {
         }
     "#};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multiple_references_open_picker(cx: &mut TestAppContext) {
         let mut cx = rust_cx(
             lsp::ServerCapabilities {
@@ -890,7 +890,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_single_result_jumps_without_picker(cx: &mut TestAppContext) {
         let mut cx = rust_cx(
             lsp::ServerCapabilities {
@@ -923,7 +923,7 @@ mod tests {
         "#});
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_results_does_not_open_picker(cx: &mut TestAppContext) {
         let mut cx = rust_cx(
             lsp::ServerCapabilities {
@@ -947,7 +947,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_definition_falls_back_to_references_picker(cx: &mut TestAppContext) {
         let mut cx = rust_cx(
             lsp::ServerCapabilities {
@@ -977,7 +977,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_fuzzy_filter_matches_subsequence(cx: &mut TestAppContext) {
         let mut cx = rust_cx(
             lsp::ServerCapabilities {
@@ -1013,7 +1013,7 @@ mod tests {
         assert_eq!(matches(&mut cx, ""), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cmd_click_fallback_honors_lsp_results_location(cx: &mut TestAppContext) {
         cx.update(crate::init);
         let mut cx = rust_cx(
@@ -1046,7 +1046,7 @@ mod tests {
         let screen_coord = cx
             .editor(|editor, _, cx| editor.pixel_position_of_cursor(cx))
             .unwrap();
-        cx.simulate_click(screen_coord, gpui::Modifiers::secondary_key());
+        cx.simulate_click(screen_coord, gpui_types::Modifiers::secondary_key());
         cx.run_until_parked();
 
         assert!(
@@ -1055,7 +1055,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_type_definition_honors_lsp_results_location(cx: &mut TestAppContext) {
         cx.update(crate::init);
         let mut cx = rust_cx(
@@ -1099,7 +1099,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_declaration_honors_lsp_results_location(cx: &mut TestAppContext) {
         cx.update(crate::init);
         let mut cx = rust_cx(

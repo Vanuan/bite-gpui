@@ -18,7 +18,7 @@ use crate::{
     tests::{active_debug_session_panel, init_test, init_test_workspace, start_debug_session},
 };
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rust_inline_values(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1522,7 +1522,7 @@ fn main() {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_python_inline_values(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2106,7 +2106,7 @@ async fn test_inline_values_util(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_inline_values_example(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     let variables = [("x", "10"), ("y", "20"), ("result", "30")];
 
@@ -2143,7 +2143,7 @@ fn main() {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_inline_values_with_globals(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     let variables = [("x", "5"), ("y", "10")];
 
@@ -2188,7 +2188,7 @@ fn main() {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_go_inline_values(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     let variables = [("x", "42"), ("y", "hello")];
 
@@ -2233,7 +2233,7 @@ func main() {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_trim_multi_line_inline_value(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     let variables = [("y", "hello\n world")];
 
@@ -2324,7 +2324,7 @@ fn tsx_lang() -> Arc<Language> {
     )
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_javascript_inline_values(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     let variables = [
         ("x", "10"),
@@ -2368,7 +2368,7 @@ function calculate() {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_typescript_inline_values(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     let variables = [
         ("count", "42"),
@@ -2412,7 +2412,7 @@ function processData(count: number, name: string): number {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tsx_inline_values(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     let variables = [("count", "5"), ("message", "Hello React")];
 
@@ -2457,7 +2457,7 @@ const Counter = () => {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_javascript_arrow_functions(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     let variables = [("x", "42"), ("result", "84")];
 
@@ -2490,7 +2490,7 @@ const double = (x) => {
     .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_typescript_for_in_loop(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     let variables = [("key", "name"), ("obj", "{name: 'test'}")];
 

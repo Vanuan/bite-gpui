@@ -194,7 +194,7 @@ impl TerminalThreadMetadataStore {
     #[cfg(any(test, feature = "test-support"))]
     pub fn init_global(cx: &mut App) {
         let db_name = TestTerminalMetadataDbName::global(cx);
-        let db = gpui::block_on(db::open_test_db::<TerminalThreadMetadataDb>(&db_name));
+        let db = gpui_platform::block_on(db::open_test_db::<TerminalThreadMetadataDb>(&db_name));
         let terminal_store = cx.new(|cx| Self::new(TerminalThreadMetadataDb(db), cx));
         cx.set_global(GlobalTerminalThreadMetadataStore(terminal_store));
     }
@@ -648,7 +648,7 @@ impl Column for TerminalThreadMetadata {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use std::path::Path;
 
     fn init_test(cx: &mut TestAppContext) {
@@ -697,7 +697,7 @@ mod tests {
         assert_eq!(metadata.display_title().as_ref(), "Fix bug");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rename_terminal_updates_stored_custom_title(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -738,7 +738,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_change_worktree_paths_reindexes_terminal_metadata(cx: &mut TestAppContext) {
         init_test(cx);
 

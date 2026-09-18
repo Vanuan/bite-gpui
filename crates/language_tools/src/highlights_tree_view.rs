@@ -152,13 +152,13 @@ pub struct HighlightsTreeView {
 
 pub struct HighlightsTreeToolbarItemView {
     tree_view: Option<Entity<HighlightsTreeView>>,
-    _subscription: Option<gpui::Subscription>,
+    _subscription: Option<gpui_runtime::Subscription>,
     toggle_settings_handle: PopoverMenuHandle<ContextMenu>,
 }
 
 struct EditorState {
     editor: Entity<Editor>,
-    _subscription: gpui::Subscription,
+    _subscription: gpui_runtime::Subscription,
 }
 
 struct SemanticHighlightEntry {
@@ -882,7 +882,7 @@ impl Render for HighlightsTreeView {
 impl EventEmitter<()> for HighlightsTreeView {}
 
 impl Focusable for HighlightsTreeView {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -987,7 +987,7 @@ impl HighlightsTreeToolbarItemView {
                     .toggle_state(self.toggle_settings_handle.is_deployed()),
                 Tooltip::text("Highlights Settings"),
             )
-            .anchor(gpui::Anchor::TopRight)
+            .anchor(gpui_types::Anchor::TopRight)
             .with_handle(self.toggle_settings_handle.clone())
             .menu(move |window, cx| {
                 let tree_view_for_text = tree_view.clone();

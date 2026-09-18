@@ -10,11 +10,11 @@ mod tests {
     use super::*;
     use fs::FakeFs;
 
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use serde_json::json;
     use std::path::Path;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_watch_config_dir_reloads_tracked_file_on_rescan(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -59,7 +59,7 @@ mod tests {
         assert_eq!(rx.next().await.as_deref(), Some("A"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_watch_config_file_reloads_when_parent_dir_is_symlink(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         let fs = FakeFs::new(cx.background_executor.clone());

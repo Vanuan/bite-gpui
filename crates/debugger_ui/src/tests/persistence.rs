@@ -13,7 +13,7 @@ use serde_json::json;
 use util::path;
 use workspace::{Panel, dock::DockPosition};
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_invert_axis_on_panel_position_change(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,

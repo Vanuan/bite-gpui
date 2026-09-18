@@ -2,7 +2,7 @@ use anyhow::{Result, anyhow};
 use async_trait::async_trait;
 use collections::HashMap;
 use futures::{Stream, StreamExt};
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use http_client::{AsyncBody, HttpClient, Request, Response, http::Method};
 use parking_lot::Mutex as SyncMutex;
 use std::{pin::Pin, sync::Arc};
@@ -413,7 +413,7 @@ mod tests {
     use super::*;
     use async_trait::async_trait;
     use futures::FutureExt as _;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use parking_lot::Mutex as SyncMutex;
     use std::{
         sync::atomic::{AtomicBool, AtomicUsize, Ordering},
@@ -496,7 +496,7 @@ mod tests {
             .unwrap())
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sse_data_field(cx: &mut TestAppContext) {
         for data_prefix in ["data:", "data: "] {
             let body = format!(
@@ -542,7 +542,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bearer_token_attached_to_requests(cx: &mut TestAppContext) {
         // Capture the Authorization header from the request.
         let captured_auth = Arc::new(SyncMutex::new(None::<String>));
@@ -577,7 +577,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_bearer_token_without_provider(cx: &mut TestAppContext) {
         let captured_auth = Arc::new(SyncMutex::new(None::<String>));
         let captured_auth_clone = captured_auth.clone();
@@ -606,7 +606,7 @@ mod tests {
         assert!(captured_auth.lock().is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_missing_token_triggers_refresh_before_first_request(cx: &mut TestAppContext) {
         let captured_auth = Arc::new(SyncMutex::new(None::<String>));
         let captured_auth_clone = captured_auth.clone();
@@ -641,7 +641,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_invalid_token_still_triggers_refresh_and_retry(cx: &mut TestAppContext) {
         let request_count = Arc::new(AtomicUsize::new(0));
         let request_count_clone = request_count.clone();
@@ -686,7 +686,7 @@ mod tests {
         assert_eq!(request_count.load(Ordering::SeqCst), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_401_triggers_refresh_and_retry(cx: &mut TestAppContext) {
         let request_count = Arc::new(AtomicUsize::new(0));
         let request_count_clone = request_count.clone();
@@ -734,7 +734,7 @@ mod tests {
         assert_eq!(request_count.load(Ordering::SeqCst), 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_401_returns_auth_required_when_refresh_fails(cx: &mut TestAppContext) {
         let client = make_fake_http_client(|_req| {
             Box::pin(async {
@@ -785,7 +785,7 @@ mod tests {
         assert_eq!(provider.refresh_count(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_401_returns_auth_required_without_provider(cx: &mut TestAppContext) {
         let client = make_fake_http_client(|_req| {
             Box::pin(async {
@@ -821,7 +821,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_401_after_successful_refresh_still_returns_auth_required(
         cx: &mut TestAppContext,
     ) {

@@ -10,10 +10,10 @@ use util::maybe;
 
 use anyhow::{Context as _, Result};
 use futures::stream::iter;
-use gpui::App;
-use gpui::BackgroundExecutor;
-use gpui::Global;
-use gpui::ReadGlobal as _;
+use gpui_runtime::App;
+use gpui_platform::BackgroundExecutor;
+use gpui_runtime::Global;
+use gpui_runtime::ReadGlobal as _;
 use gpui::SharedString;
 #[cfg(unix)]
 use std::ffi::CString;
@@ -1439,7 +1439,7 @@ pub struct FakeFs {
     this: std::sync::Weak<Self>,
     // Use an unfair lock to ensure tests are deterministic.
     state: Arc<Mutex<FakeFsState>>,
-    executor: gpui::BackgroundExecutor,
+    executor: gpui_platform::BackgroundExecutor,
     native_watcher: Arc<fs_watcher::OsWatcher>,
     poll_watcher: Arc<fs_watcher::OsWatcher>,
 }
@@ -1806,7 +1806,7 @@ impl FakeFs {
     /// https://doc.rust-lang.org/nightly/std/time/struct.SystemTime.html#platform-specific-behavior
     const SYSTEMTIME_INTERVAL: Duration = Duration::from_nanos(100);
 
-    pub fn new(executor: gpui::BackgroundExecutor) -> Arc<Self> {
+    pub fn new(executor: gpui_platform::BackgroundExecutor) -> Arc<Self> {
         let (tx, rx) = async_channel::bounded::<PathBuf>(10);
 
         let state = Arc::new(Mutex::new(FakeFsState {

@@ -1,5 +1,5 @@
 use collections::BTreeMap;
-use gpui::HighlightStyle;
+use gpui_runtime::HighlightStyle;
 use language::{Chunk, LanguageAwareStyling};
 use multi_buffer::{MultiBufferChunks, MultiBufferOffset, MultiBufferSnapshot};
 use std::{cmp, ops::Range};
@@ -291,11 +291,11 @@ mod tests {
 
     use super::*;
     use crate::MultiBuffer;
-    use gpui::App;
+    use gpui_runtime::App;
     use rand::prelude::*;
     use util::RandomCharIter;
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_random_chunk_bitmaps(cx: &mut App, mut rng: StdRng) {
         // Generate random buffer using existing test infrastructure
         let len = rng.random_range(10..10000);
@@ -314,7 +314,7 @@ mod tests {
 
         for _i in 0..highlight_count {
             let style = HighlightStyle {
-                color: Some(gpui::Hsla {
+                color: Some(gpui_types::Hsla {
                     h: rng.random::<f32>(),
                     s: rng.random::<f32>(),
                     l: rng.random::<f32>(),

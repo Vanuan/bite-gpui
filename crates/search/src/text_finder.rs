@@ -486,7 +486,7 @@ impl TextFinder {
 }
 
 fn remove_project_search_tab(
-    project_search_item_id: gpui::EntityId,
+    project_search_item_id: gpui_runtime::EntityId,
     workspace: &mut Workspace,
     window: &mut Window,
     cx: &mut Context<'_, Workspace>,
@@ -563,7 +563,7 @@ mod tests {
     /// `on_before_dismiss` synchronously under that lease. Reading the workspace
     /// entity there panics with "cannot read workspace::Workspace while it is
     /// already being updated", so this test dismisses the finder the same way.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dismiss_from_within_workspace_update(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -600,7 +600,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_clearing_query_does_not_restore_previous_query(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -670,7 +670,7 @@ mod tests {
         assert!(seed_query.is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_query_highlighted_as_regex_while_regex_filter_is_on(cx: &mut TestAppContext) {
         init_test(cx);
 

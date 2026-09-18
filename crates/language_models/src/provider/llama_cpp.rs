@@ -1500,7 +1500,7 @@ impl Render for ConfigurationView {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use http_client::FakeHttpClient;
     use language_model::LanguageModelToolUse;
     use parking_lot::Mutex;
@@ -1829,7 +1829,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn authenticate_fetches_models_after_loading_api_key(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);

@@ -627,7 +627,7 @@ impl RenderOnce for ThreadItem {
                         )
                         .child(Label::new("Waiting for Confirmation"))
                         .into_any_element(),
-                    _ => gpui::Empty.into_any_element(),
+                    _ => gpui_runtime::Empty.into_any_element(),
                 }))
             })
             .when_some(self.on_click, |this, on_click| this.on_click(on_click))

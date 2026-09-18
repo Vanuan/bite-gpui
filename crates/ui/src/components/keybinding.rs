@@ -252,7 +252,7 @@ fn render_key(
 impl RenderOnce for KeyBinding {
     fn render(self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         if !Self::default_visibility(cx) {
-            return gpui::Empty.into_any_element();
+            return gpui_runtime::Empty.into_any_element();
         }
 
         let render_keybinding = |keystrokes: &[KeybindingKeystroke]| {
@@ -309,7 +309,7 @@ impl RenderOnce for KeyBinding {
                 .map(|binding| render_keybinding(binding.keystrokes())),
             Source::Keystrokes { keystrokes } => Some(render_keybinding(keystrokes.as_ref())),
         }
-        .unwrap_or_else(|| gpui::Empty.into_any_element())
+        .unwrap_or_else(|| gpui_runtime::Empty.into_any_element())
     }
 }
 

@@ -499,13 +499,13 @@ pub struct FastModeConfirmation {
 pub trait LanguageModelProviderState: 'static {
     type ObservableEntity;
 
-    fn observable_entity(&self) -> Option<gpui::Entity<Self::ObservableEntity>>;
+    fn observable_entity(&self) -> Option<gpui_runtime::Entity<Self::ObservableEntity>>;
 
     fn subscribe<T: 'static>(
         &self,
-        cx: &mut gpui::Context<T>,
-        callback: impl Fn(&mut T, &mut gpui::Context<T>) + 'static,
-    ) -> Option<gpui::Subscription> {
+        cx: &mut gpui_runtime::Context<T>,
+        callback: impl Fn(&mut T, &mut gpui_runtime::Context<T>) + 'static,
+    ) -> Option<gpui_runtime::Subscription> {
         let entity = self.observable_entity()?;
         Some(cx.observe(&entity, move |this, _, cx| {
             callback(this, cx);

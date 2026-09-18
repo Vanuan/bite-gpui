@@ -355,7 +355,7 @@ pub trait Item: Focusable + EventEmitter<Self::Event> + Render + Sized {
         &self,
         _window: &mut Window,
         _cx: &mut Context<Self>,
-    ) -> Option<gpui::AnyElement> {
+    ) -> Option<gpui_runtime::AnyElement> {
         None
     }
 
@@ -480,7 +480,7 @@ pub trait ItemHandle: 'static + Send {
         window: &mut Window,
         cx: &mut App,
         handler: Box<dyn Fn(ItemEvent, &mut Window, &mut App)>,
-    ) -> gpui::Subscription;
+    ) -> gpui_runtime::Subscription;
     fn tab_content(&self, params: TabContentParams, window: &Window, cx: &App) -> AnyElement;
     fn tab_content_text(&self, detail: usize, cx: &App) -> SharedString;
     fn suggested_filename(&self, cx: &App) -> SharedString;
@@ -559,11 +559,11 @@ pub trait ItemHandle: 'static + Send {
         &self,
         cx: &mut App,
         callback: Box<dyn FnOnce(&mut App) + Send>,
-    ) -> gpui::Subscription;
+    ) -> gpui_runtime::Subscription;
     fn to_searchable_item_handle(&self, cx: &App) -> Option<Box<dyn SearchableItemHandle>>;
     fn breadcrumb_location(&self, cx: &App) -> ToolbarItemLocation;
     fn breadcrumbs(&self, cx: &App) -> Option<(Vec<HighlightedText>, Option<Font>)>;
-    fn breadcrumb_prefix(&self, window: &mut Window, cx: &mut App) -> Option<gpui::AnyElement>;
+    fn breadcrumb_prefix(&self, window: &mut Window, cx: &mut App) -> Option<gpui_runtime::AnyElement>;
     fn show_toolbar(&self, cx: &App) -> bool;
     fn pixel_position_of_cursor(&self, cx: &App) -> Option<Point<Pixels>>;
     fn downgrade_item(&self) -> Box<dyn WeakItemHandle>;
@@ -612,7 +612,7 @@ impl<T: Item> ItemHandle for Entity<T> {
         window: &mut Window,
         cx: &mut App,
         handler: Box<dyn Fn(ItemEvent, &mut Window, &mut App)>,
-    ) -> gpui::Subscription {
+    ) -> gpui_runtime::Subscription {
         window.subscribe(self, cx, move |_, event, window, cx| {
             T::to_item_events(event, &mut |item_event| handler(item_event, window, cx));
         })
@@ -1106,7 +1106,7 @@ impl<T: Item> ItemHandle for Entity<T> {
         &self,
         cx: &mut App,
         callback: Box<dyn FnOnce(&mut App) + Send>,
-    ) -> gpui::Subscription {
+    ) -> gpui_runtime::Subscription {
         cx.observe_release(self, move |_, cx| callback(cx))
     }
 
@@ -1122,7 +1122,7 @@ impl<T: Item> ItemHandle for Entity<T> {
         self.read(cx).breadcrumbs(cx)
     }
 
-    fn breadcrumb_prefix(&self, window: &mut Window, cx: &mut App) -> Option<gpui::AnyElement> {
+    fn breadcrumb_prefix(&self, window: &mut Window, cx: &mut App) -> Option<gpui_runtime::AnyElement> {
         self.update(cx, |item, cx| item.breadcrumb_prefix(window, cx))
     }
 
@@ -1464,8 +1464,8 @@ pub mod test {
         pub tab_descriptions: Option<Vec<&'static str>>,
         pub tab_detail: Cell<Option<usize>>,
         serialize: Option<Box<dyn Fn() -> Option<Task<anyhow::Result<()>>>>>,
-        focus_handle: gpui::FocusHandle,
-        pub child_focus_handles: Vec<gpui::FocusHandle>,
+        focus_handle: gpui_runtime::FocusHandle,
+        pub child_focus_handles: Vec<gpui_runtime::FocusHandle>,
     }
 
     impl project::ProjectItem for TestProjectItem {
@@ -1636,11 +1636,11 @@ pub mod test {
 
     impl Render for TestItem {
         fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-            let parent = gpui::div().track_focus(&self.focus_handle(cx));
+            let parent = gpui_runtime::div().track_focus(&self.focus_handle(cx));
             self.child_focus_handles
                 .iter()
                 .fold(parent, |parent, child_handle| {
-                    parent.child(gpui::div().track_focus(child_handle))
+                    parent.child(gpui_runtime::div().track_focus(child_handle))
                 })
         }
     }
@@ -1648,7 +1648,7 @@ pub mod test {
     impl EventEmitter<ItemEvent> for TestItem {}
 
     impl Focusable for TestItem {
-        fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+        fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
             self.focus_handle.clone()
         }
     }
@@ -1677,7 +1677,7 @@ pub mod test {
 
         fn tab_content(&self, params: TabContentParams, _window: &Window, _cx: &App) -> AnyElement {
             self.tab_detail.set(params.detail);
-            gpui::div().into_any_element()
+            gpui_runtime::div().into_any_element()
         }
 
         fn for_each_project_item(

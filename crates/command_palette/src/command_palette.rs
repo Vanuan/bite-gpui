@@ -1017,7 +1017,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_palette(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let db = cx.update(|cx| persistence::CommandPaletteDB::global(cx));
@@ -1071,32 +1071,32 @@ mod tests {
 
         cx.dispatch_action(Toggle);
         let history_button = cx.debug_bounds("command-history-0").unwrap();
-        cx.simulate_mouse_move(history_button.center(), None, gpui::Modifiers::default());
+        cx.simulate_mouse_move(history_button.center(), None, gpui_types::Modifiers::default());
         cx.simulate_mouse_down(
             history_button.center(),
             MouseButton::Right,
-            gpui::Modifiers::default(),
+            gpui_types::Modifiers::default(),
         );
         cx.simulate_mouse_up(
             history_button.center(),
             MouseButton::Right,
-            gpui::Modifiers::default(),
+            gpui_types::Modifiers::default(),
         );
         cx.simulate_mouse_down(
             history_button.center(),
             MouseButton::Left,
-            gpui::Modifiers::default(),
+            gpui_types::Modifiers::default(),
         );
         let label_position = history_button.center() - gpui::point(px(100.0), px(0.0));
         cx.simulate_mouse_move(
             label_position,
             MouseButton::Left,
-            gpui::Modifiers::default(),
+            gpui_types::Modifiers::default(),
         );
         cx.simulate_mouse_up(
             label_position,
             MouseButton::Left,
-            gpui::Modifiers::default(),
+            gpui_types::Modifiers::default(),
         );
         workspace.read_with(cx, |workspace, cx| {
             assert!(workspace.active_modal::<CommandPalette>(cx).is_some());
@@ -1110,8 +1110,8 @@ mod tests {
             1
         );
 
-        cx.simulate_mouse_move(history_button.center(), None, gpui::Modifiers::default());
-        cx.simulate_click(history_button.center(), gpui::Modifiers::default());
+        cx.simulate_mouse_move(history_button.center(), None, gpui_types::Modifiers::default());
+        cx.simulate_click(history_button.center(), gpui_types::Modifiers::default());
         cx.run_until_parked();
 
         assert_eq!(db.get_command_usage("editor: backspace").unwrap(), None);
@@ -1154,7 +1154,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_commands_sorted_by_recency(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(|cx| cx.set_global(db::AppDatabase::test_new()));
@@ -1209,7 +1209,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_used_commands_rank_above_unused_when_filtering(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         cx.update(|cx| cx.set_global(db::AppDatabase::test_new()));
@@ -1352,7 +1352,7 @@ mod tests {
         assert_eq!(db.list_commands_used().unwrap(), remaining_usage);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_intercepted_commands_are_not_history(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1426,7 +1426,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_selected_command_none_when_no_matches(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1453,7 +1453,7 @@ mod tests {
             assert!(picker.delegate.selected_command().is_none());
         });
     }
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_normalized_matches(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1490,7 +1490,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_to_line(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1530,7 +1530,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reopen_command_palette_over_another_modal(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1603,7 +1603,7 @@ mod tests {
         palette
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_navigation_basic(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1647,7 +1647,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_mode_exit_on_typing(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1672,7 +1672,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_navigation_with_suggestions(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1715,7 +1715,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_prefix_search(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1769,7 +1769,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_prefix_search_no_matches(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;
@@ -1792,7 +1792,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_empty_prefix_searches_all(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         let project = Project::test(app_state.fs.clone(), [], cx).await;

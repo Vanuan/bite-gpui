@@ -852,7 +852,7 @@ pub fn decode_skill_share_link(link: &str) -> Result<String> {
 mod tests {
     use super::*;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     #[test]
     fn test_skill_source_precedence_is_total_and_ordered() {
@@ -1605,7 +1605,7 @@ description: A skill with no body content
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_skills_from_empty_directory(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree("/skills", serde_json::json!({})).await;
@@ -1619,7 +1619,7 @@ description: A skill with no body content
         assert!(results.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_single_skill(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1645,7 +1645,7 @@ description: A skill with no body content
         assert_eq!(skill.description, "Test skill");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_symlinked_skill_directory(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1680,7 +1680,7 @@ description: A skill with no body content
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_nested_skills(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1713,7 +1713,7 @@ description: A skill with no body content
         assert!(names.contains(&"skill-two"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_skills_returns_results_sorted_by_path(cx: &mut TestAppContext) {
         // `apply_skill_overrides` resolves same-source name collisions
         // by keeping the first entry in iteration order. Without a
@@ -1763,7 +1763,7 @@ description: A skill with no body content
         assert_eq!(paths, expected);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_ignores_non_skill_files(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1792,7 +1792,7 @@ description: A skill with no body content
         assert_eq!(skill.name, "my-skill");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_returns_errors_for_invalid_skills(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1826,7 +1826,7 @@ description: A skill with no body content
         assert!(error.path.to_string_lossy().contains("invalid-skill"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_from_nonexistent_directory(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
 
@@ -1859,7 +1859,7 @@ description: A skill with no body content
         assert_eq!(summary.location, "/skills/test-skill/SKILL.md");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_nested_skill_md_inside_skill_resources_is_not_loaded(cx: &mut TestAppContext) {
         // We only look at immediate children of the skills root, so a
         // `SKILL.md` nested inside a skill's resources directory cannot
@@ -1893,7 +1893,7 @@ description: A skill with no body content
         assert_eq!(names, vec!["outer"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_oversized_skill_file_short_circuits(cx: &mut TestAppContext) {
         // A `SKILL.md` whose size exceeds `MAX_SKILL_FILE_SIZE` must be
         // rejected via metadata before we read its contents into memory.
@@ -1931,7 +1931,7 @@ description: A skill with no body content
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_skill_frontmatter_parses_metadata_without_body(cx: &mut TestAppContext) {
         // `load_skill_frontmatter` should read just enough of the file to
         // parse the frontmatter and return a `Skill` with name/description/
@@ -1966,7 +1966,7 @@ description: A skill with no body content
         assert_eq!(skill.directory_path, PathBuf::from("/skills/my-skill"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_skill_body_returns_trimmed_body(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
@@ -1988,7 +1988,7 @@ description: A skill with no body content
         assert_eq!(body, "# Instructions\n\nDo the thing.");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_skill_body_accepts_description_too_long(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         let long_desc = "a".repeat(MAX_SKILL_DESCRIPTION_LEN + 1);
@@ -2009,7 +2009,7 @@ description: A skill with no body content
         assert_eq!(body, "Body");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_skill_body_for_skill_without_body(cx: &mut TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(

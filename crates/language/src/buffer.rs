@@ -137,9 +137,9 @@ pub struct Buffer {
     has_unsaved_edits: Cell<(clock::Global, bool)>,
     change_bits: Vec<rc::Weak<Cell<bool>>>,
     modeline: Option<Arc<ModelineSettings>>,
-    _subscriptions: Vec<gpui::Subscription>,
+    _subscriptions: Vec<gpui_runtime::Subscription>,
     resolved_settings: Option<Arc<LanguageSettings>>,
-    _settings_observer: Option<gpui::Subscription>,
+    _settings_observer: Option<gpui_runtime::Subscription>,
     tree_sitter_data: Arc<TreeSitterData>,
     encoding: &'static Encoding,
     has_bom: bool,
@@ -648,7 +648,7 @@ impl HighlightedText {
     }
 
     pub fn to_styled_text(&self, default_style: &TextStyle) -> StyledText {
-        gpui::StyledText::new(self.text.clone())
+        gpui_runtime::StyledText::new(self.text.clone())
             .with_default_highlights(default_style, self.highlights.iter().cloned())
     }
 
@@ -5883,7 +5883,7 @@ impl File for TestFile {
         &self.path
     }
 
-    fn full_path(&self, _: &gpui::App) -> PathBuf {
+    fn full_path(&self, _: &gpui_runtime::App) -> PathBuf {
         PathBuf::from(self.root_name.clone()).join(self.path.as_std_path())
     }
 
@@ -5899,7 +5899,7 @@ impl File for TestFile {
         unimplemented!()
     }
 
-    fn file_name<'a>(&'a self, _: &'a gpui::App) -> &'a str {
+    fn file_name<'a>(&'a self, _: &'a gpui_runtime::App) -> &'a str {
         self.path().file_name().unwrap_or(self.root_name.as_ref())
     }
 

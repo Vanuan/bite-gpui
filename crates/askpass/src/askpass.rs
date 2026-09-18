@@ -618,9 +618,9 @@ fn find_gpg_program() -> Option<std::path::PathBuf> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn dropping_password_request_cancels_prompt(cx: &mut TestAppContext) {
         let (prompt_sender, mut prompt_receiver) = mpsc::unbounded();
         let delegate = AskPassDelegate::new_with_cancellation(

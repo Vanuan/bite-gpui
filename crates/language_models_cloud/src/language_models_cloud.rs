@@ -1269,9 +1269,9 @@ mod tests {
     use serde_json::json;
     use std::sync::Mutex;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn cloud_explicit_compaction_forwards_supported_request_fields(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let captured_request = Arc::new(Mutex::new(None));
         let captured_request_for_handler = captured_request.clone();
@@ -1381,9 +1381,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn cloud_anthropic_explicit_compaction_uses_paused_completion(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let captured_request = Arc::new(Mutex::new(None));
         let captured_request_for_handler = captured_request.clone();
@@ -1526,9 +1526,9 @@ mod tests {
         assert!(body["provider_request"]["tools"].is_null());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn cloud_explicit_compaction_rejects_output_without_compaction_item(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let http_client = FakeHttpClient::create(|_| async move {
             Ok(http_client::Response::builder()
@@ -1751,8 +1751,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn cloud_transport_errors_include_hostname(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn cloud_transport_errors_include_hostname(cx: &mut gpui_runtime::TestAppContext) {
         let http_client =
             FakeHttpClient::create(|_| async move { Err(anyhow::anyhow!("DNS lookup failed")) });
         let model = cloud_test_model(http_client);

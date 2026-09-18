@@ -31,7 +31,7 @@ use workspace::{MultiWorkspace, Workspace};
 
 use crate::TestServer;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_root_repo_common_dir_sync(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -86,7 +86,7 @@ async fn test_root_repo_common_dir_sync(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_file_permalink(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -147,8 +147,8 @@ async fn test_remote_file_permalink(
     );
 }
 
-fn collect_diff_stats<C: gpui::AppContext>(
-    panel: &gpui::Entity<GitPanel>,
+fn collect_diff_stats<C: gpui_runtime::AppContext>(
+    panel: &gpui_runtime::Entity<GitPanel>,
     cx: &C,
 ) -> HashMap<RepoPath, DiffStat> {
     panel.read_with(cx, |panel, cx| {
@@ -167,7 +167,7 @@ fn collect_diff_stats<C: gpui::AppContext>(
 }
 
 async fn load_commit_data_batch(
-    repository: &gpui::Entity<Repository>,
+    repository: &gpui_runtime::Entity<Repository>,
     shas: &[Oid],
     executor: &BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -203,7 +203,7 @@ async fn load_commit_data_batch(
 }
 
 fn branch_list_snapshot(
-    project: &gpui::Entity<project::Project>,
+    project: &gpui_runtime::Entity<project::Project>,
     cx: &mut TestAppContext,
 ) -> (Option<String>, Vec<String>) {
     project.read_with(cx, |project, cx| {
@@ -272,8 +272,8 @@ fn assert_initial_graph_commits_eq(
 }
 
 fn assert_remote_cache_matches_local_cache(
-    local_repository: &gpui::Entity<Repository>,
-    remote_repository: &gpui::Entity<Repository>,
+    local_repository: &gpui_runtime::Entity<Repository>,
+    remote_repository: &gpui_runtime::Entity<Repository>,
     cx_local: &mut TestAppContext,
     cx_remote: &mut TestAppContext,
 ) {
@@ -319,7 +319,7 @@ fn assert_remote_cache_matches_local_cache(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_project_diff(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext) {
     let mut server = TestServer::start(cx_a.background_executor.clone()).await;
     let client_a = server.create_client(cx_a, "user_a").await;
@@ -449,7 +449,7 @@ async fn test_project_diff(cx_a: &mut TestAppContext, cx_b: &mut TestAppContext)
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_git_worktrees(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -656,7 +656,7 @@ async fn test_remote_git_worktrees(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_git_head_sha(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -708,7 +708,7 @@ async fn test_remote_git_head_sha(
     assert_eq!(remote_head_sha.unwrap(), local_head_sha);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_git_commit_data_batches(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -812,7 +812,7 @@ async fn test_remote_git_commit_data_batches(
     assert_remote_cache_matches_local_cache(&repo_a, &repo_b, cx_a, cx_b);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_git_graph_data_and_search(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -908,7 +908,7 @@ async fn test_remote_git_graph_data_and_search(
     assert_eq!(remote_search_results, local_search_results);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_branch_list_sync(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -997,7 +997,7 @@ async fn test_branch_list_sync(
     assert_eq!(guest_snapshot_after_update, host_snapshot_after_update);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_linked_worktrees_sync(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,
@@ -1272,7 +1272,7 @@ async fn test_linked_worktrees_sync(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diff_stat_sync_between_host_and_downstream_client(
     cx_a: &mut TestAppContext,
     cx_b: &mut TestAppContext,
@@ -1467,7 +1467,7 @@ async fn test_diff_stat_sync_between_host_and_downstream_client(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_load_commit_template_over_collab(
     executor: BackgroundExecutor,
     cx_a: &mut TestAppContext,

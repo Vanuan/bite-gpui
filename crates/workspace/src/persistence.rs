@@ -76,7 +76,7 @@ fn contains_wsl_path(paths: &PathList) -> bool {
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
-pub(crate) struct SerializedAxis(pub(crate) gpui::Axis);
+pub(crate) struct SerializedAxis(pub(crate) gpui_types::Axis);
 impl sqlez::bindable::StaticColumnCount for SerializedAxis {}
 impl sqlez::bindable::Bind for SerializedAxis {
     fn bind(
@@ -85,8 +85,8 @@ impl sqlez::bindable::Bind for SerializedAxis {
         start_index: i32,
     ) -> anyhow::Result<i32> {
         match self.0 {
-            gpui::Axis::Horizontal => "Horizontal",
-            gpui::Axis::Vertical => "Vertical",
+            gpui_types::Axis::Horizontal => "Horizontal",
+            gpui_types::Axis::Vertical => "Vertical",
         }
         .bind(statement, start_index)
     }
@@ -519,7 +519,7 @@ impl Column for Breakpoint {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-struct SerializedPixels(gpui::Pixels);
+struct SerializedPixels(gpui_types::Pixels);
 impl sqlez::bindable::StaticColumnCount for SerializedPixels {}
 
 impl sqlez::bindable::Bind for SerializedPixels {
@@ -2817,9 +2817,9 @@ mod tests {
             read_multi_workspace_state,
         },
     };
-    use gpui::TaskExt;
+    use gpui_platform::TaskExt;
 
-    use gpui::AppContext as _;
+    use gpui_runtime::AppContext as _;
     use pretty_assertions::assert_eq;
     use project::Project;
     use remote::SshConnectionOptions;
@@ -2834,8 +2834,8 @@ mod tests {
         dir
     }
 
-    #[gpui::test]
-    async fn test_multi_workspace_serializes_on_add_and_remove(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_multi_workspace_serializes_on_add_and_remove(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -2899,7 +2899,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_breakpoints() {
         zlog::init_test();
 
@@ -3089,7 +3089,7 @@ mod tests {
         assert_eq!(loaded_breakpoints[4].path, Arc::from(path));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_last_breakpoint() {
         zlog::init_test();
 
@@ -3186,7 +3186,7 @@ mod tests {
         assert!(empty_breakpoints.is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_next_id_stability() {
         zlog::init_test();
 
@@ -3235,7 +3235,7 @@ mod tests {
         assert_eq!(test_text_1, "test-text-1");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_workspace_id_stability() {
         zlog::init_test();
 
@@ -3340,7 +3340,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_full_workspace_serialization() {
         zlog::init_test();
 
@@ -3422,7 +3422,7 @@ mod tests {
         assert!(db.recent_navigation_history(workspace.id).is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_workspace_assignment() {
         zlog::init_test();
 
@@ -3526,7 +3526,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_session_workspaces() {
         zlog::init_test();
 
@@ -3712,8 +3712,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_last_session_workspace_locations(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_last_session_workspace_locations(cx: &mut gpui_runtime::TestAppContext) {
         let dir1 = tempfile::TempDir::with_prefix("dir1").unwrap();
         let dir2 = tempfile::TempDir::with_prefix("dir2").unwrap();
         let dir3 = tempfile::TempDir::with_prefix("dir3").unwrap();
@@ -3899,8 +3899,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_scratch_only_workspace_restores_from_last_session(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_scratch_only_workspace_restores_from_last_session(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let db =
             WorkspaceDb::open_test_db("test_scratch_only_workspace_restores_from_last_session")
@@ -3926,8 +3926,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_gc_preserves_scratch_inside_window(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_gc_preserves_scratch_inside_window(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let db = WorkspaceDb::open_test_db("test_gc_preserves_scratch_inside_window").await;
 
@@ -3943,8 +3943,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_gc_deletes_stale_outside_window(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_gc_deletes_stale_outside_window(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let db = WorkspaceDb::open_test_db("test_gc_deletes_stale_outside_window").await;
 
@@ -3963,9 +3963,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_gc_preserves_directory_workspace_with_missing_path(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = fs::FakeFs::new(cx.executor());
         let db =
@@ -4001,8 +4001,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_gc_preserves_current_and_last_sessions(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_gc_preserves_current_and_last_sessions(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let db = WorkspaceDb::open_test_db("test_gc_preserves_current_and_last_sessions").await;
 
@@ -4037,8 +4037,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_gc_deletes_empty_workspace_with_items(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_gc_deletes_empty_workspace_with_items(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let db = WorkspaceDb::open_test_db("test_gc_deletes_empty_workspace_with_items").await;
 
@@ -4057,9 +4057,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_last_session_restores_workspace_with_missing_paths(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = fs::FakeFs::new(cx.executor());
         let db =
@@ -4085,8 +4085,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_last_session_workspace_locations_remote(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_last_session_workspace_locations_remote(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let db =
             WorkspaceDb::open_test_db("test_serializing_workspaces_last_session_workspaces_remote")
@@ -4194,7 +4194,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_or_create_ssh_project() {
         let db = WorkspaceDb::open_test_db("test_get_or_create_ssh_project").await;
 
@@ -4243,7 +4243,7 @@ mod tests {
         assert_ne!(connection_id, different_connection);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_or_create_ssh_project_with_null_user() {
         let db = WorkspaceDb::open_test_db("test_get_or_create_ssh_project_with_null_user").await;
 
@@ -4272,7 +4272,7 @@ mod tests {
         assert_eq!(connection_id, same_connection_id);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_remote_connections() {
         let db = WorkspaceDb::open_test_db("test_get_remote_connections").await;
 
@@ -4339,7 +4339,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_simple_split() {
         zlog::init_test();
 
@@ -4394,7 +4394,7 @@ mod tests {
         assert_eq!(workspace.center_group, new_workspace.center_group);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cleanup_panes() {
         zlog::init_test();
 
@@ -4470,7 +4470,7 @@ mod tests {
         assert_eq!(workspace.center_group, new_workspace.center_group);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_empty_workspace_window_bounds() {
         zlog::init_test();
 
@@ -4526,9 +4526,9 @@ mod tests {
         assert_eq!(retrieved.display.unwrap(), display_uuid);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_last_session_workspace_locations_groups_by_window_id(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let dir1 = tempfile::TempDir::with_prefix("dir1").unwrap();
         let dir2 = tempfile::TempDir::with_prefix("dir2").unwrap();
@@ -4639,8 +4639,8 @@ mod tests {
         assert!(window_30.contains(&WorkspaceId(5)));
     }
 
-    #[gpui::test]
-    async fn test_read_serialized_multi_workspaces_with_state(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_read_serialized_multi_workspaces_with_state(cx: &mut gpui_runtime::TestAppContext) {
         use crate::persistence::model::MultiWorkspaceState;
 
         // Write multi-workspace state for two windows via the scoped KVP.
@@ -4725,8 +4725,8 @@ mod tests {
         assert_eq!(group_none.state.sidebar_open, false);
     }
 
-    #[gpui::test]
-    async fn test_flush_serialization_completes_before_quit(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_flush_serialization_completes_before_quit(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -4765,8 +4765,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_pending_serialization_flushed_on_shutdown(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_pending_serialization_flushed_on_shutdown(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let app_state = cx.update(crate::AppState::test);
@@ -4816,8 +4816,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_create_workspace_serialization(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_create_workspace_serialization(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -4868,8 +4868,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_remove_workspace_clears_session_binding(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_remove_workspace_clears_session_binding(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -4958,8 +4958,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_remove_workspace_not_restored_as_zombie(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_remove_workspace_not_restored_as_zombie(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -5066,8 +5066,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_pending_removal_tasks_drained_on_flush(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_pending_removal_tasks_drained_on_flush(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -5169,9 +5169,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_window_quit_app_preserves_all_sidebar_workspaces(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -5239,9 +5239,9 @@ mod tests {
     }
 
     #[cfg(target_os = "macos")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_window_platform_default_still_removes_from_session(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -5300,8 +5300,8 @@ mod tests {
         assert_eq!(restored_ids, Vec::new());
     }
 
-    #[gpui::test]
-    async fn test_create_workspace_bounds_observer_uses_fresh_id(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_create_workspace_bounds_observer_uses_fresh_id(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -5334,7 +5334,7 @@ mod tests {
             "The workspace row should exist in the DB"
         );
 
-        cx.simulate_resize(gpui::size(px(1024.0), px(768.0)));
+        cx.simulate_resize(gpui_backend::size(px(1024.0), px(768.0)));
 
         // Advance the clock past the 100ms debounce timer so the bounds
         // observer task fires
@@ -5352,8 +5352,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_flush_serialization_writes_bounds(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_flush_serialization_writes_bounds(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -5393,8 +5393,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_recent_workspace_identity_deduplication(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_recent_workspace_identity_deduplication(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
 
         // Main repo with a linked worktree entry
@@ -5500,8 +5500,8 @@ mod tests {
         assert_eq!(result[2].workspace_id, WorkspaceId(4));
     }
 
-    #[gpui::test]
-    async fn test_recent_workspace_identity_for_bare_repo(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_recent_workspace_identity_for_bare_repo(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
 
         // Bare repo at /foo/.bare (commondir doesn't end with .git)
@@ -5543,8 +5543,8 @@ mod tests {
         assert_eq!(result.identity_paths.paths(), &[PathBuf::from("/foo")]);
     }
 
-    #[gpui::test]
-    async fn test_recent_workspace_identity_for_submodule(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_recent_workspace_identity_for_submodule(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
 
         // Superproject `/Foo` with a submodule `Bar`. A submodule's `.git` is a
@@ -5584,9 +5584,9 @@ mod tests {
         assert_eq!(result.identity_paths.paths(), &[PathBuf::from("/Foo/Bar")]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_recent_workspace_identity_deduplicates_main_and_linked_worktree(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = fs::FakeFs::new(cx.executor());
 
@@ -5646,8 +5646,8 @@ mod tests {
         assert_eq!(result[0].timestamp, t1);
     }
 
-    #[gpui::test]
-    async fn test_recent_project_workspaces_preserve_reopen_paths(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_recent_project_workspaces_preserve_reopen_paths(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let db =
             WorkspaceDb::open_test_db("test_recent_project_workspaces_preserve_reopen_paths").await;
@@ -5713,8 +5713,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_recent_project_workspaces_remote_identity_hint(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_recent_project_workspaces_remote_identity_hint(cx: &mut gpui_runtime::TestAppContext) {
         let fs = fs::FakeFs::new(cx.executor());
         let db =
             WorkspaceDb::open_test_db("test_recent_project_workspaces_remote_identity_hint").await;
@@ -5736,9 +5736,9 @@ mod tests {
         assert_eq!(recents[0].identity_paths.paths(), &[PathBuf::from("/repo")]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_recent_project_workspaces_remote_paths_do_not_use_local_fs_identity(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = fs::FakeFs::new(cx.executor());
         let db = WorkspaceDb::open_test_db(
@@ -5787,9 +5787,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_recent_project_workspaces_do_not_dedupe_remote_hosts(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = fs::FakeFs::new(cx.executor());
         let db =
@@ -5814,9 +5814,9 @@ mod tests {
         assert_eq!(recents[1].workspace_id, WorkspaceId(1));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_recent_workspace_group_removes_all_matching_rows(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = fs::FakeFs::new(cx.executor());
         let db = WorkspaceDb::open_test_db(
@@ -5882,9 +5882,9 @@ mod tests {
         assert!(recents.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restore_window_with_linked_worktree_and_multiple_project_groups(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         crate::tests::init_test(cx);
 
@@ -6025,7 +6025,7 @@ mod tests {
             multi_workspace.read_with(cx, |mw, cx| mw.workspace().read(cx).app_state().clone());
 
         let serialized_mw = multi_workspaces.into_iter().next().unwrap();
-        let restored_handle: gpui::WindowHandle<MultiWorkspace> = cx
+        let restored_handle: gpui_runtime::WindowHandle<MultiWorkspace> = cx
             .update(|_, cx| {
                 cx.spawn(async move |mut cx| {
                     crate::restore_multiworkspace(serialized_mw, app_state, &mut cx).await
@@ -6064,8 +6064,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_remove_project_group_falls_back_to_neighbor(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_remove_project_group_falls_back_to_neighbor(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());
@@ -6175,8 +6175,8 @@ mod tests {
     /// a provisional key mismatch). When the first is removed and the
     /// fallback searches for the same paths, `workspace_for_paths` must
     /// skip the doomed workspace so the assert in `remove` is satisfied.
-    #[gpui::test]
-    async fn test_remove_fallback_skips_excluded_workspaces(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_remove_fallback_skips_excluded_workspaces(cx: &mut gpui_runtime::TestAppContext) {
         crate::tests::init_test(cx);
 
         let fs = fs::FakeFs::new(cx.executor());

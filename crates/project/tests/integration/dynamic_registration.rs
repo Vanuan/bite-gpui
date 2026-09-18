@@ -8,8 +8,8 @@ use project::lsp_store::TokenType;
 
 use super::*;
 
-#[gpui::test]
-async fn test_dynamic_semantic_tokens_registration(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_dynamic_semantic_tokens_registration(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -45,7 +45,7 @@ async fn test_dynamic_semantic_tokens_registration(cx: &mut gpui::TestAppContext
     let server_id = fake_server.server.server_id();
     cx.executor().run_until_parked();
 
-    let semantic_tokens_provider = |cx: &mut gpui::TestAppContext| {
+    let semantic_tokens_provider = |cx: &mut gpui_runtime::TestAppContext| {
         project.read_with(cx, |project, cx| {
             project
                 .lsp_store()
@@ -133,9 +133,9 @@ async fn test_dynamic_semantic_tokens_registration(cx: &mut gpui::TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_local_semantic_tokens_request_uses_matching_dynamic_registration(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (project, fake_server) =
@@ -249,7 +249,7 @@ async fn test_local_semantic_tokens_request_uses_matching_dynamic_registration(
         "expected the matching registration to route a full semantic tokens request",
     );
 
-    let stylizer_token_type = |cx: &mut gpui::TestAppContext| {
+    let stylizer_token_type = |cx: &mut gpui_runtime::TestAppContext| {
         lsp_store.update(cx, |lsp_store, cx| {
             let language = buffer.read(cx).language().map(|language| language.name());
             lsp_store
@@ -297,9 +297,9 @@ async fn test_local_semantic_tokens_request_uses_matching_dynamic_registration(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_semantic_tokens_refresh_when_duplicate_removal_changes_provider_order(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (project, fake_server) =
@@ -368,7 +368,7 @@ async fn test_semantic_tokens_refresh_when_duplicate_removal_changes_provider_or
     refresh_events.lock().clear();
 
     let lsp_store = project.read_with(cx, |project, _| project.lsp_store());
-    let stylizer_token_type = |cx: &mut gpui::TestAppContext| {
+    let stylizer_token_type = |cx: &mut gpui_runtime::TestAppContext| {
         lsp_store.update(cx, |lsp_store, cx| {
             let language = buffer.read(cx).language().map(|language| language.name());
             lsp_store
@@ -397,8 +397,8 @@ async fn test_semantic_tokens_refresh_when_duplicate_removal_changes_provider_or
     );
 }
 
-#[gpui::test]
-async fn test_completion_resolve_uses_matching_dynamic_registration(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_completion_resolve_uses_matching_dynamic_registration(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -489,8 +489,8 @@ async fn test_completion_resolve_uses_matching_dynamic_registration(cx: &mut gpu
     );
 }
 
-#[gpui::test]
-async fn test_code_lens_resolve_uses_matching_dynamic_registration(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_code_lens_resolve_uses_matching_dynamic_registration(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -570,9 +570,9 @@ async fn test_code_lens_resolve_uses_matching_dynamic_registration(cx: &mut gpui
     assert_eq!(resolved.lsp_action.title(), "resolved");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_inlay_hint_resolve_state_uses_matching_dynamic_registration(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (project, fake_server) =
@@ -652,8 +652,8 @@ async fn test_inlay_hint_resolve_state_uses_matching_dynamic_registration(
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_inlay_hint(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_inlay_hint(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -726,8 +726,8 @@ async fn test_multi_registration_inlay_hint(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_code_lens(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_code_lens(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -785,8 +785,8 @@ async fn test_multi_registration_code_lens(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_document_symbol(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_document_symbol(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -836,8 +836,8 @@ async fn test_multi_registration_document_symbol(cx: &mut gpui::TestAppContext) 
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_restores_static_capability(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_restores_static_capability(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) = setup_dynamic_registration_test(
         cx,
@@ -885,8 +885,8 @@ async fn test_multi_registration_restores_static_capability(cx: &mut gpui::TestA
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_duplicate_id_keeps_order(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_duplicate_id_keeps_order(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -968,8 +968,8 @@ async fn test_multi_registration_duplicate_id_keeps_order(cx: &mut gpui::TestApp
     );
 }
 
-#[gpui::test]
-async fn test_registration_with_unchanged_options_does_not_refresh(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_registration_with_unchanged_options_does_not_refresh(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -1023,9 +1023,9 @@ async fn test_registration_with_unchanged_options_does_not_refresh(cx: &mut gpui
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_selector_only_registration_change_refreshes_cached_lsp_data(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (project, fake_server) =
@@ -1068,8 +1068,8 @@ async fn test_selector_only_registration_change_refreshes_cached_lsp_data(
     );
 }
 
-#[gpui::test]
-async fn test_duplicate_content_registration_changes_do_not_refresh(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_duplicate_content_registration_changes_do_not_refresh(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -1183,9 +1183,9 @@ async fn test_duplicate_content_registration_changes_do_not_refresh(cx: &mut gpu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_selector_aware_routing_with_duplicate_content_registrations(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (project, fake_server) =
@@ -1199,7 +1199,7 @@ async fn test_selector_aware_routing_with_duplicate_content_registrations(
         })
         .await
         .unwrap();
-    let buffer_triggers = |cx: &mut gpui::TestAppContext| {
+    let buffer_triggers = |cx: &mut gpui_runtime::TestAppContext| {
         buffer.read_with(cx, |buffer, _| buffer.completion_triggers().clone())
     };
     let registration_options = |scheme: &str, trigger: &str| {
@@ -1292,8 +1292,8 @@ async fn test_selector_aware_routing_with_duplicate_content_registrations(
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_completion_triggers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_completion_triggers(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -1305,7 +1305,7 @@ async fn test_multi_registration_completion_triggers(cx: &mut gpui::TestAppConte
         })
         .await
         .unwrap();
-    let buffer_triggers = |cx: &mut gpui::TestAppContext| {
+    let buffer_triggers = |cx: &mut gpui_runtime::TestAppContext| {
         buffer.read_with(cx, |buffer, _| buffer.completion_triggers().clone())
     };
 
@@ -1381,8 +1381,8 @@ async fn test_multi_registration_completion_triggers(cx: &mut gpui::TestAppConte
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_middle_removal(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_middle_removal(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -1439,9 +1439,9 @@ async fn test_multi_registration_middle_removal(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_refresh_during_code_lens_fetch_does_not_resurrect_stale_data(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (project, fake_server) =
@@ -1527,8 +1527,8 @@ async fn test_refresh_during_code_lens_fetch_does_not_resurrect_stale_data(
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_unregister_with_static_only(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_unregister_with_static_only(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) = setup_dynamic_registration_test(
         cx,
@@ -1549,8 +1549,8 @@ async fn test_multi_registration_unregister_with_static_only(cx: &mut gpui::Test
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_completion_static_restore(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_completion_static_restore(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let static_options = lsp::CompletionOptions {
         trigger_characters: Some(vec![".".to_string()]),
@@ -1573,7 +1573,7 @@ async fn test_multi_registration_completion_static_restore(cx: &mut gpui::TestAp
         })
         .await
         .unwrap();
-    let buffer_triggers = |cx: &mut gpui::TestAppContext| {
+    let buffer_triggers = |cx: &mut gpui_runtime::TestAppContext| {
         buffer.read_with(cx, |buffer, _| buffer.completion_triggers().clone())
     };
     assert_eq!(
@@ -1614,8 +1614,8 @@ async fn test_multi_registration_completion_static_restore(cx: &mut gpui::TestAp
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_same_id_different_methods(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_same_id_different_methods(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -1648,8 +1648,8 @@ async fn test_multi_registration_same_id_different_methods(cx: &mut gpui::TestAp
     );
 }
 
-#[gpui::test]
-async fn test_multi_registration_diagnostics(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multi_registration_diagnostics(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) =
         setup_dynamic_registration_test(cx, lsp::ServerCapabilities::default()).await;
@@ -1724,8 +1724,8 @@ async fn test_multi_registration_diagnostics(cx: &mut gpui::TestAppContext) {
 /// links, folding ranges, symbols, code lens, semantic tokens, inlay hints), asserting
 /// at the data level that per-server refreshes never disturb other servers:
 /// neither the second server on the same buffer, nor a server of an unrelated language.
-#[gpui::test]
-async fn test_per_server_refreshes_keep_other_servers_data(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_per_server_refreshes_keep_other_servers_data(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1933,8 +1933,8 @@ async fn test_per_server_refreshes_keep_other_servers_data(cx: &mut gpui::TestAp
 /// dynamic capability changes as the refresh trigger: how they combine data from
 /// static and dynamic capabilities (e.g. completion trigger characters), and which
 /// servers get [re-]queried after the capability changes.
-#[gpui::test]
-async fn test_dynamic_registration_refreshes_lsp_data(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_dynamic_registration_refreshes_lsp_data(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1979,7 +1979,7 @@ async fn test_dynamic_registration_refreshes_lsp_data(cx: &mut gpui::TestAppCont
     let static_counts = serve_lsp_data(&static_server, 1);
     let dynamic_counts = serve_lsp_data(&dynamic_server, 2);
     let (refresh_events, _refresh_events_subscription) = observe_refresh_events(&project, cx);
-    let buffer_triggers = |cx: &mut gpui::TestAppContext| {
+    let buffer_triggers = |cx: &mut gpui_runtime::TestAppContext| {
         buffer.read_with(cx, |buffer, _| buffer.completion_triggers().clone())
     };
     cx.executor().run_until_parked();
@@ -2098,9 +2098,9 @@ async fn test_dynamic_registration_refreshes_lsp_data(cx: &mut gpui::TestAppCont
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_semantic_tokens_server_set_shrink_invalidates_completed_task(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (project, fake_server) =
@@ -2179,9 +2179,9 @@ async fn test_semantic_tokens_server_set_shrink_invalidates_completed_task(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_semantic_tokens_refresh_invalidates_only_the_refreshed_server(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -2244,7 +2244,7 @@ async fn test_semantic_tokens_refresh_invalidates_only_the_refreshed_server(
     cx.executor().run_until_parked();
 
     let lsp_store = project.read_with(cx, |project, _| project.lsp_store());
-    let cached_token_servers = |cx: &mut gpui::TestAppContext| {
+    let cached_token_servers = |cx: &mut gpui_runtime::TestAppContext| {
         lsp_store.read_with(cx, |lsp_store, _| {
             lsp_store.semantic_token_servers(buffer_id)
         })
@@ -2294,9 +2294,9 @@ async fn test_semantic_tokens_refresh_invalidates_only_the_refreshed_server(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_semantic_tokens_refresh_during_fetch_does_not_resurrect_stale_data(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let (project, fake_server) = setup_dynamic_registration_test(
@@ -2396,8 +2396,8 @@ async fn test_semantic_tokens_refresh_during_fetch_does_not_resurrect_stale_data
     );
 }
 
-#[gpui::test]
-async fn test_code_lens_concurrent_fetches_are_deduplicated(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_code_lens_concurrent_fetches_are_deduplicated(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let (project, fake_server) = setup_dynamic_registration_test(
         cx,
@@ -2452,8 +2452,8 @@ async fn test_code_lens_concurrent_fetches_are_deduplicated(cx: &mut gpui::TestA
     );
 }
 
-#[gpui::test]
-async fn test_multiple_did_change_watched_files_registrations(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multiple_did_change_watched_files_registrations(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2595,7 +2595,7 @@ async fn test_multiple_did_change_watched_files_registrations(cx: &mut gpui::Tes
 }
 
 async fn setup_dynamic_registration_test(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
     capabilities: lsp::ServerCapabilities,
 ) -> (Entity<Project>, lsp::FakeLanguageServer) {
     let fs = FakeFs::new(cx.executor());
@@ -2676,7 +2676,7 @@ async fn unregister_capabilities(
 fn server_capabilities(
     project: &Entity<Project>,
     server_id: LanguageServerId,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) -> lsp::ServerCapabilities {
     project.read_with(cx, |project, cx| {
         project
@@ -2690,8 +2690,8 @@ fn server_capabilities(
 
 fn observe_refresh_events(
     project: &Entity<Project>,
-    cx: &mut gpui::TestAppContext,
-) -> (Arc<Mutex<Vec<String>>>, gpui::Subscription) {
+    cx: &mut gpui_runtime::TestAppContext,
+) -> (Arc<Mutex<Vec<String>>>, gpui_runtime::Subscription) {
     let events = Arc::new(Mutex::new(Vec::new()));
     let subscription = cx.update({
         let events = events.clone();
@@ -3002,7 +3002,7 @@ async fn fetch_all_lsp_data(
     project: &Entity<Project>,
     buffer: &Entity<Buffer>,
     inlay_hints_invalidate: InvalidationStrategy,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) -> LspDataLabels {
     let lsp_store = project.read_with(cx, |project, _| project.lsp_store());
     let buffer_id = buffer.read_with(cx, |buffer, _| buffer.remote_id());

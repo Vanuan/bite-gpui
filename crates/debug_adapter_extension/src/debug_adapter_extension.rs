@@ -6,7 +6,7 @@ use std::{path::Path, sync::Arc};
 use dap::DapRegistry;
 use extension::{ExtensionDebugAdapterProviderProxy, ExtensionHostProxy};
 use extension_dap_adapter::ExtensionDapAdapter;
-use gpui::App;
+use gpui_runtime::App;
 use util::ResultExt;
 
 use crate::extension_locator_adapter::ExtensionLocatorAdapter;

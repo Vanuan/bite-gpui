@@ -1634,7 +1634,7 @@ fn render_zeta_tab_animation(cx: &App) -> impl IntoElement {
         .border_1()
         .border_dashed()
         .border_color(cx.theme().colors().border)
-        .bg(gpui::pattern_slash(
+        .bg(gpui_types::pattern_slash(
             cx.theme().colors().border.opacity(0.5),
             1.,
             8.,
@@ -1686,9 +1686,9 @@ fn copilot_settings_url(enterprise_uri: Option<&str>) -> Arc<str> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_settings_url_with_enterprise_uri(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);
@@ -1718,7 +1718,7 @@ mod tests {
         assert_eq!(url.as_ref(), "https://my-company.ghe.com/settings/copilot");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_settings_url_with_enterprise_uri_trailing_slash(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);
@@ -1748,7 +1748,7 @@ mod tests {
         assert_eq!(url.as_ref(), "https://my-company.ghe.com/settings/copilot");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_settings_url_without_enterprise_uri(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);

@@ -1034,8 +1034,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_expand_tabs(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_expand_tabs(cx: &mut gpui_runtime::App) {
         let input = "A\tBC\tDEF\tG\tHI\tJ\tK\tL\tM";
 
         let buffer = MultiBuffer::build_simple(input, cx);
@@ -1055,8 +1055,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_collapse_tabs(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_collapse_tabs(cx: &mut gpui_runtime::App) {
         let input = "A\tBC\tDEF\tG\tHI\tJ\tK\tL\tM";
 
         let buffer = MultiBuffer::build_simple(input, cx);
@@ -1092,8 +1092,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_to_fold_point_panic_reproduction(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_to_fold_point_panic_reproduction(cx: &mut gpui_runtime::App) {
         // This test reproduces a specific panic where to_fold_point returns incorrect results
         let _text = "use macro_rules_attribute::apply;\nuse serde_json::Value;\nuse smol::{\n    io::AsyncReadExt,\n    process::{Command, Stdio},\n};\nuse smol_macros::main;\nuse std::io;\n\nfn test_random() {\n    // Generate a random value\n    let random_value = std::time::SystemTime::now()\n        .duration_since(std::time::UNIX_EPOCH)\n        .unwrap()\n        .as_secs()\n        % 100;\n\n    // Create some complex nested data structures\n    let mut vector = Vec::new();\n    for i in 0..random_value {\n        vector.push(i);\n    }\n    ";
 
@@ -1112,8 +1112,8 @@ mod tests {
         assert_eq!(result, expected);
     }
 
-    #[gpui::test(iterations = 100)]
-    fn test_collapse_tabs_random(cx: &mut gpui::App, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    fn test_collapse_tabs_random(cx: &mut gpui_runtime::App, mut rng: StdRng) {
         // Generate random input string with up to 200 characters including tabs
         // to stay within the MAX_EXPANSION_COLUMN limit of 256
         let len = rng.random_range(0..=2048);
@@ -1176,8 +1176,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_long_lines(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_long_lines(cx: &mut gpui_runtime::App) {
         let max_expansion_column = 12;
         let input = "A\tBC\tDEF\tG\tHI\tJ\tK\tL\tM";
         let output = "A   BC  DEF G   HI J K L M";
@@ -1227,8 +1227,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_long_lines_with_character_spanning_max_expansion_column(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_long_lines_with_character_spanning_max_expansion_column(cx: &mut gpui_runtime::App) {
         let max_expansion_column = 8;
         let input = "abcdefg⋯hij";
 
@@ -1242,8 +1242,8 @@ mod tests {
         assert_eq!(tab_snapshot.text(), input);
     }
 
-    #[gpui::test]
-    fn test_marking_tabs(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_marking_tabs(cx: &mut gpui_runtime::App) {
         let input = "\t \thello";
 
         let buffer = MultiBuffer::build_simple(input, cx);
@@ -1299,8 +1299,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_empty_chunk_after_leading_tab_trim(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_empty_chunk_after_leading_tab_trim(cx: &mut gpui_runtime::App) {
         // We fold "hello" (offsets 1..6) so the fold map creates a
         // transform boundary at offset 1, producing a 1-byte fold chunk
         // for the tab.
@@ -1344,8 +1344,8 @@ mod tests {
         assert!(!result.is_empty());
     }
 
-    #[gpui::test(iterations = 100)]
-    fn test_random_tabs(cx: &mut gpui::App, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    fn test_random_tabs(cx: &mut gpui_runtime::App, mut rng: StdRng) {
         let tab_size = NonZeroU32::new(rng.random_range(1..=4)).unwrap();
         let len = rng.random_range(0..30);
         let buffer = if rng.random() {
@@ -1429,8 +1429,8 @@ mod tests {
         }
     }
 
-    #[gpui::test(iterations = 100)]
-    fn test_to_tab_point_random(cx: &mut gpui::App, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    fn test_to_tab_point_random(cx: &mut gpui_runtime::App, mut rng: StdRng) {
         let tab_size = NonZeroU32::new(rng.random_range(1..=16)).unwrap();
         let len = rng.random_range(0..=2000);
 
@@ -1476,8 +1476,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_tab_stop_cursor_utf8(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_tab_stop_cursor_utf8(cx: &mut gpui_runtime::App) {
         let text = "\tfoo\tbarbarbar\t\tbaz\n";
         let buffer = MultiBuffer::build_simple(text, cx);
         let buffer_snapshot = buffer.read(cx).snapshot(cx);
@@ -1516,8 +1516,8 @@ mod tests {
         assert_eq!(cursor.byte_offset(), byte_offset);
     }
 
-    #[gpui::test]
-    fn test_tab_stop_with_end_range_utf8(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_tab_stop_with_end_range_utf8(cx: &mut gpui_runtime::App) {
         let input = "A\tBC\t"; // DEF\tG\tHI\tJ\tK\tL\tM
 
         let buffer = MultiBuffer::build_simple(input, cx);
@@ -1551,8 +1551,8 @@ mod tests {
         assert_eq!(cursor.byte_offset(), byte_offset);
     }
 
-    #[gpui::test(iterations = 100)]
-    fn test_tab_stop_cursor_random_utf8(cx: &mut gpui::App, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    fn test_tab_stop_cursor_random_utf8(cx: &mut gpui_runtime::App, mut rng: StdRng) {
         // Generate random input string with up to 512 characters including tabs
         let len = rng.random_range(0..=2048);
         let mut input = String::with_capacity(len);
@@ -1645,8 +1645,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_tab_stop_cursor_utf16(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_tab_stop_cursor_utf16(cx: &mut gpui_runtime::App) {
         let text = "\r\t😁foo\tb😀arbar🤯bar\t\tbaz\n";
         let buffer = MultiBuffer::build_simple(text, cx);
         let buffer_snapshot = buffer.read(cx).snapshot(cx);
@@ -1686,8 +1686,8 @@ mod tests {
         assert_eq!(cursor.byte_offset(), byte_offset);
     }
 
-    #[gpui::test(iterations = 100)]
-    fn test_tab_stop_cursor_random_utf16(cx: &mut gpui::App, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    fn test_tab_stop_cursor_random_utf16(cx: &mut gpui_runtime::App, mut rng: StdRng) {
         // Generate random input string with up to 512 characters including tabs
         let len = rng.random_range(0..=2048);
         let input = util::RandomCharIter::new(&mut rng)

@@ -17,7 +17,7 @@ use crate::NewProcessMode;
 use crate::new_process_modal::NewProcessModal;
 use crate::tests::{init_test, init_test_workspace};
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_debug_session_substitutes_variables_and_relativizes_paths(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -167,7 +167,7 @@ async fn test_debug_session_substitutes_variables_and_relativizes_paths(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_save_debug_scenario_to_file(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -288,7 +288,7 @@ async fn test_save_debug_scenario_to_file(executor: BackgroundExecutor, cx: &mut
     pretty_assertions::assert_eq!(expected_content, debug_json_content);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_debug_modal_subtitles_with_multiple_worktrees(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -357,7 +357,7 @@ async fn test_debug_modal_subtitles_with_multiple_worktrees(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dap_adapter_config_conversion_and_validation(cx: &mut TestAppContext) {
     init_test(cx);
 

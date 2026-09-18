@@ -4,7 +4,7 @@ use std::{
     sync::Arc,
 };
 
-use gpui::Pixels;
+use gpui_types::Pixels;
 use itertools::{Either, Itertools as _};
 use language::{Bias, Point, Selection, SelectionGoal};
 use multi_buffer::{MultiBufferDimension, MultiBufferOffset, MultiBufferRow, ToPoint};
@@ -1365,7 +1365,7 @@ mod tests {
     use settings::SettingsStore;
     use std::sync::Arc;
 
-    fn row_range_snapshot(cx: &mut gpui::TestAppContext, text: &str) -> DisplaySnapshot {
+    fn row_range_snapshot(cx: &mut gpui_runtime::TestAppContext, text: &str) -> DisplaySnapshot {
         cx.update(|cx| {
             let settings = SettingsStore::test(cx);
             cx.set_global(settings);
@@ -1417,8 +1417,8 @@ mod tests {
     /// `disjoint_in_row_range` selects by whole rows, so a selection sharing a queried row must be
     /// returned even when its columns don't overlap the queried range. `disjoint_in_range` compares
     /// exact offsets and would miss this case.
-    #[gpui::test]
-    fn disjoint_in_row_range_matches_whole_row(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn disjoint_in_row_range_matches_whole_row(cx: &mut gpui_runtime::TestAppContext) {
         let snapshot = row_range_snapshot(cx, "aaaa\nbbbbbbbb\ncccc");
         let buffer_snapshot = snapshot.buffer_snapshot();
 
@@ -1441,8 +1441,8 @@ mod tests {
 
     /// A selection on a row outside the queried row range must not be returned. This guards the
     /// row-overlap boundary against becoming over-inclusive.
-    #[gpui::test]
-    fn disjoint_in_row_range_excludes_other_rows(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn disjoint_in_row_range_excludes_other_rows(cx: &mut gpui_runtime::TestAppContext) {
         let snapshot = row_range_snapshot(cx, "aaaa\nbbbbbbbb\ncccc");
         let buffer_snapshot = snapshot.buffer_snapshot();
 
@@ -1462,8 +1462,8 @@ mod tests {
 
     /// A selection spanning multiple rows must be returned when the query touches any of those rows,
     /// not just when the query shares the selection's start or end row.
-    #[gpui::test]
-    fn disjoint_in_row_range_matches_interior_row(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn disjoint_in_row_range_matches_interior_row(cx: &mut gpui_runtime::TestAppContext) {
         let snapshot = row_range_snapshot(cx, "aaaa\nbbbb\ncccc\ndddd");
         let buffer_snapshot = snapshot.buffer_snapshot();
 
@@ -1484,9 +1484,9 @@ mod tests {
         assert_eq!(result[0].end, Point::new(3, 2));
     }
 
-    #[gpui::test(iterations = 20)]
+    #[gpui_runtime::test(iterations = 20)]
     fn fast_and_slow_selection_resolution_match_without_collapsed_content(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
         mut rng: StdRng,
     ) {
         cx.update(|cx| {

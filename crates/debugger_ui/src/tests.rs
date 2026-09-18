@@ -33,7 +33,7 @@ mod stack_frame_list;
 #[cfg(test)]
 mod variable_list;
 
-pub fn init_test(cx: &mut gpui::TestAppContext) {
+pub fn init_test(cx: &mut gpui_runtime::TestAppContext) {
     #[cfg(test)]
     zlog::init_test();
 
@@ -109,7 +109,7 @@ pub fn active_debug_session_panel(
 
 pub fn start_debug_session_with<T: Fn(&Arc<DebugAdapterClient>) + 'static>(
     workspace: &WindowHandle<MultiWorkspace>,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
     config: DebugTaskDefinition,
     configure: T,
 ) -> Result<Entity<Session>> {
@@ -149,7 +149,7 @@ pub fn start_debug_session_with<T: Fn(&Arc<DebugAdapterClient>) + 'static>(
 
 pub fn start_debug_session<T: Fn(&Arc<DebugAdapterClient>) + 'static>(
     workspace: &WindowHandle<MultiWorkspace>,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
     configure: T,
 ) -> Result<Entity<Session>> {
     use serde_json::json;

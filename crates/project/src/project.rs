@@ -238,7 +238,7 @@ pub struct Project {
     context_server_store: Entity<ContextServerStore>,
     image_store: Entity<ImageStore>,
     lsp_store: Entity<LspStore>,
-    _subscriptions: Vec<gpui::Subscription>,
+    _subscriptions: Vec<gpui_runtime::Subscription>,
     buffers_needing_diff: HashSet<WeakEntity<Buffer>>,
     git_diff_debouncer: DebouncedDelay<Self>,
     remotely_created_models: Arc<Mutex<RemotelyCreatedModels>>,
@@ -2096,7 +2096,7 @@ impl Project {
     pub async fn test(
         fs: Arc<dyn Fs>,
         root_paths: impl IntoIterator<Item = &Path>,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> Entity<Project> {
         Self::test_project(fs, root_paths, false, cx).await
     }
@@ -2105,7 +2105,7 @@ impl Project {
     pub async fn test_with_worktree_trust(
         fs: Arc<dyn Fs>,
         root_paths: impl IntoIterator<Item = &Path>,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> Entity<Project> {
         Self::test_project(fs, root_paths, true, cx).await
     }
@@ -2115,7 +2115,7 @@ impl Project {
         fs: Arc<dyn Fs>,
         root_paths: impl IntoIterator<Item = &Path>,
         init_worktree_trust: bool,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> Entity<Project> {
         use clock::FakeSystemClock;
 

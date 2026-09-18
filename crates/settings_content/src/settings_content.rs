@@ -1012,7 +1012,7 @@ pub enum ModalWidthContent {
 }
 
 impl ModalWidthContent {
-    pub fn to_pixels(self, base_width: gpui::Pixels, window_width: gpui::Pixels) -> gpui::Pixels {
+    pub fn to_pixels(self, base_width: gpui_types::Pixels, window_width: gpui_types::Pixels) -> gpui_types::Pixels {
         match self {
             ModalWidthContent::Small => base_width,
             ModalWidthContent::Full => window_width,

@@ -131,7 +131,7 @@ fn update_command_palette_filter(enabled: bool, cx: &mut App) {
 fn open_performance_profiler(
     startup_time: Instant,
     workspace_handle: WeakEntity<Workspace>,
-    _window: &mut gpui::Window,
+    _window: &mut gpui_runtime::Window,
     cx: &mut App,
 ) {
     let existing_window = cx
@@ -227,12 +227,12 @@ impl ProfilerWindow {
         match self.source {
             ProfileSource::Foreground => {
                 let current_thread =
-                    gpui::profiler::get_current_thread_timings(TasksIncluded::OnlyCompleted);
+                    gpui_runtime::profiler::get_current_thread_timings(TasksIncluded::OnlyCompleted);
                 let deltas = self.collector.collect_unseen(vec![current_thread]);
                 self.apply_deltas(deltas);
             }
             ProfileSource::AllThreads => {
-                let all_timings = gpui::profiler::get_all_timings(TasksIncluded::OnlyCompleted);
+                let all_timings = gpui_runtime::profiler::get_all_timings(TasksIncluded::OnlyCompleted);
                 let deltas = self.collector.collect_unseen(all_timings);
                 self.apply_deltas(deltas);
             }
@@ -390,7 +390,7 @@ impl ProfilerWindow {
 
     fn render_source_dropdown(
         &self,
-        window: &mut gpui::Window,
+        window: &mut gpui_runtime::Window,
         cx: &mut Context<Self>,
     ) -> DropdownMenu {
         let weak = cx.weak_entity();
@@ -509,9 +509,9 @@ impl ProfilerWindow {
 impl Render for ProfilerWindow {
     fn render(
         &mut self,
-        window: &mut gpui::Window,
-        cx: &mut gpui::Context<Self>,
-    ) -> impl gpui::IntoElement {
+        window: &mut gpui_runtime::Window,
+        cx: &mut gpui_runtime::Context<Self>,
+    ) -> impl gpui_runtime::IntoElement {
         let ui_font = theme_settings::setup_ui_font(window, cx);
         if !self.paused {
             self.poll_timings(cx);

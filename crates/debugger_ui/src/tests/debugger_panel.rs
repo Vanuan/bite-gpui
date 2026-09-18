@@ -38,7 +38,7 @@ use workspace::item::SaveOptions;
 use workspace::pane_group::SplitDirection;
 use workspace::{Item, dock::Panel, move_active_item};
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_basic_show_debug_panel(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -160,7 +160,7 @@ async fn test_basic_show_debug_panel(executor: BackgroundExecutor, cx: &mut Test
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_we_can_only_have_one_panel_per_debug_session(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -311,7 +311,7 @@ async fn test_we_can_only_have_one_panel_per_debug_session(
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_handle_successful_run_in_terminal_reverse_request(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -386,7 +386,7 @@ async fn test_handle_successful_run_in_terminal_reverse_request(
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_handle_start_debugging_request(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -498,7 +498,7 @@ async fn test_handle_start_debugging_request(
 
 // // covers that we always send a response back, if something when wrong,
 // // while spawning the terminal
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_handle_error_run_in_terminal_reverse_request(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -566,7 +566,7 @@ async fn test_handle_error_run_in_terminal_reverse_request(
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_handle_start_debugging_reverse_request(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -665,7 +665,7 @@ async fn test_handle_start_debugging_reverse_request(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_shutdown_children_when_parent_session_shutdown(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -771,7 +771,7 @@ async fn test_shutdown_children_when_parent_session_shutdown(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_shutdown_parent_session_if_all_children_are_shutdown(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -891,7 +891,7 @@ async fn test_shutdown_parent_session_if_all_children_are_shutdown(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_continue_response_updates_thread_statuses(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -964,7 +964,7 @@ async fn test_continue_response_updates_thread_statuses(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_continue_thread_action_only_resumes_selected_thread(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -1027,7 +1027,7 @@ async fn test_continue_thread_action_only_resumes_selected_thread(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_debug_panel_item_thread_status_reset_on_failure(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -1220,7 +1220,7 @@ async fn test_debug_panel_item_thread_status_reset_on_failure(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_send_breakpoints_when_editor_has_been_saved(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -1384,7 +1384,7 @@ async fn test_send_breakpoints_when_editor_has_been_saved(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unsetting_breakpoints_on_clear_breakpoint_action(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -1502,7 +1502,7 @@ async fn test_unsetting_breakpoints_on_clear_breakpoint_action(
     cx.run_until_parked();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_debug_session_is_shutdown_when_attach_and_launch_request_fails(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -1550,7 +1550,7 @@ async fn test_debug_session_is_shutdown_when_attach_and_launch_request_fails(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_we_send_arguments_from_user_config(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -1611,7 +1611,7 @@ async fn test_we_send_arguments_from_user_config(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_active_debug_line_setting(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1896,7 +1896,7 @@ async fn test_active_debug_line_setting(executor: BackgroundExecutor, cx: &mut T
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_debug_adapters_shutdown_on_app_quit(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -1952,7 +1952,7 @@ async fn test_debug_adapters_shutdown_on_app_quit(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_breakpoint_jumps_only_in_proper_split_view(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -2482,7 +2482,7 @@ async fn test_breakpoint_jumps_only_in_proper_split_view(
     shutdown_session.await.unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_adapter_shutdown_with_child_sessions_on_app_quit(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -2620,7 +2620,7 @@ async fn test_adapter_shutdown_with_child_sessions_on_app_quit(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_restart_request_is_not_sent_more_than_once_until_response(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,

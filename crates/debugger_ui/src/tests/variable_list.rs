@@ -26,7 +26,7 @@ use unindent::Unindent as _;
 use util::path;
 
 /// This only tests fetching one scope and 2 variables for a single stackframe
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_basic_fetch_initial_scope_and_variables(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -223,7 +223,7 @@ async fn test_basic_fetch_initial_scope_and_variables(
 }
 
 /// This tests fetching multiple scopes and variables for them with a single stackframe
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_variables_for_multiple_scopes(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -482,7 +482,7 @@ async fn test_fetch_variables_for_multiple_scopes(
 /// scope) must not have its variables fetched automatically, since resolving it can
 /// hang indefinitely. It should render collapsed, and only be resolved once the user
 /// explicitly expands it.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_expensive_scope_is_not_eagerly_fetched(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -730,7 +730,7 @@ async fn test_expensive_scope_is_not_eagerly_fetched(
 }
 
 // tests that toggling a variable will fetch its children and shows it
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_keyboard_navigation(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1505,7 +1505,7 @@ async fn test_keyboard_navigation(executor: BackgroundExecutor, cx: &mut TestApp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_variable_list_only_sends_requests_when_rendering(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -1733,7 +1733,7 @@ async fn test_variable_list_only_sends_requests_when_rendering(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_it_fetches_scopes_variables_when_you_select_a_stack_frame(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -2081,7 +2081,7 @@ async fn test_it_fetches_scopes_variables_when_you_select_a_stack_frame(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_add_and_remove_watcher(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2333,7 +2333,7 @@ async fn test_add_and_remove_watcher(executor: BackgroundExecutor, cx: &mut Test
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_refresh_watchers(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2593,7 +2593,7 @@ async fn test_refresh_watchers(executor: BackgroundExecutor, cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_evaluate_variable_value_uses_clipboard_context(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,

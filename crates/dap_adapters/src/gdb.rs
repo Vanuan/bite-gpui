@@ -2,7 +2,7 @@ use anyhow::{Context as _, Result, bail};
 use async_trait::async_trait;
 use collections::HashMap;
 use dap::{StartDebuggingRequestArguments, adapters::DebugTaskDefinition};
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use std::ffi::OsStr;
 use task::{DebugScenario, ZedDebugConfig};
 

@@ -723,7 +723,7 @@ impl ButtonCommon for ButtonLike {
         self
     }
 
-    fn track_focus(mut self, focus_handle: &gpui::FocusHandle) -> Self {
+    fn track_focus(mut self, focus_handle: &gpui_runtime::FocusHandle) -> Self {
         self.focus_handle = Some(focus_handle.clone());
         self
     }

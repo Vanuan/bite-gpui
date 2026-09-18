@@ -86,7 +86,7 @@ async fn setup_auto_watch_test_with_initial_participants(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_watch_opens_existing_share_on_toggle(
     executor: BackgroundExecutor,
     user_a: &mut TestAppContext,
@@ -117,7 +117,7 @@ async fn test_auto_watch_opens_existing_share_on_toggle(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_watch_opens_share_when_no_one_is_sharing_yet(
     executor: BackgroundExecutor,
     user_a: &mut TestAppContext,
@@ -146,7 +146,7 @@ async fn test_auto_watch_opens_share_when_no_one_is_sharing_yet(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_watch_switches_to_next_share_on_share_end(
     executor: BackgroundExecutor,
     user_a: &mut TestAppContext,
@@ -189,7 +189,7 @@ async fn test_auto_watch_switches_to_next_share_on_share_end(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_watch_ignores_shares_while_user_is_sharing(
     executor: BackgroundExecutor,
     user_a: &mut TestAppContext,
@@ -222,7 +222,7 @@ async fn test_auto_watch_ignores_shares_while_user_is_sharing(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_watch_opens_share_after_local_user_stops_sharing(
     executor: BackgroundExecutor,
     user_a: &mut TestAppContext,
@@ -256,7 +256,7 @@ async fn test_auto_watch_opens_share_after_local_user_stops_sharing(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_watch_toggle_off_leaves_tabs_open(
     executor: BackgroundExecutor,
     user_a: &mut TestAppContext,
@@ -296,7 +296,7 @@ async fn test_auto_watch_toggle_off_leaves_tabs_open(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_watch_reopens_screen_share_from_returning_channel_participant(
     executor: BackgroundExecutor,
     user_a: &mut TestAppContext,
@@ -392,7 +392,7 @@ async fn test_auto_watch_reopens_screen_share_from_returning_channel_participant
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_watch_is_disabled_when_following_collaborator(
     executor: BackgroundExecutor,
     user_a: &mut TestAppContext,
@@ -430,7 +430,7 @@ async fn test_auto_watch_is_disabled_when_following_collaborator(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_auto_watch_is_disabled_when_leaving_call(
     executor: BackgroundExecutor,
     user_a: &mut TestAppContext,

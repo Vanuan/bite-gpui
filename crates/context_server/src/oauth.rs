@@ -1972,7 +1972,7 @@ mod tests {
 
     #[test]
     fn test_fetch_protected_resource_metadata() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2018,7 +2018,7 @@ mod tests {
 
     #[test]
     fn test_fetch_protected_resource_metadata_prefers_www_authenticate_url() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2060,7 +2060,7 @@ mod tests {
         // header contains a resource_metadata URL with a doubled path (e.g.
         // /mcp/mcp), which returns HTML instead of JSON. The client should
         // fall back to the RFC 9728 well-known URL, which works correctly.
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2121,7 +2121,7 @@ mod tests {
 
     #[test]
     fn test_fetch_protected_resource_metadata_rejects_cross_origin_url() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2164,7 +2164,7 @@ mod tests {
 
     #[test]
     fn test_fetch_auth_server_metadata() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2209,7 +2209,7 @@ mod tests {
 
     #[test]
     fn test_fetch_auth_server_metadata_falls_back_to_oidc() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2242,7 +2242,7 @@ mod tests {
 
     #[test]
     fn test_fetch_auth_server_metadata_rejects_issuer_mismatch() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2280,7 +2280,7 @@ mod tests {
 
     #[test]
     fn test_full_discover_with_cimd() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2332,7 +2332,7 @@ mod tests {
 
     #[test]
     fn test_full_discover_with_dcr_fallback() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2395,7 +2395,7 @@ mod tests {
 
     #[test]
     fn test_discover_fails_without_pkce_support() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2445,7 +2445,7 @@ mod tests {
 
     #[test]
     fn test_exchange_code_success() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2497,7 +2497,7 @@ mod tests {
 
     #[test]
     fn test_refresh_tokens_success() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|req| {
                 Box::pin(async move {
                     let uri = req.uri().to_string();
@@ -2537,7 +2537,7 @@ mod tests {
 
     #[test]
     fn test_exchange_code_failure() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|_req| {
                 Box::pin(async move { json_response(400, r#"{"error": "invalid_grant"}"#) })
             });
@@ -2583,7 +2583,7 @@ mod tests {
 
     #[test]
     fn test_perform_dcr() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|_req| {
                 Box::pin(async move {
                     json_response(
@@ -2617,7 +2617,7 @@ mod tests {
 
     #[test]
     fn test_perform_dcr_failure() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let client = make_fake_http_client(|_req| {
                 Box::pin(
                     async move { json_response(403, r#"{"error": "registration_not_allowed"}"#) },
@@ -2795,7 +2795,7 @@ mod tests {
 
     #[test]
     fn test_mcp_oauth_provider_refresh_without_refresh_token_returns_false() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let session = make_test_session("token", None, None);
             let provider = McpOAuthTokenProvider::new(
                 session,
@@ -2812,7 +2812,7 @@ mod tests {
 
     #[test]
     fn test_mcp_oauth_provider_refresh_updates_session_and_notifies_channel() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let session = make_test_session("old-access", Some("my-refresh-token"), None);
             let (tx, mut rx) = futures::channel::mpsc::unbounded();
 
@@ -2846,7 +2846,7 @@ mod tests {
 
     #[test]
     fn test_mcp_oauth_provider_refresh_preserves_old_refresh_token_when_server_omits_it() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let session = make_test_session("old-access", Some("original-refresh"), None);
             let (tx, mut rx) = futures::channel::mpsc::unbounded();
 
@@ -2878,7 +2878,7 @@ mod tests {
 
     #[test]
     fn test_mcp_oauth_provider_refresh_returns_false_on_http_error() {
-        gpui::block_on(async {
+        gpui_platform::block_on(async {
             let session = make_test_session("old-access", Some("my-refresh"), None);
 
             let http_client = make_fake_http_client(|_req| {

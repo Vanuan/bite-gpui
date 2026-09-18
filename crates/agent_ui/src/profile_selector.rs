@@ -250,7 +250,7 @@ impl Render for ProfileSelector {
             picker,
             trigger_button,
             tooltip,
-            gpui::Anchor::BottomRight,
+            gpui_types::Anchor::BottomRight,
             cx,
         )
         .with_handle(self.picker_handle.clone())
@@ -776,7 +776,7 @@ impl PickerDelegate for ProfilePickerDelegate {
         &self,
         _: &mut Window,
         cx: &mut Context<Picker<Self>>,
-    ) -> Option<gpui::AnyElement> {
+    ) -> Option<gpui_runtime::AnyElement> {
         let focus_handle = self.focus_handle.clone();
         let is_restricted = self.provider.is_restricted(cx);
 
@@ -847,9 +847,9 @@ impl PickerDelegate for ProfilePickerDelegate {
 mod tests {
     use super::*;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn entries_include_custom_profiles(_cx: &mut TestAppContext) {
         let candidates = vec![
             ProfileCandidate {
@@ -877,7 +877,7 @@ mod tests {
         )));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn fuzzy_filter_returns_no_results_and_keeps_configure(cx: &mut TestAppContext) {
         let candidates = vec![ProfileCandidate {
             id: AgentProfileId("write".into()),
@@ -908,7 +908,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn active_profile_selection_logic_works(cx: &mut TestAppContext) {
         let candidates = vec![
             ProfileCandidate {

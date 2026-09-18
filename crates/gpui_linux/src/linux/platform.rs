@@ -250,7 +250,7 @@ impl<P: LinuxClient + 'static> Platform for LinuxPlatform<P> {
     }
 
     fn keyboard_mapper(&self) -> Rc<dyn PlatformKeyboardMapper> {
-        Rc::new(gpui::DummyKeyboardMapper)
+        Rc::new(gpui_platform::DummyKeyboardMapper)
     }
 
     fn on_keyboard_layout_change(&self, callback: Box<dyn FnMut()>) {
@@ -1016,9 +1016,9 @@ fn guess_ascii(keycode: Keycode, shift: bool) -> Option<char> {
 #[cfg(any(feature = "wayland", feature = "x11"))]
 pub(super) fn keystroke_from_xkb(
     state: &State,
-    mut modifiers: gpui::Modifiers,
+    mut modifiers: gpui_types::Modifiers,
     keycode: Keycode,
-) -> gpui::Keystroke {
+) -> gpui_types::Keystroke {
     let key_utf32 = state.key_get_utf32(keycode);
     let key_utf8 = state.key_get_utf8(keycode);
     let key_sym = state.key_get_one_sym(keycode);
@@ -1131,7 +1131,7 @@ pub(super) fn keystroke_from_xkb(
     let key_char =
         (key_utf32 >= 32 && key_utf32 != 127 && !key_utf8.is_empty()).then_some(key_utf8);
 
-    gpui::Keystroke {
+    gpui_types::Keystroke {
         modifiers,
         key,
         key_char,
@@ -1198,12 +1198,12 @@ pub fn keystroke_underlying_dead_key(keysym: Keysym) -> Option<String> {
     }
 }
 #[cfg(any(feature = "wayland", feature = "x11"))]
-pub(super) fn modifiers_from_xkb(keymap_state: &State) -> gpui::Modifiers {
+pub(super) fn modifiers_from_xkb(keymap_state: &State) -> gpui_types::Modifiers {
     let shift = keymap_state.mod_name_is_active(xkb::MOD_NAME_SHIFT, xkb::STATE_MODS_EFFECTIVE);
     let alt = keymap_state.mod_name_is_active(xkb::MOD_NAME_ALT, xkb::STATE_MODS_EFFECTIVE);
     let control = keymap_state.mod_name_is_active(xkb::MOD_NAME_CTRL, xkb::STATE_MODS_EFFECTIVE);
     let platform = keymap_state.mod_name_is_active(xkb::MOD_NAME_LOGO, xkb::STATE_MODS_EFFECTIVE);
-    gpui::Modifiers {
+    gpui_types::Modifiers {
         shift,
         alt,
         control,
@@ -1213,9 +1213,9 @@ pub(super) fn modifiers_from_xkb(keymap_state: &State) -> gpui::Modifiers {
 }
 
 #[cfg(any(feature = "wayland", feature = "x11"))]
-pub(super) fn capslock_from_xkb(keymap_state: &State) -> gpui::Capslock {
+pub(super) fn capslock_from_xkb(keymap_state: &State) -> gpui_types::Capslock {
     let on = keymap_state.mod_name_is_active(xkb::MOD_NAME_CAPS, xkb::STATE_MODS_EFFECTIVE);
-    gpui::Capslock { on }
+    gpui_types::Capslock { on }
 }
 
 /// Resolve a Linux `dev_t` to PCI vendor/device IDs via sysfs, returning a

@@ -632,7 +632,7 @@ mod tests {
     use client::{Credentials, test::make_get_authenticated_user_response};
     use clock::FakeSystemClock;
     use feature_flags::FeatureFlagAppExt as _;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use http_client::{FakeHttpClient, Method, Response};
     use std::sync::{
         Arc, Mutex,
@@ -763,7 +763,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn provider_authenticate_does_not_start_sign_in_when_signed_out(cx: &mut TestAppContext) {
         let (client, _user_store, provider) = cx.update(init_test);
         let authenticate_calls = Arc::new(AtomicUsize::new(0));
@@ -797,7 +797,7 @@ mod tests {
         assert!(!cx.read(|cx| provider.is_authenticated(cx)));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn provider_authenticate_waits_for_current_user(cx: &mut TestAppContext) {
         let (client, _user_store, provider) = cx.update(init_test);
         let (authenticate_tx, authenticate_rx) = futures::channel::oneshot::channel();
@@ -834,7 +834,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn provider_authenticate_returns_error_when_sign_in_fails(cx: &mut TestAppContext) {
         let (client, _user_store, provider) = cx.update(init_test);
         let (authenticate_tx, authenticate_rx) = futures::channel::oneshot::channel();
@@ -855,7 +855,7 @@ mod tests {
         assert!(error.to_string().contains("AuthenticationError"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn provided_models_surface_disabled_reason(cx: &mut TestAppContext) {
         let (_client, _user_store, provider) = cx.update(init_test);
         let model_id = cloud_llm_client::LanguageModelId(Arc::from("disabled-model"));
@@ -890,7 +890,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn sign_out_hides_cached_cloud_models(cx: &mut TestAppContext) {
         let (client, _user_store, provider) = cx.update(init_test);
         let (authenticate_tx, authenticate_rx) = futures::channel::oneshot::channel();

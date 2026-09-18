@@ -565,11 +565,11 @@ mod tests {
         assert_eq!(format_event(&event).as_ref(), "--:--:--.---  watch_error");
     }
 
-    #[gpui::test]
-    fn editors_allow_copying_and_preserve_selections_on_updates(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn editors_allow_copying_and_preserve_selections_on_updates(cx: &mut gpui_runtime::TestAppContext) {
         let app_state = cx.update(AppState::test);
         let window = cx.add_window(|window, cx| WatcherDebug::new(app_state, window, cx));
-        let mut visual = gpui::VisualTestContext::from_window(window.into(), cx);
+        let mut visual = gpui_runtime::VisualTestContext::from_window(window.into(), cx);
         for tab in WatcherTab::ALL {
             window
                 .update(cx, |view, window, cx| {
@@ -625,8 +625,8 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    fn event_rollover_preserves_retained_selection(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn event_rollover_preserves_retained_selection(cx: &mut gpui_runtime::TestAppContext) {
         let app_state = cx.update(AppState::test);
         let window = cx.add_window(|window, cx| WatcherDebug::new(app_state, window, cx));
         let snapshot = |dropped_events, paths: &[&str]| WatchSnapshot {
@@ -677,7 +677,7 @@ mod tests {
                 view.select_tab(WatcherTab::RawEvents, window, cx);
             })
             .unwrap();
-        let mut visual = gpui::VisualTestContext::from_window(window.into(), cx);
+        let mut visual = gpui_runtime::VisualTestContext::from_window(window.into(), cx);
         visual.run_until_parked();
         visual.dispatch_action(editor::actions::Copy);
         visual.run_until_parked();
@@ -738,8 +738,8 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    async fn tabs_separate_rows_and_keep_footer_visible(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn tabs_separate_rows_and_keep_footer_visible(cx: &mut gpui_runtime::TestAppContext) {
         let app_state = cx.update(AppState::test);
         let fs = app_state.fs.clone();
         let root = std::path::Path::new(util::path!("/watched"));
@@ -770,7 +770,7 @@ mod tests {
             })
             .unwrap();
 
-        let mut visual = gpui::VisualTestContext::from_window(window.into(), cx);
+        let mut visual = gpui_runtime::VisualTestContext::from_window(window.into(), cx);
         assert_eq!(
             visual.window_title().as_deref(),
             Some("Debug Filesystem Watching")
@@ -788,7 +788,7 @@ mod tests {
             ("TAB-Raw Events", WatcherTab::RawEvents),
         ] {
             let bounds = visual.debug_bounds(selector).unwrap();
-            visual.simulate_click(bounds.center(), gpui::Modifiers::default());
+            visual.simulate_click(bounds.center(), gpui_types::Modifiers::default());
             visual.run_until_parked();
             assert_eq!(visual.debug_bounds("watcher-footer"), Some(footer));
             window
@@ -817,8 +817,8 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
-    fn singleton_releases_recording_view_on_close(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn singleton_releases_recording_view_on_close(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| {
             let app_state = AppState::test(cx);
             init(app_state, cx);
@@ -853,8 +853,8 @@ mod tests {
         assert!(view.upgrade().is_none());
     }
 
-    #[gpui::test]
-    async fn saves_json_handles_cancellation_and_reports_errors(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn saves_json_handles_cancellation_and_reports_errors(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| release_channel::init("1.2.3+dev.test".parse().unwrap(), cx));
         let app_state = cx.update(AppState::test);
         let fs = app_state.fs.clone();

@@ -27,7 +27,7 @@ use util::{path, rel_path::rel_path};
 
 use crate::init_test;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostic_batches_skip_paths_without_worktrees(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -148,7 +148,7 @@ async fn test_diagnostic_batches_skip_paths_without_worktrees(cx: &mut TestAppCo
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_removing_invisible_worktree_cleans_reused_lsp_bookkeeping(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -227,7 +227,7 @@ async fn test_removing_invisible_worktree_cleans_reused_lsp_bookkeeping(cx: &mut
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_buffer_via_lsp_case_variant_no_duplicate(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -288,7 +288,7 @@ async fn test_open_buffer_via_lsp_case_variant_no_duplicate(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_buffer_via_lsp_preserves_external_symlink_path(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -339,7 +339,7 @@ async fn test_open_buffer_via_lsp_preserves_external_symlink_path(cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_buffer_via_lsp_case_variant_in_unscanned_dir(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -725,7 +725,7 @@ fn test_trailing_newline_in_completion_documentation() {
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_user_initialization_options_override_adapter_arrays(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -820,7 +820,7 @@ async fn test_user_initialization_options_override_adapter_arrays(cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_other_adapters_lsp_configuration_contributions_are_unioned(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -950,7 +950,7 @@ async fn test_other_adapters_lsp_configuration_contributions_are_unioned(cx: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_initialization_options_contributions_without_own_options(cx: &mut TestAppContext) {
     init_test(cx);
 

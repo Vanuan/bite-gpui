@@ -16,7 +16,7 @@ use std::sync::{
 };
 use util::path;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_module_list(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 

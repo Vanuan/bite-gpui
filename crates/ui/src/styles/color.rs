@@ -133,7 +133,7 @@ impl Component for Color {
         Color::DOCS
     }
 
-    fn preview(_window: &mut gpui::Window, _cx: &mut App) -> gpui::AnyElement {
+    fn preview(_window: &mut gpui_runtime::Window, _cx: &mut App) -> gpui_runtime::AnyElement {
         v_flex()
             .gap_6()
             .children(vec![

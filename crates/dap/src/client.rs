@@ -8,7 +8,7 @@ use dap_types::{
     requests::Request,
 };
 use futures::channel::oneshot;
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use std::{
     hash::Hash,
     sync::atomic::{AtomicU64, Ordering},
@@ -265,7 +265,7 @@ mod tests {
         messages::Events,
         requests::{Initialize, Request, RunInTerminal},
     };
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use serde_json::json;
     use settings::SettingsStore;
     use std::sync::{
@@ -273,7 +273,7 @@ mod tests {
         atomic::{AtomicBool, Ordering},
     };
 
-    pub fn init_test(cx: &mut gpui::TestAppContext) {
+    pub fn init_test(cx: &mut gpui_runtime::TestAppContext) {
         zlog::init_test();
 
         cx.update(|cx| {
@@ -282,7 +282,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     pub async fn test_initialize_client(cx: &mut TestAppContext) {
         #![expect(clippy::result_large_err)]
         init_test(cx);
@@ -349,7 +349,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     pub async fn test_calls_event_handler(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -400,7 +400,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     pub async fn test_calls_event_handler_for_reverse_request(cx: &mut TestAppContext) {
         init_test(cx);
 

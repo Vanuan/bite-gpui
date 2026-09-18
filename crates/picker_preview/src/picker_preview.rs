@@ -298,7 +298,7 @@ impl EditorPreview {
             });
 
             editor.scroll_manager.set_forbid_vertical_scroll(false);
-            editor.set_scroll_position(gpui::Point::new(centered_x, centered_y), window, cx);
+            editor.set_scroll_position(gpui_types::Point::new(centered_x, centered_y), window, cx);
             editor.scroll_manager.set_forbid_vertical_scroll(true);
         })
     }
@@ -307,7 +307,7 @@ impl EditorPreview {
         match layout {
             PreviewLayout::Below => self.render_preview_below(cx).into_any_element(),
             PreviewLayout::Right => self.render_preview_right(cx).into_any_element(),
-            PreviewLayout::Hidden => gpui::Empty.into_any_element(),
+            PreviewLayout::Hidden => gpui_runtime::Empty.into_any_element(),
         }
     }
 

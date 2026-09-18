@@ -49,7 +49,7 @@ pub fn hover(editor: &mut Editor, _: &Hover, window: &mut Window, cx: &mut Conte
 pub fn hover_at(
     editor: &mut Editor,
     anchor: Option<Anchor>,
-    mouse_position: Option<gpui::Point<Pixels>>,
+    mouse_position: Option<gpui_types::Point<Pixels>>,
     window: &mut Window,
     cx: &mut Context<Editor>,
 ) {
@@ -1094,7 +1094,7 @@ impl HoverState {
         !self.info_popovers.is_empty() || self.diagnostic_popover.is_some()
     }
 
-    pub fn is_mouse_getting_closer(&mut self, mouse_position: gpui::Point<Pixels>) -> bool {
+    pub fn is_mouse_getting_closer(&mut self, mouse_position: gpui_types::Point<Pixels>) -> bool {
         if !self.visible() {
             return false;
         }
@@ -1134,7 +1134,7 @@ impl HoverState {
 
     fn distance_from_point_to_bounds(
         &self,
-        point: gpui::Point<Pixels>,
+        point: gpui_types::Point<Pixels>,
         bounds: Bounds<Pixels>,
     ) -> Pixels {
         let center_x = bounds.origin.x + bounds.size.width / 2.;
@@ -1484,7 +1484,7 @@ mod tests {
     };
     use collections::BTreeSet;
     use futures::stream::StreamExt;
-    use gpui::App;
+    use gpui_runtime::App;
     use indoc::indoc;
     use markdown::parser::MarkdownEvent;
     use project::InlayId;
@@ -1494,12 +1494,12 @@ mod tests {
     use std::sync::atomic::AtomicUsize;
     use text::Bias;
 
-    fn get_hover_popover_delay(cx: &gpui::TestAppContext) -> u64 {
+    fn get_hover_popover_delay(cx: &gpui_runtime::TestAppContext) -> u64 {
         cx.read(|cx: &App| -> u64 { EditorSettings::get_global(cx).hover_popover_delay.0 })
     }
 
-    #[gpui::test]
-    fn test_hover_markdown_soft_breaks_reflow_per_commonmark(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_hover_markdown_soft_breaks_reflow_per_commonmark(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let cx = cx.add_empty_window();
@@ -1522,8 +1522,8 @@ mod tests {
         assert_eq!(rendered, "This is a test for tooltip reflow");
     }
 
-    #[gpui::test]
-    fn test_hover_markdown_explicit_hard_breaks_preserved(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_hover_markdown_explicit_hard_breaks_preserved(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let cx = cx.add_empty_window();
@@ -1549,7 +1549,7 @@ mod tests {
     }
 
     impl InfoPopover {
-        fn get_rendered_text(&self, cx: &gpui::App) -> String {
+        fn get_rendered_text(&self, cx: &gpui_runtime::App) -> String {
             let mut rendered_text = String::new();
             if let Some(parsed_content) = self.parsed_content.clone() {
                 let markdown = parsed_content.read(cx);
@@ -1573,9 +1573,9 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_mouse_hover_info_popover_with_autocomplete_popover(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 
@@ -1742,8 +1742,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_mouse_hover_info_popover(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_mouse_hover_info_popover(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -1832,8 +1832,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_mouse_hover_cancelled_before_delay(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_mouse_hover_cancelled_before_delay(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -1890,8 +1890,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_keyboard_hover_info_popover(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_keyboard_hover_info_popover(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -1957,8 +1957,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_empty_hovers_filtered(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_empty_hovers_filtered(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -2018,8 +2018,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_oversized_hover_truncated(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_oversized_hover_truncated(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -2367,8 +2367,8 @@ mod tests {
         assert_eq!(wrapping_code_fence("````"), "`````");
     }
 
-    #[gpui::test]
-    async fn test_line_ends_trimmed(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_line_ends_trimmed(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -2432,9 +2432,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     // https://github.com/zed-industries/zed/issues/15498
-    async fn test_info_hover_with_hrs(cx: &mut gpui::TestAppContext) {
+    async fn test_info_hover_with_hrs(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let mut cx = EditorLspTestContext::new_rust(
@@ -2488,8 +2488,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_hover_inlay_label_parts(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_inlay_label_parts(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |settings| {
             settings.defaults.inlay_hints = Some(InlayHintSettingsContent {
                 show_value_hints: Some(true),
@@ -2897,8 +2897,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_hover_popover_hiding_delay(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_popover_hiding_delay(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let custom_delay_ms = 500u64;
@@ -2981,8 +2981,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_hover_popover_sticky_disabled(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_popover_sticky_disabled(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         cx.update(|cx| {
@@ -3051,9 +3051,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_hover_popover_hiding_delay_restarts_when_mouse_gets_closer(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx, |_| {});
 
@@ -3114,7 +3114,7 @@ mod tests {
         cx.update_editor(|editor, _, _| {
             let popover = editor.hover_state.info_popovers.first().unwrap();
             popover.last_bounds.set(Some(Bounds {
-                origin: gpui::Point {
+                origin: gpui_types::Point {
                     x: px(100.0),
                     y: px(100.0),
                 },
@@ -3125,7 +3125,7 @@ mod tests {
             }));
         });
 
-        let far_point = gpui::Point {
+        let far_point = gpui_types::Point {
             x: px(260.0),
             y: px(130.0),
         };
@@ -3135,7 +3135,7 @@ mod tests {
             .advance_clock(Duration::from_millis(400));
         cx.background_executor.run_until_parked();
 
-        let closer_point = gpui::Point {
+        let closer_point = gpui_types::Point {
             x: px(220.0),
             y: px(130.0),
         };
@@ -3166,8 +3166,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_hover_popover_cancel_hide_on_rehover(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_popover_cancel_hide_on_rehover(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         let custom_delay_ms = 500u64;
@@ -3276,8 +3276,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_hover_popover_enabled_false_ignores_sticky(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_hover_popover_enabled_false_ignores_sticky(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx, |_| {});
 
         cx.update(|cx| {

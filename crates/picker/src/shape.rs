@@ -1,4 +1,4 @@
-use gpui::Window;
+use gpui_runtime::Window;
 use gpui::{Pixels, Rems, Size};
 use ui::{Div, Styled, rems_from_px};
 

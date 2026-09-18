@@ -113,7 +113,7 @@ const UPDATE_DEBOUNCE: Duration = Duration::from_millis(50);
 const TREE_INDENT: f32 = 16.0;
 const MAX_HISTORY_TAG_CHIPS: usize = 3;
 // Horizontal offset that aligns the tree indent guides with the row icon column.
-const INDENT_GUIDE_LEFT_OFFSET: gpui::Pixels = gpui::px(19.);
+const INDENT_GUIDE_LEFT_OFFSET: gpui_types::Pixels = gpui::px(19.);
 
 actions!(
     git_panel,
@@ -6225,7 +6225,7 @@ impl GitPanel {
                 }
             })
             .anchor(Anchor::TopRight)
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.),
                 y: px(2.),
             })
@@ -6348,7 +6348,7 @@ impl GitPanel {
                 ))
             })
             .anchor(Anchor::TopRight)
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.),
                 y: px(2.),
             })
@@ -7935,7 +7935,7 @@ impl GitPanel {
                     ),
             )
             .child(if section_is_empty {
-                gpui::Empty.into_any_element()
+                gpui_runtime::Empty.into_any_element()
             } else {
                 let checkbox = Checkbox::new(checkbox_id, toggle_state)
                     .disabled(!has_write_access || all_conflicts_resolved)
@@ -9064,7 +9064,7 @@ impl Render for GitPanel {
 }
 
 impl Focusable for GitPanel {
-    fn focus_handle(&self, _cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _cx: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -9178,7 +9178,7 @@ pub fn panel_editor_container(_window: &mut Window, cx: &mut App) -> Div {
         .bg(cx.theme().colors().editor_background)
 }
 
-pub(crate) fn git_commit_editor_style(font_size: gpui::Pixels, cx: &App) -> EditorStyle {
+pub(crate) fn git_commit_editor_style(font_size: gpui_types::Pixels, cx: &App) -> EditorStyle {
     let settings = ThemeSettings::get_global(cx);
 
     EditorStyle {
@@ -9261,7 +9261,7 @@ impl Render for GitPanelMessageTooltip {
         if let Some(commit_tooltip) = &self.commit_tooltip {
             commit_tooltip.clone().into_any_element()
         } else {
-            gpui::Empty.into_any_element()
+            gpui_runtime::Empty.into_any_element()
         }
     }
 }
@@ -9365,7 +9365,7 @@ impl RenderOnce for PanelRepoFooter {
                 },
             )
             .anchor(Anchor::BottomLeft)
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(-2.0),
             })
@@ -9390,7 +9390,7 @@ impl RenderOnce for PanelRepoFooter {
                 Tooltip::for_action_title("Switch Branch", &zed_actions::git::Switch),
             )
             .anchor(Anchor::BottomLeft)
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(-2.0),
             });
@@ -9718,7 +9718,7 @@ mod tests {
 
     use super::*;
 
-    fn init_test(cx: &mut gpui::TestAppContext) {
+    fn init_test(cx: &mut gpui_runtime::TestAppContext) {
         zlog::init_test();
 
         cx.update(|cx| {
@@ -9888,7 +9888,7 @@ mod tests {
         (fs, project, workspace, panel, cx)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skip_hooks_toggle(cx: &mut TestAppContext) {
         init_test(cx);
         let (_, _, _, panel, mut cx) = setup_git_panel_with_changes(
@@ -9913,7 +9913,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skip_hooks_clears_after_successful_commit(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, _, _, panel, mut cx) = setup_git_panel_with_changes(
@@ -9950,7 +9950,7 @@ mod tests {
         assert_eq!(commit_count, 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skip_hooks_remains_enabled_after_failed_commit(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, _, _, panel, mut cx) = setup_git_panel_with_changes(
@@ -9998,7 +9998,7 @@ mod tests {
         assert_eq!(commit_count, 0);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_view_file_tracked(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10056,7 +10056,7 @@ mod tests {
         assert_editor_opened_with_path(&workspace, Path::new("tracked"), &mut cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_view_file_untracked(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10123,7 +10123,7 @@ mod tests {
         assert_editor_opened_with_path(&workspace, Path::new("untracked"), &mut cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_view_file_tree_view(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10165,7 +10165,7 @@ mod tests {
         assert_editor_opened_with_path(&workspace, Path::new("src/a/foo.rs"), &mut cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copy_paths(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -10277,7 +10277,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_tab_stops_loading_for_unborn_branch(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10300,7 +10300,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_tab_loads_detached_head(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10335,7 +10335,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_tab_surfaces_load_error(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10365,7 +10365,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_tab_without_repository(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10425,7 +10425,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_entry_worktree_paths(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -10548,7 +10548,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_discard_prompt_escapes_markdown_in_file_name(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -10614,7 +10614,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_group_by_staging_section_membership_and_order(cx: &mut TestAppContext) {
         use GitListEntry::*;
 
@@ -10889,7 +10889,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_staging_conflict_mark_resolved_transition(cx: &mut TestAppContext) {
         use GitListEntry::*;
 
@@ -11032,7 +11032,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_resolved_conflict_is_locked_against_unstaging(cx: &mut TestAppContext) {
         use GitListEntry::*;
 
@@ -11262,7 +11262,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_group_by_staging_primary_action_stages_partially_staged_files(
         cx: &mut TestAppContext,
     ) {
@@ -11336,7 +11336,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_group_by_staging_open_diff_uses_section_diff(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(search::buffer_search::init);
@@ -11492,7 +11492,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bulk_staging(cx: &mut TestAppContext) {
         use GitListEntry::*;
 
@@ -11687,7 +11687,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bulk_staging_with_sort_by_paths(cx: &mut TestAppContext) {
         use GitListEntry::*;
 
@@ -11927,7 +11927,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_amend_commit_message_handling(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -11999,7 +11999,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_commit_message_restored_after_reconnect(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -12163,7 +12163,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_commit_template_applied_fresh_after_template_file_change(
         cx: &mut TestAppContext,
     ) {
@@ -12258,7 +12258,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_user_draft_preserved_when_template_changes(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -12355,7 +12355,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pending_commit_state_is_per_repository(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -12471,7 +12471,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_amend(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -12562,7 +12562,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_diff(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12628,7 +12628,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remote_operation_serialization(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12670,7 +12670,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tree_view_without_status_grouping_combines_statuses(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -12780,7 +12780,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tree_view_reveals_collapsed_parent_on_select_entry_by_path(
         cx: &mut TestAppContext,
     ) {
@@ -12905,7 +12905,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tree_view_select_next_at_last_visible_collapsed_directory(
         cx: &mut TestAppContext,
     ) {
@@ -13044,7 +13044,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tree_view_select_first_skips_collapsed_section(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -13199,7 +13199,7 @@ mod tests {
         assert!(!prompt.contains("<commit_message_instructions>"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_suggest_commit_message(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13459,7 +13459,7 @@ mod tests {
         assert!(!commit_title_exceeds_limit("", 72));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dispatch_context_with_focus_states(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13530,7 +13530,7 @@ mod tests {
         panel.update_in(cx, |panel, window, cx| {
             panel.focus_handle.focus(window, cx);
         });
-        cx.simulate_resize(gpui::size(px(800.), px(600.)));
+        cx.simulate_resize(gpui_backend::size(px(800.), px(600.)));
 
         panel.update_in(cx, |panel, window, cx| {
             let context = panel.dispatch_context(window, cx);
@@ -13596,7 +13596,7 @@ mod tests {
         panel.update_in(cx, |panel, window, cx| {
             panel.focus_handle.focus(window, cx);
         });
-        cx.simulate_resize(gpui::size(px(800.), px(600.)));
+        cx.simulate_resize(gpui_backend::size(px(800.), px(600.)));
 
         panel.update_in(cx, |panel, window, cx| {
             assert!(
@@ -13620,7 +13620,7 @@ mod tests {
         panel.update_in(cx, |panel, window, cx| {
             panel.focus_editor(&FocusEditor, window, cx);
         });
-        cx.simulate_resize(gpui::size(px(800.), px(600.)));
+        cx.simulate_resize(gpui_backend::size(px(800.), px(600.)));
 
         panel.update_in(cx, |panel, window, cx| {
             assert!(panel.commit_editor.read(cx).is_focused(window));
@@ -13658,7 +13658,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_fill_commit_editor_toggle(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -13702,7 +13702,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_focus_handle(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13743,7 +13743,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_history_tab_pane_navigation_focuses_rendered_panel(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -13855,7 +13855,7 @@ mod tests {
         assert_eq!(GitPanel::staged_tracked_entries(&entries).len(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_discard_tracked_changes_respects_staging(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -13935,7 +13935,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_collapse_selected_entry(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -14084,7 +14084,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stage_section_scopes_to_selected_section(cx: &mut TestAppContext) {
         use GitListEntry::*;
 
@@ -14417,7 +14417,7 @@ mod tests {
             .staging
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_mark_range_flat(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, _project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -14453,7 +14453,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_mark_range_tree_marks_dirs_skips_headers(cx: &mut TestAppContext) {
         init_test(cx);
         let (_, _, _, panel, mut cx) = setup_git_panel_with_changes(
@@ -14553,7 +14553,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_shift_range_shrinks_when_reversed(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, _project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -14632,7 +14632,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_directory_selection_is_explicit(cx: &mut TestAppContext) {
         init_test(cx);
         let (_, _, _, panel, mut cx) = setup_git_panel_with_changes(
@@ -14721,7 +14721,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_mark_promotes_selection(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, _project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -14748,7 +14748,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_effective_status_entries_rule(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, _project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -14787,7 +14787,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bulk_toggle_staged_mixed(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -14841,7 +14841,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_marks_pruned_after_refresh(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -14871,7 +14871,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_clear_marks_and_select(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, _project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -14887,7 +14887,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_shift_select_next_extends_marks(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, _project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -14920,7 +14920,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bulk_revert_prompt_cancel_mixed(cx: &mut TestAppContext) {
         init_test(cx);
         let (fs, _project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -14946,7 +14946,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_bulk_revert_trashes_created_files(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -15011,7 +15011,7 @@ mod tests {
         assert!(!fs.is_file(path!("/project/new2.txt").as_ref()).await);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stage_and_unstage_actions_apply_to_marks(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -15049,7 +15049,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancel_clears_marks_only_on_changes_tab(cx: &mut TestAppContext) {
         init_test(cx);
         let (_fs, _project, panel, mut cx) = setup_flat_marks_fixture(cx).await;
@@ -15075,7 +15075,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_marks_cleared_on_repo_switch(cx: &mut TestAppContext) {
         init_test(cx);
 

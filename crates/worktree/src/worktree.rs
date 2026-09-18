@@ -6545,13 +6545,13 @@ pub trait WorktreeModelHandle {
     #[cfg(feature = "test-support")]
     fn flush_fs_events<'a>(
         &self,
-        cx: &'a mut gpui::TestAppContext,
+        cx: &'a mut gpui_runtime::TestAppContext,
     ) -> futures::future::LocalBoxFuture<'a, ()>;
 
     #[cfg(feature = "test-support")]
     fn flush_fs_events_in_root_git_repository<'a>(
         &self,
-        cx: &'a mut gpui::TestAppContext,
+        cx: &'a mut gpui_runtime::TestAppContext,
     ) -> futures::future::LocalBoxFuture<'a, ()>;
 }
 
@@ -6565,7 +6565,7 @@ impl WorktreeModelHandle for Entity<Worktree> {
     #[cfg(feature = "test-support")]
     fn flush_fs_events<'a>(
         &self,
-        cx: &'a mut gpui::TestAppContext,
+        cx: &'a mut gpui_runtime::TestAppContext,
     ) -> futures::future::LocalBoxFuture<'a, ()> {
         let file_name = "fs-event-sentinel";
 
@@ -6647,7 +6647,7 @@ impl WorktreeModelHandle for Entity<Worktree> {
     #[cfg(feature = "test-support")]
     fn flush_fs_events_in_root_git_repository<'a>(
         &self,
-        cx: &'a mut gpui::TestAppContext,
+        cx: &'a mut gpui_runtime::TestAppContext,
     ) -> futures::future::LocalBoxFuture<'a, ()> {
         let file_name = "fs-event-sentinel";
 
@@ -7493,7 +7493,7 @@ mod tests {
         assert_eq!(content.len(), STREAM_BLOCK_BYTES);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stream_utf8_normalizes_line_endings() {
         let crlf = "one\r\ntwo\r\nthree\r\n".repeat(40);
         let (text, line_ending) = stream(crlf.as_bytes()).await.unwrap();
@@ -7507,7 +7507,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stream_utf8_block_boundaries() {
         // A carriage return landing on the last byte of a block, with and
         // without its newline arriving in the next one.
@@ -7535,7 +7535,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stream_utf8_falls_back_on_non_utf8() {
         // Each of these must bail so the caller re-reads and decodes the slow
         // way, rather than silently mangling the file.

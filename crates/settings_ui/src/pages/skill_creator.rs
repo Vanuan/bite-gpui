@@ -127,7 +127,7 @@ pub(crate) fn render_skill_creator_page(
     _cx: &mut Context<SettingsWindow>,
 ) -> AnyElement {
     let Some(page) = settings_window.skill_creator_page() else {
-        return gpui::Empty.into_any_element();
+        return gpui_runtime::Empty.into_any_element();
     };
     page.into_any_element()
 }
@@ -1544,8 +1544,8 @@ mod tests {
         assert_eq!(truncated, "中".repeat(MAX_SKILL_DESCRIPTION_LEN));
     }
 
-    #[gpui::test]
-    async fn fetch_imported_skill_retries_404_with_github_token(_cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn fetch_imported_skill_retries_404_with_github_token(_cx: &mut gpui_runtime::TestAppContext) {
         let client = TestHttpClient::new_sequence(vec![
             (404, AsyncBody::from("Not Found")),
             (200, AsyncBody::from("# Imported Skill\n\nDo the thing.")),
@@ -1576,9 +1576,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn fetch_imported_skill_rejects_redirect_on_authenticated_request(
-        _cx: &mut gpui::TestAppContext,
+        _cx: &mut gpui_runtime::TestAppContext,
     ) {
         let client = TestHttpClient::new_sequence(vec![
             (404, AsyncBody::from("Not Found")),
@@ -1600,9 +1600,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn fetch_imported_skill_reports_private_or_missing_for_404(
-        _cx: &mut gpui::TestAppContext,
+        _cx: &mut gpui_runtime::TestAppContext,
     ) {
         let client = TestHttpClient::new_sequence(vec![(404, AsyncBody::from("Not Found"))]);
 
@@ -1622,8 +1622,8 @@ mod tests {
         assert_eq!(client.authorization_headers(), vec![None]);
     }
 
-    #[gpui::test]
-    async fn fetch_imported_skill_stops_reading_after_size_limit(_cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn fetch_imported_skill_stops_reading_after_size_limit(_cx: &mut gpui_runtime::TestAppContext) {
         let client = TestHttpClient::new(
             200,
             AsyncBody::from_reader(FailsAfterLimitReader {
@@ -1650,8 +1650,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn fetch_imported_skill_truncates_error_response_body(_cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn fetch_imported_skill_truncates_error_response_body(_cx: &mut gpui_runtime::TestAppContext) {
         let body = format!(
             "{}tail-that-should-not-appear",
             "x".repeat(URL_IMPORT_ERROR_BODY_MAX_LEN + 20)
@@ -1677,8 +1677,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn write_skill_to_disk_creates_directory_and_file(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn write_skill_to_disk_creates_directory_and_file(cx: &mut gpui_runtime::TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree("/skills", serde_json::json!({})).await;
 
@@ -1701,8 +1701,8 @@ mod tests {
         assert_eq!(skill.description, "Push a draft PR");
     }
 
-    #[gpui::test]
-    async fn write_skill_to_disk_refuses_to_overwrite(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn write_skill_to_disk_refuses_to_overwrite(cx: &mut gpui_runtime::TestAppContext) {
         let fs = FakeFs::new(cx.executor());
         fs.insert_tree(
             "/skills",
@@ -1730,9 +1730,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn write_skill_to_disk_rejects_non_directory_at_skill_path(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let fs = FakeFs::new(cx.executor());
         // A *file* (not a directory) sitting at `/skills/draft-pr`. With the

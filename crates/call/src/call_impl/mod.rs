@@ -89,7 +89,7 @@ pub fn init(client: Arc<Client>, user_store: Entity<UserStore>, cx: &mut App) {
 struct ActiveCallEntity(Entity<ActiveCall>);
 
 impl AnyActiveCall for ActiveCallEntity {
-    fn entity(&self) -> gpui::AnyEntity {
+    fn entity(&self) -> gpui_runtime::AnyEntity {
         self.0.clone().into_any()
     }
 
@@ -822,11 +822,11 @@ impl ActiveCall {
 
 #[cfg(test)]
 mod test {
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     use crate::OneAtATime;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_one_at_a_time(cx: &mut TestAppContext) {
         let mut one_at_a_time = OneAtATime { cancel: None };
 

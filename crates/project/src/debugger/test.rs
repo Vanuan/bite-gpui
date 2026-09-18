@@ -7,7 +7,7 @@ use gpui::{App, Subscription};
 use super::session::{Session, SessionStateEvent};
 
 pub fn intercept_debug_sessions<T: Fn(&Arc<DebugAdapterClient>) + 'static>(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
     configure: T,
 ) -> Subscription {
     cx.update(|cx| {

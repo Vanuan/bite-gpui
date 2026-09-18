@@ -773,7 +773,7 @@ impl Render for AcpTools {
                                     connection.list_state.clone(),
                                     cx.processor(Self::render_message),
                                 )
-                                .with_sizing_behavior(gpui::ListSizingBehavior::Auto)
+                                .with_sizing_behavior(gpui_runtime::ListSizingBehavior::Auto)
                                 .size_full(),
                             )
                             .vertical_scrollbar_for(&connection.list_state, window, cx)

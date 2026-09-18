@@ -887,7 +887,7 @@ mod tests {
         fn associated_tasks(
             &self,
             _: Option<Entity<language::Buffer>>,
-            _: &gpui::App,
+            _: &gpui_runtime::App,
         ) -> Task<Option<TaskTemplates>> {
             Task::ready(Some(TaskTemplates(vec![
                 TaskTemplate {
@@ -914,7 +914,7 @@ mod tests {
         fn associated_tasks(
             &self,
             _: Option<Entity<language::Buffer>>,
-            _: &gpui::App,
+            _: &gpui_runtime::App,
         ) -> Task<Option<TaskTemplates>> {
             Task::ready(Some(TaskTemplates(vec![TaskTemplate {
                 label: "Run test".into(),
@@ -969,7 +969,7 @@ mod tests {
         result
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multi_buffer_runnables_on_scroll(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1112,7 +1112,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lsp_runnables_removed_after_edit(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1234,7 +1234,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_runnables_for_unsaved_buffer(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -1327,7 +1327,7 @@ mod tests {
 
     // Verifies that a shell runnable from rust-analyzer produces
     // a task template that uses the shell program and args.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_shell_runnable_produces_correct_task_template(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 

@@ -52,7 +52,7 @@ pub fn derive_render(input: TokenStream) -> TokenStream {
 /// # #[macro_use] extern crate gpui;
 /// #[derive(AppContext)]
 /// struct MyContext<'a> {
-///     app: &'a mut gpui::App
+///     app: &'a mut gpui_runtime::App
 /// }
 /// ```
 #[proc_macro_derive(AppContext, attributes(app))]
@@ -73,8 +73,8 @@ pub fn derive_app_context(input: TokenStream) -> TokenStream {
 /// #[derive(VisualContext)]
 /// struct MyContext<'a, 'b> {
 ///     #[app]
-///     app: &'a mut gpui::App,
-///     window: &'b mut gpui::Window
+///     app: &'a mut gpui_runtime::App,
+///     window: &'b mut gpui_runtime::Window
 /// }
 /// ```
 ///
@@ -83,9 +83,9 @@ pub fn derive_app_context(input: TokenStream) -> TokenStream {
 /// # #[macro_use] extern crate gpui;
 /// #[derive(VisualContext)]
 /// struct MyContext<'a, 'b> {
-///     app: &'a mut gpui::App,
+///     app: &'a mut gpui_runtime::App,
 ///     #[window]
-///     window: &'b mut gpui::Window
+///     window: &'b mut gpui_runtime::Window
 /// }
 /// ```
 #[proc_macro_derive(VisualContext, attributes(window, app))]
@@ -148,7 +148,7 @@ pub fn box_shadow_style_methods(input: TokenStream) -> TokenStream {
     styles::box_shadow_style_methods(input)
 }
 
-/// `#[gpui::test]` can be used to annotate test functions that run with GPUI support.
+/// `#[gpui_runtime::test]` can be used to annotate test functions that run with GPUI support.
 ///
 /// It supports both synchronous and asynchronous tests, and can provide you with
 /// as many `TestAppContext` instances as you need.
@@ -156,7 +156,7 @@ pub fn box_shadow_style_methods(input: TokenStream) -> TokenStream {
 /// test harness (`cargo test` or `cargo-nextest`).
 ///
 /// ```
-/// #[gpui::test]
+/// #[gpui_runtime::test]
 /// async fn test_foo(mut cx: &TestAppContext) { }
 /// ```
 ///
@@ -168,18 +168,18 @@ pub fn box_shadow_style_methods(input: TokenStream) -> TokenStream {
 ///
 /// # Arguments
 ///
-/// - `#[gpui::test]` with no arguments runs once with the seed `0` or `SEED` env var if set.
-/// - `#[gpui::test(seed = 10)]` runs once with the seed `10`.
-/// - `#[gpui::test(seeds(10, 20, 30))]` runs three times with seeds `10`, `20`, and `30`.
-/// - `#[gpui::test(iterations = 5)]` runs five times, providing as seed the values in the range `0..5`.
-/// - `#[gpui::test(retries = 3)]` runs up to four times if it fails to try and make it pass.
-/// - `#[gpui::test(on_failure = "crate::test::report_failure")]` will call the specified function after the
+/// - `#[gpui_runtime::test]` with no arguments runs once with the seed `0` or `SEED` env var if set.
+/// - `#[gpui_runtime::test(seed = 10)]` runs once with the seed `10`.
+/// - `#[gpui_runtime::test(seeds(10, 20, 30))]` runs three times with seeds `10`, `20`, and `30`.
+/// - `#[gpui_runtime::test(iterations = 5)]` runs five times, providing as seed the values in the range `0..5`.
+/// - `#[gpui_runtime::test(retries = 3)]` runs up to four times if it fails to try and make it pass.
+/// - `#[gpui_runtime::test(on_failure = "crate::test::report_failure")]` will call the specified function after the
 ///   tests fail so that you can write out more detail about the failure.
 ///
 /// You can combine `iterations = ...` with `seeds(...)`:
-/// - `#[gpui::test(iterations = 5, seed = 10)]` is equivalent to `#[gpui::test(seeds(0, 1, 2, 3, 4, 10))]`.
-/// - `#[gpui::test(iterations = 5, seeds(10, 20, 30)]` is equivalent to `#[gpui::test(seeds(0, 1, 2, 3, 4, 10, 20, 30))]`.
-/// - `#[gpui::test(seeds(10, 20, 30), iterations = 5]` is equivalent to `#[gpui::test(seeds(0, 1, 2, 3, 4, 10, 20, 30))]`.
+/// - `#[gpui_runtime::test(iterations = 5, seed = 10)]` is equivalent to `#[gpui_runtime::test(seeds(0, 1, 2, 3, 4, 10))]`.
+/// - `#[gpui_runtime::test(iterations = 5, seeds(10, 20, 30)]` is equivalent to `#[gpui_runtime::test(seeds(0, 1, 2, 3, 4, 10, 20, 30))]`.
+/// - `#[gpui_runtime::test(seeds(10, 20, 30), iterations = 5]` is equivalent to `#[gpui_runtime::test(seeds(0, 1, 2, 3, 4, 10, 20, 30))]`.
 ///
 /// # Environment Variables
 ///
@@ -205,7 +205,7 @@ pub fn bench(args: TokenStream, function: TokenStream) -> TokenStream {
     bench::bench(args, function)
 }
 
-/// A variant of `#[gpui::test]` that supports property-based testing.
+/// A variant of `#[gpui_runtime::test]` that supports property-based testing.
 ///
 /// A property test, much like a standard GPUI randomized test, allows testing
 /// claims of the form "for any possible X, Y should hold". For example:
@@ -237,7 +237,7 @@ pub fn bench(args: TokenStream, function: TokenStream) -> TokenStream {
 /// ## Customizing random values
 ///
 /// This macro is based on the [`#[proptest::property_test]`] macro, but handles
-/// some of the same GPUI-specific arguments as `#[gpui::test]`. Specifically,
+/// some of the same GPUI-specific arguments as `#[gpui_runtime::test]`. Specifically,
 /// `&{mut,} TestAppContext` and `BackgroundExecutor` work as normal. `StdRng`
 /// arguments are **explicitly forbidden**, since they break shrinking, and are
 /// a common footgun.
@@ -264,7 +264,7 @@ pub fn bench(args: TokenStream, function: TokenStream) -> TokenStream {
 ///
 /// ## Scheduler
 ///
-/// Similar to `#[gpui::test]`, this macro will choose random seeds for the test
+/// Similar to `#[gpui_runtime::test]`, this macro will choose random seeds for the test
 /// scheduler. It uses `.no_shrink()` to tell proptest that all seeds are
 /// roughly equivalent in terms of "complexity". If `$SEED` is set, it will
 /// affect **ONLY** the seed passed to the scheduler. To control other values,
@@ -287,9 +287,9 @@ pub fn property_test(args: TokenStream, function: TokenStream) -> TokenStream {
 /// following functions:
 ///
 /// ```ignore
-/// pub fn methods::<T: TheTrait + 'static>() -> Vec<gpui::inspector_reflection::FunctionReflection<T>>;
+/// pub fn methods::<T: TheTrait + 'static>() -> Vec<gpui_runtime::inspector_reflection::FunctionReflection<T>>;
 ///
-/// pub fn find_method::<T: TheTrait + 'static>() -> Option<gpui::inspector_reflection::FunctionReflection<T>>;
+/// pub fn find_method::<T: TheTrait + 'static>() -> Option<gpui_runtime::inspector_reflection::FunctionReflection<T>>;
 /// ```
 ///
 /// The `invoke` method on `FunctionReflection` will run the method. `FunctionReflection` also

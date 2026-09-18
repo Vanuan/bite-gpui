@@ -264,7 +264,7 @@ fn variant_from_key<V: FeatureFlagValue>(key: &str) -> Option<V> {
 mod tests {
     use super::*;
     use crate::{EnumFeatureFlag, FeatureFlag, PresenceFlag};
-    use gpui::UpdateGlobal;
+    use gpui_runtime::UpdateGlobal;
     use settings::SettingsStore;
 
     struct DemoFlag;
@@ -311,7 +311,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn server_flag_enables_presence(cx: &mut App) {
         init_settings_store(cx);
         let mut store = FeatureFlagStore::default();
@@ -320,7 +320,7 @@ mod tests {
         assert!(store.has_flag::<DemoFlag>(cx));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn off_override_beats_server_flag(cx: &mut App) {
         init_settings_store(cx);
         let mut store = FeatureFlagStore::default();
@@ -333,7 +333,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn enabled_for_all_wins_over_override(cx: &mut App) {
         init_settings_store(cx);
         let store = FeatureFlagStore::default();
@@ -344,7 +344,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn enum_override_selects_specific_variant(cx: &mut App) {
         init_settings_store(cx);
         let store = FeatureFlagStore::default();
@@ -361,7 +361,7 @@ mod tests {
         assert_eq!(store.try_flag_value::<EnumDemo>(cx), Some(Intensity::High));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn unknown_variant_key_resolves_to_none(cx: &mut App) {
         init_settings_store(cx);
         let store = FeatureFlagStore::default();
@@ -376,7 +376,7 @@ mod tests {
         assert_eq!(store.try_flag_value::<EnumDemo>(cx), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn on_override_enables_without_server_or_staff(cx: &mut App) {
         init_settings_store(cx);
         let store = FeatureFlagStore::default();
@@ -387,7 +387,7 @@ mod tests {
     /// No rule applies, so the store's `try_flag_value` returns `None`. The
     /// `FeatureFlagAppExt::flag_value` path (used by most callers) falls
     /// back to [`Default`], which for `PresenceFlag` is `Off`.
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn presence_flag_defaults_to_off(cx: &mut App) {
         init_settings_store(cx);
         let store = FeatureFlagStore::default();
@@ -395,8 +395,8 @@ mod tests {
         assert_eq!(PresenceFlag::default(), PresenceFlag::Off);
     }
 
-    #[gpui::test]
-    fn on_flags_ready_waits_for_server_flags(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn on_flags_ready_waits_for_server_flags(cx: &mut gpui_runtime::TestAppContext) {
         use crate::FeatureFlagAppExt;
         use std::cell::Cell;
         use std::rc::Rc;

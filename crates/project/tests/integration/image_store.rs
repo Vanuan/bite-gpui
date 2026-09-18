@@ -1,5 +1,5 @@
 use fs::FakeFs;
-use gpui::TestAppContext;
+use gpui_runtime::TestAppContext;
 use project::Project;
 use project::ProjectPath;
 use project::image_store::*;
@@ -16,7 +16,7 @@ pub fn init_test(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_image_not_loaded_twice(cx: &mut TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -57,7 +57,7 @@ async fn test_image_not_loaded_twice(cx: &mut TestAppContext) {
     assert_eq!(image1, image2);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_compute_metadata_from_bytes() {
     // Single white pixel PNG
     let png_bytes = vec![

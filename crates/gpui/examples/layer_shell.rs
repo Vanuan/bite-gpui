@@ -16,7 +16,7 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }
 
@@ -28,7 +28,7 @@ mod example {
         App, Bounds, Context, FontWeight, Size, Window, WindowBackgroundAppearance, WindowBounds,
         WindowKind, WindowOptions, div, layer_shell::*, point, prelude::*, px, rems, rgba, white,
     };
-    use gpui_platform::application;
+    use gpui::application;
 
     struct LayerShellExample;
 

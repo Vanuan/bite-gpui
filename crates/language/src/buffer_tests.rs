@@ -43,8 +43,8 @@ fn init_logger() {
     zlog::init_test();
 }
 
-#[gpui::test]
-fn test_line_endings(cx: &mut gpui::App) {
+#[gpui_runtime::test]
+fn test_line_endings(cx: &mut gpui_runtime::App) {
     init_settings(cx, |_| {});
 
     cx.new(|cx| {
@@ -67,7 +67,7 @@ fn test_line_endings(cx: &mut gpui::App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_set_line_ending(cx: &mut TestAppContext) {
     let base = cx.new(|cx| Buffer::local("one\ntwo\nthree\n", cx));
     let base_replica = cx.new(|cx| {
@@ -146,7 +146,7 @@ fn test_set_line_ending(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_select_language(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -239,7 +239,7 @@ fn test_select_language(cx: &mut App) {
     );
 }
 
-#[gpui::test(iterations = 10)]
+#[gpui_runtime::test(iterations = 10)]
 async fn test_first_line_pattern(cx: &mut TestAppContext) {
     cx.update(|cx| init_settings(cx, |_| {}));
 
@@ -278,7 +278,7 @@ async fn test_first_line_pattern(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_language_for_file_with_custom_file_types(cx: &mut TestAppContext) {
     cx.update(|cx| {
         init_settings(cx, |settings| {
@@ -398,7 +398,7 @@ async fn test_language_for_file_with_custom_file_types(cx: &mut TestAppContext) 
     assert_eq!(language_name(language), "Dockerfile");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_reregistering_language_during_load_yields_current_language(cx: &mut TestAppContext) {
     let registry = Arc::new(LanguageRegistry::test(cx.executor()));
     let (unblock_stale_load_tx, unblock_stale_load_rx) = futures::channel::oneshot::channel::<()>();
@@ -461,7 +461,7 @@ async fn test_reregistering_language_during_load_yields_current_language(cx: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_reregistering_language_during_failed_load_yields_current_language(
     cx: &mut TestAppContext,
 ) {
@@ -514,7 +514,7 @@ async fn test_reregistering_language_during_failed_load_yields_current_language(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_extension_grammar_cannot_shadow_native_grammar(cx: &mut TestAppContext) {
     let registry = Arc::new(LanguageRegistry::test(cx.executor()));
     registry.register_native_grammars([("rust", tree_sitter_rust::LANGUAGE)]);
@@ -562,8 +562,8 @@ fn file(path: &str) -> Arc<dyn File> {
     })
 }
 
-#[gpui::test]
-fn test_edit_events(cx: &mut gpui::App) {
+#[gpui_runtime::test]
+fn test_edit_events(cx: &mut gpui_runtime::App) {
     let mut now = Instant::now();
     let buffer_1_events = Arc::new(Mutex::new(Vec::new()));
     let buffer_2_events = Arc::new(Mutex::new(Vec::new()));
@@ -680,7 +680,7 @@ fn test_edit_events(cx: &mut gpui::App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_apply_diff(cx: &mut TestAppContext) {
     let (text, offsets) = marked_text_offsets(
         "one two three\nfour fiˇve six\nseven eightˇ nine\nten eleven twelve\n",
@@ -723,8 +723,8 @@ async fn test_apply_diff(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_normalize_whitespace(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_normalize_whitespace(cx: &mut gpui_runtime::TestAppContext) {
     let text = [
         "zero",     //
         "one  ",    // 2 trailing spaces
@@ -796,8 +796,8 @@ async fn test_normalize_whitespace(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_reparse(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_reparse(cx: &mut gpui_runtime::TestAppContext) {
     let text = "fn a() {}";
     let buffer = cx.new(|cx| Buffer::local(text, cx).with_language(rust_lang(), cx));
 
@@ -921,8 +921,8 @@ async fn test_reparse(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_resetting_language(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_resetting_language(cx: &mut gpui_runtime::TestAppContext) {
     let buffer = cx.new(|cx| {
         let mut buffer = Buffer::local("{}", cx).with_language(rust_lang(), cx);
         buffer.set_sync_parse_timeout(None);
@@ -941,8 +941,8 @@ async fn test_resetting_language(cx: &mut gpui::TestAppContext) {
     assert_eq!(get_tree_sexp(&buffer, cx), "(document (object))");
 }
 
-#[gpui::test]
-async fn test_outline(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_outline(cx: &mut gpui_runtime::TestAppContext) {
     let text = r#"
         struct Person {
             name: String,
@@ -1058,7 +1058,7 @@ async fn test_outline(cx: &mut gpui::TestAppContext) {
     async fn search<'a>(
         outline: &'a Outline<Anchor>,
         query: &'a str,
-        cx: &'a gpui::TestAppContext,
+        cx: &'a gpui_runtime::TestAppContext,
     ) -> Vec<(&'a str, Vec<usize>)> {
         let entries = cx
             .update(|cx| outline.search(query, cx.background_executor().clone()))
@@ -1074,8 +1074,8 @@ async fn test_outline(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test]
-async fn test_outline_nodes_with_newlines(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_outline_nodes_with_newlines(cx: &mut gpui_runtime::TestAppContext) {
     let text = r#"
         impl A for B<
             C
@@ -1097,8 +1097,8 @@ async fn test_outline_nodes_with_newlines(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_outline_with_extra_context(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_outline_with_extra_context(cx: &mut gpui_runtime::TestAppContext) {
     let language = javascript_lang()
         .with_outline_query(
             r#"
@@ -1143,8 +1143,8 @@ async fn test_outline_with_extra_context(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_outline_selection_range_for_multiline_c_signature(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_outline_selection_range_for_multiline_c_signature(cx: &mut gpui_runtime::TestAppContext) {
     let text = indoc! {"
         void
         evdev_post_scroll(struct evdev_device *device,
@@ -1172,7 +1172,7 @@ async fn test_outline_selection_range_for_multiline_c_signature(cx: &mut gpui::T
     assert_eq!(item.text, "void evdev_post_scroll( )");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_outline_annotations(cx: &mut App) {
     // Add this new test case
     let text = r#"
@@ -1224,8 +1224,8 @@ fn test_outline_annotations(cx: &mut App) {
     );
 }
 
-#[gpui::test]
-async fn test_symbols_containing(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_symbols_containing(cx: &mut gpui_runtime::TestAppContext) {
     let text = r#"
         impl Person {
             fn one() {
@@ -1324,7 +1324,7 @@ async fn test_symbols_containing(cx: &mut gpui::TestAppContext) {
     assert_eq!(snapshot.symbols_containing(offsets[0], None), vec![]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_text_objects(cx: &mut App) {
     let (text, ranges) = marked_text_ranges(
         indoc! {r#"
@@ -1364,7 +1364,7 @@ fn test_text_objects(cx: &mut App) {
     )
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_text_objects_with_has_parent_predicate(cx: &mut App) {
     use std::borrow::Cow;
 
@@ -1414,7 +1414,7 @@ fn test_text_objects_with_has_parent_predicate(cx: &mut App) {
     assert_eq!(matches, &[("|y| y * 2", TextObject::AroundFunction),]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_text_objects_with_not_has_parent_predicate(cx: &mut App) {
     use std::borrow::Cow;
 
@@ -1464,7 +1464,7 @@ fn test_text_objects_with_not_has_parent_predicate(cx: &mut App) {
     assert_eq!(matches, &[("|x| x + 1", TextObject::AroundFunction),]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_enclosing_bracket_ranges(cx: &mut App) {
     #[track_caller]
     fn assert(selection_text: &'static str, range_markers: Vec<&'static str>, cx: &mut App) {
@@ -1587,7 +1587,7 @@ fn test_enclosing_bracket_ranges(cx: &mut App) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_bracket_colorization_indices_remain_stable_across_row_chunks(cx: &mut App) {
     let mut text = String::from("{\n  \"theme\": {\n");
     let mut property_object_open_offsets = Vec::new();
@@ -1632,7 +1632,7 @@ fn test_bracket_colorization_indices_remain_stable_across_row_chunks(cx: &mut Ap
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_c_bracket_ranges_in_error_nodes(cx: &mut App) {
     let text = indoc! {r#"
         CLAY(CLAY_ID("MenuContainer"),
@@ -1669,7 +1669,7 @@ fn test_c_bracket_ranges_in_error_nodes(cx: &mut App) {
     assert_set_eq!(matches, expected);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_bracket_ranges_do_not_repair_unbalanced_error_nodes(cx: &mut App) {
     let (text, ranges) = marked_text_ranges(
         indoc! {r#"
@@ -1706,7 +1706,7 @@ fn test_bracket_ranges_do_not_repair_unbalanced_error_nodes(cx: &mut App) {
 
 // This test passes without the error recovery too: it pins the retention of
 // cross-chunk pairs, which the chunk-local repair can neither see nor verify.
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_bracket_ranges_keep_chunk_spanning_pairs_amid_errors(cx: &mut App) {
     let mut text = String::from("void outer(void) {\n");
     for index in 0..60 {
@@ -1757,7 +1757,7 @@ fn test_bracket_ranges_keep_chunk_spanning_pairs_amid_errors(cx: &mut App) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_bracket_ranges_keep_pairs_straddling_a_chunk_boundary_amid_errors(cx: &mut App) {
     let mut text = String::from("void outer(void) {\n");
     for index in 0..56 {
@@ -1823,7 +1823,7 @@ fn test_bracket_ranges_keep_pairs_straddling_a_chunk_boundary_amid_errors(cx: &m
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_bracket_ranges_deduplicate_overlapping_patterns(cx: &mut TestAppContext) {
     let text = indoc! {r#"
         CLAY(CLAY_ID("MenuContainer"),
@@ -1946,7 +1946,7 @@ fn test_applicable_row_chunks() {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_enclosing_bracket_ranges_where_brackets_are_not_outermost_children(cx: &mut App) {
     let mut assert = |selection_text, bracket_pair_texts| {
         assert_bracket_pairs(
@@ -1983,7 +1983,7 @@ fn test_enclosing_bracket_ranges_where_brackets_are_not_outermost_children(cx: &
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_range_for_syntax_ancestor(cx: &mut App) {
     cx.new(|cx| {
         let text = "fn a() { b(|c| {}) }";
@@ -2033,7 +2033,7 @@ fn test_range_for_syntax_ancestor(cx: &mut App) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_with_soft_tabs(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2073,7 +2073,7 @@ fn test_autoindent_with_soft_tabs(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_with_hard_tabs(cx: &mut App) {
     init_settings(cx, |settings| {
         settings.defaults.hard_tabs = Some(true);
@@ -2115,7 +2115,7 @@ fn test_autoindent_with_hard_tabs(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_does_not_adjust_lines_with_unchanged_suggestion(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2320,7 +2320,7 @@ fn test_autoindent_does_not_adjust_lines_with_unchanged_suggestion(cx: &mut App)
     eprintln!("DONE");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_does_not_adjust_lines_within_newly_created_errors(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2381,7 +2381,7 @@ fn test_autoindent_does_not_adjust_lines_within_newly_created_errors(cx: &mut Ap
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_adjusts_lines_when_only_text_changes(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2437,7 +2437,7 @@ fn test_autoindent_adjusts_lines_when_only_text_changes(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_with_edit_at_end_of_buffer(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2454,7 +2454,7 @@ fn test_autoindent_with_edit_at_end_of_buffer(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_multi_line_insertion(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2495,7 +2495,7 @@ fn test_autoindent_multi_line_insertion(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_edit_before_insertion(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2530,7 +2530,7 @@ fn test_autoindent_edit_before_insertion(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_block_mode(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2613,7 +2613,7 @@ fn test_autoindent_block_mode(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_block_mode_with_newline(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2663,7 +2663,7 @@ fn test_autoindent_block_mode_with_newline(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_block_mode_without_original_indent_columns(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2742,7 +2742,7 @@ fn test_autoindent_block_mode_without_original_indent_columns(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_block_mode_with_hard_tabs(cx: &mut App) {
     init_settings(cx, |settings| {
         settings.defaults.hard_tabs = Some(true);
@@ -2774,7 +2774,7 @@ fn test_autoindent_block_mode_with_hard_tabs(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_block_mode_multiple_adjacent_ranges(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2837,7 +2837,7 @@ fn test_autoindent_block_mode_multiple_adjacent_ranges(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_replacing_line_content_keeps_manual_indent(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2873,7 +2873,7 @@ fn test_replacing_line_content_keeps_manual_indent(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_language_without_indents_query(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -2917,7 +2917,7 @@ fn test_autoindent_language_without_indents_query(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_with_injected_languages(cx: &mut App) {
     init_settings(cx, |settings| {
         settings.languages.0.extend([
@@ -2991,7 +2991,7 @@ fn test_autoindent_with_injected_languages(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_query_with_outdent_captures(cx: &mut App) {
     init_settings(cx, |settings| {
         settings.defaults.tab_size = Some(2.try_into().unwrap());
@@ -3035,7 +3035,7 @@ fn test_autoindent_query_with_outdent_captures(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_async_autoindents_preserve_preview(cx: &mut TestAppContext) {
     cx.update(|cx| init_settings(cx, |_| {}));
 
@@ -3092,7 +3092,7 @@ async fn test_async_autoindents_preserve_preview(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_insert_empty_line(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -3178,7 +3178,7 @@ fn test_insert_empty_line(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_language_scope_at_with_javascript(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -3368,7 +3368,7 @@ fn test_language_scope_at_with_javascript(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_language_scope_at_with_rust(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -3437,7 +3437,7 @@ fn test_language_scope_at_with_rust(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_language_scope_at_with_combined_injections(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -3487,7 +3487,7 @@ fn test_language_scope_at_with_combined_injections(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_language_at_with_hidden_languages(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -3526,7 +3526,7 @@ fn test_language_at_with_hidden_languages(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_language_at_for_markdown_code_block(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -3579,7 +3579,7 @@ fn test_language_at_for_markdown_code_block(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_markdown_inline_html_highlighting(cx: &mut TestAppContext) {
     let markdown_language = markdown_lang();
     let markdown_inline_language = Arc::new(
@@ -3612,8 +3612,8 @@ async fn test_markdown_inline_html_highlighting(cx: &mut TestAppContext) {
         .unwrap(),
     );
     let syntax_theme = SyntaxTheme::new([
-        ("comment".to_string(), gpui::rgba(0xffffffff).into()),
-        ("tag".to_string(), gpui::rgba(0xff0000ff).into()),
+        ("comment".to_string(), gpui_types::rgba(0xffffffff).into()),
+        ("tag".to_string(), gpui_types::rgba(0xff0000ff).into()),
     ]);
     markdown_language.set_theme(&syntax_theme);
     markdown_inline_language.set_theme(&syntax_theme);
@@ -3677,7 +3677,7 @@ async fn test_markdown_inline_html_highlighting(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_syntax_layer_at_for_combined_injections(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -3742,7 +3742,7 @@ fn test_syntax_layer_at_for_combined_injections(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_languages_at_for_combined_injections(cx: &mut App) {
     init_settings(cx, |_| {});
 
@@ -3817,8 +3817,8 @@ fn test_languages_at_for_combined_injections(cx: &mut App) {
     });
 }
 
-#[gpui::test]
-fn test_serialization(cx: &mut gpui::App) {
+#[gpui_runtime::test]
+fn test_serialization(cx: &mut gpui_runtime::App) {
     let mut now = Instant::now();
 
     let buffer1 = cx.new(|cx| {
@@ -3857,7 +3857,7 @@ fn test_serialization(cx: &mut gpui::App) {
     assert_eq!(buffer2.read(cx).text(), "abcDF");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_branch_and_merge(cx: &mut TestAppContext) {
     cx.update(|cx| init_settings(cx, |_| {}));
 
@@ -3951,7 +3951,7 @@ fn test_branch_and_merge(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_merge_into_base(cx: &mut TestAppContext) {
     cx.update(|cx| init_settings(cx, |_| {}));
 
@@ -3991,7 +3991,7 @@ fn test_merge_into_base(cx: &mut TestAppContext) {
     base.read_with(cx, |base, _| assert_eq!(base.text(), "abcdefghijk"));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_undo_after_merge_into_base(cx: &mut TestAppContext) {
     cx.update(|cx| init_settings(cx, |_| {}));
 
@@ -4021,7 +4021,7 @@ fn test_undo_after_merge_into_base(cx: &mut TestAppContext) {
     branch.read_with(cx, |branch, _| assert_eq!(branch.text(), "ABCdefgHIjk"));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_preview_edits(cx: &mut TestAppContext) {
     cx.update(|cx| {
         init_settings(cx, |_| {});
@@ -4156,7 +4156,7 @@ async fn test_preview_edits(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 fn test_random_collaboration(cx: &mut App, mut rng: StdRng) {
     let min_peers = env::var("MIN_PEERS")
         .map(|i| i.parse().expect("invalid `MIN_PEERS` variable"))
@@ -4482,8 +4482,8 @@ fn test_contiguous_ranges() {
     );
 }
 
-#[gpui::test]
-fn test_insertion_after_deletion(cx: &mut gpui::App) {
+#[gpui_runtime::test]
+fn test_insertion_after_deletion(cx: &mut gpui_runtime::App) {
     let buffer = cx.new(|cx| Buffer::local("struct Foo {\n    \n}", cx));
     buffer.update(cx, |buffer, cx| {
         let mut anchor = buffer.anchor_after(17);
@@ -4501,7 +4501,7 @@ fn test_insertion_after_deletion(cx: &mut gpui::App) {
     })
 }
 
-#[gpui::test(iterations = 500)]
+#[gpui_runtime::test(iterations = 500)]
 fn test_trailing_whitespace_ranges(mut rng: StdRng) {
     // Generate a random multi-line string containing
     // some lines with trailing whitespace.
@@ -4540,7 +4540,7 @@ fn test_trailing_whitespace_ranges(mut rng: StdRng) {
     );
 }
 
-#[gpui::test(iterations = 500)]
+#[gpui_runtime::test(iterations = 500)]
 fn test_trailing_whitespace_ranges_in_rows(mut rng: StdRng) {
     let mut text = String::new();
     for _ in 0..rng.random_range(0..16) {
@@ -4600,8 +4600,8 @@ fn test_trailing_whitespace_ranges_in_rows(mut rng: StdRng) {
     );
 }
 
-#[gpui::test]
-async fn test_trailing_whitespace_in_ranges(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_trailing_whitespace_in_ranges(cx: &mut gpui_runtime::TestAppContext) {
     // line 0: "zero"      (no trailing whitespace)
     // line 1: "one  "     (2 trailing spaces)
     // line 2: "two"       (no trailing whitespace)
@@ -4627,8 +4627,8 @@ async fn test_trailing_whitespace_in_ranges(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_trailing_whitespace_empty_ranges(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_trailing_whitespace_empty_ranges(cx: &mut gpui_runtime::TestAppContext) {
     let text = ["zero", "one  ", "two  "].join("\n");
     let buffer = cx.new(|cx| Buffer::local(text.clone(), cx));
 
@@ -4643,8 +4643,8 @@ async fn test_trailing_whitespace_empty_ranges(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_final_newline_modified_last_line(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_final_newline_modified_last_line(cx: &mut gpui_runtime::TestAppContext) {
     // No final newline; the modified range (rows 0..3) includes the last line (row 2).
     let text = "line0\nline1\nline2";
     let buffer = cx.new(|cx| Buffer::local(text, cx));
@@ -4656,8 +4656,8 @@ async fn test_final_newline_modified_last_line(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_final_newline_unmodified_last_line(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_final_newline_unmodified_last_line(cx: &mut gpui_runtime::TestAppContext) {
     // No final newline; the modified range (rows 0..2) excludes the last line (row 2), so nothing changes.
     let text = "line0\nline1\nline2";
     let buffer = cx.new(|cx| Buffer::local(text, cx));
@@ -4672,8 +4672,8 @@ async fn test_final_newline_unmodified_last_line(cx: &mut gpui::TestAppContext) 
 // An empty last line (file already ends with a newline) is left untouched, even with extra
 // trailing blank lines. With `None` these would collapse; scoped to rows they must not, to
 // avoid deleting unselected rows.
-#[gpui::test]
-async fn test_final_newline_does_not_collapse_trailing_blank_lines(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_final_newline_does_not_collapse_trailing_blank_lines(cx: &mut gpui_runtime::TestAppContext) {
     let text = "line0\nline1\n\n";
     let buffer = cx.new(|cx| Buffer::local(text, cx));
 
@@ -4686,8 +4686,8 @@ async fn test_final_newline_does_not_collapse_trailing_blank_lines(cx: &mut gpui
 
 // When scoped to rows, only a newline is inserted; unlike the `None` (whole-buffer) case, it
 // does not trim trailing whitespace on the last line.
-#[gpui::test]
-async fn test_final_newline_in_range_only_inserts(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_final_newline_in_range_only_inserts(cx: &mut gpui_runtime::TestAppContext) {
     let text = "line0\nline1  ";
     let buffer = cx.new(|cx| Buffer::local(text, cx));
 
@@ -4698,8 +4698,8 @@ async fn test_final_newline_in_range_only_inserts(cx: &mut gpui::TestAppContext)
     });
 }
 
-#[gpui::test]
-async fn test_final_newline_whole_buffer(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_final_newline_whole_buffer(cx: &mut gpui_runtime::TestAppContext) {
     // (input, expected) pairs for the whole-buffer (`None`) case.
     let cases = [
         // Content without a trailing newline gets exactly one appended.
@@ -4723,8 +4723,8 @@ async fn test_final_newline_whole_buffer(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test]
-async fn test_trailing_whitespace_in_ranges_crlf(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_trailing_whitespace_in_ranges_crlf(cx: &mut gpui_runtime::TestAppContext) {
     let text = "zero\r\none  \r\ntwo\r\nthree   \r\nfour\r\nfive    ";
     let buffer = cx.new(|cx| {
         let buffer = Buffer::local(text, cx);
@@ -4745,8 +4745,8 @@ async fn test_trailing_whitespace_in_ranges_crlf(cx: &mut gpui::TestAppContext) 
     });
 }
 
-#[gpui::test]
-async fn test_final_newline_in_range_crlf(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_final_newline_in_range_crlf(cx: &mut gpui_runtime::TestAppContext) {
     let text = "line0\r\nline1\r\nline2";
     let buffer = cx.new(|cx| {
         let buffer = Buffer::local(text, cx);
@@ -4762,8 +4762,8 @@ async fn test_final_newline_in_range_crlf(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-fn test_words_in_range(cx: &mut gpui::App) {
+#[gpui_runtime::test]
+fn test_words_in_range(cx: &mut gpui_runtime::App) {
     init_settings(cx, |_| {});
 
     // The first line are words excluded from the results with heuristics, we do not expect them in the test assertions.
@@ -5100,7 +5100,7 @@ pub fn markdown_inline_lang() -> Language {
     .unwrap()
 }
 
-fn get_tree_sexp(buffer: &Entity<Buffer>, cx: &mut gpui::TestAppContext) -> String {
+fn get_tree_sexp(buffer: &Entity<Buffer>, cx: &mut gpui_runtime::TestAppContext) -> String {
     buffer.update(cx, |buffer, _| {
         let snapshot = buffer.snapshot();
         let layers = snapshot.syntax.layers(buffer.as_text_snapshot());
@@ -5140,7 +5140,7 @@ fn tsx_lang_with_indents() -> Arc<Language> {
     )
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_autoindent_typescript_braceless_control_flow(cx: &mut App) {
     init_settings(cx, |_| {});
     cx.new(|cx| {
@@ -5192,7 +5192,7 @@ fn test_autoindent_typescript_braceless_control_flow(cx: &mut App) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_completion_triggers_across_language_servers(cx: &mut TestAppContext) {
     cx.update(|cx| init_settings(cx, |_| {}));
 
@@ -5327,7 +5327,7 @@ fn init_settings(cx: &mut App, f: fn(&mut AllLanguageSettingsContent)) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_settings_changed_event(cx: &mut TestAppContext) {
     cx.update(|cx| init_settings(cx, |_| {}));
 
@@ -5387,7 +5387,7 @@ fn test_settings_changed_event(cx: &mut TestAppContext) {
     drop(subscription);
 }
 
-#[gpui::test(iterations = 100)]
+#[gpui_runtime::test(iterations = 100)]
 fn test_random_chunk_bitmaps(cx: &mut App, mut rng: StdRng) {
     use util::RandomCharIter;
 
@@ -5470,8 +5470,8 @@ fn test_random_chunk_bitmaps(cx: &mut App, mut rng: StdRng) {
     }
 }
 
-#[gpui::test]
-fn test_formatted_chunks(cx: &mut gpui::App) {
+#[gpui_runtime::test]
+fn test_formatted_chunks(cx: &mut gpui_runtime::App) {
     init_settings(cx, |_| {});
     let buffer = cx.new(|cx| Buffer::local("use std::cmp::Eq;", cx).with_language(rust_lang(), cx));
     let snapshot = buffer.read(cx).snapshot();

@@ -6147,7 +6147,7 @@ impl ProjectPanel {
                 }),
             )
             .on_click(
-                cx.listener(move |project_panel, event: &gpui::ClickEvent, window, cx| {
+                cx.listener(move |project_panel, event: &gpui_runtime::ClickEvent, window, cx| {
                     if event.is_right_click() || show_editor {
                         return;
                     }
@@ -6251,7 +6251,7 @@ impl ProjectPanel {
                 }),
             )
             .on_aux_click(
-                cx.listener(move |project_panel, event: &gpui::ClickEvent, _, cx| {
+                cx.listener(move |project_panel, event: &gpui_runtime::ClickEvent, _, cx| {
                     if !event.is_middle_click() || show_editor || !kind.is_file() {
                         return;
                     }
@@ -7654,7 +7654,7 @@ impl Render for ProjectPanel {
                                     },
                                 ))
                                 .on_click(cx.listener(|this, event, window, cx| {
-                                    if matches!(event, gpui::ClickEvent::Keyboard(_)) {
+                                    if matches!(event, gpui_runtime::ClickEvent::Keyboard(_)) {
                                         return;
                                     }
                                     cx.stop_propagation();
@@ -7679,7 +7679,7 @@ impl Render for ProjectPanel {
                                 )
                                 .when(!project.is_read_only(cx), |el| {
                                     el.on_click(cx.listener(
-                                        |this, event: &gpui::ClickEvent, window, cx| {
+                                        |this, event: &gpui_runtime::ClickEvent, window, cx| {
                                             if event.click_count() > 1
                                                 && let Some(entry_id) =
                                                     this.state.last_worktree_root_id
@@ -7727,7 +7727,7 @@ impl Render for ProjectPanel {
                     deferred(
                         anchored()
                             .position(*position)
-                            .anchor(gpui::Anchor::TopLeft)
+                            .anchor(gpui_types::Anchor::TopLeft)
                             .child(menu.clone()),
                     )
                     .with_priority(3)

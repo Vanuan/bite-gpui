@@ -177,8 +177,8 @@ mod test {
     };
     use indoc::indoc;
 
-    #[gpui::test]
-    async fn test_indent_gv(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_indent_gv(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_neovim_option("shiftwidth=4").await;
 
@@ -189,8 +189,8 @@ mod test {
             .assert_eq("«    hello\n ˇ»   world\n");
     }
 
-    #[gpui::test]
-    async fn test_indent_hx(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_indent_hx(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
 
@@ -203,8 +203,8 @@ mod test {
         cx.assert_state("«Hello\nWorldˇ»\n", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_autoindent_op(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_autoindent_op(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(

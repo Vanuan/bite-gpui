@@ -160,7 +160,7 @@ mod tests {
 
     use crate::persistence::{CommandPaletteDB, SerializedCommandUsage};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_saves_and_retrieves_command_invocation() {
         let db =
             CommandPaletteDB::open_test_db("test_saves_and_retrieves_command_invocation").await;
@@ -181,7 +181,7 @@ mod tests {
         assert_eq!(retrieved_cmd.user_query, "".to_string());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_gets_usage_history() {
         let db = CommandPaletteDB::open_test_db("test_gets_usage_history").await;
         db.write_command_invocation("go to line: toggle", "200")
@@ -206,7 +206,7 @@ mod tests {
         assert_eq!(command_usage.last_invoked, retrieved_cmd.last_invoked);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_lists_ordered_by_usage() {
         let db = CommandPaletteDB::open_test_db("test_lists_ordered_by_usage").await;
 
@@ -239,7 +239,7 @@ mod tests {
         assert_eq!(commands.as_slice()[1].invocations, 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_deletes_all_history_for_one_command() {
         let db = CommandPaletteDB::open_test_db("test_deletes_all_history_for_one_command").await;
         db.write_command_invocation("editor: backspace", "back")
@@ -266,7 +266,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_handles_max_invocation_entries() {
         let db = CommandPaletteDB::open_test_db("test_handles_max_invocation_entries").await;
 

@@ -1,10 +1,10 @@
 use std::path::Path;
 
 use fs::Fs;
-use gpui::AppContext;
-use gpui::Entity;
+use gpui_runtime::AppContext;
+use gpui_runtime::Entity;
 use gpui::Task;
-use gpui::WeakEntity;
+use gpui_runtime::WeakEntity;
 use http_client::anyhow;
 use picker::Picker;
 use picker::PickerDelegate;
@@ -1691,7 +1691,7 @@ mod tests {
         get_deserializable_oci_blob, ghcr_registry,
     };
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_get_devcontainer_templates() {
         let client = FakeHttpClient::create(|request| async move {
             let host = request.uri().host();

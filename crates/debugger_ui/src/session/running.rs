@@ -499,7 +499,7 @@ fn render_debugger_tab_bar(
     focus_handle: &FocusHandle,
     window: &mut Window,
     cx: &mut Context<Pane>,
-) -> gpui::AnyElement {
+) -> gpui_runtime::AnyElement {
     let active_pane_item = pane.active_item();
     let pane_group_id: SharedString = format!("pane-zoom-button-hover-{}", cx.entity_id()).into();
     let as_subview = active_pane_item
@@ -698,7 +698,7 @@ impl DebugTerminal {
     }
 }
 
-impl gpui::Render for DebugTerminal {
+impl gpui_runtime::Render for DebugTerminal {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         div()
             .track_focus(&self.focus_handle)
@@ -2049,7 +2049,7 @@ mod tests {
     use serde_json::json;
     use util::path;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn stale_subview_host_during_tab_drop_does_not_read_updating_source_pane(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,

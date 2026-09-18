@@ -299,7 +299,7 @@ fn disable_sandboxing(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_echo(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -336,7 +336,7 @@ async fn test_echo(cx: &mut TestAppContext) {
     assert_eq!(stop_events(events), vec![acp::StopReason::EndTurn]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_tool_timeout_kills_handle(cx: &mut TestAppContext) {
     init_test(cx);
     always_allow_tools(cx);
@@ -403,7 +403,7 @@ async fn test_terminal_tool_timeout_kills_handle(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[ignore]
 async fn test_terminal_tool_without_timeout_does_not_kill_handle(cx: &mut TestAppContext) {
     init_test(cx);
@@ -454,7 +454,7 @@ async fn test_terminal_tool_without_timeout_does_not_kill_handle(cx: &mut TestAp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thinking(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -503,7 +503,7 @@ async fn test_thinking(cx: &mut TestAppContext) {
     assert_eq!(stop_events(events), vec![acp::StopReason::EndTurn]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_thinking_allowed_when_model_cannot_disable_thinking(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -529,7 +529,7 @@ async fn test_thinking_allowed_when_model_cannot_disable_thinking(cx: &mut TestA
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_system_prompt(cx: &mut TestAppContext) {
     let ThreadTest {
         model,
@@ -576,7 +576,7 @@ async fn test_system_prompt(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_system_prompt_without_tools(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -614,7 +614,7 @@ async fn test_system_prompt_without_tools(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_prompt_caching(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -760,7 +760,7 @@ async fn test_prompt_caching(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(not(feature = "e2e"), ignore)]
 async fn test_basic_tool_calls(cx: &mut TestAppContext) {
     let ThreadTest { thread, .. } = setup(cx, TestModel::Sonnet4).await;
@@ -820,7 +820,7 @@ async fn test_basic_tool_calls(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(not(feature = "e2e"), ignore)]
 async fn test_streaming_tool_calls(cx: &mut TestAppContext) {
     let ThreadTest { thread, .. } = setup(cx, TestModel::Sonnet4).await;
@@ -880,7 +880,7 @@ async fn test_streaming_tool_calls(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tool_authorization(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -1051,7 +1051,7 @@ async fn test_tool_authorization(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tool_hallucination(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -1086,7 +1086,7 @@ async fn test_tool_hallucination(cx: &mut TestAppContext) {
 /// the same id (e.g. `call_1`) can recur within one turn. Used verbatim as
 /// the ACP id, this let a later tool call overwrite an earlier, unrelated
 /// one in `AcpThread::upsert_tool_call`.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tool_call_id_scoped_per_completion_request(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -1148,7 +1148,7 @@ async fn test_tool_call_id_scoped_per_completion_request(cx: &mut TestAppContext
 /// Same bug as `test_tool_call_id_scoped_per_completion_request`, but
 /// exercised through persistence and `Thread::replay()` instead of live
 /// streaming.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_replayed_tool_call_ids_scoped_across_messages(cx: &mut TestAppContext) {
     let ThreadTest {
         model,
@@ -1566,7 +1566,7 @@ fn test_permission_options_terminal_pipeline_with_chaining() {
     assert!(pattern_names.contains(&"tail"));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(not(feature = "e2e"), ignore)]
 async fn test_concurrent_tool_calls(cx: &mut TestAppContext) {
     let ThreadTest { thread, .. } = setup(cx, TestModel::Sonnet4).await;
@@ -1611,7 +1611,7 @@ async fn test_concurrent_tool_calls(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_profiles(cx: &mut TestAppContext) {
     let ThreadTest {
         model, thread, fs, ..
@@ -1691,7 +1691,7 @@ async fn test_profiles(cx: &mut TestAppContext) {
     assert_eq!(tool_names, vec![InfiniteTool::NAME]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_mcp_tools(cx: &mut TestAppContext) {
     let ThreadTest {
         model,
@@ -1857,7 +1857,7 @@ async fn test_mcp_tools(cx: &mut TestAppContext) {
     events.collect::<Vec<_>>().await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_mcp_tool_names_are_sanitized_for_providers(cx: &mut TestAppContext) {
     let ThreadTest {
         model,
@@ -1948,7 +1948,7 @@ async fn test_mcp_tool_names_are_sanitized_for_providers(cx: &mut TestAppContext
     events.collect::<Vec<_>>().await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_mcp_tool_multi_content_response(cx: &mut TestAppContext) {
     let ThreadTest {
         model,
@@ -2082,7 +2082,7 @@ async fn test_mcp_tool_multi_content_response(cx: &mut TestAppContext) {
     events.collect::<Vec<_>>().await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_mcp_tool_result_displayed_when_server_disconnected(cx: &mut TestAppContext) {
     let ThreadTest {
         model,
@@ -2271,7 +2271,7 @@ async fn test_mcp_tool_result_displayed_when_server_disconnected(cx: &mut TestAp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_mcp_tool_truncation(cx: &mut TestAppContext) {
     let ThreadTest {
         model,
@@ -2456,7 +2456,7 @@ async fn test_mcp_tool_truncation(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(not(feature = "e2e"), ignore)]
 async fn test_cancellation(cx: &mut TestAppContext) {
     let ThreadTest { thread, .. } = setup(cx, TestModel::Sonnet4).await;
@@ -2542,7 +2542,7 @@ async fn test_cancellation(cx: &mut TestAppContext) {
     assert_eq!(stop_events(events), vec![acp::StopReason::EndTurn]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_tool_cancellation_captures_output(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     always_allow_tools(cx);
@@ -2639,7 +2639,7 @@ async fn test_terminal_tool_cancellation_captures_output(cx: &mut TestAppContext
     verify_thread_recovery(&thread, &fake_model, cx).await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cancellation_aware_tool_responds_to_cancellation(cx: &mut TestAppContext) {
     // This test verifies that tools which properly handle cancellation via
     // `event_stream.cancelled_by_user()` (like edit_file_tool) respond promptly
@@ -2824,7 +2824,7 @@ async fn collect_events_until_stop(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_truncate_while_terminal_tool_running(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     always_allow_tools(cx);
@@ -2894,7 +2894,7 @@ async fn test_truncate_while_terminal_tool_running(cx: &mut TestAppContext) {
     verify_thread_recovery(&thread, &fake_model, cx).await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cancel_multiple_concurrent_terminal_tools(cx: &mut TestAppContext) {
     // Tests that cancellation properly kills all running terminal tools when multiple are active.
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
@@ -3008,7 +3008,7 @@ async fn test_cancel_multiple_concurrent_terminal_tools(cx: &mut TestAppContext)
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_tool_stopped_via_terminal_card_button(cx: &mut TestAppContext) {
     // Tests that clicking the stop button on the terminal card (as opposed to the main
     // cancel button) properly reports user stopped via the was_stopped_by_user path.
@@ -3103,7 +3103,7 @@ async fn test_terminal_tool_stopped_via_terminal_card_button(cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_tool_timeout_expires(cx: &mut TestAppContext) {
     // Tests that when a timeout is configured and expires, the tool result indicates timeout.
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
@@ -3206,7 +3206,7 @@ async fn test_terminal_tool_timeout_expires(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_in_progress_send_canceled_by_next_send(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3237,7 +3237,7 @@ async fn test_in_progress_send_canceled_by_next_send(cx: &mut TestAppContext) {
     assert_eq!(stop_events(events_2), vec![acp::StopReason::EndTurn]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_retry_cancelled_promptly_on_new_send(cx: &mut TestAppContext) {
     // Regression test: when a completion fails with a retryable error (e.g. upstream 500),
     // the retry loop waits on a timer. If the user switches models and sends a new message
@@ -3314,7 +3314,7 @@ async fn test_retry_cancelled_promptly_on_new_send(cx: &mut TestAppContext) {
     assert_eq!(stop_events(events_2), vec![acp::StopReason::EndTurn]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subsequent_successful_sends_dont_cancel(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3347,7 +3347,7 @@ async fn test_subsequent_successful_sends_dont_cancel(cx: &mut TestAppContext) {
     assert_eq!(stop_events(events_2), vec![acp::StopReason::EndTurn]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_refusal(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3396,7 +3396,7 @@ async fn test_refusal(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_truncate_first_message(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3518,7 +3518,7 @@ async fn test_truncate_first_message(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_latest_token_usage_counts_cached_input_tokens(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3569,7 +3569,7 @@ async fn test_latest_token_usage_counts_cached_input_tokens(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_prompt_too_large_marks_token_usage_exceeded(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3623,7 +3623,7 @@ async fn test_prompt_too_large_marks_token_usage_exceeded(cx: &mut TestAppContex
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_prompt_too_large_uses_reported_token_count(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3651,7 +3651,7 @@ async fn test_prompt_too_large_uses_reported_token_count(cx: &mut TestAppContext
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cumulative_token_usage(cx: &mut TestAppContext) {
     let ThreadTest {
         model,
@@ -3747,7 +3747,7 @@ async fn test_cumulative_token_usage(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_cumulative_token_usage_keeps_accounted_usage_monotonic(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3791,7 +3791,7 @@ async fn test_cumulative_token_usage_keeps_accounted_usage_monotonic(cx: &mut Te
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_truncate_second_message(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3906,7 +3906,7 @@ async fn test_truncate_second_message(cx: &mut TestAppContext) {
     assert_first_message_state(cx);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_title_generation(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -3956,7 +3956,7 @@ async fn test_title_generation(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_stream_thread_title_keeps_only_first_line(cx: &mut TestAppContext) {
     let model = Arc::new(FakeLanguageModel::default());
     let request = LanguageModelRequest::default();
@@ -3975,7 +3975,7 @@ async fn test_stream_thread_title_keeps_only_first_line(cx: &mut TestAppContext)
     assert_eq!(title, "Hello world");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_stream_thread_title_stops_when_newline_ends_chunk(cx: &mut TestAppContext) {
     let model = Arc::new(FakeLanguageModel::default());
     let request = LanguageModelRequest::default();
@@ -3999,7 +3999,7 @@ async fn test_stream_thread_title_stops_when_newline_ends_chunk(cx: &mut TestApp
 // native) must stay byte-for-byte identical for the same messages, since both
 // back the sidebar's native "Open Thread as Markdown" action. This pins that
 // they share a single rendering path.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_db_thread_markdown_matches_live_thread(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -4022,7 +4022,7 @@ async fn test_db_thread_markdown_matches_live_thread(cx: &mut TestAppContext) {
     assert_eq!(db_thread.to_markdown(), live_markdown);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_title_generation_failure_allows_retry(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -4047,7 +4047,7 @@ async fn test_title_generation_failure_allows_retry(cx: &mut TestAppContext) {
     fake_summary_model.send_last_completion_stream_error(
         LanguageModelCompletionError::from_http_status(
             language_model::LanguageModelProviderName::new("test"),
-            gpui::http_client::StatusCode::INTERNAL_SERVER_ERROR,
+            gpui_runtime::http_client::StatusCode::INTERNAL_SERVER_ERROR,
             "Internal server error".to_string(),
             None,
         ),
@@ -4090,7 +4090,7 @@ async fn test_title_generation_failure_allows_retry(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_building_request_with_pending_tools(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -4170,7 +4170,7 @@ async fn test_building_request_with_pending_tools(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_agent_connection(cx: &mut TestAppContext) {
     cx.update(settings::init);
     let templates = Templates::new();
@@ -4292,7 +4292,7 @@ async fn test_agent_connection(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tool_updates_to_completion(cx: &mut TestAppContext) {
     let ThreadTest { thread, model, .. } = setup(cx, TestModel::Fake).await;
     thread.update(cx, |thread, _cx| thread.add_tool(EchoTool));
@@ -4375,7 +4375,7 @@ async fn test_tool_updates_to_completion(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_send_no_retry_on_success(cx: &mut TestAppContext) {
     let ThreadTest { thread, model, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -4418,7 +4418,7 @@ async fn test_send_no_retry_on_success(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_send_retry_on_error(cx: &mut TestAppContext) {
     let ThreadTest { thread, model, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -4487,7 +4487,7 @@ async fn test_send_retry_on_error(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_send_retry_finishes_tool_calls_on_error(cx: &mut TestAppContext) {
     let ThreadTest { thread, model, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -4572,7 +4572,7 @@ async fn test_send_retry_finishes_tool_calls_on_error(cx: &mut TestAppContext) {
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_send_max_retries_exceeded(cx: &mut TestAppContext) {
     let ThreadTest { thread, model, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -4634,7 +4634,7 @@ async fn test_send_max_retries_exceeded(cx: &mut TestAppContext) {
     ));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_streaming_tool_completes_when_llm_stream_ends_without_final_input(
     cx: &mut TestAppContext,
 ) {
@@ -4743,7 +4743,7 @@ async fn test_streaming_tool_completes_when_llm_stream_ends_without_final_input(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_streaming_tool_json_parse_error_is_forwarded_to_running_tool(
     cx: &mut TestAppContext,
 ) {
@@ -5114,7 +5114,7 @@ fn setup_context_server(
     mcp_tool_calls_rx
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tokens_before_message(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -5221,7 +5221,7 @@ async fn test_tokens_before_message(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_tokens_before_message_after_truncate(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -5292,7 +5292,7 @@ async fn test_tokens_before_message_after_truncate(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_terminal_tool_permission_rules(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -5514,7 +5514,7 @@ async fn test_terminal_tool_permission_rules(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_tool_call_end_to_end(cx: &mut TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
@@ -5651,7 +5651,7 @@ async fn test_subagent_tool_call_end_to_end(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_tool_output_does_not_include_thinking(cx: &mut TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
@@ -5801,7 +5801,7 @@ async fn test_subagent_tool_output_does_not_include_thinking(cx: &mut TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_tool_call_cancellation_during_task_prompt(cx: &mut TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
@@ -5933,7 +5933,7 @@ async fn test_subagent_tool_call_cancellation_during_task_prompt(cx: &mut TestAp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_tool_resume_session(cx: &mut TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
@@ -6117,7 +6117,7 @@ async fn test_subagent_tool_resume_session(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_thread_inherits_parent_thread_properties(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -6165,7 +6165,7 @@ async fn test_subagent_thread_inherits_parent_thread_properties(cx: &mut TestApp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_thread_uses_configured_subagent_model(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -6249,7 +6249,7 @@ async fn test_subagent_thread_uses_configured_subagent_model(cx: &mut TestAppCon
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_max_subagent_depth_prevents_tool_registration(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -6299,7 +6299,7 @@ async fn test_max_subagent_depth_prevents_tool_registration(cx: &mut TestAppCont
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_lsp_tools_gated_by_feature_flag(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -6413,7 +6413,7 @@ async fn test_lsp_tools_gated_by_feature_flag(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sibling_thread_tools_gated_by_feature_flag(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -6528,7 +6528,7 @@ async fn test_sibling_thread_tools_gated_by_feature_flag(cx: &mut TestAppContext
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_parent_cancel_stops_subagent(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -6585,7 +6585,7 @@ async fn test_parent_cancel_stops_subagent(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_context_window_warning(cx: &mut TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
@@ -6712,7 +6712,7 @@ async fn test_subagent_context_window_warning(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_no_context_window_warning_when_already_at_warning(cx: &mut TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
@@ -6889,7 +6889,7 @@ async fn test_subagent_no_context_window_warning_when_already_at_warning(cx: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_subagent_error_propagation(cx: &mut TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
@@ -7000,7 +7000,7 @@ async fn test_subagent_error_propagation(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_file_tool_deny_rule_blocks_edit(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7068,7 +7068,7 @@ async fn test_edit_file_tool_deny_rule_blocks_edit(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_delete_path_tool_deny_rule_blocks_deletion(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7116,7 +7116,7 @@ async fn test_delete_path_tool_deny_rule_blocks_deletion(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_path_tool_denies_if_destination_denied(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7172,7 +7172,7 @@ async fn test_move_path_tool_denies_if_destination_denied(cx: &mut TestAppContex
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_move_path_tool_denies_if_source_denied(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7228,7 +7228,7 @@ async fn test_move_path_tool_denies_if_source_denied(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_path_tool_deny_rule_blocks_copy(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7283,7 +7283,7 @@ async fn test_copy_path_tool_deny_rule_blocks_copy(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_web_search_tool_deny_rule_blocks_search(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7326,7 +7326,7 @@ async fn test_web_search_tool_deny_rule_blocks_search(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_file_tool_allow_rule_skips_confirmation(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7395,7 +7395,7 @@ async fn test_edit_file_tool_allow_rule_skips_confirmation(cx: &mut TestAppConte
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edit_file_tool_allow_still_prompts_for_local_settings(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7460,7 +7460,7 @@ async fn test_edit_file_tool_allow_still_prompts_for_local_settings(cx: &mut Tes
     let _auth = rx.expect_authorization().await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_tool_deny_rule_blocks_url(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7481,7 +7481,7 @@ async fn test_fetch_tool_deny_rule_blocks_url(cx: &mut TestAppContext) {
         agent_settings::AgentSettings::override_global(settings, cx);
     });
 
-    let http_client = gpui::http_client::FakeHttpClient::with_200_response();
+    let http_client = gpui_runtime::http_client::FakeHttpClient::with_200_response();
 
     #[allow(clippy::arc_with_non_send_sync)]
     let tool = Arc::new(crate::FetchTool::new(http_client));
@@ -7500,7 +7500,7 @@ async fn test_fetch_tool_deny_rule_blocks_url(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_tool_allow_rule_skips_confirmation(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7525,7 +7525,7 @@ async fn test_fetch_tool_allow_rule_skips_confirmation(cx: &mut TestAppContext) 
         agent_settings::AgentSettings::override_global(settings, cx);
     });
 
-    let http_client = gpui::http_client::FakeHttpClient::with_200_response();
+    let http_client = gpui_runtime::http_client::FakeHttpClient::with_200_response();
 
     #[allow(clippy::arc_with_non_send_sync)]
     let tool = Arc::new(crate::FetchTool::new(http_client));
@@ -7547,7 +7547,7 @@ async fn test_fetch_tool_allow_rule_skips_confirmation(cx: &mut TestAppContext) 
 
 /// A fetch to a host that hasn't been granted network access prompts for the
 /// shared per-host sandbox grant, even when the tool itself is allowed.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_tool_prompts_for_ungranted_host(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7566,7 +7566,7 @@ async fn test_fetch_tool_prompts_for_ungranted_host(cx: &mut TestAppContext) {
         agent_settings::AgentSettings::override_global(settings, cx);
     });
 
-    let http_client = gpui::http_client::FakeHttpClient::with_200_response();
+    let http_client = gpui_runtime::http_client::FakeHttpClient::with_200_response();
 
     #[allow(clippy::arc_with_non_send_sync)]
     let tool = Arc::new(crate::FetchTool::new(http_client));
@@ -7589,7 +7589,7 @@ async fn test_fetch_tool_prompts_for_ungranted_host(cx: &mut TestAppContext) {
 
 /// A host already present in the shared sandbox grants lets a fetch proceed
 /// without any prompt — the same grant the terminal tool records and consults.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_tool_granted_host_skips_prompt(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7613,7 +7613,7 @@ async fn test_fetch_tool_granted_host_skips_prompt(cx: &mut TestAppContext) {
         agent_settings::AgentSettings::override_global(settings, cx);
     });
 
-    let http_client = gpui::http_client::FakeHttpClient::with_200_response();
+    let http_client = gpui_runtime::http_client::FakeHttpClient::with_200_response();
 
     #[allow(clippy::arc_with_non_send_sync)]
     let tool = Arc::new(crate::FetchTool::new(http_client));
@@ -7635,7 +7635,7 @@ async fn test_fetch_tool_granted_host_skips_prompt(cx: &mut TestAppContext) {
 
 /// Loopback / IP-literal hosts can't be granted individually, so without
 /// unsandboxed access a fetch to them is refused with guidance to grant it.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_tool_refuses_loopback_without_unsandboxed(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7655,7 +7655,7 @@ async fn test_fetch_tool_refuses_loopback_without_unsandboxed(cx: &mut TestAppCo
         agent_settings::AgentSettings::override_global(settings, cx);
     });
 
-    let http_client = gpui::http_client::FakeHttpClient::with_200_response();
+    let http_client = gpui_runtime::http_client::FakeHttpClient::with_200_response();
 
     #[allow(clippy::arc_with_non_send_sync)]
     let tool = Arc::new(crate::FetchTool::new(http_client));
@@ -7676,7 +7676,7 @@ async fn test_fetch_tool_refuses_loopback_without_unsandboxed(cx: &mut TestAppCo
 /// Granting unsandboxed access lifts every fetch restriction, matching the
 /// terminal: even loopback hosts become reachable and no per-host prompt is
 /// requested.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_tool_unsandboxed_lifts_restrictions(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7697,7 +7697,7 @@ async fn test_fetch_tool_unsandboxed_lifts_restrictions(cx: &mut TestAppContext)
         agent_settings::AgentSettings::override_global(settings, cx);
     });
 
-    let http_client = gpui::http_client::FakeHttpClient::with_200_response();
+    let http_client = gpui_runtime::http_client::FakeHttpClient::with_200_response();
 
     #[allow(clippy::arc_with_non_send_sync)]
     let tool = Arc::new(crate::FetchTool::new(http_client));
@@ -7724,7 +7724,7 @@ async fn test_fetch_tool_unsandboxed_lifts_restrictions(cx: &mut TestAppContext)
 /// is refused just like a direct loopback fetch. This is the redirect variant of
 /// the SSRF protection — the approved domain can't be used to bounce the request
 /// onto the local machine.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_tool_refuses_redirect_to_loopback(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7747,13 +7747,13 @@ async fn test_fetch_tool_refuses_redirect_to_loopback(cx: &mut TestAppContext) {
         agent_settings::AgentSettings::override_global(settings, cx);
     });
 
-    let http_client = gpui::http_client::FakeHttpClient::create(|req| async move {
+    let http_client = gpui_runtime::http_client::FakeHttpClient::create(|req| async move {
         let uri = req.uri().to_string();
         assert!(
             uri.contains("example.com"),
             "the loopback redirect target must never be requested, but saw {uri}"
         );
-        Ok(gpui::http_client::Response::builder()
+        Ok(gpui_runtime::http_client::Response::builder()
             .status(302)
             .header("location", "http://localhost:3000/internal")
             .body("".into())
@@ -7782,7 +7782,7 @@ async fn test_fetch_tool_refuses_redirect_to_loopback(cx: &mut TestAppContext) {
 /// A granted host that redirects to a *different*, ungranted host triggers a
 /// fresh per-host authorization prompt for the redirect target — the redirect is
 /// not silently followed to a host the user never approved.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_tool_reauthorizes_redirect_to_new_host(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7805,14 +7805,14 @@ async fn test_fetch_tool_reauthorizes_redirect_to_new_host(cx: &mut TestAppConte
         agent_settings::AgentSettings::override_global(settings, cx);
     });
 
-    let http_client = gpui::http_client::FakeHttpClient::create(|req| async move {
+    let http_client = gpui_runtime::http_client::FakeHttpClient::create(|req| async move {
         let uri = req.uri().to_string();
         assert!(
             uri.contains("example.com"),
             "the ungranted redirect target must not be requested before authorization, \
              but saw {uri}"
         );
-        Ok(gpui::http_client::Response::builder()
+        Ok(gpui_runtime::http_client::Response::builder()
             .status(302)
             .header("location", "https://redirect-target.example/landing")
             .body("".into())
@@ -7844,7 +7844,7 @@ async fn test_fetch_tool_reauthorizes_redirect_to_new_host(cx: &mut TestAppConte
 /// Redirects between paths on an already-granted host are followed without any
 /// additional prompt, so ordinary redirects (http→https upgrades, trailing-slash
 /// canonicalization, etc.) keep working after the per-hop authorization change.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fetch_tool_follows_same_host_redirect(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -7867,16 +7867,16 @@ async fn test_fetch_tool_follows_same_host_redirect(cx: &mut TestAppContext) {
         agent_settings::AgentSettings::override_global(settings, cx);
     });
 
-    let http_client = gpui::http_client::FakeHttpClient::create(|req| async move {
+    let http_client = gpui_runtime::http_client::FakeHttpClient::create(|req| async move {
         let uri = req.uri().to_string();
         if uri.ends_with("/start") {
-            Ok(gpui::http_client::Response::builder()
+            Ok(gpui_runtime::http_client::Response::builder()
                 .status(302)
                 .header("location", "https://example.com/final")
                 .body("".into())
                 .unwrap())
         } else if uri.ends_with("/final") {
-            Ok(gpui::http_client::Response::builder()
+            Ok(gpui_runtime::http_client::Response::builder()
                 .status(200)
                 .header("content-type", "text/plain")
                 .body("final content".into())
@@ -7909,7 +7909,7 @@ async fn test_fetch_tool_follows_same_host_redirect(cx: &mut TestAppContext) {
 
 /// Approving one pending tool call with "Always for <tool>" auto-resolves
 /// sibling pending authorizations for the same tool in the same turn.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_always_allow_resolves_pending_authorizations(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -7990,7 +7990,7 @@ async fn test_always_allow_resolves_pending_authorizations(cx: &mut TestAppConte
 /// Externally editing settings (e.g. the user opening settings.json and
 /// adding an `always_allow` rule) resolves pending authorization prompts
 /// for tool calls that match the new rule.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_external_settings_edit_resolves_pending_authorization(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -8061,7 +8061,7 @@ async fn test_external_settings_edit_resolves_pending_authorization(cx: &mut Tes
 
 /// Externally adding a deny rule to settings dismisses a pending
 /// authorization prompt and returns the tool call as denied.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_external_deny_rule_resolves_pending_authorization(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -8135,7 +8135,7 @@ async fn test_external_deny_rule_resolves_pending_authorization(cx: &mut TestApp
 /// Unrelated settings changes must not spuriously resolve pending
 /// authorizations: if the re-check still returns `Confirm`, the prompt
 /// stays visible and waits for the user.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unrelated_settings_change_does_not_resolve_pending_authorization(
     cx: &mut TestAppContext,
 ) {
@@ -8200,7 +8200,7 @@ async fn test_unrelated_settings_change_does_not_resolve_pending_authorization(
 /// dismiss a sibling pending authorization for a *different* tool: the
 /// persisted rule is scoped to tool A, so tool B's prompt stays visible
 /// and waits for the user.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_always_allow_does_not_resolve_unrelated_tool_authorization(cx: &mut TestAppContext) {
     let ThreadTest { model, thread, .. } = setup(cx, TestModel::Fake).await;
     let fake_model = model.as_fake();
@@ -8295,7 +8295,7 @@ async fn test_always_allow_does_not_resolve_unrelated_tool_authorization(cx: &mu
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_queued_message_ends_turn_at_boundary(cx: &mut TestAppContext) {
     init_test(cx);
     always_allow_tools(cx);
@@ -8382,7 +8382,7 @@ async fn test_queued_message_ends_turn_at_boundary(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_queued_message_does_not_end_turn_without_boundary_flag(cx: &mut TestAppContext) {
     init_test(cx);
     always_allow_tools(cx);
@@ -8444,7 +8444,7 @@ async fn test_queued_message_does_not_end_turn_without_boundary_flag(cx: &mut Te
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_streaming_tool_error_breaks_stream_loop_immediately(cx: &mut TestAppContext) {
     init_test(cx);
     always_allow_tools(cx);
@@ -8519,7 +8519,7 @@ async fn test_streaming_tool_error_breaks_stream_loop_immediately(cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_streaming_tool_error_waits_for_prior_tools_to_complete(cx: &mut TestAppContext) {
     init_test(cx);
     always_allow_tools(cx);
@@ -8637,7 +8637,7 @@ async fn test_streaming_tool_error_waits_for_prior_tools_to_complete(cx: &mut Te
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_mid_turn_model_and_settings_refresh(cx: &mut TestAppContext) {
     let ThreadTest {
         model, thread, fs, ..

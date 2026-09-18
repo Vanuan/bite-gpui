@@ -1,6 +1,12 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/gpui_authoring",
+    "crates/gpui_engine",
+    "crates/gpui_engine_default",
+    "crates/gpui_parley",
+    "crates/gpui_runtime",
+    "crates/gpui_types",
     "crates/acp_thread",
     "crates/acp_tools",
     "crates/action_log",
@@ -270,6 +276,12 @@ publish = false
 edition = "2024"
 
 [workspace.dependencies]
+gpui_authoring = { path = "crates/gpui_authoring" }
+gpui_engine = { path = "crates/gpui_engine" }
+gpui_parley = { path = "crates/gpui_parley" }
+gpui_runtime = { path = "crates/gpui_runtime" }
+gpui_types = { path = "crates/gpui_types" }
+zed = { path = "crates/zed" }
 
 #
 # Workspace member crates

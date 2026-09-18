@@ -144,7 +144,7 @@ pub fn request_prediction(
         })
     });
 
-    cx.spawn(async move |cx: &mut gpui::AsyncApp| {
+    cx.spawn(async move |cx: &mut gpui_runtime::AsyncApp| {
         let output = result.await.context("fim edit prediction failed")?;
         anyhow::Ok(Some(
             EditPredictionResult::new(

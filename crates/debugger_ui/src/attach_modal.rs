@@ -126,7 +126,7 @@ impl Render for AttachModal {
 impl EventEmitter<DismissEvent> for AttachModal {}
 
 impl Focusable for AttachModal {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.picker.read(cx).focus_handle(cx)
     }
 }

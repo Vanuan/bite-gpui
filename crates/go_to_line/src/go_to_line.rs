@@ -26,7 +26,7 @@ pub struct GoToLine {
     active_editor: Entity<Editor>,
     active_buffer: Entity<Buffer>,
     current_text: SharedString,
-    prev_scroll_position: Option<gpui::Point<ScrollOffset>>,
+    prev_scroll_position: Option<gpui_types::Point<ScrollOffset>>,
     current_line: u32,
     _subscriptions: Vec<Subscription>,
 }
@@ -363,7 +363,7 @@ mod tests {
     use util::{path, rel_path::rel_path};
     use workspace::{AppState, MultiWorkspace, Workspace};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_to_line_view_row_highlights(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -474,7 +474,7 @@ mod tests {
         assert_single_caret_at_row(&editor, expected_highlighted_row, cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_to_line_uses_buffer_rows_in_multibuffers(cx: &mut TestAppContext) {
         init_test(cx);
         let cx = cx.add_empty_window();
@@ -521,7 +521,7 @@ mod tests {
         assert_single_caret_at_buffer_row(&editor, 50, cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_unicode_characters_selection(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -606,7 +606,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_unicode_line_numbers(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -685,7 +685,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_into_unicode(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -892,7 +892,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scroll_position_on_outside_click(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -950,7 +950,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scroll_position_on_cancel(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1006,7 +1006,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scroll_position_on_confirm(cx: &mut TestAppContext) {
         init_test(cx);
 

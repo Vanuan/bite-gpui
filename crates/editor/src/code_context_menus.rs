@@ -1022,7 +1022,7 @@ impl CompletionsMenu {
                                 })
                             });
 
-                        let highlights = gpui::combine_highlights(
+                        let highlights = gpui_runtime::combine_highlights(
                             match_highlights,
                             styled_runs_for_code_label(
                                 &completion.label,

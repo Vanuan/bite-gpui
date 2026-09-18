@@ -327,7 +327,7 @@ impl Component for Icon {
                 example_group(vec![single_example(
                     "All Icons",
                     h_flex()
-                        .image_cache(gpui::retain_all("all icons"))
+                        .image_cache(gpui_runtime::retain_all("all icons"))
                         .flex_wrap()
                         .gap_2()
                         .children(<IconName as strum::IntoEnumIterator>::iter().map(

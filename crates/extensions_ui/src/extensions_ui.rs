@@ -56,7 +56,7 @@ actions!(
 );
 
 /// Rebuilds an installed dev extension.
-#[derive(Clone, Debug, Default, PartialEq, Deserialize, JsonSchema, gpui::Action)]
+#[derive(Clone, Debug, Default, PartialEq, Deserialize, JsonSchema, gpui_runtime::Action)]
 #[action(namespace = zed)]
 #[serde(deny_unknown_fields)]
 pub struct RebuildDevExtension {
@@ -391,7 +391,7 @@ pub struct ExtensionsPage {
     query_editor: Entity<Editor>,
     query_contains_error: bool,
     provides_filter: Option<ExtensionProvides>,
-    _subscriptions: [gpui::Subscription; 2],
+    _subscriptions: [gpui_runtime::Subscription; 2],
     extension_fetch_task: Option<Task<()>>,
     upsells: BTreeSet<Feature>,
 }
@@ -1536,7 +1536,7 @@ impl Render for ExtensionsPage {
 impl EventEmitter<ItemEvent> for ExtensionsPage {}
 
 impl Focusable for ExtensionsPage {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.query_editor.read(cx).focus_handle(cx)
     }
 }

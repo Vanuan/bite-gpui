@@ -417,7 +417,7 @@ mod test {
     use futures::StreamExt;
     use indoc::indoc;
 
-    use gpui::EntityInputHandler;
+    use gpui_runtime::EntityInputHandler;
 
     use crate::{
         VimGlobals,
@@ -425,8 +425,8 @@ mod test {
         test::{NeovimBackedTestContext, VimTestContext},
     };
 
-    #[gpui::test]
-    async fn test_dot_repeat(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_dot_repeat(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // "o"
@@ -472,8 +472,8 @@ mod test {
             .assert_eq("hello worlˇd\nhello world\nhello world\n");
     }
 
-    #[gpui::test]
-    async fn test_dot_repeat_after_macro_change_motion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_dot_repeat_after_macro_change_motion(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇfoo foo", Mode::Normal);
@@ -487,8 +487,8 @@ mod test {
         cx.assert_state("xo ˇx", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_dot_repeat_registers_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_dot_repeat_registers_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // basic paste repeat uses the unnamed register
@@ -621,8 +621,8 @@ mod test {
     // This needs to be a separate test from `test_dot_repeat_registers_paste`
     // as Neovim doesn't have support for using registers in replace operations
     // by default.
-    #[gpui::test]
-    async fn test_dot_repeat_registers_replace(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_dot_repeat_registers_replace(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -688,8 +688,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_repeat_ime(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_ime(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("hˇllo", Mode::Normal);
@@ -706,8 +706,8 @@ mod test {
         cx.assert_state("hˇäällo", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_repeat_completion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_completion(cx: &mut gpui_runtime::TestAppContext) {
         VimTestContext::init(cx);
         let cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -780,8 +780,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_repeat_completion_unicode_bug(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_completion_unicode_bug(cx: &mut gpui_runtime::TestAppContext) {
         VimTestContext::init(cx);
         let cx = EditorLspTestContext::new_rust(
             lsp::ServerCapabilities {
@@ -836,8 +836,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_repeat_visual(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_visual(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // single-line (3 columns)
@@ -941,8 +941,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_repeat_motion_counts(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_motion_counts(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -971,8 +971,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_record_interrupted(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_record_interrupted(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state("ˇhello\n", Mode::Normal);
@@ -981,8 +981,8 @@ mod test {
         cx.assert_state("ˇjhello\n", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_repeat_over_blur(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_over_blur(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello hello hello\n").await;
@@ -993,15 +993,15 @@ mod test {
         cx.shared_state().await.assert_eq("ˇx hello\n");
     }
 
-    #[gpui::test]
-    async fn test_repeat_after_blur_resets_dot_replaying(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_after_blur_resets_dot_replaying(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Bind `ctrl-f` to the `buffer_search::Deploy` action so that this can
         // be triggered while in Insert mode, ensuring that an action which
         // moves the focus away from the editor, gets recorded.
         cx.update(|_, cx| {
-            cx.bind_keys([gpui::KeyBinding::new(
+            cx.bind_keys([gpui_runtime::KeyBinding::new(
                 "ctrl-f",
                 search::buffer_search::Deploy::find(),
                 None,
@@ -1035,8 +1035,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_undo_repeated_insert(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_undo_repeated_insert(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("hellˇo").await;
@@ -1046,8 +1046,8 @@ mod test {
         cx.shared_state().await.assert_eq("hellˇo");
     }
 
-    #[gpui::test]
-    async fn test_record_replay(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_record_replay(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello world").await;
@@ -1057,8 +1057,8 @@ mod test {
         cx.shared_state().await.assert_eq("j ˇj");
     }
 
-    #[gpui::test]
-    async fn test_record_replay_count(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_record_replay_count(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello world!!").await;
@@ -1069,8 +1069,8 @@ mod test {
         cx.shared_state().await.assert_eq("000ˇ!");
     }
 
-    #[gpui::test]
-    async fn test_record_replay_dot(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_record_replay_dot(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello world").await;
@@ -1084,8 +1084,8 @@ mod test {
         cx.shared_state().await.assert_eq("ababˇb world");
     }
 
-    #[gpui::test]
-    async fn test_record_replay_of_dot(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_record_replay_of_dot(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello world").await;
@@ -1097,8 +1097,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇllo world");
     }
 
-    #[gpui::test]
-    async fn test_record_replay_interleaved(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_record_replay_interleaved(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello world").await;
@@ -1118,8 +1118,8 @@ mod test {
         cx.shared_state().await.assert_eq("aaaaaaabbbˇd");
     }
 
-    #[gpui::test]
-    async fn test_repeat_clear(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_clear(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Check that, when repeat is preceded by something other than a number,
@@ -1129,8 +1129,8 @@ mod test {
         assert_eq!(cx.active_operator(), None);
     }
 
-    #[gpui::test]
-    async fn test_repeat_clear_repeat(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_clear_repeat(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {
@@ -1150,8 +1150,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_repeat_clear_count(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeat_clear_count(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {

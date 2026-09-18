@@ -642,7 +642,7 @@ mod jsx_tag_autoclose_tests {
 
     macro_rules! check {
         ($name:ident, $initial:literal + $input:literal => $expected:expr) => {
-            #[gpui::test]
+            #[gpui_runtime::test]
             async fn $name(cx: &mut TestAppContext) {
                 let mut cx = test_setup(cx).await;
                 cx.set_state($initial);
@@ -786,7 +786,7 @@ mod jsx_tag_autoclose_tests {
         "<divˇfoobar" + ">" => "<div>ˇ</div>foobar"
     );
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multibuffer(cx: &mut TestAppContext) {
         init_test(cx, |settings| {
             settings

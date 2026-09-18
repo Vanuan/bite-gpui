@@ -23,7 +23,7 @@ impl ModalView for ExtensionVersionSelector {}
 impl EventEmitter<DismissEvent> for ExtensionVersionSelector {}
 
 impl Focusable for ExtensionVersionSelector {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.picker.focus_handle(cx)
     }
 }

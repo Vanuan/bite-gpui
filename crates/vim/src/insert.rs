@@ -141,8 +141,8 @@ mod test {
         test::{NeovimBackedTestContext, VimTestContext},
     };
 
-    #[gpui::test]
-    async fn test_enter_and_exit_insert_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_enter_and_exit_insert_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.simulate_keystrokes("i");
         assert_eq!(cx.mode(), Mode::Insert);
@@ -153,8 +153,8 @@ mod test {
         cx.assert_editor_state("Tesˇt");
     }
 
-    #[gpui::test]
-    async fn test_insert_with_counts(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_insert_with_counts(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello\n").await;
@@ -180,8 +180,8 @@ mod test {
         cx.shared_state().await.assert_eq("oi\noi\noˇi\nhello\n");
     }
 
-    #[gpui::test]
-    async fn test_insert_with_repeat(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_insert_with_repeat(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇhello\n").await;
@@ -205,8 +205,8 @@ mod test {
             .assert_eq("hello\nkk\nkk\nkk\nkk\nkˇk\n");
     }
 
-    #[gpui::test]
-    async fn test_insert_ctrl_r(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_insert_ctrl_r(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("heˇllo\n").await;
@@ -218,8 +218,8 @@ mod test {
         cx.shared_state().await.assert_eq("hehello\nˇllo\n");
     }
 
-    #[gpui::test]
-    async fn test_insert_ctrl_y(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_insert_ctrl_y(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("hello\nˇ\nworld").await;

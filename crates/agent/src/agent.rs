@@ -477,7 +477,7 @@ enum SkillsState {
     Watching,
 }
 
-impl gpui::EventEmitter<SkillLoadingIssuesUpdated> for NativeAgent {}
+impl gpui_runtime::EventEmitter<SkillLoadingIssuesUpdated> for NativeAgent {}
 
 static RULES_FILE_REL_PATHS: LazyLock<Vec<Arc<RelPath>>> = LazyLock::new(|| {
     RULES_FILE_NAMES
@@ -1915,7 +1915,7 @@ impl NativeAgent {
             let Some(database) = database_future.await.map_err(|err| anyhow!(err)).log_err() else {
                 return;
             };
-            // All quit observers share `gpui::SHUTDOWN_TIMEOUT`, so run the
+            // All quit observers share `gpui_runtime::SHUTDOWN_TIMEOUT`, so run the
             // saves concurrently instead of one at a time.
             future::join_all(saves.into_iter().map(|(id, folder_paths, db_thread)| {
                 let database = database.clone();
@@ -3870,7 +3870,7 @@ mod internal_tests {
     use acp_thread::{AgentConnection, AgentModelGroupName, AgentModelInfo, MentionUri};
     use agent_settings::COMPACTION_PROMPT;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use indoc::formatdoc;
     use language_model::fake_provider::{FakeLanguageModel, FakeLanguageModelProvider};
     use language_model::{
@@ -3882,7 +3882,7 @@ mod internal_tests {
     use util::{path, rel_path::rel_path};
 
     #[cfg(target_os = "macos")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_native_terminal_tool_releases_pty_resources(cx: &mut TestAppContext) {
         use feature_flags::FeatureFlagAppExt as _;
 
@@ -4048,7 +4048,7 @@ mod internal_tests {
             .collect()
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compact_command_is_available(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -4082,7 +4082,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compact_prompt_routes_to_manual_compaction(cx: &mut TestAppContext) {
         init_test(cx);
         let (connection, agent, project, acp_thread) = setup_native_agent_session(cx).await;
@@ -4136,7 +4136,7 @@ mod internal_tests {
         prompt_task.await.unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_threads_flushed_to_database_on_app_quit(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -4637,7 +4637,7 @@ mod internal_tests {
         assert_eq!(kept_names, vec!["visible"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_maintaining_project_context(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -4725,7 +4725,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_global_skills_load_and_reload(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -4790,7 +4790,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_global_skill_with_long_description_loads_with_warning(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -4885,7 +4885,7 @@ mod internal_tests {
         assert_eq!(body, "body");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_symlinked_global_skills_load_and_reload(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -4992,7 +4992,7 @@ mod internal_tests {
         assert_eq!(body, "body-v2");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_global_skills_dir_created_after_startup(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5073,7 +5073,7 @@ mod internal_tests {
     /// skill in `<available_skills>` but get "not found" when it tried to
     /// invoke it. The fix wires the tool to a dynamic resolver closure
     /// that re-reads `state.skills` for the project on every invocation.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skills_added_after_session_visible_to_skill_tool(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5214,7 +5214,7 @@ mod internal_tests {
     /// `register_session`. It then asserts that the `SkillTool` is
     /// registered on the subagent thread and that resolving against the
     /// same `project_id` produces the same skill set the parent sees.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_subagent_skills_lookup_matches_parent(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5314,7 +5314,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skills_appear_as_available_skills(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5412,7 +5412,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_skills_require_worktree_trust(cx: &mut TestAppContext) {
         use collections::{HashMap, HashSet};
         use project::trusted_worktrees::{self, PathTrust, TrustedWorktrees};
@@ -5586,7 +5586,7 @@ mod internal_tests {
     /// the project files actually live. We prove the buffer path is used
     /// by editing the buffer in memory (without saving) and asserting the
     /// resolver returns the edited body, not the on-disk body.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_skill_body_resolves_through_buffer(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5655,7 +5655,7 @@ mod internal_tests {
     /// A project SKILL.md whose on-disk size exceeds the cap must be
     /// rejected with a size-limit error and excluded from the loaded
     /// skills, exercising the size guard in `load_project_skills`.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_oversized_project_skill_reports_error(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5700,7 +5700,7 @@ mod internal_tests {
     /// A malformed project SKILL.md must surface a per-skill load error
     /// without preventing sibling skills in the same worktree from
     /// loading.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_malformed_project_skill_reports_error(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5751,7 +5751,7 @@ mod internal_tests {
     /// (not under `.agents/skills`) and assert the catalog reflects the
     /// in-memory edit. Under the previous `.agents/skills`-only trigger
     /// this refresh would not have fired.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_skill_metadata_refreshes_from_buffer(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5815,7 +5815,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_listing_models(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5872,7 +5872,7 @@ mod internal_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_model_selection_persists_to_settings(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5984,7 +5984,7 @@ mod internal_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_select_model_updates_thinking_enabled(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6076,7 +6076,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_summarization_model_survives_transient_registry_clearing(
         cx: &mut TestAppContext,
     ) {
@@ -6131,7 +6131,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_loaded_thread_preserves_thinking_enabled(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6231,7 +6231,7 @@ mod internal_tests {
         drop(reloaded_acp_thread);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_loaded_thread_preserves_model(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6415,7 +6415,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_loaded_thread_resolves_model_when_provider_loads_late(cx: &mut TestAppContext) {
         init_test(cx);
         let (agent, _connection, project, session_id, provider) =
@@ -6470,7 +6470,7 @@ mod internal_tests {
         drop(reloaded_acp_thread);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_explicit_model_selection_cancels_pending(cx: &mut TestAppContext) {
         init_test(cx);
         let (agent, connection, project, session_id, provider) =
@@ -6540,7 +6540,7 @@ mod internal_tests {
         drop(reloaded_acp_thread);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_load_thread(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6651,7 +6651,7 @@ mod internal_tests {
             thread.set_draft_prompt(Some(draft_blocks.clone()), cx);
         });
         thread.update(cx, |thread, _cx| {
-            thread.set_ui_scroll_position(Some(gpui::ListOffset {
+            thread.set_ui_scroll_position(Some(gpui_runtime::ListOffset {
                 item_ix: 5,
                 offset_in_item: gpui::px(12.5),
             }));
@@ -6719,7 +6719,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_releasing_session_saves_thread(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6801,7 +6801,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_releasing_thread_releases_subagent_sessions_and_project(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6883,7 +6883,7 @@ mod internal_tests {
         assert!(weak_project.upgrade().is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_burst_preserves_in_flight_write(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6974,7 +6974,7 @@ mod internal_tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_thread_summary_releases_loaded_session(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7052,7 +7052,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_loaded_sessions_keep_state_until_last_close(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7194,7 +7194,7 @@ mod internal_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rapid_title_changes_do_not_loop(cx: &mut TestAppContext) {
         // Regression test: rapid title changes must not cause a propagation loop
         // between Thread and AcpThread via handle_thread_title_updated.

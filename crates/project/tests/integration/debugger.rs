@@ -1,10 +1,10 @@
 mod go_locator {
     use collections::HashMap;
     use dap::{DapLocator, adapters::DebugAdapterName};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::debugger::locators::go::{DelveLaunchRequest, GoLocator};
     use task::{HideStrategy, RevealStrategy, RevealTarget, SaveStrategy, Shell, TaskTemplate};
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_scenario_for_go_build(_: &mut TestAppContext) {
         let locator = GoLocator;
         let task = TaskTemplate {
@@ -33,7 +33,7 @@ mod go_locator {
         assert!(scenario.is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skip_non_go_commands_with_non_delve_adapter(_: &mut TestAppContext) {
         let locator = GoLocator;
         let task = TaskTemplate {
@@ -69,7 +69,7 @@ mod go_locator {
             .await;
         assert!(scenario.is_none());
     }
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_locator_run(_: &mut TestAppContext) {
         let locator = GoLocator;
         let delve = DebugAdapterName("Delve".into());
@@ -129,7 +129,7 @@ mod go_locator {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_locator_test(_: &mut TestAppContext) {
         let locator = GoLocator;
         let delve = DebugAdapterName("Delve".into());
@@ -173,7 +173,7 @@ mod go_locator {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_locator_unescapes_nested_subtest_regex(_: &mut TestAppContext) {
         let locator = GoLocator;
         let delve = DebugAdapterName("Delve".into());
@@ -211,7 +211,7 @@ mod go_locator {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skip_unsupported_go_commands(_: &mut TestAppContext) {
         let locator = GoLocator;
         let task = TaskTemplate {
@@ -248,7 +248,7 @@ mod python_locator {
     use project::debugger::locators::python::*;
     use task::{DebugScenario, TaskTemplate};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_python_locator() {
         let adapter = DebugAdapterName("Debugpy".into());
         let build_task = TaskTemplate {

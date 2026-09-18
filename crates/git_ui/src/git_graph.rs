@@ -593,7 +593,7 @@ actions!(
 );
 
 /// Opens the Git Graph Tab at a specific commit.
-#[derive(Clone, PartialEq, serde::Deserialize, schemars::JsonSchema, gpui::Action)]
+#[derive(Clone, PartialEq, serde::Deserialize, schemars::JsonSchema, gpui_runtime::Action)]
 #[action(namespace = git_graph)]
 pub struct OpenAtCommit {
     pub sha: String,
@@ -1716,7 +1716,7 @@ impl GitGraph {
     fn render_chip(
         &self,
         name: &SharedString,
-        accent_color: gpui::Hsla,
+        accent_color: gpui_types::Hsla,
         is_head: bool,
     ) -> impl IntoElement {
         Chip::new(name.clone())
@@ -1745,7 +1745,7 @@ impl GitGraph {
     fn render_ref_chip(
         &self,
         name: &SharedString,
-        accent_color: gpui::Hsla,
+        accent_color: gpui_types::Hsla,
         is_head: bool,
         commit_idx: usize,
         cx: &mut Context<Self>,
@@ -3216,7 +3216,7 @@ impl GitGraph {
         let is_focused = self.focus_handle.is_focused(window);
         let graph_canvas_bounds = self.graph_canvas_bounds.clone();
 
-        gpui::canvas(
+        gpui_runtime::canvas(
             move |_bounds, _window, _cx| {},
             move |bounds: Bounds<Pixels>, _: (), window: &mut Window, cx: &mut App| {
                 graph_canvas_bounds.set(Some(bounds));
@@ -3244,7 +3244,7 @@ impl GitGraph {
 
                             let row_bounds = Bounds::new(
                                 point(bounds.origin.x, row_y),
-                                gpui::Size {
+                                gpui_types::Size {
                                     width: bounds.size.width,
                                     height: row_height,
                                 },
@@ -3255,7 +3255,7 @@ impl GitGraph {
                             } else {
                                 hover_bg
                             };
-                            window.paint_quad(gpui::fill(row_bounds, bg_color));
+                            window.paint_quad(gpui_runtime::fill(row_bounds, bg_color));
                         }
                     }
 
@@ -3645,7 +3645,7 @@ impl GitGraph {
                         }
                         cx.stop_propagation();
                     }))
-                    .on_drag(DraggedSplitHandle, |_, _, _, cx| cx.new(|_| gpui::Empty)),
+                    .on_drag(DraggedSplitHandle, |_, _, _, cx| cx.new(|_| gpui_runtime::Empty)),
             )
             .into_any_element()
     }
@@ -5276,7 +5276,7 @@ mod tests {
 
     // The full integration test has less iterations because it's significantly slower
     // than the random commit test
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_git_graph_random_integration(mut rng: StdRng, cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5332,7 +5332,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_empty_nested_repository_graph_stops_loading(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5389,7 +5389,7 @@ mod tests {
         assert!(!is_loading, "empty graph data should stop loading");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initial_graph_data_not_cleared_on_initial_loading(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5465,7 +5465,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initial_graph_data_propagates_error(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5515,7 +5515,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_graph_data_repopulated_from_cache_after_repo_switch(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5615,7 +5615,7 @@ mod tests {
 
         cx.draw(
             point(px(0.), px(0.)),
-            gpui::size(px(1200.), px(800.)),
+            gpui_backend::size(px(1200.), px(800.)),
             |_, _| git_graph.clone().into_any_element(),
         );
         cx.run_until_parked();
@@ -5630,7 +5630,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_history_action_uses_git_panel_and_editor_sources(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5849,7 +5849,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_file_history_action_resolves_through_project_diff(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5910,7 +5910,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_serialized_state_roundtrip(_cx: &mut TestAppContext) {
         use persistence::SerializedGitGraphState;
 
@@ -5991,7 +5991,7 @@ mod tests {
         ));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_hidden_columns_bitmask_roundtrip(_cx: &mut TestAppContext) {
         let mask = [false, true, false, true, false];
         let bits = persistence::serialize_hidden_columns(&mask);
@@ -6019,7 +6019,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_graph_state_persists_across_serialization_roundtrip(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6066,7 +6066,7 @@ mod tests {
 
         cx.draw(
             point(px(0.), px(0.)),
-            gpui::size(px(1200.), px(800.)),
+            gpui_backend::size(px(1200.), px(800.)),
             |_, _| git_graph.clone().into_any_element(),
         );
         cx.run_until_parked();
@@ -6129,7 +6129,7 @@ mod tests {
 
         cx.draw(
             point(px(0.), px(0.)),
-            gpui::size(px(1200.), px(800.)),
+            gpui_backend::size(px(1200.), px(800.)),
             |_, _| restored_graph.clone().into_any_element(),
         );
         cx.run_until_parked();
@@ -6178,7 +6178,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_graph_search_matches_commit_hash_prefix(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6304,7 +6304,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_graph_data_reloaded_after_stash_change(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6424,7 +6424,7 @@ mod tests {
 
         cx.draw(
             point(px(0.), px(0.)),
-            gpui::size(px(1200.), px(800.)),
+            gpui_backend::size(px(1200.), px(800.)),
             |_, _| git_graph.clone().into_any_element(),
         );
         cx.run_until_parked();
@@ -6440,7 +6440,7 @@ mod tests {
         assert_eq!(reloaded_shas, vec![updated_head, updated_stash]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_graph_row_at_position_rounding(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6496,7 +6496,7 @@ mod tests {
             let origin_y = px(100.0);
             graph.graph_canvas_bounds.set(Some(Bounds {
                 origin: point(px(0.0), origin_y),
-                size: gpui::size(px(100.0), row_height * 50.0),
+                size: gpui_backend::size(px(100.0), row_height * 50.0),
             }));
 
             // Scroll down by half a row so the row under a position near the
@@ -6516,7 +6516,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_focus_handle_focuses_search_editor(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6571,7 +6571,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_row_height_matches_uniform_list_item_height(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6630,7 +6630,7 @@ mod tests {
 
         cx.draw(
             point(px(0.), px(0.)),
-            gpui::size(px(1200.), px(800.)),
+            gpui_backend::size(px(1200.), px(800.)),
             |_, _| git_graph.clone().into_any_element(),
         );
         cx.run_until_parked();
@@ -6661,7 +6661,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copy_selected_commit_tag_with_one_tag_copies_to_clipboard(
         cx: &mut TestAppContext,
     ) {
@@ -6728,7 +6728,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copy_selected_commit_tag_with_multiple_tags_opens_picker_and_copies_selected_tag(
         cx: &mut TestAppContext,
     ) {
@@ -6819,7 +6819,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_open_at_commit_reuses_loaded_graph(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6919,7 +6919,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_go_back_from_commit_view_returns_to_git_graph(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7043,7 +7043,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_git_graph_navigation(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7101,7 +7101,7 @@ mod tests {
 
         cx.draw(
             point(px(0.), px(0.)),
-            gpui::size(px(1200.), px(800.)),
+            gpui_backend::size(px(1200.), px(800.)),
             |_, _| multi_workspace.clone().into_any_element(),
         );
         cx.run_until_parked();
@@ -7215,7 +7215,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_global_git_command_task_runs_from_context_menu(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7369,7 +7369,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_global_git_command_task_runs_from_ref_context_menu(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7516,7 +7516,7 @@ mod tests {
         assert_eq!(GitGraph::ref_name_from_decoration("HEAD"), None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_commit_message_rendered_as_markdown(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7596,7 +7596,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_long_commit_message_is_constrained_to_scroll_viewport(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7685,7 +7685,7 @@ mod tests {
 
         cx.draw(
             point(px(0.), px(0.)),
-            gpui::size(px(1200.), px(800.)),
+            gpui_backend::size(px(1200.), px(800.)),
             |_, _| git_graph.clone().into_any_element(),
         );
         cx.run_until_parked();
@@ -7727,7 +7727,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_commit_message_not_reloaded_for_same_sha(cx: &mut TestAppContext) {
         init_test(cx);
 

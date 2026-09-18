@@ -10,7 +10,7 @@ mod since_v0_6_0;
 mod since_v0_8_0;
 use dap::DebugRequest;
 use extension::{DebugTaskDefinition, KeyValueStoreDelegate, WorktreeDelegate};
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use language::LanguageName;
 use lsp::LanguageServerName;
 use release_channel::ReleaseChannel;

@@ -56,7 +56,7 @@ fn init_logger() {
     zlog::init_test();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_load_plugin_queries(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor);
     fs.insert_tree(
@@ -266,7 +266,7 @@ fn remote_sync_keeps_debug_adapters() {
     assert_eq!(remote_sync_extension_ids(&index), ["foo"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_extension_store(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -771,7 +771,7 @@ async fn test_extension_store(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_extension_store_with_test_extension(cx: &mut TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
@@ -1307,7 +1307,7 @@ fn init_test(cx: &mut TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_register_remote_client_syncs_only_the_new_client(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1359,7 +1359,7 @@ async fn test_register_remote_client_syncs_only_the_new_client(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_register_remote_client_resyncs_extensions_on_reconnect(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1401,7 +1401,7 @@ async fn test_register_remote_client_resyncs_extensions_on_reconnect(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_register_remote_client_retries_failed_sync(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1440,7 +1440,7 @@ async fn test_register_remote_client_retries_failed_sync(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_persistent_sync_failure_retries_with_capped_backoff(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1493,7 +1493,7 @@ async fn test_persistent_sync_failure_retries_with_capped_backoff(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_register_remote_client_drops_stale_retry_after_successful_sync(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1533,7 +1533,7 @@ async fn test_register_remote_client_drops_stale_retry_after_successful_sync(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_register_remote_client_keeps_subscription_across_disconnect(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1580,7 +1580,7 @@ async fn test_register_remote_client_keeps_subscription_across_disconnect(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_register_remote_client_release_evicts_client(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1612,7 +1612,7 @@ async fn test_register_remote_client_release_evicts_client(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_register_remote_client_resyncs_after_simulated_reconnect(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -1657,7 +1657,7 @@ async fn test_register_remote_client_resyncs_after_simulated_reconnect(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_sync_extensions_notifications(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1777,7 +1777,7 @@ path_suffixes = ["foo", "foo2"]
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_sync_skips_dev_extension_with_matching_fingerprint(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -1867,7 +1867,7 @@ languages = ["languages/foo"]
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_sync_extensions_reports_failed_load_as_missing_again(
     cx: &mut TestAppContext,
 ) {
@@ -1927,7 +1927,7 @@ async fn test_headless_sync_extensions_reports_failed_load_as_missing_again(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_sync_uninstall_failure_does_not_block_other_extensions(
     cx: &mut TestAppContext,
 ) {
@@ -2009,7 +2009,7 @@ async fn test_headless_sync_uninstall_failure_does_not_block_other_extensions(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_extension_index_change_sync_failure_is_retried(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2055,7 +2055,7 @@ async fn test_extension_index_change_sync_failure_is_retried(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_register_remote_client_reconnect_does_not_start_parallel_retry_chain(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2099,7 +2099,7 @@ async fn test_register_remote_client_reconnect_does_not_start_parallel_retry_cha
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_index_change_during_backoff_neither_preempts_nor_resets_it(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2151,7 +2151,7 @@ async fn test_index_change_during_backoff_neither_preempts_nor_resets_it(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_index_change_after_exhaustion_triggers_single_attempt(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2209,7 +2209,7 @@ async fn test_index_change_after_exhaustion_triggers_single_attempt(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_sync_failed_install_is_retried(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2271,7 +2271,7 @@ async fn test_remote_sync_failed_install_is_retried(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unchanged_dev_extension_is_not_reuploaded_on_resync(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2334,7 +2334,7 @@ async fn test_unchanged_dev_extension_is_not_reuploaded_on_resync(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remote_sync_hang_times_out_and_is_retried(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -2366,7 +2366,7 @@ async fn test_remote_sync_hang_times_out_and_is_retried(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_failed_reload_keeps_other_extensions_languages(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2496,7 +2496,7 @@ languages = ["languages/foo", "languages/shared", "languages/broken"]
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_dev_reload_deregisters_dropped_languages(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2593,7 +2593,7 @@ languages = ["languages/foo"]
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_uninstall_restores_surviving_extensions_language_config(
     cx: &mut TestAppContext,
 ) {
@@ -2671,7 +2671,7 @@ async fn test_headless_uninstall_restores_surviving_extensions_language_config(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_failed_reload_restores_previous_language_config(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2790,7 +2790,7 @@ languages = ["languages/foo", "languages/broken"]
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_failed_reinstall_restores_previous_registrations(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -2908,7 +2908,7 @@ languages = ["languages/foo"]
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_remove_stale_uploads_removes_only_stale_entries(cx: &mut TestAppContext) {
     let fs = FakeFs::new(cx.executor());
     fs.insert_tree(
@@ -2952,7 +2952,7 @@ async fn test_remove_stale_uploads_removes_only_stale_entries(cx: &mut TestAppCo
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_dev_reload_replaces_registrations(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3051,7 +3051,7 @@ async fn test_headless_dev_reload_replaces_registrations(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_install_failure_after_removing_old_files_evicts_extension(
     cx: &mut TestAppContext,
 ) {
@@ -3156,7 +3156,7 @@ languages = ["languages/foo"]
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_failed_install_cleanup_is_retried_on_later_syncs(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3238,7 +3238,7 @@ languages = ["languages/foo"]
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_unchanged_reinstall_skips_reload(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3354,7 +3354,7 @@ languages = ["languages/foo"]
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_failed_uninstall_is_retried_on_later_syncs(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -3469,7 +3469,7 @@ async fn test_headless_failed_uninstall_is_retried_on_later_syncs(cx: &mut TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_index_change_without_remote_relevant_extensions_does_not_sync(
     cx: &mut TestAppContext,
     server_cx: &mut TestAppContext,
@@ -3513,7 +3513,7 @@ async fn test_index_change_without_remote_relevant_extensions_does_not_sync(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_uninstalling_extension_restores_surviving_extensions_language(
     cx: &mut TestAppContext,
 ) {
@@ -3559,7 +3559,7 @@ async fn test_uninstalling_extension_restores_surviving_extensions_language(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_extension_cannot_shadow_language_registered_outside_extensions(
     cx: &mut TestAppContext,
 ) {
@@ -3617,7 +3617,7 @@ async fn test_extension_cannot_shadow_language_registered_outside_extensions(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_headless_extension_cannot_shadow_language_registered_outside_extensions(
     cx: &mut TestAppContext,
 ) {
@@ -3702,7 +3702,7 @@ languages = ["languages/shared"]
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_hash_directory_contents_hashes_symlinks_by_target(cx: &mut TestAppContext) {
     let fs = FakeFs::new(cx.executor());
     fs.insert_tree(

@@ -17,7 +17,7 @@ use serde_json::json;
 use settings::SettingsStore;
 use util::path;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_lsp_log_view_filters_servers_from_other_projects(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -127,7 +127,7 @@ async fn test_lsp_log_view_filters_servers_from_other_projects(cx: &mut TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_lsp_log_view_labels_registered_supplementary_servers(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -190,7 +190,7 @@ async fn test_lsp_log_view_labels_registered_supplementary_servers(cx: &mut Test
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_log_store_does_not_retain_language_servers(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -280,7 +280,7 @@ async fn test_log_store_does_not_retain_language_servers(cx: &mut TestAppContext
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_log_store_removes_unavailable_copilot_server(cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -322,7 +322,7 @@ async fn test_log_store_removes_unavailable_copilot_server(cx: &mut TestAppConte
     }));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_lsp_log_view(cx: &mut TestAppContext) {
     zlog::init_test();
 
@@ -413,7 +413,7 @@ async fn test_lsp_log_view(cx: &mut TestAppContext) {
     });
 }
 
-fn init_test(cx: &mut gpui::TestAppContext) {
+fn init_test(cx: &mut gpui_runtime::TestAppContext) {
     cx.update(|cx| {
         let settings_store = SettingsStore::test(cx);
         cx.set_global(settings_store);

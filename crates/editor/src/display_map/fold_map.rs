@@ -41,7 +41,7 @@ pub struct FoldPlaceholder {
 impl Default for FoldPlaceholder {
     fn default() -> Self {
         Self {
-            render: Arc::new(|_, _, _| gpui::Empty.into_any_element()),
+            render: Arc::new(|_, _, _| gpui_runtime::Empty.into_any_element()),
             constrain_width: true,
             merge_adjacent: true,
             type_tag: None,
@@ -54,13 +54,13 @@ impl FoldPlaceholder {
     /// Returns a styled `Div` container with the standard fold‐placeholder
     /// look (background, hover, active, rounded corners, full size).
     /// Callers add children and event handlers on top.
-    pub fn fold_element(fold_id: FoldId, cx: &App) -> Stateful<gpui::Div> {
+    pub fn fold_element(fold_id: FoldId, cx: &App) -> Stateful<gpui_runtime::Div> {
         use gpui::{InteractiveElement as _, StatefulInteractiveElement as _, Styled as _};
         use settings::Settings as _;
         use theme::ActiveTheme as _;
         use theme_settings::ThemeSettings;
         let settings = ThemeSettings::get_global(cx);
-        gpui::div()
+        gpui_runtime::div()
             .id(fold_id)
             .font(settings.buffer_font.clone())
             .text_color(cx.theme().colors().text_placeholder)
@@ -74,7 +74,7 @@ impl FoldPlaceholder {
     #[cfg(any(test, feature = "test-support"))]
     pub fn test() -> Self {
         Self {
-            render: Arc::new(|_id, _range, _cx| gpui::Empty.into_any_element()),
+            render: Arc::new(|_id, _range, _cx| gpui_runtime::Empty.into_any_element()),
             constrain_width: true,
             merge_adjacent: true,
             type_tag: None,
@@ -1757,8 +1757,8 @@ mod tests {
     use util::RandomCharIter;
     use util::test::sample_text;
 
-    #[gpui::test]
-    fn test_basic_folds(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_basic_folds(cx: &mut gpui_runtime::App) {
         init_test(cx);
         let buffer = MultiBuffer::build_simple(&sample_text(5, 6, 'a'), cx);
         let subscription = buffer.update(cx, |buffer, _| buffer.subscribe());
@@ -1836,8 +1836,8 @@ mod tests {
         assert_eq!(snapshot6.text(), "123aaaaa\nbbbbbb\nccc123456eee");
     }
 
-    #[gpui::test]
-    fn test_adjacent_folds(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_adjacent_folds(cx: &mut gpui_runtime::App) {
         init_test(cx);
         let buffer = MultiBuffer::build_simple("abcdefghijkl", cx);
         let subscription = buffer.update(cx, |buffer, _| buffer.subscribe());
@@ -1920,8 +1920,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_overlapping_folds(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_overlapping_folds(cx: &mut gpui_runtime::App) {
         let buffer = MultiBuffer::build_simple(&sample_text(5, 6, 'a'), cx);
         let buffer_snapshot = buffer.read(cx).snapshot(cx);
         let (_, inlay_snapshot) = InlayMap::new(buffer_snapshot);
@@ -1937,8 +1937,8 @@ mod tests {
         assert_eq!(snapshot.text(), "aa⋯eeeee");
     }
 
-    #[gpui::test]
-    fn test_merging_folds_via_edit(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_merging_folds_via_edit(cx: &mut gpui_runtime::App) {
         init_test(cx);
         let buffer = MultiBuffer::build_simple(&sample_text(5, 6, 'a'), cx);
         let subscription = buffer.update(cx, |buffer, _| buffer.subscribe());
@@ -1964,8 +1964,8 @@ mod tests {
         assert_eq!(snapshot.text(), "aa⋯eeeee");
     }
 
-    #[gpui::test]
-    fn test_folds_in_range(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_folds_in_range(cx: &mut gpui_runtime::App) {
         let buffer = MultiBuffer::build_simple(&sample_text(5, 6, 'a'), cx);
         let buffer_snapshot = buffer.read(cx).snapshot(cx);
         let (_, inlay_snapshot) = InlayMap::new(buffer_snapshot.clone());
@@ -1995,8 +1995,8 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
-    fn test_random_folds(cx: &mut gpui::App, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    fn test_random_folds(cx: &mut gpui_runtime::App, mut rng: StdRng) {
         init_test(cx);
         let operations = env::var("OPERATIONS")
             .map(|i| i.parse().expect("invalid `OPERATIONS` variable"))
@@ -2280,8 +2280,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    fn test_buffer_rows(cx: &mut gpui::App) {
+    #[gpui_runtime::test]
+    fn test_buffer_rows(cx: &mut gpui_runtime::App) {
         let text = sample_text(6, 6, 'a') + "\n";
         let buffer = MultiBuffer::build_simple(&text, cx);
 
@@ -2313,8 +2313,8 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
-    fn test_random_chunk_bitmaps(cx: &mut gpui::App, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    fn test_random_chunk_bitmaps(cx: &mut gpui_runtime::App, mut rng: StdRng) {
         init_test(cx);
 
         // Generate random buffer using existing test infrastructure
@@ -2407,7 +2407,7 @@ mod tests {
         }
     }
 
-    fn init_test(cx: &mut gpui::App) {
+    fn init_test(cx: &mut gpui_runtime::App) {
         let store = SettingsStore::test(cx);
         cx.set_global(store);
     }

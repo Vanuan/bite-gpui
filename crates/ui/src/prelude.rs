@@ -1,6 +1,6 @@
 //! The prelude of this crate. When building UI in Zed you almost always want to import this.
 
-pub use gpui::prelude::*;
+pub use gpui_runtime::prelude::*;
 pub use gpui::{
     AbsoluteLength, AnyElement, App, Context, DefiniteLength, Div, Element, ElementId,
     InteractiveElement, ParentElement, Pixels, Rems, RenderOnce, SharedString, Styled, Window, div,

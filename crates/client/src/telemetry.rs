@@ -737,14 +737,14 @@ mod tests {
     use super::*;
     use clock::FakeSystemClock;
 
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use http_client::FakeHttpClient;
     use std::collections::HashMap;
     use telemetry_events::FlexibleEvent;
     use util::rel_path::RelPath;
     use worktree::{PathChange, ProjectEntryId, WorktreeId};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_telemetry_flush_on_max_queue_size(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,
@@ -821,7 +821,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_telemetry_flush_on_flush_interval(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,
@@ -873,7 +873,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_report_remote_event_tags_origin(cx: &mut TestAppContext) {
         init_test(cx);
         let clock = Arc::new(FakeSystemClock::new());
@@ -946,8 +946,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_project_discovery_does_not_double_report(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_project_discovery_does_not_double_report(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let clock = Arc::new(FakeSystemClock::new());
@@ -970,8 +970,8 @@ mod tests {
         test_project_discovery_helper(telemetry, vec!["package.json"], None, worktree_id);
     }
 
-    #[gpui::test]
-    fn test_pnpm_project_discovery(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_pnpm_project_discovery(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let clock = Arc::new(FakeSystemClock::new());
@@ -986,8 +986,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_yarn_project_discovery(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_yarn_project_discovery(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let clock = Arc::new(FakeSystemClock::new());
@@ -1002,8 +1002,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    fn test_dotnet_project_discovery(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_dotnet_project_discovery(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let clock = Arc::new(FakeSystemClock::new());

@@ -782,7 +782,7 @@ impl Render for ActivityIndicator {
                         }))
                     }),
                 )
-                .anchor(gpui::Anchor::BottomLeft)
+                .anchor(gpui_types::Anchor::BottomLeft)
                 .when(!has_click_handler, |this| {
                     this.menu(move |window, cx| {
                         let strong_this = activity_indicator.upgrade()?;

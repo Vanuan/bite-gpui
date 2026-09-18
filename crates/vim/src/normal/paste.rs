@@ -396,8 +396,8 @@ mod test {
     use language::{LanguageName, language_settings::LanguageSettingsContent};
     use settings::{SettingsStore, UseSystemClipboard};
 
-    #[gpui::test]
-    async fn test_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // single line
@@ -476,8 +476,8 @@ mod test {
             the lazy dog"});
     }
 
-    #[gpui::test]
-    async fn test_yank_system_clipboard_never(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_yank_system_clipboard_never(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {
@@ -512,8 +512,8 @@ mod test {
         assert_eq!(cx.read_from_clipboard(), None);
     }
 
-    #[gpui::test]
-    async fn test_yank_system_clipboard_on_yank(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_yank_system_clipboard_on_yank(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {
@@ -574,8 +574,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_paste_visual(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_visual(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         // copy in visual mode
@@ -657,8 +657,8 @@ mod test {
             the lazy dog"});
     }
 
-    #[gpui::test]
-    async fn test_paste_visual_block(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_visual_block(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         // copy in visual block mode
         cx.set_shared_state(indoc! {"
@@ -701,8 +701,8 @@ mod test {
             the lzy dog"});
     }
 
-    #[gpui::test]
-    async fn test_paste_indent(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_indent(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new_typescript(cx).await;
 
         cx.set_state(
@@ -746,8 +746,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_paste_auto_indent(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_auto_indent(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -807,8 +807,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_paste_count(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_count(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -841,8 +841,8 @@ mod test {
         "});
     }
 
-    #[gpui::test]
-    async fn test_paste_system_clipboard_never(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_system_clipboard_never(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {
@@ -887,8 +887,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_editor_paste_visual_preserves_system_clipboard(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_editor_paste_visual_preserves_system_clipboard(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -922,8 +922,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_numbered_registers(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_numbered_registers(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {
@@ -968,8 +968,8 @@ mod test {
             .await;
     }
 
-    #[gpui::test]
-    async fn test_named_registers(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_named_registers(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {
@@ -997,8 +997,8 @@ mod test {
         cx.shared_register('a').await.assert_eq(" over");
     }
 
-    #[gpui::test]
-    async fn test_special_registers(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_special_registers(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {
@@ -1056,8 +1056,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_multicursor_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_multicursor_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.update_global(|store: &mut SettingsStore, cx| {
@@ -1087,8 +1087,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_replace_with_register(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_with_register(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -1156,8 +1156,8 @@ mod test {
         assert_eq!(clipboard.text, "fish");
     }
 
-    #[gpui::test]
-    async fn test_replace_with_register_dot_repeat(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_replace_with_register_dot_repeat(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -1187,8 +1187,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_paste_entire_line_from_editor_copy(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_entire_line_from_editor_copy(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -1235,8 +1235,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_paste_marks(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_marks(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Yank a word, paste it elsewhere, then verify `[ and `] point to pasted text.
@@ -1309,8 +1309,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_paste_marks_unicode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_marks_unicode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇxy", Mode::Normal);
         cx.write_to_clipboard(ClipboardItem::new_string("é".to_string()));
@@ -1321,8 +1321,8 @@ mod test {
         cx.assert_state("xˇéy", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_paste_marks_normalize_line_endings(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_marks_normalize_line_endings(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇxy", Mode::Normal);
         cx.write_to_clipboard(ClipboardItem::new_string("a\r\nb".to_string()));
@@ -1333,8 +1333,8 @@ mod test {
         cx.assert_state("xa\nˇby", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_paste_marks_read_only(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_marks_read_only(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state("ˇx", Mode::Normal);
         cx.write_to_clipboard(ClipboardItem::new_string("long text".to_string()));
@@ -1345,8 +1345,8 @@ mod test {
         cx.assert_state("ˇx", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_paste_marks_linewise_before(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste_marks_linewise_before(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state(
             indoc! {"

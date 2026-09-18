@@ -255,7 +255,7 @@ mod tests {
 
     const COPILOT_TEST_DEBOUNCE: Duration = Duration::from_millis(75);
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_copilot(executor: BackgroundExecutor, cx: &mut TestAppContext) {
         // flaky
         init_test(cx, |settings| {
@@ -465,7 +465,7 @@ mod tests {
         });
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_accept_partial_copilot_suggestion(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,
@@ -610,7 +610,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_completion_invalidation(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,
@@ -697,7 +697,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_multibuffer(executor: BackgroundExecutor, cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 
@@ -726,7 +726,7 @@ mod tests {
         let (editor, cx) =
             cx.add_window_view(|window, cx| Editor::for_multibuffer(multibuffer, None, window, cx));
         editor.update_in(cx, |editor, window, cx| {
-            use gpui::Focusable;
+            use gpui_runtime::Focusable;
             window.focus(&editor.focus_handle(cx), cx);
         });
         let copilot_provider = cx.new(|_| CopilotEditPredictionDelegate::new(copilot));
@@ -845,7 +845,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_does_not_prevent_completion_triggers(
         executor: BackgroundExecutor,
         cx: &mut TestAppContext,
@@ -973,7 +973,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_copilot_disabled_globs(executor: BackgroundExecutor, cx: &mut TestAppContext) {
         init_test(cx, |settings| {
             settings
@@ -1030,7 +1030,7 @@ mod tests {
             cx.add_window(|window, cx| Editor::for_multibuffer(multibuffer, None, window, cx));
         editor
             .update(cx, |editor, window, cx| {
-                use gpui::Focusable;
+                use gpui_runtime::Focusable;
                 window.focus(&editor.focus_handle(cx), cx)
             })
             .unwrap();

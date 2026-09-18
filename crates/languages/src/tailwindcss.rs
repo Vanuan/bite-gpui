@@ -1,6 +1,6 @@
 use anyhow::Result;
 use async_trait::async_trait;
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use language::{LspAdapter, LspAdapterDelegate, LspInstaller, Toolchain};
 use lsp::{LanguageServerBinary, LanguageServerName, Uri};
 use node_runtime::{NodeRuntime, VersionStrategy};

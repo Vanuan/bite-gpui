@@ -5,7 +5,7 @@ use async_trait::async_trait;
 use collections::HashMap;
 use dap::adapters::{DebugTaskDefinition, latest_github_release};
 use futures::StreamExt;
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use serde_json::Value;
 use task::{DebugRequest, DebugScenario, ZedDebugConfig};
 use util::fs::remove_matching;

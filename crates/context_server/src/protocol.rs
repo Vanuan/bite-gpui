@@ -9,7 +9,7 @@ use std::time::Duration;
 
 use anyhow::Result;
 use futures::{channel::oneshot, future::BoxFuture};
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use serde_json::Value;
 
 use crate::client::{Client, NotificationSubscription};

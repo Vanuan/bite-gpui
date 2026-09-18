@@ -1,5 +1,5 @@
 use editor::{EditorSettings, ui_scrollbar_settings_from_raw};
-use gpui::Pixels;
+use gpui_types::Pixels;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 use settings::{

@@ -666,7 +666,7 @@ mod tests {
 
     use super::*;
     use buffer_diff::DiffHunkStatusKind;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use language::Point;
     use project::{FakeFs, Fs, Project, RemoveOptions};
     use rand::prelude::*;
@@ -688,7 +688,7 @@ mod tests {
         });
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_keep_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -766,7 +766,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_deletions(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -851,7 +851,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_overlapping_user_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -948,7 +948,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_creating_files(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1007,7 +1007,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_deleting_files(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1117,7 +1117,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reject_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1252,7 +1252,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reject_multiple_edits(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1328,7 +1328,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reject_deleted_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1385,7 +1385,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reject_created_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1440,7 +1440,7 @@ mod tests {
         assert_eq!(unreviewed_hunks(&action_log, cx), vec![]);
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     async fn test_random_diffs(mut rng: StdRng, cx: &mut TestAppContext) {
         init_test(cx);
 

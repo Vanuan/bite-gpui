@@ -164,8 +164,8 @@ mod test {
 
     use crate::{state::Mode, test::VimTestContext};
 
-    #[gpui::test]
-    async fn test_system_clipboard_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_system_clipboard_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state(
@@ -212,8 +212,8 @@ mod test {
         cx.assert_state("«Xˇ»\n«Xˇ»\n«Xˇ»\nend", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_system_clipboard_crlf_paste_at_end_of_buffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_system_clipboard_crlf_paste_at_end_of_buffer(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("ˇ", Mode::HelixNormal);
@@ -224,8 +224,8 @@ mod test {
         cx.assert_state("«a\nbˇ»", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_read_only_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_read_only_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state("aˇb", Mode::HelixNormal);
@@ -237,8 +237,8 @@ mod test {
         cx.assert_state("aˇb", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state(
@@ -277,8 +277,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_point_selection_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_point_selection_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state(
@@ -343,8 +343,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_multi_cursor_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_multi_cursor_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         // Select two blocks of text.
@@ -426,8 +426,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_line_mode_paste(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_line_mode_paste(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.enable_helix();
         cx.set_state(

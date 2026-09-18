@@ -1,8 +1,8 @@
-use gpui::TaskExt;
+use gpui_platform::TaskExt;
 use workspace::Workspace;
 use zed_actions::remote_debug::{SimulateDisconnect, SimulateTimeout, SimulateTimeoutExhausted};
 
-pub fn init(cx: &mut gpui::App) {
+pub fn init(cx: &mut gpui_runtime::App) {
     cx.observe_new(|workspace: &mut Workspace, _, cx| {
         let project = workspace.project().read(cx);
         let Some(remote_client) = project.remote_client() else {

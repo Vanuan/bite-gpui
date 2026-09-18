@@ -443,7 +443,7 @@ mod tests {
         assert!(!has_item(&without_agent_panel, "View", "Agent Panel"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_entries_refresh_on_settings_change(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -511,7 +511,7 @@ mod tests {
         )));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_entries_preserve_deployed_menu_on_unrelated_settings_change(cx: &mut TestAppContext) {
         init_test(cx);
 

@@ -180,7 +180,7 @@ impl LinkedEdits {
         editor: &Editor,
         anchor_range: Range<Anchor>,
         text: Arc<str>,
-        cx: &gpui::App,
+        cx: &gpui_runtime::App,
     ) {
         if let Some(editing_ranges) = editor.linked_editing_ranges_for(anchor_range, cx) {
             for (buffer, ranges) in editing_ranges {
@@ -234,10 +234,10 @@ impl LinkedEdits {
 #[cfg(test)]
 mod tests {
     use crate::{editor_tests::init_test, test::editor_test_context::EditorTestContext};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use text::Point;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_edits_push_and_apply(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorTestContext::new(cx).await;
@@ -259,7 +259,7 @@ mod tests {
         cx.assert_editor_state("<dixˇv></dixv>");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_edits_backspace(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorTestContext::new(cx).await;
@@ -283,7 +283,7 @@ mod tests {
         cx.assert_editor_state("<diˇ></di>");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_edits_delete(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorTestContext::new(cx).await;
@@ -307,7 +307,7 @@ mod tests {
         cx.assert_editor_state("<ˇiv></iv>");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_edits_selection(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
         let mut cx = EditorTestContext::new(cx).await;

@@ -283,7 +283,7 @@ mod tests {
     use util::path;
     use util::rel_path::{RelPath, rel_path};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_write_create_file(cx: &mut TestAppContext) {
         let (write_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"dir": {}})).await;
@@ -307,7 +307,7 @@ mod tests {
         assert!(!diff.is_empty());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_write_overwrite_file(cx: &mut TestAppContext) {
         let (write_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "old content"})).await;
@@ -334,7 +334,7 @@ mod tests {
         assert_eq!(*old_text, "old content");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_write_global_skill_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -397,7 +397,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_path_completeness_heuristic(cx: &mut TestAppContext) {
         let (write_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "hello world"})).await;
@@ -430,7 +430,7 @@ mod tests {
         assert_eq!(new_text, "new content");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_create_file_with_partials(cx: &mut TestAppContext) {
         let (write_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"dir": {}})).await;
@@ -466,7 +466,7 @@ mod tests {
         assert_eq!(new_text, "Hello, World!");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_input_recv_drains_partials(cx: &mut TestAppContext) {
         let (write_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"dir": {}})).await;
@@ -496,7 +496,7 @@ mod tests {
         assert_eq!(new_text, "streamed content");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_resolve_path_for_creating_file(cx: &mut TestAppContext) {
         let mode = EditSessionMode::Write;
 
@@ -525,7 +525,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_format_on_save(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -692,7 +692,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_remove_trailing_whitespace(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -794,7 +794,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_diff_finalization(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = project::FakeFs::new(cx.executor());
@@ -852,7 +852,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_create_content_streamed(cx: &mut TestAppContext) {
         let (write_tool, project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"dir": {}})).await;
@@ -914,7 +914,7 @@ mod tests {
         assert_eq!(new_text, "line 1\nline 2\nline 3\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_overwrite_diff_revealed_during_streaming(cx: &mut TestAppContext) {
         let (write_tool, _project, _action_log, _fs, _thread) = setup_test(
             cx,
@@ -978,7 +978,7 @@ mod tests {
         diff.read_with(cx, |diff, _| assert!(matches!(diff, Diff::Finalized(_))));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_overwrite_content_streamed(cx: &mut TestAppContext) {
         let (write_tool, project, _action_log, _fs, _thread) = setup_test(
             cx,
@@ -1042,7 +1042,7 @@ mod tests {
         assert_eq!(*old_text, "old line 1\nold line 2\nold line 3\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_write_file_tool_registers_changed_buffers(cx: &mut TestAppContext) {
         let (write_tool, _project, action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "original content"})).await;
@@ -1078,7 +1078,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_write_file_tool_fields_out_of_order(cx: &mut TestAppContext) {
         let (write_tool, _project, _action_log, _fs, _thread) =
             setup_test(cx, json!({"file.txt": "old_content"})).await;
@@ -1110,7 +1110,7 @@ mod tests {
         assert_eq!(new_text, "new_content");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_reject_created_file_deletes_it(cx: &mut TestAppContext) {
         let (write_tool, _project, action_log, fs, _thread) =
             setup_test(cx, json!({"dir": {}})).await;
@@ -1163,7 +1163,7 @@ mod tests {
     /// When the buffer has unsaved user edits and the user picks
     /// "Discard my edits", the pending edits are reverted to match disk
     /// and the agent's overwrite proceeds.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_write_dirty_buffer_discard(cx: &mut TestAppContext) {
         let (write_tool, project, _action_log, fs, _thread) =
             setup_test(cx, json!({"file.txt": "on disk content"})).await;
@@ -1242,7 +1242,7 @@ mod tests {
     /// When the buffer has unsaved user edits and the user picks
     /// "Keep my edits", the overwrite is cancelled with an error and the
     /// user's pending edits are preserved.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_write_dirty_buffer_keep(cx: &mut TestAppContext) {
         let (write_tool, project, _action_log, fs, _thread) =
             setup_test(cx, json!({"file.txt": "on disk content"})).await;
@@ -1305,7 +1305,7 @@ mod tests {
     /// overwrite prompt is visible, that's treated as "Keep my edits":
     /// the user just deliberately persisted their work, so we cancel the
     /// agent's overwrite to avoid clobbering it.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_streaming_write_dirty_buffer_resolved_externally(cx: &mut TestAppContext) {
         let (write_tool, project, _action_log, fs, _thread) =
             setup_test(cx, json!({"file.txt": "on disk content"})).await;

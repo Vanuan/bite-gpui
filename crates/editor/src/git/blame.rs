@@ -228,7 +228,7 @@ impl BlameRenderer for () {
 
 pub(crate) struct GlobalBlameRenderer(pub Arc<dyn BlameRenderer>);
 
-impl gpui::Global for GlobalBlameRenderer {}
+impl gpui_runtime::Global for GlobalBlameRenderer {}
 
 impl GitBlame {
     pub fn new(
@@ -861,7 +861,7 @@ fn build_blame_entry_sum_tree(entries: Vec<BlameEntry>, max_row: u32) -> SumTree
 mod tests {
     use super::*;
     use git::repository::repo_path;
-    use gpui::Context;
+    use gpui_runtime::Context;
     use language::{Capability, Point, Rope};
     use project::FakeFs;
     use rand::prelude::*;
@@ -911,7 +911,7 @@ mod tests {
         );
     }
 
-    fn init_test(cx: &mut gpui::TestAppContext) {
+    fn init_test(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| {
             let settings = SettingsStore::test(cx);
             cx.set_global(settings);
@@ -922,8 +922,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_blame_error_notifications(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_blame_error_notifications(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -982,8 +982,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_blame_ignores_buffers_outside_git_repositories(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_blame_ignores_buffers_outside_git_repositories(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -1049,8 +1049,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_blame_for_rows(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_blame_for_rows(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -1171,8 +1171,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_static_blame(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_static_blame(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -1322,8 +1322,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_blame_for_rows_with_edits(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_blame_for_rows_with_edits(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -1467,8 +1467,8 @@ mod tests {
         });
     }
 
-    #[gpui::test(iterations = 100)]
-    async fn test_blame_random(mut rng: StdRng, cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test(iterations = 100)]
+    async fn test_blame_random(mut rng: StdRng, cx: &mut gpui_runtime::TestAppContext) {
         let operations = env::var("OPERATIONS")
             .map(|i| i.parse().expect("invalid `OPERATIONS` variable"))
             .unwrap_or(10);
@@ -1608,12 +1608,12 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_blame_hover_shows_popover_on_first_trigger(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_blame_hover_shows_popover_on_first_trigger(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         cx.update(|cx| {
-            use gpui::UpdateGlobal;
+            use gpui_runtime::UpdateGlobal;
             settings::SettingsStore::update_global(
                 cx,
                 |store: &mut settings::SettingsStore, cx| {

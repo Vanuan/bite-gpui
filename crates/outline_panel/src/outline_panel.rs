@@ -2663,7 +2663,7 @@ impl OutlinePanel {
         depth: usize,
         icon_element: AnyElement,
         is_active: bool,
-        label_element: gpui::AnyElement,
+        label_element: gpui_runtime::AnyElement,
         window: &mut Window,
         cx: &mut Context<OutlinePanel>,
     ) -> Stateful<Div> {
@@ -2673,7 +2673,7 @@ impl OutlinePanel {
             .id(item_id.clone())
             .on_click({
                 let clicked_entry = rendered_entry.clone();
-                cx.listener(move |outline_panel, event: &gpui::ClickEvent, window, cx| {
+                cx.listener(move |outline_panel, event: &gpui_runtime::ClickEvent, window, cx| {
                     if event.is_right_click() || event.first_focus() {
                         return;
                     }
@@ -4956,7 +4956,7 @@ impl OutlinePanel {
             deferred(
                 anchored()
                     .position(*position)
-                    .anchor(gpui::Anchor::TopLeft)
+                    .anchor(gpui_types::Anchor::TopLeft)
                     .child(menu.clone()),
             )
             .with_priority(1)
@@ -5575,7 +5575,7 @@ mod tests {
 
     const SELECTED_MARKER: &str = "  <==== selected";
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_project_search_results_toggling(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5804,7 +5804,7 @@ mod tests {
         });
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_item_filtering(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -5937,7 +5937,7 @@ mod tests {
         });
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_item_opening(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6149,7 +6149,7 @@ outline: fn hints_lifetimes_named  <==== selected"
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multiple_worktrees(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6325,7 +6325,7 @@ two/  <==== selected
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_navigating_in_singleton(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6667,7 +6667,7 @@ outline: struct OutlineEntryExcerpt
         });
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_frontend_repo_structure(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7395,7 +7395,7 @@ outline: struct OutlineEntryExcerpt
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_keyboard_expand_collapse(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7647,7 +7647,7 @@ outline: fn main"
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_click_toggle_behavior(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7862,7 +7862,7 @@ outline: fn main"
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_expand_collapse_all(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8056,7 +8056,7 @@ outline: fn main"
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_buffer_search(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8151,7 +8151,7 @@ search: | Field          | Meaning              «  »|"
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_panel_lsp_document_symbols(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8364,7 +8364,7 @@ outline: struct Foo  <==== selected
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_markdown_outline_selection_at_heading_boundaries(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8470,7 +8470,7 @@ outline: struct Foo  <==== selected
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_hide_symbols_in_multibuffer(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8679,7 +8679,7 @@ outline: struct Foo  <==== selected
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_hide_symbols_exempts_singleton(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -8805,7 +8805,7 @@ outline: fn main"
         });
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_hide_symbols_hides_search_matches(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8979,7 +8979,7 @@ rust-analyzer/
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_excerpt_outlines_scoped_to_excerpt_range(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9083,7 +9083,7 @@ test/
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_simultaneous_hide_symbols_and_depth_settings_change(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9205,7 +9205,7 @@ test/
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_filtered_symbol_selection_survives_hide_symbols(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9331,7 +9331,7 @@ test/
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_default_depth_applies_to_all_buffers(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -9417,7 +9417,7 @@ test/
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_depth_change_while_symbols_hidden_applies_on_reveal(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {

@@ -228,8 +228,8 @@ mod test {
         test::{NeovimBackedTestContext, VimTestContext},
     };
 
-    #[gpui::test]
-    async fn test_delete_h(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_h(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("d h", "Teˇst").await.assert_matches();
         cx.simulate("d h", "Tˇest").await.assert_matches();
@@ -244,8 +244,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_l(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_l(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("d l", "ˇTest").await.assert_matches();
         cx.simulate("d l", "Teˇst").await.assert_matches();
@@ -260,8 +260,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_w(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_w(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "d w",
@@ -306,8 +306,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_next_word_end(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_next_word_end(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("d e", "Teˇst Test\n").await.assert_matches();
         cx.simulate("d e", "Tˇest test\n").await.assert_matches();
@@ -333,8 +333,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_b(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_b(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("d b", "Teˇst Test").await.assert_matches();
         cx.simulate("d b", "Test ˇtest").await.assert_matches();
@@ -364,8 +364,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_end_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_end_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "d $",
@@ -386,8 +386,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_end_of_paragraph(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_end_of_paragraph(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "d }",
@@ -409,8 +409,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_0(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_0(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "d 0",
@@ -431,8 +431,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_k(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_k(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "d k",
@@ -471,8 +471,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_j(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_j(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "d j",
@@ -512,8 +512,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_end_of_document(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_end_of_document(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "d shift-g",
@@ -557,8 +557,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_to_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_to_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "d 3 shift-g",
@@ -592,8 +592,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_gg(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_gg(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "d g g",
@@ -637,8 +637,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_cancel_delete_operator(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_cancel_delete_operator(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state(
             indoc! {"
@@ -658,8 +658,8 @@ mod test {
             the lazy dog"});
     }
 
-    #[gpui::test]
-    async fn test_unbound_command_cancels_pending_operator(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_unbound_command_cancels_pending_operator(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state(
             indoc! {"
@@ -675,8 +675,8 @@ mod test {
         assert_eq!(cx.mode(), Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_delete_with_counts(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_with_counts(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {"
                 The ˇquick brown
@@ -708,15 +708,15 @@ mod test {
         the ˇlazy dog"});
     }
 
-    #[gpui::test]
-    async fn test_delete_to_adjacent_character(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_to_adjacent_character(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("d t x", "ˇax").await.assert_matches();
         cx.simulate("d t x", "aˇx").await.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_sentence(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_sentence(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         // cx.simulate(
         //     "d )",

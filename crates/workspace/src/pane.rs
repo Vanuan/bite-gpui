@@ -3466,7 +3466,7 @@ impl Pane {
 
     fn render_tab_bar(&mut self, window: &mut Window, cx: &mut Context<Pane>) -> AnyElement {
         if self.workspace.upgrade().is_none() {
-            return gpui::Empty.into_any();
+            return gpui_runtime::Empty.into_any();
         }
 
         let focus_handle = self.focus_handle.clone();
@@ -5100,7 +5100,7 @@ mod tests {
 
     // drop_call_count is a Cell here because `handle_drop` takes &self, not &mut self.
     struct CustomDropHandlingItem {
-        focus_handle: gpui::FocusHandle,
+        focus_handle: gpui_runtime::FocusHandle,
         drop_call_count: Cell<usize>,
     }
 
@@ -5120,7 +5120,7 @@ mod tests {
     impl EventEmitter<()> for CustomDropHandlingItem {}
 
     impl Focusable for CustomDropHandlingItem {
-        fn focus_handle(&self, _cx: &App) -> gpui::FocusHandle {
+        fn focus_handle(&self, _cx: &App) -> gpui_runtime::FocusHandle {
             self.focus_handle.clone()
         }
     }
@@ -5130,8 +5130,8 @@ mod tests {
             &mut self,
             _window: &mut Window,
             _cx: &mut Context<Self>,
-        ) -> impl gpui::IntoElement {
-            gpui::Empty
+        ) -> impl gpui_runtime::IntoElement {
+            gpui_runtime::Empty
         }
     }
 
@@ -5157,7 +5157,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_add_item_capped_to_max_tabs(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5207,7 +5207,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reduce_max_tabs_closes_existing_items(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5244,7 +5244,7 @@ mod tests {
         assert_item_labels(&pane, ["C!", "D!", "Settings*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_allow_pinning_dirty_item_at_max_tabs(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5264,7 +5264,7 @@ mod tests {
         assert_item_labels(&pane, ["A*^!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_allow_pinning_non_dirty_item_at_max_tabs(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5284,7 +5284,7 @@ mod tests {
         assert_item_labels(&pane, ["A*!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pin_tabs_incrementally_at_max_capacity(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5324,7 +5324,7 @@ mod tests {
         assert_item_labels(&pane, ["A!", "B!", "C*!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pin_tabs_left_to_right_after_opening_at_max_capacity(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5364,7 +5364,7 @@ mod tests {
         assert_item_labels(&pane, ["A!", "B!", "C*!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pin_tabs_right_to_left_after_opening_at_max_capacity(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5404,7 +5404,7 @@ mod tests {
         assert_item_labels(&pane, ["C*!", "B!", "A!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pinned_tabs_never_closed_at_max_tabs(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5442,7 +5442,7 @@ mod tests {
         assert_item_labels(&pane, ["A!", "B!", "H*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_always_allows_one_unpinned_item_over_max_tabs_regardless_of_pinned_count(
         cx: &mut TestAppContext,
     ) {
@@ -5492,7 +5492,7 @@ mod tests {
         assert_item_labels(&pane, ["A!", "B!", "C!", "D!", "F*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_can_open_one_item_when_all_tabs_are_dirty_at_max(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5526,7 +5526,7 @@ mod tests {
         assert_item_labels(&pane, ["A^", "B^", "C^", "G*^"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggle_pin_tab(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5550,7 +5550,7 @@ mod tests {
         assert_item_labels(&pane, ["B*", "A", "C"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_unpin_all_tabs(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5622,7 +5622,7 @@ mod tests {
         assert_item_labels(&pane, ["A", "B*", "C"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_separate_pinned_row_disabled_by_default(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5660,7 +5660,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_separate_pinned_row_two_rows_when_both_tab_types_exist(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5692,7 +5692,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_separate_pinned_row_single_row_when_only_pinned_tabs(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5725,7 +5725,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_separate_pinned_row_single_row_when_only_unpinned_tabs(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5752,7 +5752,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_separate_pinned_row_toggles_between_layouts(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5797,7 +5797,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_separate_pinned_row_has_right_border(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5837,7 +5837,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pinning_active_tab_without_position_change_maintains_focus(
         cx: &mut TestAppContext,
     ) {
@@ -5879,7 +5879,7 @@ mod tests {
         assert_item_labels(&pane, ["A*", "B"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pinning_active_tab_with_position_change_maintains_focus(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -5910,7 +5910,7 @@ mod tests {
         assert_item_labels(&pane, ["C*", "A", "B"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pinning_inactive_tab_without_position_change_preserves_existing_focus(
         cx: &mut TestAppContext,
     ) {
@@ -5942,7 +5942,7 @@ mod tests {
         assert_item_labels(&pane, ["A", "B*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pinning_inactive_tab_with_position_change_preserves_existing_focus(
         cx: &mut TestAppContext,
     ) {
@@ -5982,7 +5982,7 @@ mod tests {
         assert_item_labels(&pane, ["C", "A", "B*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_handle_tab_drop_respects_is_pane_target(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6059,7 +6059,7 @@ mod tests {
         assert_eq!(target_item_ids, vec![moved_item_id, custom_item_id]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_unpinned_tab_to_split_creates_pane_with_unpinned_tab(
         cx: &mut TestAppContext,
     ) {
@@ -6106,7 +6106,7 @@ mod tests {
         assert_item_labels(&pane_b, ["A*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_pinned_tab_to_split_creates_pane_with_pinned_tab(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6155,7 +6155,7 @@ mod tests {
         assert_item_labels(&pane_b, ["A*!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_pinned_tab_into_existing_panes_pinned_region(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6201,7 +6201,7 @@ mod tests {
         assert_item_labels(&pane_b, ["A*!", "B!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_pinned_tab_into_existing_panes_unpinned_region(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6249,7 +6249,7 @@ mod tests {
         assert_item_labels(&pane_b, ["B!", "A*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_pinned_tab_into_existing_panes_first_position_with_no_pinned_tabs(
         cx: &mut TestAppContext,
     ) {
@@ -6293,7 +6293,7 @@ mod tests {
         assert_item_labels(&pane_b, ["A*!", "B"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_pinned_tab_into_existing_pane_at_max_capacity_closes_unpinned_tabs(
         cx: &mut TestAppContext,
     ) {
@@ -6355,7 +6355,7 @@ mod tests {
         assert_item_labels(&pane_b, ["A*!", "C!", "D!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_last_pinned_tab_to_same_position_stays_pinned(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6389,7 +6389,7 @@ mod tests {
         assert_item_labels(&pane_a, ["A*!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_pinned_tab_beyond_last_pinned_tab_in_same_pane_stays_pinned(
         cx: &mut TestAppContext,
     ) {
@@ -6429,7 +6429,7 @@ mod tests {
         assert_item_labels(&pane_a, ["B!", "A*!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dragging_pinned_tab_onto_unpinned_tab_reduces_unpinned_tab_count(
         cx: &mut TestAppContext,
     ) {
@@ -6466,7 +6466,7 @@ mod tests {
         assert_item_labels(&pane_a, ["B", "A*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_pinned_tab_beyond_unpinned_tab_in_same_pane_becomes_unpinned(
         cx: &mut TestAppContext,
     ) {
@@ -6503,7 +6503,7 @@ mod tests {
         assert_item_labels(&pane_a, ["B", "A*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_unpinned_tab_in_front_of_pinned_tab_in_same_pane_becomes_pinned(
         cx: &mut TestAppContext,
     ) {
@@ -6540,7 +6540,7 @@ mod tests {
         assert_item_labels(&pane_a, ["B*!", "A!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_unpinned_tab_to_the_pinned_region_stays_pinned(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6576,7 +6576,7 @@ mod tests {
         assert_item_labels(&pane_a, ["A!", "C*", "B"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_unpinned_tab_into_existing_panes_pinned_region(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6618,7 +6618,7 @@ mod tests {
         assert_item_labels(&pane_b, ["A*!", "B!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_unpinned_tab_into_existing_panes_unpinned_region(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6660,7 +6660,7 @@ mod tests {
         assert_item_labels(&pane_b, ["B!", "A*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_pinned_tab_throughout_entire_range_of_pinned_tabs_both_directions(
         cx: &mut TestAppContext,
     ) {
@@ -6751,7 +6751,7 @@ mod tests {
         assert_item_labels(&pane_a, ["A*!", "B!", "C!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_first_tab_to_last_position(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6783,7 +6783,7 @@ mod tests {
         assert_item_labels(&pane_a, ["B", "C", "A*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_last_tab_to_first_position(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6815,7 +6815,7 @@ mod tests {
         assert_item_labels(&pane_a, ["C*", "A", "B"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_tab_to_middle_tab_with_mouse_events(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -6864,7 +6864,7 @@ mod tests {
         assert_item_labels(&pane, ["B", "C", "A*", "D"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_pinned_tab_when_show_pinned_tabs_in_separate_row_enabled(
         cx: &mut TestAppContext,
     ) {
@@ -6939,7 +6939,7 @@ mod tests {
         assert_item_labels(&pane, ["B!", "C!", "A*!", "D!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_unpinned_tab_when_show_pinned_tabs_in_separate_row_enabled(
         cx: &mut TestAppContext,
     ) {
@@ -6991,7 +6991,7 @@ mod tests {
         assert_item_labels(&pane, ["B", "C", "A*", "D"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_drag_mixed_tabs_when_show_pinned_tabs_in_separate_row_enabled(
         cx: &mut TestAppContext,
     ) {
@@ -7058,7 +7058,7 @@ mod tests {
         assert_item_labels(&pane, ["A!", "B!", "D", "E", "C*", "F"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_middle_click_pinned_tab_does_not_close(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7129,7 +7129,7 @@ mod tests {
         assert_item_labels(&pane, ["A*!"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_double_click_pinned_tab_bar_empty_space_creates_new_tab(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7197,7 +7197,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_add_item_with_new_item(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7280,7 +7280,7 @@ mod tests {
         assert_item_labels(&pane, ["A", "B", "C", "D*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_add_item_with_existing_item(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7356,7 +7356,7 @@ mod tests {
         assert_item_labels(&pane, ["A*", "B", "C"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_add_item_with_same_project_entries(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7461,7 +7461,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_item_ordering_history(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7545,7 +7545,7 @@ mod tests {
         assert_item_labels(&pane, ["A*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_item_ordering_neighbour(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update_global::<SettingsStore, ()>(|s, cx| {
@@ -7634,7 +7634,7 @@ mod tests {
         assert_item_labels(&pane, ["A*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_item_ordering_left_neighbour(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update_global::<SettingsStore, ()>(|s, cx| {
@@ -7729,7 +7729,7 @@ mod tests {
         assert_item_labels(&pane, ["C*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_inactive_items(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7776,7 +7776,7 @@ mod tests {
         assert_item_labels(&pane, ["A!", "B!", "E*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_running_close_inactive_items_via_an_inactive_item(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7813,7 +7813,7 @@ mod tests {
         assert_item_labels(&pane, ["B*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_other_items_unpreviews_active_item(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7852,7 +7852,7 @@ mod tests {
         assert_item_labels(&pane, ["C*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_clean_items(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7883,7 +7883,7 @@ mod tests {
         assert_item_labels(&pane, ["A^", "C*^"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_items_to_the_left(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7910,7 +7910,7 @@ mod tests {
         assert_item_labels(&pane, ["C*", "D", "E"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_items_to_the_right(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -7937,7 +7937,7 @@ mod tests {
         assert_item_labels(&pane, ["A", "B", "C*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_all_items(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8090,7 +8090,7 @@ mod tests {
         assert_item_labels(&pane, ["Dirty*^"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_discard_all_reloads_from_disk(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8144,7 +8144,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dont_save_single_file_reloads_from_disk(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8179,7 +8179,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_format_runs_on_first_save_of_new_file(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8212,7 +8212,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_format_does_not_run_on_first_save_when_save_without_format(
         cx: &mut TestAppContext,
     ) {
@@ -8247,7 +8247,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_discard_does_not_reload_multibuffer(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8318,7 +8318,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_multibuffer_items(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8451,7 +8451,7 @@ mod tests {
         assert_item_labels(&pane, ["C", "A*^"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_with_save_intent(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8494,7 +8494,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_new_tab_scrolls_into_view_completely(cx: &mut TestAppContext) {
         // Arrange
         init_test(cx);
@@ -8531,7 +8531,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_pinned_tabs_scroll_to_item_uses_correct_index(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8596,7 +8596,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_all_items_including_pinned(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8628,7 +8628,7 @@ mod tests {
         assert_item_labels(&pane, [], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_pinned_tab_with_non_pinned_in_same_pane(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8660,7 +8660,7 @@ mod tests {
         assert_item_labels(&pane, ["A!", "B*", "C"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_pinned_tab_with_non_pinned_in_different_pane(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8695,7 +8695,7 @@ mod tests {
         assert_item_labels(&pane2, ["B*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_close_pinned_tab_while_workspace_is_leased(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8741,7 +8741,7 @@ mod tests {
         assert_item_labels(&pane2, ["B*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn ensure_item_closing_actions_do_not_panic_when_no_items_exist(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8831,7 +8831,7 @@ mod tests {
         .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_item_swapping_actions(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -8882,33 +8882,33 @@ mod tests {
         assert_item_labels(&pane, ["A", "C*", "B"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_split_empty(cx: &mut TestAppContext) {
         for split_direction in SplitDirection::all() {
             test_single_pane_split(["A"], split_direction, SplitMode::EmptyPane, cx).await;
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_split_clone(cx: &mut TestAppContext) {
         for split_direction in SplitDirection::all() {
             test_single_pane_split(["A"], split_direction, SplitMode::ClonePane, cx).await;
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_split_move_right_on_single_pane(cx: &mut TestAppContext) {
         test_single_pane_split(["A"], SplitDirection::Right, SplitMode::MovePane, cx).await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_split_move(cx: &mut TestAppContext) {
         for split_direction in SplitDirection::all() {
             test_single_pane_split(["A", "B"], split_direction, SplitMode::MovePane, cx).await;
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reopening_closed_item_after_unpreview(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -8965,7 +8965,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_activate_item_with_wrap_around(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -9010,7 +9010,7 @@ mod tests {
         assert_item_labels(&pane, ["A", "B", "C*"], cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_intents_are_noops_for_read_only_items(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -9388,7 +9388,7 @@ mod tests {
                 _window: &mut Window,
                 _cx: &mut Context<Self>,
             ) -> impl IntoElement {
-                gpui::Empty
+                gpui_runtime::Empty
             }
         }
 

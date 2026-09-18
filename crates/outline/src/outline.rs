@@ -475,7 +475,7 @@ pub fn render_item<T, M: IntoIterator<Item = Range<usize>>>(
 
     let text_style = buffer_text_style(cx);
     let buffer_font_size = text_style.font_size;
-    let highlights = gpui::combine_highlights(
+    let highlights = gpui_runtime::combine_highlights(
         custom_highlights,
         outline_item.highlight_ranges.iter().cloned(),
     );
@@ -500,7 +500,7 @@ mod tests {
     use util::{path, rel_path::rel_path};
     use workspace::{AppState, MultiWorkspace, Workspace};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_view_row_highlights(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.executor());
@@ -632,7 +632,7 @@ mod tests {
         assert_single_caret_at_row(&editor, expected_first_highlighted_row, cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_empty_query_prefers_deepest_containing_symbol_else_first(
         cx: &mut TestAppContext,
     ) {
@@ -740,7 +740,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_stale_hover_index_after_matches_shrink(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -804,7 +804,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_filtered_selection_prefers_first_match_on_score_ties(
         cx: &mut TestAppContext,
     ) {
@@ -1006,7 +1006,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_outline_modal_lsp_document_symbols(cx: &mut TestAppContext) {
         init_test(cx);
 

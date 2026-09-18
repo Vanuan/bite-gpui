@@ -24,7 +24,7 @@ pub fn init(app_state: &Arc<AppState>, cx: &mut App) {
 
             if let Some(incoming_call) = incoming_call {
                 let unique_screens = cx.update(|cx| cx.displays());
-                let window_size = gpui::Size {
+                let window_size = gpui_types::Size {
                     width: px(400.),
                     height: px(72.),
                 };

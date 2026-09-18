@@ -242,7 +242,7 @@ mod tests {
     use agent_skills::{SkillScopeId, SkillSource, parse_skill_frontmatter};
     use anyhow::Context as _;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::Project;
     use serde_json::json;
     use settings::{Settings, SettingsStore};
@@ -306,7 +306,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_returns_content(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -346,7 +346,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_output_wraps_in_skill_content(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -386,7 +386,7 @@ mod tests {
         assert!(!text.contains("<skill_files>"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_neutralizes_envelope_tags_in_malicious_skill(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -441,7 +441,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_passes_through_legitimate_html(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -506,7 +506,7 @@ mod tests {
         assert!(escaped.contains("🦀"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_returns_source(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -588,7 +588,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_unknown_skill(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -614,7 +614,7 @@ mod tests {
         assert!(err.contains("existing-skill"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_refuses_disable_model_invocation(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -659,7 +659,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_prompts_for_authorization_by_default(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -715,7 +715,7 @@ mod tests {
         assert!(rendered.contains("<skill_content name=\"my-skill\">"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_auth_context_uses_skill_file_path(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -772,7 +772,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_skill_tool_denial_returns_error(cx: &mut TestAppContext) {
         init_test(cx);
 

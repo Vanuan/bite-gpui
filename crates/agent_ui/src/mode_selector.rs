@@ -182,9 +182,9 @@ impl Render for ModeSelector {
                     }
                 }),
             )
-            .anchor(gpui::Anchor::BottomRight)
+            .anchor(gpui_types::Anchor::BottomRight)
             .with_handle(self.menu_handle.clone())
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(-2.0),
             })
@@ -205,7 +205,7 @@ mod tests {
     use project::{AgentId, Project};
     use std::{any::Any, cell::RefCell};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn setting_mode_saves_selected_mode_as_default(cx: &mut TestAppContext) {
         let agent_server = Rc::new(TestAgentServer::default());
         let session_modes = Rc::new(TestSessionModes::new());

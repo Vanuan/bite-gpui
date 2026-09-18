@@ -352,7 +352,7 @@ impl Editor {
         autoscroll_request: Option<(Autoscroll, bool)>,
         window: &mut Window,
         cx: &mut Context<Self>,
-    ) -> Option<gpui::Point<ScrollOffset>> {
+    ) -> Option<gpui_types::Point<ScrollOffset>> {
         let (_, local) = autoscroll_request?;
         let em_advance = ScrollOffset::from(em_advance);
         let viewport_width = ScrollOffset::from(viewport_width);

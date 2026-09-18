@@ -33,7 +33,7 @@ pub struct PaneGroup {
 }
 
 pub struct PaneRenderResult {
-    pub element: gpui::AnyElement,
+    pub element: gpui_runtime::AnyElement,
     pub contains_active_pane: bool,
     #[cfg(any(test, feature = "test-support"))]
     pub decorated_pane_ix: Option<usize>,
@@ -1370,7 +1370,7 @@ mod element {
         fn request_layout(
             &mut self,
             _global_id: Option<&GlobalElementId>,
-            _inspector_id: Option<&gpui::InspectorElementId>,
+            _inspector_id: Option<&gpui_runtime::InspectorElementId>,
             window: &mut Window,
             cx: &mut App,
         ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -1387,7 +1387,7 @@ mod element {
         fn prepaint(
             &mut self,
             global_id: Option<&GlobalElementId>,
-            _inspector_id: Option<&gpui::InspectorElementId>,
+            _inspector_id: Option<&gpui_runtime::InspectorElementId>,
             bounds: Bounds<Pixels>,
             _state: &mut Self::RequestLayoutState,
             window: &mut Window,
@@ -1463,8 +1463,8 @@ mod element {
         fn paint(
             &mut self,
             _id: Option<&GlobalElementId>,
-            _inspector_id: Option<&gpui::InspectorElementId>,
-            bounds: gpui::Bounds<ui::prelude::Pixels>,
+            _inspector_id: Option<&gpui_runtime::InspectorElementId>,
+            bounds: gpui_types::Bounds<ui::prelude::Pixels>,
             _: &mut Self::RequestLayoutState,
             layout: &mut Self::PrepaintState,
             window: &mut Window,
@@ -1509,14 +1509,14 @@ mod element {
                         && child.is_leaf_pane
                         && self.active_pane_ix != Some(ix)
                     {
-                        window.paint_quad(gpui::fill(overlay_bounds, overlay_background));
+                        window.paint_quad(gpui_runtime::fill(overlay_bounds, overlay_background));
                     }
 
                     if let Some(border) = overlay_border
                         && self.active_pane_ix == Some(ix)
                         && child.is_leaf_pane
                     {
-                        window.paint_quad(gpui::quad(
+                        window.paint_quad(gpui_runtime::quad(
                             overlay_bounds,
                             0.,
                             gpui::transparent_black(),
@@ -1543,7 +1543,7 @@ mod element {
                         window.set_cursor_style(cursor_style, &handle.hitbox);
                     }
 
-                    window.paint_quad(gpui::fill(
+                    window.paint_quad(gpui_runtime::fill(
                         handle.divider_bounds,
                         cx.theme().colors().pane_group_border,
                     ));

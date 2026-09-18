@@ -1,6 +1,6 @@
 //! Modal implementation for the which-key display.
 
-use gpui::prelude::FluentBuilder;
+use gpui_runtime::prelude::FluentBuilder;
 use gpui::{
     App, Context, DismissEvent, EventEmitter, FocusHandle, Focusable, FontWeight,
     KeybindingKeystroke, ScrollHandle, Subscription, WeakEntity, Window,
@@ -188,7 +188,7 @@ impl Render for WhichKeyModal {
                                     .size(LabelSize::Default)
                                     .color(Color::Accent),
                             )
-                            .text_align(gpui::TextAlign::Right)
+                            .text_align(gpui_runtime::TextAlign::Right)
                     })),
             )
             .child(
@@ -239,7 +239,7 @@ impl Render for WhichKeyModal {
 impl EventEmitter<DismissEvent> for WhichKeyModal {}
 
 impl Focusable for WhichKeyModal {
-    fn focus_handle(&self, _cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _cx: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -292,7 +292,7 @@ fn group_bindings(
 #[cfg(test)]
 mod tests {
     #[cfg(target_os = "windows")]
-    use gpui::Modifiers;
+    use gpui_types::Modifiers;
     use gpui::{
         Action as _, Entity, FocusHandle, InvalidKeystrokeError, KeyBinding, Keystroke,
         TestAppContext, VisualTestContext, actions,
@@ -365,7 +365,7 @@ mod tests {
         Ok(())
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_which_key_modal_groups_and_orders_pending_bindings(cx: &mut TestAppContext) {
         let (modal, cx) = setup_modal_test(
             cx,

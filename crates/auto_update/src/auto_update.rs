@@ -178,9 +178,9 @@ pub struct AutoUpdater {
     current_version: Version,
     client: Arc<Client>,
     pending_poll: Option<Task<Option<()>>>,
-    quit_subscription: Option<gpui::Subscription>,
+    quit_subscription: Option<gpui_runtime::Subscription>,
     update_check_type: UpdateCheckType,
-    _wake_subscription: gpui::Subscription,
+    _wake_subscription: gpui_runtime::Subscription,
     dismissed_status: Option<AutoUpdateStatus>,
 }
 
@@ -1350,7 +1350,7 @@ mod tests {
     use client::Client;
     use clock::FakeSystemClock;
     use futures::channel::oneshot;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use http_client::{FakeHttpClient, Response};
     use settings::default_settings;
     use std::{
@@ -1372,7 +1372,7 @@ mod tests {
     pub(super) struct InstallOverride(pub Rc<dyn Fn(&Path, &AsyncApp) -> Result<Option<PathBuf>>>);
     impl Global for InstallOverride {}
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_auto_update_defaults_to_true(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let mut store = SettingsStore::new(cx, &settings::default_settings());
@@ -1387,7 +1387,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_auto_update_downloads(cx: &mut TestAppContext) {
         cx.background_executor.allow_parking();
         zlog::init_test();
@@ -1499,7 +1499,7 @@ mod tests {
         assert_eq!(std::fs::read_to_string(path).unwrap(), "<fake-zed-update>");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_download_release_reports_progress(cx: &mut TestAppContext) {
         cx.background_executor.allow_parking();
 
@@ -1566,7 +1566,7 @@ mod tests {
         assert_eq!(downloaded_len, content_length as u64);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_download_release_without_content_length_reports_no_progress(
         cx: &mut TestAppContext,
     ) {

@@ -1293,7 +1293,7 @@ pub(crate) async fn test_resolve_path(
     mode: &EditSessionMode,
     path: &str,
     project: &Entity<Project>,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) -> Result<ProjectPath, String> {
     cx.update(|cx| resolve_path(*mode, &PathBuf::from(path), project, cx))
 }

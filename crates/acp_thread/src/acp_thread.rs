@@ -1358,7 +1358,7 @@ pub enum ContentBlock {
     },
     Image {
         image: Arc<gpui::Image>,
-        dimensions: Option<gpui::Size<u32>>,
+        dimensions: Option<gpui_types::Size<u32>>,
     },
 }
 
@@ -1486,13 +1486,13 @@ impl ContentBlock {
 
     fn decode_image(
         image_content: &acp::ImageContent,
-    ) -> Option<(Arc<gpui::Image>, Option<gpui::Size<u32>>)> {
+    ) -> Option<(Arc<gpui::Image>, Option<gpui_types::Size<u32>>)> {
         Self::decode_image_data(&image_content.data, &image_content.mime_type)
     }
 
     fn decode_embedded_resource_image(
         resource: &acp::EmbeddedResource,
-    ) -> Option<(Arc<gpui::Image>, Option<gpui::Size<u32>>)> {
+    ) -> Option<(Arc<gpui::Image>, Option<gpui_types::Size<u32>>)> {
         let acp::EmbeddedResourceResource::BlobResourceContents(blob) = &resource.resource else {
             return None;
         };
@@ -1503,7 +1503,7 @@ impl ContentBlock {
     fn decode_image_data(
         data: &str,
         mime_type: &str,
-    ) -> Option<(Arc<gpui::Image>, Option<gpui::Size<u32>>)> {
+    ) -> Option<(Arc<gpui::Image>, Option<gpui_types::Size<u32>>)> {
         use base64::Engine as _;
 
         let bytes = base64::engine::general_purpose::STANDARD
@@ -1514,7 +1514,7 @@ impl ContentBlock {
         Some((Arc::new(gpui::Image::from_bytes(format, bytes)), dimensions))
     }
 
-    fn image_dimensions(bytes: &[u8], format: gpui::ImageFormat) -> Option<gpui::Size<u32>> {
+    fn image_dimensions(bytes: &[u8], format: gpui::ImageFormat) -> Option<gpui_types::Size<u32>> {
         let format = match format {
             gpui::ImageFormat::Png => image::ImageFormat::Png,
             gpui::ImageFormat::Jpeg => image::ImageFormat::Jpeg,
@@ -1530,7 +1530,7 @@ impl ContentBlock {
         image::ImageReader::with_format(std::io::Cursor::new(bytes), format)
             .into_dimensions()
             .ok()
-            .map(|(width, height)| gpui::Size { width, height })
+            .map(|(width, height)| gpui_types::Size { width, height })
     }
 
     fn create_markdown_block(
@@ -1741,7 +1741,7 @@ impl ContentBlock {
         }
     }
 
-    pub fn image(&self) -> Option<(&Arc<gpui::Image>, Option<gpui::Size<u32>>)> {
+    pub fn image(&self) -> Option<(&Arc<gpui::Image>, Option<gpui_types::Size<u32>>)> {
         match self {
             ContentBlock::Image { image, dimensions } => Some((image, *dimensions)),
             _ => None,
@@ -1894,7 +1894,7 @@ impl ToolCallContent {
         }
     }
 
-    pub fn image(&self) -> Option<(&Arc<gpui::Image>, Option<gpui::Size<u32>>)> {
+    pub fn image(&self) -> Option<(&Arc<gpui::Image>, Option<gpui_types::Size<u32>>)> {
         match self {
             Self::ContentBlock(content) => content.image(),
             _ => None,
@@ -2115,7 +2115,7 @@ pub struct AcpThread {
     /// The user's unsent prompt text, persisted so it can be restored when reloading the thread.
     draft_prompt: Option<Vec<acp::ContentBlock>>,
     /// The initial scroll position for the thread view, set during session registration.
-    ui_scroll_position: Option<gpui::ListOffset>,
+    ui_scroll_position: Option<gpui_runtime::ListOffset>,
     /// Buffer for smooth text streaming. Holds text that has been received from
     /// the model but not yet revealed in the UI. A timer task drains this buffer
     /// gradually to create a fluid typing effect instead of choppy chunk-at-a-time
@@ -2360,11 +2360,11 @@ impl AcpThread {
         self.draft_prompt = prompt;
     }
 
-    pub fn ui_scroll_position(&self) -> Option<gpui::ListOffset> {
+    pub fn ui_scroll_position(&self) -> Option<gpui_runtime::ListOffset> {
         self.ui_scroll_position
     }
 
-    pub fn set_ui_scroll_position(&mut self, position: Option<gpui::ListOffset>) {
+    pub fn set_ui_scroll_position(&mut self, position: Option<gpui_runtime::ListOffset>) {
         self.ui_scroll_position = position;
     }
 
@@ -4769,7 +4769,7 @@ mod tests {
     use feature_flags::FeatureFlag as _;
     use futures::stream::StreamExt as _;
     use futures::{channel::mpsc, future::LocalBoxFuture, select};
-    use gpui::UpdateGlobal as _;
+    use gpui_runtime::UpdateGlobal as _;
     use gpui::{App, AsyncApp, TestAppContext, WeakEntity};
     use indoc::indoc;
     use project::{AgentId, FakeFs, Fs, RemoveOptions};
@@ -4889,9 +4889,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_call_content_preserves_embedded_text_resource(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -4952,9 +4952,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_call_content_renders_embedded_image_blob_resource(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -4991,9 +4991,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_call_content_falls_back_for_non_image_blob_resource(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -5067,8 +5067,8 @@ mod tests {
         assert!(!details.network_all_hosts);
     }
 
-    #[gpui::test]
-    async fn test_terminal_output_buffered_before_created_renders(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_terminal_output_buffered_before_created_renders(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -5136,8 +5136,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_terminal_exit_preserves_visible_scrollback(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_terminal_exit_preserves_visible_scrollback(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -5213,8 +5213,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_terminal_output_and_exit_buffered_before_created(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_terminal_output_and_exit_buffered_before_created(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -5301,8 +5301,8 @@ mod tests {
     /// the shell process in addition to the foreground process) properly allows
     /// wait_for_exit to complete instead of hanging indefinitely.
     #[cfg(unix)]
-    #[gpui::test]
-    async fn test_terminal_kill_allows_wait_for_exit_to_complete(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_terminal_kill_allows_wait_for_exit_to_complete(cx: &mut gpui_runtime::TestAppContext) {
         use std::collections::HashMap;
         use task::Shell;
         use util::shell_builder::ShellBuilder;
@@ -5444,8 +5444,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_push_user_content_block(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_push_user_content_block(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -5517,9 +5517,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_user_message_chunks_use_protocol_message_id_boundaries(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -5620,9 +5620,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_protocol_user_chunk_does_not_merge_into_optimistic_prompt(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -5683,9 +5683,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_assistant_chunks_use_protocol_message_id_boundaries(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -5796,8 +5796,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_thinking_concatenation(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_thinking_concatenation(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -5862,8 +5862,8 @@ mod tests {
     /// `send_command` runs the turn (the connection receives the typed command)
     /// but never echoes a user-message bubble, so commands like `/compact` don't
     /// show a fake user message implying the text was sent to the model.
-    #[gpui::test]
-    async fn test_send_command_does_not_echo_user_message(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_send_command_does_not_echo_user_message(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let fs = FakeFs::new(cx.executor());
@@ -5933,9 +5933,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_ignore_echoed_user_message_chunks_during_active_turn(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_test(cx);
 
@@ -5989,7 +5989,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_edits_concurrently_to_user(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6068,7 +6068,7 @@ mod tests {
         request.await.unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reading_from_line(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6146,7 +6146,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reading_empty_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6222,7 +6222,7 @@ mod tests {
             "Invalid params: \"Attempting to read beyond the end of the file, line 1:0\""
         );
     }
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reading_non_existing_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6256,7 +6256,7 @@ mod tests {
         assert_eq!(err.code, acp::ErrorCode::ResourceNotFound);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_succeeding_canceled_toolcall(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6348,7 +6348,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_call_location_resolves_external_file(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6398,7 +6398,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_duplicate_tool_call_update_preserves_open_permission_request_until_authorized(
         cx: &mut TestAppContext,
     ) {
@@ -6542,7 +6542,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_permission_request_tracks_agent_status_until_resolved(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -6630,7 +6630,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_permission_request_sets_waiting_status_on_existing_tool_call(
         cx: &mut TestAppContext,
     ) {
@@ -6715,7 +6715,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancel_tool_call_authorization_resolves_permission_request(
         cx: &mut TestAppContext,
     ) {
@@ -6770,7 +6770,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_terminal_tool_call_update_closes_open_permission_request(
         cx: &mut TestAppContext,
     ) {
@@ -6833,7 +6833,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_no_pending_edits_if_tool_calls_are_completed(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -6880,7 +6880,7 @@ mod tests {
         assert!(cx.read(|cx| !thread.read(cx).has_pending_edit_tool_calls()));
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_checkpoints(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -7060,7 +7060,7 @@ mod tests {
         assert_eq!(fs.files(), vec![Path::new(path!("/test/file-0"))]);
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_checkpoint_shows_when_file_changes_during_pending_message(
         cx: &mut TestAppContext,
     ) {
@@ -7173,7 +7173,7 @@ mod tests {
         send_task.await.unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_result_refusal(cx: &mut TestAppContext) {
         use std::sync::atomic::AtomicUsize;
         init_test(cx);
@@ -7272,7 +7272,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_user_prompt_refusal_emits_event(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -7333,7 +7333,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_refusal(cx: &mut TestAppContext) {
         init_test(cx);
         let fs = FakeFs::new(cx.background_executor.clone());
@@ -7451,7 +7451,7 @@ mod tests {
         (id.clone(), elicitation)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_elicitation_is_available_without_acp_beta_flag(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {
@@ -7483,7 +7483,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_form_elicitation_accepts_response(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -7545,7 +7545,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_url_elicitation_can_be_completed(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -7610,7 +7610,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_idle_cancel_cancels_accepted_url_elicitation(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -7674,7 +7674,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancel_accepted_url_elicitation_marks_canceled(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -7744,7 +7744,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_turn_cancel_cancels_accepted_url_elicitation_from_previous_turn(
         cx: &mut TestAppContext,
     ) {
@@ -7845,7 +7845,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_request_scoped_elicitation_store_accepts_response(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -7897,7 +7897,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_request_elicitation_store_ignores_duplicate_response(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -7952,7 +7952,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancel_session_elicitation_by_id_resolves_cancel(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -7987,7 +7987,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancel_pending_session_elicitation_resolves_cancel(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -8048,7 +8048,7 @@ mod tests {
         })?
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prompt_error_cancels_pending_session_elicitation(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -8103,7 +8103,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_max_tokens_cancels_pending_session_elicitation(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -8158,7 +8158,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancel_request_scoped_elicitation_resolves_cancel(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -8192,7 +8192,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_request_elicitation_store_cancel_all_resolves_cancel(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -8220,7 +8220,7 @@ mod tests {
         assert_eq!(response_task.await.action, acp::ElicitationAction::Cancel);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_request_elicitation_store_clear_removes_answered_and_cancels_pending(
         cx: &mut TestAppContext,
     ) {
@@ -8284,7 +8284,7 @@ mod tests {
         store.read_with(cx, |store, _| assert!(store.elicitations().is_empty()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_request_elicitation_store_clear_resolved_preserves_outstanding(
         cx: &mut TestAppContext,
     ) {
@@ -8398,7 +8398,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_request_url_elicitation_store_can_be_completed(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -8467,7 +8467,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_request_url_elicitation_store_cancel_all_cancels_accepted_url(
         cx: &mut TestAppContext,
     ) {
@@ -8536,7 +8536,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_cancel_pending_elicitations_preserves_responded_statuses(
         cx: &mut TestAppContext,
     ) {
@@ -8583,7 +8583,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_session_elicitation_ignores_duplicate_response(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -8634,7 +8634,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_url_elicitation_rejects_non_browser_urls(cx: &mut TestAppContext) {
         init_test(cx);
         enable_acp_beta(cx);
@@ -8670,7 +8670,7 @@ mod tests {
         thread.read_with(cx, |thread, _| assert!(thread.entries().is_empty()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_elicitation_rejects_unadvertised_mode(cx: &mut TestAppContext) {
         init_test(cx);
         let thread = new_test_thread(cx).await;
@@ -8697,7 +8697,7 @@ mod tests {
         thread.read_with(cx, |thread, _| assert!(thread.entries().is_empty()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_request_elicitation_store_rejects_unadvertised_mode(cx: &mut TestAppContext) {
         init_test(cx);
         let store = cx.update(|cx| cx.new(|_| ElicitationStore::default()));
@@ -8957,7 +8957,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_call_not_found_creates_failed_entry(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9028,7 +9028,7 @@ mod tests {
     /// Reproduces issue #35142: When a checkpoint is restored, any terminal processes
     /// that were started after that checkpoint should be terminated, and any in-progress
     /// AI generation should be canceled.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_restore_checkpoint_kills_terminal(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9329,7 +9329,7 @@ mod tests {
     /// This is a regression test for a bug where update_last_checkpoint would fail with
     /// "no checkpoint" if a new user message (without a checkpoint) was added between when
     /// update_last_checkpoint started and when its async closure ran.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_update_last_checkpoint_with_new_message_added(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9393,7 +9393,7 @@ mod tests {
     /// This is a regression test for a bug where update_last_checkpoint would
     /// swallow a checkpoint comparison error and hide an already-visible
     /// "Restore checkpoint" button without logging anything.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_update_last_checkpoint_compare_error_keeps_checkpoint_visible(
         cx: &mut TestAppContext,
     ) {
@@ -9471,7 +9471,7 @@ mod tests {
     /// Tests that when a follow-up message is sent during generation,
     /// the first turn completing does NOT clear `running_turn` because
     /// it now belongs to the second turn.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_follow_up_message_during_generation_does_not_clear_turn(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9567,7 +9567,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stale_cancelled_response_does_not_cancel_current_compaction(
         cx: &mut TestAppContext,
     ) {
@@ -9663,7 +9663,7 @@ mod tests {
             .expect("second request should complete");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_send_omits_message_id_without_client_user_message_id_support(
         cx: &mut TestAppContext,
     ) {
@@ -9695,7 +9695,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_send_returns_cancelled_response_and_marks_tools_as_cancelled(
         cx: &mut TestAppContext,
     ) {
@@ -9771,7 +9771,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_provisional_title_replaced_by_real_title(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9829,7 +9829,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_session_info_update_replaces_provisional_title_and_emits_event(
         cx: &mut TestAppContext,
     ) {
@@ -9905,7 +9905,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_usage_update_populates_token_usage_and_cost(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -9941,7 +9941,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_context_compaction_preserves_token_usage(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10006,7 +10006,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_usage_update_without_cost_preserves_existing_cost(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10047,7 +10047,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_response_usage_does_not_clobber_session_usage(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10102,7 +10102,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_clearing_token_usage_also_clears_cost(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -10145,7 +10145,7 @@ mod tests {
     /// must still clear `running_turn` so the panel transitions out of
     /// `Generating`. Without this, the agent thread is wedged in the
     /// loading state until Zed restarts.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_running_turn_cleared_when_send_task_dropped(cx: &mut TestAppContext) {
         init_test(cx);
 

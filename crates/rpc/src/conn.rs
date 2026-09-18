@@ -30,7 +30,7 @@ impl Connection {
 
     #[cfg(any(test, feature = "test-support"))]
     pub fn in_memory(
-        executor: gpui::BackgroundExecutor,
+        executor: gpui_platform::BackgroundExecutor,
     ) -> (Self, Self, std::sync::Arc<std::sync::atomic::AtomicBool>) {
         use std::sync::{
             Arc,
@@ -49,7 +49,7 @@ impl Connection {
         #[allow(clippy::type_complexity)]
         fn channel(
             killed: Arc<AtomicBool>,
-            executor: gpui::BackgroundExecutor,
+            executor: gpui_platform::BackgroundExecutor,
         ) -> (
             Box<dyn Send + Unpin + futures::Sink<WebSocketMessage, Error = anyhow::Error>>,
             Box<dyn Send + Unpin + futures::Stream<Item = anyhow::Result<WebSocketMessage>>>,

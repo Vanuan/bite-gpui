@@ -1436,7 +1436,7 @@ impl Render for TerminalView {
                 deferred(
                     anchored()
                         .position(*position)
-                        .anchor(gpui::Anchor::TopLeft)
+                        .anchor(gpui_types::Anchor::TopLeft)
                         .child(menu.clone()),
                 )
                 .with_priority(1)
@@ -1736,7 +1736,7 @@ impl Item for TerminalView {
         &self,
         _window: &mut Window,
         cx: &mut Context<Self>,
-    ) -> Vec<(SharedString, Box<dyn gpui::Action>)> {
+    ) -> Vec<(SharedString, Box<dyn gpui_runtime::Action>)> {
         let terminal = self.terminal.read(cx);
         if terminal.task().is_none() {
             vec![("Rename".into(), Box::new(RenameTerminal))]
@@ -2227,7 +2227,7 @@ mod tests {
     // CSI `1;2A` = cursor-up with the xterm Shift modifier (`1 + 1` for Shift).
     const SHIFT_UP_ESCAPE: &[u8] = b"\x1b[1;2A";
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn edit_menu_copy_and_paste_are_available_when_terminal_is_focused(
         cx: &mut TestAppContext,
     ) {
@@ -2253,7 +2253,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn shift_up_scrolls_history_in_normal_screen(cx: &mut TestAppContext) {
         let (project, _workspace, window_handle) = init_test_with_window(cx).await;
         cx.update(load_default_keymap);
@@ -2298,7 +2298,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn shift_up_is_forwarded_to_program_in_alt_screen(cx: &mut TestAppContext) {
         let (project, _workspace, window_handle) = init_test_with_window(cx).await;
         cx.update(load_default_keymap);
@@ -2330,7 +2330,7 @@ mod tests {
     }
 
     #[cfg(target_os = "linux")]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn ctrl_q_is_forwarded_to_terminal_not_quit(cx: &mut TestAppContext) {
         let (project, _workspace, window_handle) = init_test_with_window(cx).await;
         cx.update(load_default_keymap);
@@ -2351,7 +2351,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn altgr_character_input_is_not_swallowed_as_meta_sequence(cx: &mut TestAppContext) {
         let (project, _workspace, window_handle) = init_test_with_window(cx).await;
         cx.update(|cx| {
@@ -2418,7 +2418,7 @@ mod tests {
     // Working directory calculation tests
 
     // No Worktrees in project -> home_dir()
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn no_worktree(cx: &mut TestAppContext) {
         let (project, workspace) = init_test(cx).await;
         cx.read(|cx| {
@@ -2436,7 +2436,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn remote_no_worktree_uses_remote_shell_default_cwd(
         cx: &mut TestAppContext,
         server_cx: &mut TestAppContext,
@@ -2453,7 +2453,7 @@ mod tests {
     }
 
     // No active entry, but a worktree, worktree is a file -> parent directory
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn no_active_entry_worktree_is_file(cx: &mut TestAppContext) {
         let (project, workspace) = init_test(cx).await;
 
@@ -2474,7 +2474,7 @@ mod tests {
     }
 
     // No active entry, but a worktree, worktree is a folder -> worktree_folder
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn no_active_entry_worktree_is_dir(cx: &mut TestAppContext) {
         let (project, workspace) = init_test(cx).await;
 
@@ -2494,7 +2494,7 @@ mod tests {
     }
 
     // Active entry with a work tree, worktree is a file -> worktree_folder()
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn active_entry_worktree_is_file(cx: &mut TestAppContext) {
         let (project, workspace) = init_test(cx).await;
 
@@ -2516,7 +2516,7 @@ mod tests {
     }
 
     // Active entry, with a worktree, worktree is a folder -> worktree_folder
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn active_entry_worktree_is_dir(cx: &mut TestAppContext) {
         let (project, workspace) = init_test(cx).await;
 
@@ -2538,7 +2538,7 @@ mod tests {
     }
 
     // active_entry_directory: No active entry -> returns None (used by CurrentFileDirectory)
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn active_entry_directory_no_active_entry(cx: &mut TestAppContext) {
         let (project, _workspace) = init_test(cx).await;
 
@@ -2553,7 +2553,7 @@ mod tests {
     }
 
     // active_entry_directory: Active entry is file -> returns parent directory (used by CurrentFileDirectory)
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn active_entry_directory_active_file(cx: &mut TestAppContext) {
         let (project, _workspace) = init_test(cx).await;
 
@@ -2568,7 +2568,7 @@ mod tests {
     }
 
     // active_entry_directory: Active entry is directory -> returns that directory (used by CurrentFileDirectory)
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn active_entry_directory_active_dir(cx: &mut TestAppContext) {
         let (project, _workspace) = init_test(cx).await;
 
@@ -2599,7 +2599,7 @@ mod tests {
 
     fn add_display_only_terminal(
         project: &Entity<Project>,
-        window_handle: gpui::WindowHandle<MultiWorkspace>,
+        window_handle: gpui_runtime::WindowHandle<MultiWorkspace>,
         focus: bool,
         cx: &mut TestAppContext,
     ) -> (Entity<Pane>, Entity<Terminal>, Entity<TerminalView>) {
@@ -2658,7 +2658,7 @@ mod tests {
     ) -> (
         Entity<Project>,
         Entity<Workspace>,
-        gpui::WindowHandle<MultiWorkspace>,
+        gpui_runtime::WindowHandle<MultiWorkspace>,
     ) {
         let params = cx.update(AppState::test);
         cx.update(|cx| {
@@ -2820,7 +2820,7 @@ mod tests {
 
     // Terminal drag/drop test
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_handle_drop_writes_paths_for_all_drop_types(cx: &mut TestAppContext) {
         let (project, _workspace, window_handle) = init_test_with_window(cx).await;
 
@@ -2962,7 +2962,7 @@ mod tests {
 
     // Terminal rename tests
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_custom_title_initially_none(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -2992,7 +2992,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_custom_title(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -3023,7 +3023,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_custom_title_empty_becomes_none(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -3060,7 +3060,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_custom_title_marks_needs_serialize(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -3092,7 +3092,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tab_content_uses_custom_title(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 
@@ -3133,7 +3133,7 @@ mod tests {
     async fn draw_standalone_terminal(
         output: &[u8],
         cx: &mut TestAppContext,
-    ) -> (gpui::Bounds<Pixels>, gpui::Size<Pixels>) {
+    ) -> (gpui_types::Bounds<Pixels>, gpui_types::Size<Pixels>) {
         let (project, workspace) = init_test(cx).await;
         let terminal = cx.new(|cx| {
             terminal::TerminalBuilder::new_display_only(
@@ -3161,13 +3161,13 @@ mod tests {
             )
         });
 
-        let draw_size = gpui::size(px(400.), px(201.));
+        let draw_size = gpui_backend::size(px(400.), px(201.));
         cx.simulate_resize(draw_size);
-        cx.draw(gpui::Point::default(), draw_size, |_, _| {
+        cx.draw(gpui_types::Point::default(), draw_size, |_, _| {
             terminal_view.clone().into_any_element()
         });
         cx.run_until_parked();
-        cx.draw(gpui::Point::default(), draw_size, |_, _| {
+        cx.draw(gpui_types::Point::default(), draw_size, |_, _| {
             terminal_view.clone().into_any_element()
         });
 
@@ -3177,13 +3177,13 @@ mod tests {
         (bounds, draw_size)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_short_standalone_terminal_stays_top_anchored_on_resize(cx: &mut TestAppContext) {
         let (bounds, _) = draw_standalone_terminal(b"$ ", cx).await;
         assert_eq!(bounds.origin.y, px(0.));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_full_standalone_terminal_stays_bottom_anchored_on_resize(
         cx: &mut TestAppContext,
     ) {
@@ -3196,14 +3196,14 @@ mod tests {
         assert_eq!(bounds.bottom(), draw_size.height);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_short_alt_screen_stays_bottom_anchored_on_resize(cx: &mut TestAppContext) {
         let (bounds, draw_size) = draw_standalone_terminal(b"\x1b[?1049h$ ", cx).await;
         assert!(bounds.origin.y > px(0.));
         assert_eq!(bounds.bottom(), draw_size.height);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_inline_terminal_displays_all_of_its_lines(cx: &mut TestAppContext) {
         let (project, workspace) = init_test(cx).await;
         let terminal = cx.new(|cx| {
@@ -3235,8 +3235,8 @@ mod tests {
                 terminal.write_output(b"line\n", cx);
             });
             cx.draw(
-                gpui::Point::default(),
-                gpui::size(px(400.), px(100.)),
+                gpui_types::Point::default(),
+                gpui_backend::size(px(400.), px(100.)),
                 |_, _| terminal_view.clone().into_any_element(),
             );
             terminal.read_with(cx, |terminal, _| {
@@ -3245,7 +3245,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_inline_terminal_shrinks_after_clear(cx: &mut TestAppContext) {
         let (project, workspace) = init_test(cx).await;
         let terminal = cx.new(|cx| {
@@ -3277,8 +3277,8 @@ mod tests {
                 terminal.write_output(b"line\n", cx);
             });
             cx.draw(
-                gpui::Point::default(),
-                gpui::size(px(400.), px(100.)),
+                gpui_types::Point::default(),
+                gpui_backend::size(px(400.), px(100.)),
                 |_, _| terminal_view.clone().into_any_element(),
             );
         }
@@ -3289,8 +3289,8 @@ mod tests {
         terminal.update(cx, |terminal, _| terminal.clear());
         for _ in 1..=2 {
             cx.draw(
-                gpui::Point::default(),
-                gpui::size(px(400.), px(100.)),
+                gpui_types::Point::default(),
+                gpui_backend::size(px(400.), px(100.)),
                 |_, _| terminal_view.clone().into_any_element(),
             );
         }
@@ -3300,7 +3300,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tab_content_shows_terminal_title_when_custom_title_directly_set_empty(
         cx: &mut TestAppContext,
     ) {

@@ -223,8 +223,8 @@ mod test {
     use crate::state::Mode;
     use crate::test::{NeovimBackedTestContext, VimTestContext};
 
-    #[gpui::test]
-    async fn test_change_h(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_h(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("c h", "Teˇst").await.assert_matches();
         cx.simulate("c h", "Tˇest").await.assert_matches();
@@ -239,8 +239,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_backspace(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_backspace(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("c backspace", "Teˇst").await.assert_matches();
         cx.simulate("c backspace", "Tˇest").await.assert_matches();
@@ -255,15 +255,15 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_l(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_l(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("c l", "Teˇst").await.assert_matches();
         cx.simulate("c l", "Tesˇt").await.assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_w(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_w(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("c w", "Teˇst").await.assert_matches();
         cx.simulate("c w", "Tˇest test").await.assert_matches();
@@ -316,8 +316,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_e(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_e(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("c e", "Teˇst Test").await.assert_matches();
         cx.simulate("c e", "Tˇest test").await.assert_matches();
@@ -352,8 +352,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_b(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_b(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate("c b", "Teˇst Test").await.assert_matches();
         cx.simulate("c b", "Test ˇtest").await.assert_matches();
@@ -383,8 +383,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_end_of_line(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_end_of_line(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "c $",
@@ -405,8 +405,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_0(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_0(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.simulate(
@@ -428,8 +428,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_k(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_k(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.simulate(
@@ -479,8 +479,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_j(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_j(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "c j",
@@ -529,8 +529,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_end_of_document(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_end_of_document(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "c shift-g",
@@ -574,8 +574,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_cc(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_cc(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "c c",
@@ -611,8 +611,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_change_gg(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_gg(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.simulate(
             "c g g",
@@ -656,8 +656,8 @@ mod test {
         .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_repeated_cj(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeated_cj(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         for count in 1..=5 {
@@ -675,8 +675,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_repeated_cl(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeated_cl(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         for count in 1..=5 {
@@ -694,8 +694,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_repeated_cb(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeated_cb(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         for count in 1..=5 {
@@ -713,8 +713,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_repeated_ce(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_repeated_ce(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         for count in 1..=5 {
@@ -732,8 +732,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_change_with_selection_spanning_expanded_diff_hunk(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_with_selection_spanning_expanded_diff_hunk(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         let diff_base = indoc! {"

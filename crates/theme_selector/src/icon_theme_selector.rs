@@ -21,7 +21,7 @@ pub(crate) struct IconThemeSelector {
 impl EventEmitter<DismissEvent> for IconThemeSelector {}
 
 impl Focusable for IconThemeSelector {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.picker.focus_handle(cx)
     }
 }
@@ -322,7 +322,7 @@ impl PickerDelegate for IconThemeSelectorDelegate {
         &self,
         _window: &mut Window,
         cx: &mut Context<Picker<Self>>,
-    ) -> Option<gpui::AnyElement> {
+    ) -> Option<gpui_runtime::AnyElement> {
         Some(
             h_flex()
                 .p_2()
@@ -467,7 +467,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_icon_theme_selector_preserves_selection_on_empty_filter(cx: &mut TestAppContext) {
         let app_state = setup_test(cx).await;
         let project = Project::test(app_state.fs.clone(), [path!("/test").as_ref()], cx).await;

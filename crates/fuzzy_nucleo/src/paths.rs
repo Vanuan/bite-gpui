@@ -1,4 +1,4 @@
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use path::{PathStyle, rel_path::RelPath};
 use std::{
     cmp::Ordering,

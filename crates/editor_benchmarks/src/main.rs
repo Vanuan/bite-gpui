@@ -110,7 +110,7 @@ fn main() {
     let has_replacement = args.replace.is_some();
     let single = args.single;
 
-    gpui_platform::headless().run(move |cx| {
+    gpui::headless().run(move |cx| {
         release_channel::init_test(
             semver::Version::new(0, 0, 0),
             release_channel::ReleaseChannel::Dev,
@@ -125,9 +125,9 @@ fn main() {
         let window_handle = cx
             .open_window(
                 WindowOptions {
-                    window_bounds: Some(WindowBounds::Windowed(gpui::Bounds {
+                    window_bounds: Some(WindowBounds::Windowed(gpui_types::Bounds {
                         origin: Default::default(),
-                        size: gpui::size(gpui::px(800.0), gpui::px(600.0)),
+                        size: gpui_backend::size(gpui::px(800.0), gpui::px(600.0)),
                     })),
                     focus: false,
                     show: false,

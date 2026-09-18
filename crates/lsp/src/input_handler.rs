@@ -140,9 +140,9 @@ impl LspStdoutHandler {
 mod tests {
     use super::*;
     use futures::{AsyncWriteExt as _, StreamExt as _};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_backpressure_when_messages_are_not_consumed(cx: &mut TestAppContext) {
         let total_messages = INCOMING_MESSAGE_QUEUE_CAPACITY * 4;
         let (mut writer, reader) = async_pipe::pipe();
@@ -187,7 +187,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_read_headers() {
         let mut buf = Vec::new();
         let mut reader = BufReader::new(b"Content-Length: 123\r\n\r\n" as &[u8]);

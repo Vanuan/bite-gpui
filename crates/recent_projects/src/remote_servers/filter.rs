@@ -28,7 +28,7 @@
 use std::sync::atomic::{self, AtomicBool};
 
 use fuzzy_nucleo::{StringMatch, StringMatchCandidate};
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 
 use super::RemoteEntry;
 
@@ -478,8 +478,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    async fn test_run_async_returns_none_when_cancelled(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_run_async_returns_none_when_cancelled(cx: &mut gpui_runtime::TestAppContext) {
         let data = FilterData::build(&build_entries(&[mock("alpha", &[])]));
         let cancel = AtomicBool::new(true);
         let executor = cx.background_executor.clone();
@@ -490,8 +490,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_run_async_returns_results_when_not_cancelled(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_run_async_returns_results_when_not_cancelled(cx: &mut gpui_runtime::TestAppContext) {
         let data = FilterData::build(&build_entries(&[mock("alpha", &["/home/project"])]));
         let cancel = AtomicBool::new(false);
         let executor = cx.background_executor.clone();

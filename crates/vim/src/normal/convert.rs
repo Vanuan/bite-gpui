@@ -268,8 +268,8 @@ mod test {
 
     use crate::{state::Mode, test::NeovimBackedTestContext};
 
-    #[gpui::test]
-    async fn test_change_case(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_case(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state("ˇabC\n").await;
         cx.simulate_shared_keystrokes("~").await;
@@ -304,8 +304,8 @@ mod test {
         cx.assert_state("aSSˇcdˇE\n", Mode::Normal);
     }
 
-    #[gpui::test]
-    async fn test_convert_to_upper_case(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_convert_to_upper_case(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         // works in visual mode
         cx.set_shared_state("a😀C«dÉ1*fˇ»\n").await;
@@ -323,8 +323,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇAa\nBb\ncc");
     }
 
-    #[gpui::test]
-    async fn test_convert_to_lower_case(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_convert_to_lower_case(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         // works in visual mode
         cx.set_shared_state("A😀c«DÉ1*fˇ»\n").await;
@@ -342,8 +342,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇaa\nbb\nCc");
     }
 
-    #[gpui::test]
-    async fn test_change_case_motion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_case_motion(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇabc def").await;
@@ -370,8 +370,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇABC DEF");
     }
 
-    #[gpui::test]
-    async fn test_change_case_motion_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_case_motion_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("abc dˇef\n").await;
@@ -379,8 +379,8 @@ mod test {
         cx.shared_state().await.assert_eq("abc ˇDEF\n");
     }
 
-    #[gpui::test]
-    async fn test_convert_to_rot13(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_convert_to_rot13(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         // works in visual mode
         cx.set_shared_state("a😀C«dÉ1*fˇ»\n").await;
@@ -398,8 +398,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇna\nob\ncc");
     }
 
-    #[gpui::test]
-    async fn test_change_rot13_motion(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_rot13_motion(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇabc def").await;
@@ -423,8 +423,8 @@ mod test {
         cx.shared_state().await.assert_eq("ˇnop qrs");
     }
 
-    #[gpui::test]
-    async fn test_change_rot13_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_rot13_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -435,8 +435,8 @@ mod test {
             .assert_eq("ˇnopqrstuvwxyzabcdefghijklmNOPQRSTUVWXYZABCDEFGHIJKLM");
     }
 
-    #[gpui::test]
-    async fn test_change_case_helix_mode(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_case_helix_mode(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Explicit selection

@@ -77,7 +77,7 @@ impl ThemePreview {
 impl EventEmitter<()> for ThemePreview {}
 
 impl Focusable for ThemePreview {
-    fn focus_handle(&self, _: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }

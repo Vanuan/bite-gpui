@@ -198,8 +198,8 @@ mod tests {
     use super::*;
     use std::path::PathBuf;
 
-    #[gpui::test]
-    fn test_folder_indicators_per_setting(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_folder_indicators_per_setting(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| {
             theme::init(theme::LoadThemes::JustBase, cx);
         });
@@ -236,8 +236,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    fn test_folder_indicators_reflect_expanded_state(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_folder_indicators_reflect_expanded_state(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| {
             theme::init(theme::LoadThemes::JustBase, cx);
         });
@@ -265,8 +265,8 @@ mod tests {
         });
     }
 
-    #[gpui::test]
-    fn test_folder_indicator_default_is_icon(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    fn test_folder_indicator_default_is_icon(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| {
             theme::init(theme::LoadThemes::JustBase, cx);
         });

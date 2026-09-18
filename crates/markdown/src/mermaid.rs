@@ -290,9 +290,9 @@ impl CachedMermaidDiagram {
     }
 
     fn on_render_complete(
-        this: gpui::WeakEntity<Markdown>,
+        this: gpui_runtime::WeakEntity<Markdown>,
         fallback_image: Option<(Arc<RenderImage>, f32)>,
-        cx: &mut gpui::AsyncApp,
+        cx: &mut gpui_runtime::AsyncApp,
     ) {
         this.update(cx, |_, cx| {
             // The fallback will no longer be painted now that the real render
@@ -994,7 +994,7 @@ mod tests {
     /// element can't be drawn bare with `cx.draw`.
     fn draw_markdown_element(
         markdown: Entity<Markdown>,
-        cx: &mut gpui::VisualTestContext,
+        cx: &mut gpui_runtime::VisualTestContext,
     ) -> crate::RenderedText {
         struct CaptureRenderedText {
             markdown: Entity<Markdown>,
@@ -1180,7 +1180,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_fallback_on_edit(cx: &mut TestAppContext) {
         let old_full_order = mermaid_sequence(&["graph A", "graph B", "graph C"]);
         let new_full_order = mermaid_sequence(&["graph A", "graph B modified", "graph C"]);
@@ -1219,7 +1219,7 @@ mod tests {
         assert_eq!(fallback.as_ref().map(|image| image.id), Some(svg_b.id));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_no_fallback_on_add_in_middle(cx: &mut TestAppContext) {
         let old_full_order = mermaid_sequence(&["graph A", "graph C"]);
         let new_full_order = mermaid_sequence(&["graph A", "graph NEW", "graph C"]);
@@ -1247,7 +1247,7 @@ mod tests {
         assert!(fallback.is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_fallback_chains_on_rapid_edits(cx: &mut TestAppContext) {
         let old_full_order = mermaid_sequence(&["graph A", "graph B modified", "graph C"]);
         let new_full_order = mermaid_sequence(&["graph A", "graph B modified again", "graph C"]);
@@ -1293,7 +1293,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_fallback_with_duplicate_blocks_edit_second(cx: &mut TestAppContext) {
         let old_full_order = mermaid_sequence(&["graph A", "graph A", "graph B"]);
         let new_full_order = mermaid_sequence(&["graph A", "graph A edited", "graph B"]);
@@ -1323,7 +1323,7 @@ mod tests {
         assert_eq!(fallback.as_ref().map(|image| image.id), Some(svg_a.id));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_rerasterize_reuses_parsed_svg(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
 
@@ -1394,7 +1394,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_zoom_rerasterize_is_debounced(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
 
@@ -1512,7 +1512,7 @@ mod tests {
         assert_eq!(mermaid_zoom_ticks(ScrollDelta::Lines(point(2.0, 0.0))), 0.0);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_zoom_snap_and_clamp(cx: &mut TestAppContext) {
         let markdown = cx.new(|cx| Markdown::new("".into(), None, None, cx));
 
@@ -1538,7 +1538,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_zoom_to_fit_tracks_container_width(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
 
@@ -1637,7 +1637,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_zoom_retained_across_reparse(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
 
@@ -1689,7 +1689,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_scroll_handle_retained_across_reparse(cx: &mut TestAppContext) {
         ensure_theme_initialized(cx);
 
@@ -1743,7 +1743,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_rendering_replaces_code_block_text(cx: &mut TestAppContext) {
         let rendered = render_markdown_with_options(
             "```mermaid\ngraph TD;\n```",
@@ -1764,7 +1764,7 @@ mod tests {
         assert!(!text.contains("graph TD;"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_mermaid_source_anchor_maps_inside_block(cx: &mut TestAppContext) {
         struct TestWindow;
 

@@ -712,7 +712,7 @@ impl RenderOnce for SwitchField {
                     if let Some(label) = self.label.clone() {
                         Label::new(label).into_any_element()
                     } else {
-                        gpui::Empty.into_any_element()
+                        gpui_runtime::Empty.into_any_element()
                     }
                 }
             })

@@ -193,7 +193,7 @@ impl WorktreeFetchFailedToast {
         branch_target: NewWorktreeBranchTarget,
         focused_dock: Option<DockPosition>,
         fetch_error: &WorktreeFetchError,
-        cx: &mut gpui::Context<Self>,
+        cx: &mut gpui_runtime::Context<Self>,
     ) -> Self {
         Self {
             workspace,
@@ -209,7 +209,7 @@ impl WorktreeFetchFailedToast {
 }
 
 impl Focusable for WorktreeFetchFailedToast {
-    fn focus_handle(&self, _cx: &gpui::App) -> FocusHandle {
+    fn focus_handle(&self, _cx: &gpui_runtime::App) -> FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -227,7 +227,7 @@ impl ToastView for WorktreeFetchFailedToast {
 }
 
 impl Render for WorktreeFetchFailedToast {
-    fn render(&mut self, _window: &mut Window, cx: &mut gpui::Context<Self>) -> impl IntoElement {
+    fn render(&mut self, _window: &mut Window, cx: &mut gpui_runtime::Context<Self>) -> impl IntoElement {
         let workspace_for_retry = self.workspace.clone();
         let worktree_name = self.worktree_name.clone();
         let branch_target = self.branch_target.clone();
@@ -314,7 +314,7 @@ impl Render for WorktreeFetchFailedToast {
 /// and non-git paths. Each unique repository is returned only once.
 pub fn classify_worktrees(
     project: &Project,
-    cx: &gpui::App,
+    cx: &gpui_runtime::App,
 ) -> (Vec<Entity<Repository>>, Vec<PathBuf>) {
     let repositories = project.repositories(cx).clone();
     let mut git_repos: Vec<Entity<Repository>> = Vec::new();
@@ -468,7 +468,7 @@ fn start_worktree_creations(
     base_ref: Option<String>,
     worktree_directory_setting: &str,
     rng: &mut impl rand::Rng,
-    cx: &mut gpui::App,
+    cx: &mut gpui_runtime::App,
 ) -> anyhow::Result<(
     Vec<(
         Entity<Repository>,
@@ -688,9 +688,9 @@ fn maybe_propagate_worktree_trust(
 pub fn handle_create_worktree(
     workspace: &mut Workspace,
     action: &zed_actions::CreateWorktree,
-    window: &mut gpui::Window,
+    window: &mut gpui_runtime::Window,
     fallback_focused_dock: Option<DockPosition>,
-    cx: &mut gpui::Context<Workspace>,
+    cx: &mut gpui_runtime::Context<Workspace>,
 ) {
     let task = create_worktree_workspace_inner(
         workspace,
@@ -736,9 +736,9 @@ pub struct CreatedWorktreeWorkspace {
 pub fn create_worktree_workspace(
     workspace: &mut Workspace,
     action: &zed_actions::CreateWorktree,
-    window: &mut gpui::Window,
+    window: &mut gpui_runtime::Window,
     fallback_focused_dock: Option<DockPosition>,
-    cx: &mut gpui::Context<Workspace>,
+    cx: &mut gpui_runtime::Context<Workspace>,
 ) -> Task<anyhow::Result<CreatedWorktreeWorkspace>> {
     create_worktree_workspace_inner(
         workspace,
@@ -755,11 +755,11 @@ pub fn create_worktree_workspace(
 fn create_worktree_workspace_inner(
     workspace: &mut Workspace,
     action: &zed_actions::CreateWorktree,
-    window: &mut gpui::Window,
+    window: &mut gpui_runtime::Window,
     fallback_focused_dock: Option<DockPosition>,
     remote_branch_fetch_mode: RemoteBranchFetchMode,
     activate: bool,
-    cx: &mut gpui::Context<Workspace>,
+    cx: &mut gpui_runtime::Context<Workspace>,
 ) -> Task<anyhow::Result<CreatedWorktreeWorkspace>> {
     let project = workspace.project().clone();
 
@@ -897,9 +897,9 @@ fn create_worktree_workspace_inner(
 pub fn handle_switch_worktree(
     workspace: &mut Workspace,
     action: &zed_actions::SwitchWorktree,
-    window: &mut gpui::Window,
+    window: &mut gpui_runtime::Window,
     fallback_focused_dock: Option<DockPosition>,
-    cx: &mut gpui::Context<Workspace>,
+    cx: &mut gpui_runtime::Context<Workspace>,
 ) {
     let project = workspace.project().clone();
 
@@ -973,7 +973,7 @@ async fn do_create_worktree(
     remote_branch_fetch_mode: RemoteBranchFetchMode,
     previous_state: PreviousWorkspaceState,
     workspace: WeakEntity<Workspace>,
-    window_handle: Option<gpui::WindowHandle<MultiWorkspace>>,
+    window_handle: Option<gpui_runtime::WindowHandle<MultiWorkspace>>,
     remote_connection_options: Option<RemoteConnectionOptions>,
     activate: bool,
     cx: &mut AsyncWindowContext,
@@ -1114,7 +1114,7 @@ async fn do_switch_worktree(
     non_git_paths: Vec<PathBuf>,
     previous_state: PreviousWorkspaceState,
     workspace: WeakEntity<Workspace>,
-    window_handle: Option<gpui::WindowHandle<MultiWorkspace>>,
+    window_handle: Option<gpui_runtime::WindowHandle<MultiWorkspace>>,
     remote_connection_options: Option<RemoteConnectionOptions>,
     cx: &mut AsyncWindowContext,
 ) -> anyhow::Result<Entity<Workspace>> {
@@ -1154,7 +1154,7 @@ async fn open_worktree_workspace(
     has_non_git: bool,
     previous_state: PreviousWorkspaceState,
     workspace: WeakEntity<Workspace>,
-    window_handle: Option<gpui::WindowHandle<MultiWorkspace>>,
+    window_handle: Option<gpui_runtime::WindowHandle<MultiWorkspace>>,
     remote_connection_options: Option<RemoteConnectionOptions>,
     operation: WorktreeOperation,
     activate: bool,
@@ -1188,15 +1188,15 @@ async fn open_worktree_workspace(
 
             let init: Option<
                 Box<
-                    dyn FnOnce(&mut Workspace, &mut gpui::Window, &mut gpui::Context<Workspace>)
+                    dyn FnOnce(&mut Workspace, &mut gpui_runtime::Window, &mut gpui_runtime::Context<Workspace>)
                         + Send,
                 >,
             > = if transfer_state {
                 let dock_structure = previous_state.dock_structure;
                 Some(Box::new(
                     move |workspace: &mut Workspace,
-                          window: &mut gpui::Window,
-                          cx: &mut gpui::Context<Workspace>| {
+                          window: &mut gpui_runtime::Window,
+                          cx: &mut gpui_runtime::Context<Workspace>| {
                         workspace.set_dock_structure(dock_structure, window, cx);
                     },
                 ))
@@ -1486,7 +1486,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_worktree_hook_does_not_run_when_switching_back_to_main_worktree(
         cx: &mut TestAppContext,
     ) {
@@ -1598,7 +1598,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_linked_worktree_inherits_trust_from_main_worktree(cx: &mut TestAppContext) {
         init_test(cx);
         cx.update(|cx| {

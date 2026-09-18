@@ -2025,7 +2025,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reconnection(cx: &mut TestAppContext) {
         init_test(cx);
         let user_id = 5;
@@ -2066,7 +2066,7 @@ mod tests {
         assert_eq!(server.auth_count(), 2); // Client re-authenticated due to an invalid token
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_auth_failure_during_reconnection(cx: &mut TestAppContext) {
         init_test(cx);
         let http_client = FakeHttpClient::with_200_response();
@@ -2106,7 +2106,7 @@ mod tests {
         assert_eq!(server.auth_count(), 1); // Client reused the cached credentials when reconnecting
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_connection_timeout(executor: BackgroundExecutor, cx: &mut TestAppContext) {
         init_test(cx);
         let user_id = 5;
@@ -2175,7 +2175,7 @@ mod tests {
         ));
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_reauthenticate_only_if_unauthorized(cx: &mut TestAppContext) {
         init_test(cx);
         let auth_count = Arc::new(Mutex::new(0));
@@ -2244,7 +2244,7 @@ mod tests {
         assert_eq!(credentials.access_token, "2");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sign_in_reports_connection_failure(cx: &mut TestAppContext) {
         init_test(cx);
         let http_client = FakeHttpClient::create(|_request| async move {
@@ -2283,7 +2283,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_authenticating_more_than_once(
         cx: &mut TestAppContext,
         executor: BackgroundExecutor,
@@ -2327,7 +2327,7 @@ mod tests {
         assert_eq!(*dropped_auth_count.lock(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_subscribing_to_entity(cx: &mut TestAppContext) {
         init_test(cx);
         let user_id = 5;
@@ -2397,7 +2397,7 @@ mod tests {
         done_rx2.recv().await.unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_subscribing_after_dropping_subscription(cx: &mut TestAppContext) {
         init_test(cx);
         let user_id = 5;
@@ -2432,7 +2432,7 @@ mod tests {
         done_rx2.recv().await.unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dropping_subscription_in_handler(cx: &mut TestAppContext) {
         init_test(cx);
         let user_id = 5;

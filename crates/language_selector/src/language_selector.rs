@@ -547,7 +547,7 @@ mod tests {
         close_selector(workspace, cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_language_selector_selects_current_language_per_active_editor(
         cx: &mut TestAppContext,
     ) {
@@ -594,7 +594,7 @@ mod tests {
         assert_selected_language_for_editor(&workspace, &empty_editor, None, cx);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_language_selector_selects_first_match_after_querying_new_buffer(
         cx: &mut TestAppContext,
     ) {

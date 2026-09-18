@@ -571,7 +571,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_indicator_tracks_pending_input(cx: &mut TestAppContext) {
         let (indicator, _, cx) = setup_indicator_test(cx, nested_timed_bindings());
 
@@ -617,7 +617,7 @@ mod tests {
         assert!(indicator.read_with(cx, |indicator, _| indicator.render_state().is_none()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_indicator_does_not_apply_which_key_binding_filter(cx: &mut TestAppContext) {
         let (indicator, _, cx) = setup_indicator_test(
             cx,
@@ -649,7 +649,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_which_key_disables_popover_but_keeps_indicator_and_hover_pause(
         cx: &mut TestAppContext,
     ) {
@@ -704,7 +704,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_clicking_indicator_opens_key_context_view(cx: &mut TestAppContext) {
         let (_, open_key_context_view_count, cx) = setup_indicator_test(cx, timed_bindings());
 
@@ -719,7 +719,7 @@ mod tests {
         assert_eq!(open_key_context_view_count.get(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_hovering_indicator_opens_popover_and_pauses_timeout(cx: &mut TestAppContext) {
         let (indicator, _, cx) = setup_indicator_test(cx, nested_timed_bindings());
         start_pending_input_and_hover_indicator(cx);
@@ -731,7 +731,7 @@ mod tests {
         assert!(paused_render_state.popover_visible);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_popover_is_positioned_above_indicator(cx: &mut TestAppContext) {
         let (_, _, cx) = setup_indicator_test(cx, nested_timed_bindings());
         start_pending_input_and_hover_indicator(cx);
@@ -749,7 +749,7 @@ mod tests {
         assert_eq!(popover_bounds.right(), indicator_bounds.right());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_pointer_handoff_keeps_popover_open_and_timeout_paused(cx: &mut TestAppContext) {
         let (indicator, _, cx) = setup_indicator_test(cx, nested_timed_bindings());
         start_pending_input_and_hover_indicator(cx);
@@ -772,7 +772,7 @@ mod tests {
         assert!(stationary_popover_render_state.popover_pointer_over);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_open_popover_tracks_pending_input_lifecycle(cx: &mut TestAppContext) {
         let (indicator, _, cx) = setup_indicator_test(cx, nested_timed_bindings());
         start_pending_input_and_hover_indicator(cx);
@@ -800,7 +800,7 @@ mod tests {
         assert!(cx.debug_bounds("PENDING_KEYSTROKES_POPOVER").is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_popover_hides_and_timeout_resumes_after_delay(cx: &mut TestAppContext) {
         let (indicator, _, cx) = setup_indicator_test(cx, nested_timed_bindings());
         start_pending_input_and_hover_indicator(cx);
@@ -825,7 +825,7 @@ mod tests {
         assert!(!resumed_render_state.popover_visible);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_disabling_indicator_releases_timeout_pause(cx: &mut TestAppContext) {
         let (indicator, _, cx) = setup_indicator_test(cx, timed_bindings());
 
@@ -861,7 +861,7 @@ mod tests {
         cx.update(|window, _| assert!(!window.has_pending_keystrokes()));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_indicator_ignores_pending_input_without_timeout(cx: &mut TestAppContext) {
         let (indicator, _, cx) = setup_indicator_test(
             cx,

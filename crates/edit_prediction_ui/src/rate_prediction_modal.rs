@@ -62,7 +62,7 @@ pub struct RatePredictionsModal {
     selected_index: usize,
     diff_editor: Entity<Editor>,
     focus_handle: FocusHandle,
-    _subscription: gpui::Subscription,
+    _subscription: gpui_runtime::Subscription,
     current_view: RatePredictionView,
     failure_mode_menu_handle: PopoverMenuHandle<ContextMenu>,
 }
@@ -72,7 +72,7 @@ struct ActivePrediction {
     feedback_editor: Entity<Editor>,
     expected_buffer: Entity<Buffer>,
     expected_editor: Entity<Editor>,
-    _expected_buffer_subscription: gpui::Subscription,
+    _expected_buffer_subscription: gpui_runtime::Subscription,
     formatted_inputs: Entity<Markdown>,
     _predicted_diff_task: Task<()>,
     expected_diff_task: Task<()>,
@@ -859,7 +859,7 @@ impl RatePredictionsModal {
             )
     }
 
-    fn render_suggested_edits(&self, cx: &mut Context<Self>) -> Option<gpui::Stateful<Div>> {
+    fn render_suggested_edits(&self, cx: &mut Context<Self>) -> Option<gpui_runtime::Stateful<Div>> {
         let bg_color = cx.theme().colors().editor_background;
         let border_color = cx.theme().colors().border;
         let active_prediction = self.active_prediction.as_ref()?;
@@ -926,7 +926,7 @@ impl RatePredictionsModal {
         &self,
         window: &mut Window,
         cx: &mut Context<Self>,
-    ) -> Option<gpui::Stateful<Div>> {
+    ) -> Option<gpui_runtime::Stateful<Div>> {
         let theme_settings = ThemeSettings::get_global(cx);
         let buffer_font_size = theme_settings.buffer_font_size(cx);
 

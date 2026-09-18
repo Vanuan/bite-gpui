@@ -1613,7 +1613,7 @@ impl Item for MarkdownPreviewView {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         _: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<Editor>() {
@@ -2200,7 +2200,7 @@ mod tests {
     use editor::Editor;
     use editor::items::open_resolved_target;
     use fs::FakeFs;
-    use gpui::UpdateGlobal as _;
+    use gpui_runtime::UpdateGlobal as _;
     use gpui::{
         App, AppContext as _, Entity, Focusable as _, Modifiers, TestAppContext, WindowHandle, px,
     };
@@ -2246,7 +2246,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn resetting_persisted_font_size_preserves_unrelated_settings(cx: &mut App) {
         let settings_store = settings::SettingsStore::test(cx);
         cx.set_global(settings_store);
@@ -2272,7 +2272,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn resolves_workspace_absolute_preview_image_path_and_rejects_missing(cx: &mut App) {
         let tree = TempTree::new(json!({
             "docs": {},
@@ -2307,7 +2307,7 @@ mod tests {
         assert!(missing.is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn resolves_remote_preview_image_through_project(cx: &mut TestAppContext) {
         init_test(cx);
         let project = Project::test(FakeFs::new(cx.executor()), [], cx).await;
@@ -2346,7 +2346,7 @@ mod tests {
         assert!(outside_worktree.is_none());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn resolves_remote_preview_image_with_different_client_path_style(
         cx: &mut TestAppContext,
     ) {
@@ -2390,7 +2390,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn resolves_workspace_relative_remote_image_in_source_worktree(cx: &mut TestAppContext) {
         init_test(cx);
         let project = Project::test(FakeFs::new(cx.executor()), [], cx).await;
@@ -2434,7 +2434,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn opens_preview_file_links_at_positions(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2577,7 +2577,7 @@ mod tests {
         assert_eq!(cx.opened_url().as_deref(), Some("tel:123"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn opens_markdown_links_in_preview(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2813,7 +2813,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn scrolls_position_link_in_newly_created_preview(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -2879,7 +2879,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn toggles_task_checkbox_and_saves_when_preview_is_active(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -2960,7 +2960,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn preview_uses_buffer_contents_instead_of_diff_contents(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3033,7 +3033,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn force_closing_preview_preserves_source_editor_changes(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3119,7 +3119,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn close_and_return_to_editor_closes_preview_and_focuses_source_editor(
         cx: &mut TestAppContext,
     ) {
@@ -3135,7 +3135,7 @@ mod tests {
         assert_no_markdown_preview_items(cx, &multi_workspace);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn close_and_return_to_editor_reopens_source_editor_when_editor_tab_was_closed(
         cx: &mut TestAppContext,
     ) {
@@ -3182,7 +3182,7 @@ mod tests {
         assert_no_markdown_preview_items(cx, &multi_workspace);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn close_and_return_to_editor_returns_to_source_when_auto_preview_is_enabled(
         cx: &mut TestAppContext,
     ) {
@@ -3210,7 +3210,7 @@ mod tests {
         assert_no_markdown_preview_items(cx, &multi_workspace);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn preview_serialized_path_updates_when_source_file_is_renamed(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3340,7 +3340,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn follow_preview_serialized_path_updates_when_followed_editor_changes(
         cx: &mut TestAppContext,
     ) {
@@ -3471,7 +3471,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn default_preview_stays_bound_to_invoking_editor_across_splits(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -3670,7 +3670,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn opens_markdown_files_in_preview_when_enabled(cx: &mut TestAppContext) {
         let (project, workspace, multi_workspace) = markdown_workspace(
             cx,
@@ -3739,7 +3739,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn first_markdown_file_opens_in_preview_before_language_load(cx: &mut TestAppContext) {
         let (project, workspace, multi_workspace) =
             markdown_workspace(cx, json!({ "note.md": "# Note\n" }), true).await;
@@ -3754,7 +3754,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn workspace_restore_does_not_auto_preview_markdown(cx: &mut TestAppContext) {
         let (project, workspace, multi_workspace) = markdown_workspace(
             cx,
@@ -3796,7 +3796,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn dirty_markdown_editor_is_retained_when_auto_preview_runs(cx: &mut TestAppContext) {
         let (project, workspace, multi_workspace) =
             markdown_workspace(cx, json!({ "note.md": "# Note\n" }), false).await;
@@ -3840,7 +3840,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn automatic_previews_preserve_temporary_tab_semantics(cx: &mut TestAppContext) {
         let (project, workspace, multi_workspace) = markdown_workspace(
             cx,
@@ -3885,7 +3885,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn automatic_preview_preserves_pane_activation_and_focus(cx: &mut TestAppContext) {
         let (project, workspace, multi_workspace) = markdown_workspace(
             cx,
@@ -3980,7 +3980,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn targeted_markdown_open_reveals_the_source_position(cx: &mut TestAppContext) {
         let (_project, workspace, multi_workspace) = markdown_workspace(
             cx,
@@ -4041,7 +4041,7 @@ mod tests {
             .unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn preview_opens_for_the_given_pane_not_the_focused_editor(cx: &mut TestAppContext) {
         let app_state = init_test(cx);
         app_state
@@ -4160,7 +4160,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn derives_remote_preview_source_directory(cx: &mut TestAppContext) {
         init_test(cx);
         let project = Project::test(FakeFs::new(cx.executor()), [], cx).await;

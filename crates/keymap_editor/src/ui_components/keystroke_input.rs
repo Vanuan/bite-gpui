@@ -144,9 +144,9 @@ impl KeystrokeInput {
         key_context
     }
 
-    fn determine_stop_recording_binding(window: &mut Window) -> Option<gpui::KeyBinding> {
+    fn determine_stop_recording_binding(window: &mut Window) -> Option<gpui_runtime::KeyBinding> {
         if cfg!(test) {
-            Some(gpui::KeyBinding::new(
+            Some(gpui_runtime::KeyBinding::new(
                 "escape escape escape",
                 StopRecording,
                 Some(KEY_CONTEXT_VALUE),
@@ -342,7 +342,7 @@ impl KeystrokeInput {
 
     fn on_inner_focus_in(&mut self, _window: &mut Window, cx: &mut Context<Self>) {
         if self.intercept_subscription.is_none() {
-            let listener = cx.listener(|this, event: &gpui::KeystrokeEvent, window, cx| {
+            let listener = cx.listener(|this, event: &gpui_runtime::KeystrokeEvent, window, cx| {
                 this.handle_keystroke(&event.keystroke, window, cx);
             });
             self.intercept_subscription = Some(cx.intercept_keystrokes(listener))
@@ -351,7 +351,7 @@ impl KeystrokeInput {
 
     fn on_inner_focus_out(
         &mut self,
-        _event: gpui::FocusOutEvent,
+        _event: gpui_runtime::FocusOutEvent,
         _window: &mut Window,
         cx: &mut Context<Self>,
     ) {
@@ -457,7 +457,7 @@ impl KeystrokeInput {
 impl EventEmitter<()> for KeystrokeInput {}
 
 impl Focusable for KeystrokeInput {
-    fn focus_handle(&self, _cx: &gpui::App) -> FocusHandle {
+    fn focus_handle(&self, _cx: &gpui_runtime::App) -> FocusHandle {
         self.outer_focus_handle.clone()
     }
 }
@@ -482,7 +482,7 @@ impl Render for KeystrokeInput {
                     "recording-pulse",
                     Animation::new(std::time::Duration::from_secs(2))
                         .repeat()
-                        .with_easing(gpui::pulsating_between(0.4, 0.8)),
+                        .with_easing(gpui_runtime::pulsating_between(0.4, 0.8)),
                     {
                         let color = color.color(cx);
                         move |this, delta| this.color(Color::Custom(color.opacity(delta)))
@@ -754,7 +754,7 @@ mod tests {
 
             let event = ModifiersChangedEvent {
                 modifiers: new_modifiers,
-                capslock: gpui::Capslock::default(),
+                capslock: gpui_types::Capslock::default(),
             };
 
             self.update_input(|input, window, cx| {
@@ -1126,7 +1126,7 @@ mod tests {
         KeystrokeInputTestHelper::new(cx)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_basic_keystroke_input(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1135,7 +1135,7 @@ mod tests {
             .expect_empty();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_modifier_handling(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1144,7 +1144,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-a"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_multiple_modifiers(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1152,7 +1152,7 @@ mod tests {
             .expect_keystrokes(&["cmd-shift-z", "cmd-shift-"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_mode_behavior(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1171,7 +1171,7 @@ mod tests {
             .expect_keystrokes(&["cmd-shift-f"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_keystroke_limit(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1183,7 +1183,7 @@ mod tests {
             .expect_empty(); // Should clear when exceeding limit
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_modifier_release_all(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1192,7 +1192,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-shift-a"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_new_modifiers_not_added_until_all_released(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1203,7 +1203,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-shift-a", "ctrl-shift-"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_previous_modifiers_no_effect_when_not_search(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1212,7 +1212,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-shift-a"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_keystroke_limit_overflow_non_search_mode(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1221,7 +1221,7 @@ mod tests {
             .expect_empty(); // Should clear when exceeding limit
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_complex_modifier_sequences(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1230,7 +1230,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-shift-alt-a"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_modifier_only_keystrokes_search_mode(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1239,7 +1239,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-shift-"]); // Modifier-only sequences create modifier-only keystrokes
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_modifier_only_keystrokes_non_search_mode(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1248,7 +1248,7 @@ mod tests {
             .expect_empty(); // Modifier-only sequences get filtered in non-search mode
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rapid_modifier_changes(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1257,7 +1257,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-", "shift-", "alt-a"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_clear_keystrokes_search_mode(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1268,7 +1268,7 @@ mod tests {
             .expect_empty();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_non_search_mode_modifier_key_sequence(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1279,7 +1279,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-a"]); // Non-search mode filters trailing empty keystrokes
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_all_modifiers_at_once(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1288,7 +1288,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-shift-alt-cmd-a"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_keystrokes_at_exact_limit(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1299,7 +1299,7 @@ mod tests {
             .expect_empty();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_function_modifier_key(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1308,7 +1308,7 @@ mod tests {
             .expect_keystrokes(&["fn-f1"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_start_stop_recording(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1321,7 +1321,7 @@ mod tests {
             .expect_keystrokes(&["c"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_modifier_sequence_with_interruption(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1330,7 +1330,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-shift-a", "ctrl-b"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_empty_key_sequence_search_mode(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1339,7 +1339,7 @@ mod tests {
             .expect_empty();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_modifier_sequence_completion_search_mode(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1348,7 +1348,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-a"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_triple_escape_stops_recording_search_mode(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1358,7 +1358,7 @@ mod tests {
             .expect_is_recording(false);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_triple_escape_stops_recording_non_search_mode(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1367,7 +1367,7 @@ mod tests {
             .expect_keystrokes(&["a"]); // Triple escape stops recording but only removes final escape
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_triple_escape_at_keystroke_limit(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1376,7 +1376,7 @@ mod tests {
             .expect_keystrokes(&["a", "b", "c"]); // Triple escape stops recording and removes escapes, leaves original keystrokes
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_interrupted_escape_sequence(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1385,7 +1385,7 @@ mod tests {
             .expect_keystrokes(&["escape", "escape", "a"]); // Escape sequence interrupted by 'a', no close triggered
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_interrupted_escape_sequence_within_limit(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1394,7 +1394,7 @@ mod tests {
             .expect_keystrokes(&["escape", "escape", "a"]); // Should not trigger close, interruption resets escape detection
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_partial_escape_sequence_no_close(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1404,7 +1404,7 @@ mod tests {
             .expect_is_recording(true); // Should remain in keystrokes, no close triggered
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_recording_state_after_triple_escape(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1414,7 +1414,7 @@ mod tests {
             .expect_is_recording(false);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_triple_escape_mixed_with_other_keystrokes(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1423,7 +1423,7 @@ mod tests {
             .expect_keystrokes(&["a", "escape", "b"]); // No complete triple escape sequence, stays at limit
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_triple_escape_only(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1432,7 +1432,7 @@ mod tests {
             .expect_empty();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_end_close_keystroke_capture(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1447,7 +1447,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-g", "escape"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_previous_modifiers_are_sticky(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1456,7 +1456,7 @@ mod tests {
             .expect_keystrokes(&["alt-j"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_previous_modifiers_can_be_entered_separately(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1467,7 +1467,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-", "alt-"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_previous_modifiers_reset_on_key(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1482,7 +1482,7 @@ mod tests {
             .expect_keystrokes(&["shift-alt-j", "shift-alt-i", "cmd-"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_previous_modifiers_reset_on_release_all(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1493,7 +1493,7 @@ mod tests {
             .expect_keystrokes(&["ctrl-shift-alt-", "j"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_search_repeat_modifiers(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1504,7 +1504,7 @@ mod tests {
             .expect_empty();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_not_search_repeat_modifiers(cx: &mut TestAppContext) {
         init_test(cx)
             .await
@@ -1513,7 +1513,7 @@ mod tests {
             .expect_empty();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_not_search_shifted_keys(cx: &mut TestAppContext) {
         init_test(cx)
             .await

@@ -2644,7 +2644,7 @@ mod test {
     use util::path;
     use workspace::{OpenOptions, Workspace};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_basics(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -2664,7 +2664,7 @@ mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_goto(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -2680,7 +2680,7 @@ mod test {
             ˇc"});
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_replace(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -2712,7 +2712,7 @@ mod test {
             cc"});
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_search(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -2736,7 +2736,7 @@ mod test {
                 c"});
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_write(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         let path = Path::new(path!("/root/dir/file.rs"));
@@ -2762,7 +2762,7 @@ mod test {
         assert_eq!(fs.load(path).await.unwrap().replace("\r\n", "\n"), "@@\n");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_read(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
@@ -2832,7 +2832,7 @@ mod test {
         cx.assert_state("one\nˇtwo\nthree", Mode::Normal);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_quit(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
@@ -2846,7 +2846,7 @@ mod test {
         cx.workspace(|workspace, _, cx| assert_eq!(workspace.items(cx).count(), 0));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_offsets(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -2874,7 +2874,7 @@ mod test {
             .assert_eq("1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\nˇ");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_ranges(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -2890,7 +2890,7 @@ mod test {
         cx.shared_state().await.assert_eq("1\nˇ2 3 4\n1");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_visual_replace(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -2925,7 +2925,7 @@ mod test {
         assert_eq!(file_path, Path::new(expected_path));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_gf(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
@@ -2984,7 +2984,7 @@ mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_write_filename(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
@@ -3017,7 +3017,7 @@ mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_write_range(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
@@ -3059,7 +3059,7 @@ mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_matching_lines(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -3101,7 +3101,7 @@ mod test {
             ˇa"});
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_del_marks(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -3132,7 +3132,7 @@ mod test {
         assert!(mark.is_none())
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_normal_command(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -3246,7 +3246,7 @@ mod test {
         // Once ctrl-v to input character literals is added there should be a test for redo
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_g_normal(cx: &mut TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
@@ -3277,7 +3277,7 @@ mod test {
         "});
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_tabnew(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
@@ -3330,7 +3330,7 @@ mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_command_tabedit(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
@@ -3383,7 +3383,7 @@ mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_ignorecase_command(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.read(|cx| {
@@ -3431,7 +3431,7 @@ mod test {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sort_commands(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
@@ -3539,7 +3539,7 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reflow(cx: &mut TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 

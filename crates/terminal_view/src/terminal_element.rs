@@ -169,7 +169,7 @@ impl BatchedTextRun {
             .paint(
                 pos,
                 dimensions.line_height,
-                gpui::TextAlign::Left,
+                gpui_runtime::TextAlign::Left,
                 None,
                 window,
                 cx,
@@ -1141,7 +1141,7 @@ impl Element for TerminalElement {
     fn request_layout(
         &mut self,
         global_id: Option<&GlobalElementId>,
-        inspector_id: Option<&gpui::InspectorElementId>,
+        inspector_id: Option<&gpui_runtime::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (LayoutId, Self::RequestLayoutState) {
@@ -1189,7 +1189,7 @@ impl Element for TerminalElement {
     fn prepaint(
         &mut self,
         global_id: Option<&GlobalElementId>,
-        inspector_id: Option<&gpui::InspectorElementId>,
+        inspector_id: Option<&gpui_runtime::InspectorElementId>,
         bounds: Bounds<Pixels>,
         _: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -1603,7 +1603,7 @@ impl Element for TerminalElement {
     fn paint(
         &mut self,
         global_id: Option<&GlobalElementId>,
-        inspector_id: Option<&gpui::InspectorElementId>,
+        inspector_id: Option<&gpui_runtime::InspectorElementId>,
         bounds: Bounds<Pixels>,
         _: &mut Self::RequestLayoutState,
         layout: &mut Self::PrepaintState,
@@ -1745,7 +1745,7 @@ impl Element for TerminalElement {
                             .paint(
                                 ime_position,
                                 layout.dimensions.line_height,
-                                gpui::TextAlign::Left,
+                                gpui_runtime::TextAlign::Left,
                                 None,
                                 window,
                                 cx,
@@ -2410,13 +2410,13 @@ mod tests {
         // Test the core contrast adjustment logic without needing full app context
 
         // Test case 1: Light colors (poor contrast)
-        let white_fg = gpui::Hsla {
+        let white_fg = gpui_types::Hsla {
             h: 0.0,
             s: 0.0,
             l: 1.0,
             a: 1.0,
         };
-        let light_gray_bg = gpui::Hsla {
+        let light_gray_bg = gpui_types::Hsla {
             h: 0.0,
             s: 0.0,
             l: 0.95,
@@ -2441,13 +2441,13 @@ mod tests {
         assert!(adjusted_contrast >= 45.0, "Should meet minimum contrast");
 
         // Test case 2: Dark colors (poor contrast)
-        let black_fg = gpui::Hsla {
+        let black_fg = gpui_types::Hsla {
             h: 0.0,
             s: 0.0,
             l: 0.0,
             a: 1.0,
         };
-        let dark_gray_bg = gpui::Hsla {
+        let dark_gray_bg = gpui_types::Hsla {
             h: 0.0,
             s: 0.0,
             l: 0.05,
@@ -2486,7 +2486,7 @@ mod tests {
         // default Lc 45 threshold. ensure_minimum_contrast would lighten
         // them, washing out the color. This is why cell_style skips the
         // adjustment for Color::Spec (24-bit true color).
-        let dark_bg = gpui::Hsla {
+        let dark_bg = gpui_types::Hsla {
             h: 0.0,
             s: 0.0,
             l: 0.05,
@@ -2521,13 +2521,13 @@ mod tests {
         // where white ANSI text on white background should be adjusted
 
         // Simulate One Light theme colors
-        let white_fg = gpui::Hsla {
+        let white_fg = gpui_types::Hsla {
             h: 0.0,
             s: 0.0,
             l: 0.98, // #fafafaff is approximately 98% lightness
             a: 1.0,
         };
-        let white_bg = gpui::Hsla {
+        let white_bg = gpui_types::Hsla {
             h: 0.0,
             s: 0.0,
             l: 0.98, // Same as foreground - this is the problem!

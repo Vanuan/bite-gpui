@@ -59,7 +59,7 @@ impl Input {
     }
 }
 
-impl gpui::View for Input {
+impl gpui_runtime::View for Input {
     fn entity_id(&self) -> Option<EntityId> {
         Some(match &self.source {
             Source::Value(value) => value.entity_id(),

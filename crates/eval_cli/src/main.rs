@@ -197,7 +197,7 @@ fn main() {
     });
 
     let http_client = Arc::new(reqwest_client::ReqwestClient::new());
-    let app = gpui_platform::headless().with_http_client(http_client);
+    let app = gpui::headless().with_http_client(http_client);
 
     app.run(move |cx| {
         let app_state = headless::init(cx);
@@ -352,7 +352,7 @@ fn openai_compatible_providers_override() -> Option<String> {
     Some(raw)
 }
 
-fn apply_openai_compatible_providers(providers_json: &str, cx: &mut gpui::App) -> Result<()> {
+fn apply_openai_compatible_providers(providers_json: &str, cx: &mut gpui_runtime::App) -> Result<()> {
     let settings = format!(r#"{{"language_models": {{"openai_compatible": {providers_json}}}}}"#);
     SettingsStore::update_global(cx, |store, cx| {
         store.set_user_settings(&settings, cx).result()
@@ -378,7 +378,7 @@ fn anthropic_available_models_override() -> Option<String> {
     Some(raw)
 }
 
-fn apply_anthropic_available_models(models_json: &str, cx: &mut gpui::App) -> Result<()> {
+fn apply_anthropic_available_models(models_json: &str, cx: &mut gpui_runtime::App) -> Result<()> {
     let settings =
         format!(r#"{{"language_models": {{"anthropic": {{"available_models": {models_json}}}}}}}"#);
     SettingsStore::update_global(cx, |store, cx| {
@@ -447,7 +447,7 @@ async fn wait_for_model(selected: &SelectedModel, cx: &mut AsyncApp) -> Result<(
     }
 }
 
-fn ensure_provider_authenticated(selected: &SelectedModel, cx: &gpui::App) -> Result<()> {
+fn ensure_provider_authenticated(selected: &SelectedModel, cx: &gpui_runtime::App) -> Result<()> {
     let registry = LanguageModelRegistry::global(cx);
     let provider = registry
         .read(cx)
@@ -465,7 +465,7 @@ fn ensure_provider_authenticated(selected: &SelectedModel, cx: &gpui::App) -> Re
 
 fn find_available_model(
     selected: &SelectedModel,
-    cx: &gpui::App,
+    cx: &gpui_runtime::App,
 ) -> Option<Arc<dyn LanguageModel>> {
     let registry = LanguageModelRegistry::global(cx);
     let models = registry.read(cx).available_models(cx).collect::<Vec<_>>();
@@ -537,7 +537,7 @@ fn selected_model_name(selected: &SelectedModel) -> String {
     format!("{}/{}", selected.provider.0, selected.model.0)
 }
 
-fn model_not_found_error(model_name: &str, cx: &gpui::App) -> anyhow::Error {
+fn model_not_found_error(model_name: &str, cx: &gpui_runtime::App) -> anyhow::Error {
     let available = LanguageModelRegistry::global(cx)
         .read(cx)
         .available_models(cx)
@@ -963,7 +963,7 @@ async fn run_agent(
 fn log_acp_thread_event(
     acp_thread: &Entity<acp_thread::AcpThread>,
     event: &acp_thread::AcpThreadEvent,
-    cx: &mut gpui::App,
+    cx: &mut gpui_runtime::App,
 ) {
     match event {
         acp_thread::AcpThreadEvent::NewEntry => {

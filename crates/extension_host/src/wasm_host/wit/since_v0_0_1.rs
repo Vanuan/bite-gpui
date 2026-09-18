@@ -3,7 +3,7 @@ use crate::wasm_host::WasmState;
 use crate::wasm_host::wit::since_v0_0_4;
 use anyhow::Result;
 use extension::{ExtensionLanguageServerProxy, WorktreeDelegate};
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use language::BinaryStatus;
 use semver::Version;
 use std::sync::{Arc, OnceLock};

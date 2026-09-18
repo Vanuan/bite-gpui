@@ -143,7 +143,7 @@ impl Asset for ProjectImageAsset {
 
 pub fn project_image_source(project: WeakEntity<Project>, path: ProjectPath) -> ImageSource {
     let source = ProjectImageSource { project, path };
-    ImageSource::from(move |window: &mut gpui::Window, cx: &mut App| {
+    ImageSource::from(move |window: &mut gpui_runtime::Window, cx: &mut App| {
         window.use_asset::<AssetLogger<ProjectImageAsset>>(&source, cx)
     })
 }

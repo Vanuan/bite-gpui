@@ -16,7 +16,7 @@ use std::{fmt::Display, path::PathBuf};
 
 use anyhow::Result;
 use client::Client;
-use gpui::AsyncApp;
+use gpui_runtime::AsyncApp;
 use parking_lot::RwLock;
 pub use settings::ContextServerCommand;
 use url::Url;
@@ -67,7 +67,7 @@ impl ContextServer {
         endpoint: &Url,
         headers: HashMap<String, String>,
         http_client: Arc<dyn HttpClient>,
-        executor: gpui::BackgroundExecutor,
+        executor: gpui_platform::BackgroundExecutor,
         request_timeout: Option<Duration>,
     ) -> Result<Self> {
         let transport = match endpoint.scheme() {

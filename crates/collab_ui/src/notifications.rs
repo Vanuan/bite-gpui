@@ -1,7 +1,7 @@
 pub mod incoming_call_notification;
 pub mod project_shared_notification;
 
-use gpui::App;
+use gpui_runtime::App;
 use std::sync::Arc;
 use workspace::AppState;
 

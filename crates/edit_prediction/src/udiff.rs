@@ -399,7 +399,7 @@ fn resolve_hunk_edits_in_buffer(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use indoc::indoc;
 
     use pretty_assertions::assert_eq;
@@ -471,7 +471,7 @@ mod tests {
         assert_eq!(text, "REPLACED");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prediction_edits_for_single_file_diff_can_target_project_file(
         cx: &mut TestAppContext,
     ) {
@@ -513,7 +513,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prediction_edits_for_single_file_diff_strips_inline_cursor_marker(
         cx: &mut TestAppContext,
     ) {
@@ -561,7 +561,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prediction_edits_for_single_file_diff_places_cursor_after_inline_completion(
         cx: &mut TestAppContext,
     ) {
@@ -612,7 +612,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prediction_edits_for_single_file_diff_drops_marker_only_edit(
         cx: &mut TestAppContext,
     ) {
@@ -651,7 +651,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_prediction_edits_for_single_file_diff_strips_cursor_marker_that_overlaps_source(
         cx: &mut TestAppContext,
     ) {
@@ -691,7 +691,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_apply_diff_successful(cx: &mut TestAppContext) {
         let fs = init_test(cx);
 
@@ -803,7 +803,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_apply_diff_unique_via_previous_context(cx: &mut TestAppContext) {
         let fs = init_test(cx);
 

@@ -1,4 +1,4 @@
-use gpui::Hsla;
+use gpui_types::Hsla;
 
 /// APCA (Accessible Perceptual Contrast Algorithm) constants
 /// Based on APCA 0.0.98G-4g W3 compatible constants

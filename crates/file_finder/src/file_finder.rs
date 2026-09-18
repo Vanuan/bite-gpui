@@ -2056,7 +2056,7 @@ impl PickerDelegate for FileFinderDelegate {
         match m {
             Match::CreateNew(project_path) => {
                 let path_style = self.project.read(cx).path_style(cx);
-                let path_highlight = gpui::HighlightStyle {
+                let path_highlight = gpui_runtime::HighlightStyle {
                     color: Some(cx.theme().colors().text_accent),
                     ..Default::default()
                 };

@@ -76,7 +76,7 @@ impl Focusable for InvalidItemView {
 }
 
 impl Render for InvalidItemView {
-    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl gpui::IntoElement {
+    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl gpui_runtime::IntoElement {
         let abs_path = self.abs_path.clone();
         v_flex()
             .size_full()

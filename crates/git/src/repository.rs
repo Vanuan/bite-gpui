@@ -4292,7 +4292,7 @@ mod tests {
     };
 
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     #[test]
     fn test_commit_hash_search_query_accepts_sha1_and_sha256_hashes() {
@@ -4424,7 +4424,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_real_git_repository_new_resolves_normal_repository_paths(
         cx: &mut TestAppContext,
     ) {
@@ -4454,7 +4454,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_merge_base_worktree_diff_handles_recreated_index_deletion(
         cx: &mut TestAppContext,
     ) {
@@ -4513,7 +4513,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_merge_base_worktree_diff_handles_committed_deletion_recreated_on_disk(
         cx: &mut TestAppContext,
     ) {
@@ -4571,7 +4571,7 @@ mod tests {
     }
 
     #[cfg(unix)]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_merge_base_worktree_diff_handles_recreated_symlink(cx: &mut TestAppContext) {
         use std::os::unix::fs::symlink;
 
@@ -4633,7 +4633,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_commit_with_type_changed_file(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -4691,7 +4691,7 @@ mod tests {
         assert_eq!(file.status(), CommitFileStatus::Modified);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_commit_with_gitlink_changes(cx: &mut TestAppContext) {
         const FIRST_SUBMODULE_COMMIT: &str = "1111111111111111111111111111111111111111";
         const SECOND_SUBMODULE_COMMIT: &str = "2222222222222222222222222222222222222222";
@@ -4792,7 +4792,7 @@ mod tests {
         assert!(!gitlink.is_binary);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_commit_shallow_boundary(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -4872,7 +4872,7 @@ mod tests {
         assert_eq!(commit_diff.files.len(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_check_access(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -4891,7 +4891,7 @@ mod tests {
         assert!(repository.check_access().await.is_ok());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_real_git_repository_new_resolves_linked_worktree_paths(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -4933,7 +4933,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_real_git_repository_new_supports_bare_repositories(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -4966,7 +4966,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_change_branch_creates_local_tracking_branch_from_remote(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -5039,7 +5039,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_change_branch_resolves_remote_head_to_tracking_branch(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -5093,7 +5093,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_change_branch_resolves_non_origin_remote_head(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -5148,7 +5148,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_real_git_repository_new_rejects_malformed_git_file(cx: &mut TestAppContext) {
         disable_git_global_config();
 
@@ -5277,7 +5277,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initial_graph_data_accepts_sha_log_source(cx: &mut TestAppContext) {
         disable_git_global_config();
 
@@ -5317,7 +5317,7 @@ mod tests {
     /// repository that also has a `docs/rewrite` directory - made git reject the revision
     /// as ambiguous, so the git panel's History tab reported "Failed to load commit
     /// history" and commit search silently returned nothing.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initial_graph_data_with_branch_named_after_a_path(cx: &mut TestAppContext) {
         disable_git_global_config();
 
@@ -5362,7 +5362,7 @@ mod tests {
     /// The branch diff passes the base ref straight to `git diff`, so a branch named after
     /// a path in the working tree broke it the same way. `git diff` takes the same `--`
     /// terminator, so the base ref is terminated like the log sources are.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_merge_base_worktree_diff_with_branch_named_after_a_path(cx: &mut TestAppContext) {
         disable_git_global_config();
 
@@ -5413,7 +5413,7 @@ mod tests {
 
     /// `show` takes the revision the user typed in the "open commit by ref" input, so a
     /// branch named after a path in the working tree reaches git unqualified there too.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_show_with_branch_named_after_a_path(cx: &mut TestAppContext) {
         disable_git_global_config();
 
@@ -5471,7 +5471,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_build_command_untrusted_includes_both_safety_args(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         let dir = tempfile::tempdir().unwrap();
@@ -5529,7 +5529,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_build_command_trusted_only_disables_fsmonitor(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         let dir = tempfile::tempdir().unwrap();
@@ -5572,7 +5572,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_build_command_disables_log_show_signature(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         let dir = tempfile::tempdir().unwrap();
@@ -5617,7 +5617,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_path_for_index_id_uses_real_git_directory(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
         let working_directory = PathBuf::from("/code/worktree");
@@ -5638,7 +5638,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_checkpoint_basic(cx: &mut TestAppContext) {
         disable_git_global_config();
 
@@ -5729,7 +5729,7 @@ mod tests {
     }
 
     #[cfg(unix)]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_commit_runs_git_hooks(cx: &mut TestAppContext) {
         use std::os::unix::fs::PermissionsExt as _;
 
@@ -5831,7 +5831,7 @@ mod tests {
         assert_eq!(message, "Commit without verification");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_revisions(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -5928,7 +5928,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_blame_at_revision(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -5996,7 +5996,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_checkpoint_empty_repo(cx: &mut TestAppContext) {
         disable_git_global_config();
 
@@ -6042,7 +6042,7 @@ mod tests {
         // );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_branches_return_head_when_commit_metadata_cannot_be_read(
         cx: &mut TestAppContext,
     ) {
@@ -6100,7 +6100,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_compare_checkpoints(cx: &mut TestAppContext) {
         disable_git_global_config();
 
@@ -6141,7 +6141,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_checkpoint_exclude_binary_files(cx: &mut TestAppContext) {
         disable_git_global_config();
 
@@ -6408,7 +6408,7 @@ mod tests {
         assert!(result[0].is_main);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_create_and_list_worktrees(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -6500,7 +6500,7 @@ mod tests {
         assert_eq!(missing, None);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remove_worktree(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -6597,7 +6597,7 @@ mod tests {
         assert!(!worktree_path.exists());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_rename_worktree(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -6670,7 +6670,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_initial_graph_data_ref_set(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -6731,7 +6731,7 @@ mod tests {
         assert!(graph.contains(&hidden_sha));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_check_for_pushed_commit(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -6812,7 +6812,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_default_branch(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();
@@ -6920,7 +6920,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_remote_urls(cx: &mut TestAppContext) {
         disable_git_global_config();
         cx.executor().allow_parking();

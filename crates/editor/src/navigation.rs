@@ -1611,7 +1611,7 @@ impl Editor {
                 if lines_below >= lines_to_expand {
                     scroll = Some(
                         current_scroll_position
-                            + gpui::Point::new(0.0, lines_to_expand as ScrollOffset),
+                            + gpui_types::Point::new(0.0, lines_to_expand as ScrollOffset),
                     );
                 }
             }

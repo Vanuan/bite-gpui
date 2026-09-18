@@ -401,7 +401,7 @@ fn swizzle_upload_data(bytes: &[u8], format: wgpu::TextureFormat) -> Vec<u8> {
 #[cfg(all(test, not(target_family = "wasm")))]
 mod tests {
     use super::*;
-    use gpui::block_on;
+    use gpui_platform::block_on;
     use gpui::{ImageId, RenderImageParams};
     use std::sync::Arc;
 

@@ -317,7 +317,7 @@ impl BufferDiffSnapshot {
     fn new_sync(
         buffer: &text::BufferSnapshot,
         diff_base: String,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> BufferDiffSnapshot {
         let buffer_diff = cx.new(|cx| BufferDiff::new_with_base_text(&diff_base, buffer, cx));
         buffer_diff.update(cx, |buffer_diff, cx| buffer_diff.snapshot(cx))
@@ -2463,7 +2463,7 @@ mod tests {
     use std::{fmt::Write as _, sync::mpsc};
 
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use pretty_assertions::{assert_eq, assert_ne};
     use rand::{Rng as _, rngs::StdRng};
     use text::{Buffer, BufferId, ReplicaId, Rope};
@@ -2475,8 +2475,8 @@ mod tests {
         zlog::init_test();
     }
 
-    #[gpui::test]
-    async fn test_buffer_diff_simple(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_buffer_diff_simple(cx: &mut gpui_runtime::TestAppContext) {
         let diff_base = "
             one
             two
@@ -2530,8 +2530,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_buffer_diff_with_secondary(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_buffer_diff_with_secondary(cx: &mut gpui_runtime::TestAppContext) {
         let head_text = "
             zero
             one
@@ -2606,7 +2606,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_buffer_diff_range(cx: &mut TestAppContext) {
         let diff_base = "
             one
@@ -2669,7 +2669,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stage_hunk(cx: &mut TestAppContext) {
         struct Example {
             name: &'static str,
@@ -2950,7 +2950,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stage_all_with_nested_hunks(cx: &mut TestAppContext) {
         // This test reproduces a crash where staging all hunks would cause an underflow
         // when there's one large unstaged hunk containing multiple uncommitted hunks.
@@ -3016,7 +3016,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_stage_all_with_stale_buffer(cx: &mut TestAppContext) {
         // Regression test for ZED-5R2: when the buffer is edited after the diff is
         // computed but before staging, anchor positions shift while diff_base_byte_range
@@ -3061,7 +3061,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_toggling_stage_and_unstage_same_hunk(cx: &mut TestAppContext) {
         let head_text = "
             one
@@ -3118,7 +3118,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_set_pending_hunks_change_covers_replaced_hunks(cx: &mut TestAppContext) {
         let base_text = "
             zero
@@ -3193,7 +3193,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_buffer_diff_compare(cx: &mut TestAppContext) {
         let base_text = "
             zero
@@ -3498,7 +3498,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     async fn test_staging_and_unstaging_hunks(cx: &mut TestAppContext, mut rng: StdRng) {
         fn gen_line(rng: &mut StdRng) -> String {
             if rng.random_bool(0.2) {
@@ -3663,8 +3663,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_changed_ranges(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_changed_ranges(cx: &mut gpui_runtime::TestAppContext) {
         let base_text = "
             one
             two
@@ -3744,7 +3744,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_extended_range(cx: &mut TestAppContext) {
         let base_text = "
             aaa
@@ -3872,7 +3872,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_buffer_diff_compare_with_base_text_change(_cx: &mut TestAppContext) {
         // Use a shared base text buffer so that anchors from old and new snapshots
         // share the same remote_id and resolve correctly across versions.
@@ -4152,7 +4152,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     async fn test_patch_for_range_random(cx: &mut TestAppContext, mut rng: StdRng) {
         fn gen_line(rng: &mut StdRng) -> String {
             if rng.random_bool(0.2) {
@@ -4367,8 +4367,8 @@ mod tests {
         }
     }
 
-    #[gpui::test]
-    async fn test_set_base_text_with_crlf(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_set_base_text_with_crlf(cx: &mut gpui_runtime::TestAppContext) {
         let base_text_crlf = "one\r\ntwo\r\nthree\r\nfour\r\nfive\r\n";
         let base_text_lf = "one\ntwo\nthree\nfour\nfive\n";
         assert_ne!(base_text_crlf.len(), base_text_lf.len());

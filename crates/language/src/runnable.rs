@@ -539,7 +539,7 @@ mod tests {
         }
     "#};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_single_match_emits_one_runnable_per_match(cx: &mut TestAppContext) {
         let query = indoc! {r#"
             ((function_item
@@ -566,7 +566,7 @@ mod tests {
         assert_eq!(decls, vec!["fn test_alpha() {}", "fn test_beta() {}"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_single_match_without_run_capture_skipped(cx: &mut TestAppContext) {
         // Pattern with only a named capture and no `@run`: should silently produce nothing.
         let query = indoc! {r#"
@@ -585,7 +585,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_match_with_no_runnable_does_not_terminate_iteration(cx: &mut TestAppContext) {
         // A syntax match yielding no runnable must not terminate the
         // outer iterator before later matches that DO have `@run` are visited.
@@ -615,7 +615,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_grouped_match_without_resolver_emits_nothing(cx: &mut TestAppContext) {
         // `@run_item` is present but no resolver is registered on the language.
         let runnables = collect_runnables(cx, GROUPED_SOURCE, GROUPED_QUERY, None);
@@ -626,7 +626,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_grouped_match_emits_one_runnable_per_run_item(cx: &mut TestAppContext) {
         let resolver: Arc<dyn RunnableResolver> = Arc::new(FirstRunResolver);
         let runnables = collect_runnables(cx, GROUPED_SOURCE, GROUPED_QUERY, Some(resolver));
@@ -638,7 +638,7 @@ mod tests {
         assert_eq!(run_texts, vec!["alpha", "beta", "gamma"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_grouped_match_shared_captures_propagate(cx: &mut TestAppContext) {
         let resolver: Arc<dyn RunnableResolver> = Arc::new(FirstRunResolver);
         let runnables = collect_runnables(cx, GROUPED_SOURCE, GROUPED_QUERY, Some(resolver));
@@ -653,7 +653,7 @@ mod tests {
         assert_eq!(runnables.len(), 3);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_grouped_match_local_extras_are_per_group(cx: &mut TestAppContext) {
         let resolver: Arc<dyn RunnableResolver> = Arc::new(LocalExtrasResolver);
         let runnables = collect_runnables(cx, GROUPED_SOURCE, GROUPED_QUERY, Some(resolver));
@@ -669,7 +669,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_grouped_match_resolver_returning_none_skips_group(cx: &mut TestAppContext) {
         let source = indoc! {r#"
             fn outer() {
@@ -690,7 +690,7 @@ mod tests {
         assert_eq!(run_texts, vec!["alpha", "gamma"]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_grouped_match_offset_range_filters_groups(cx: &mut TestAppContext) {
         let resolver: Arc<dyn RunnableResolver> = Arc::new(FirstRunResolver);
         let beta_offset = GROUPED_SOURCE
@@ -715,7 +715,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_grouped_match_zero_width_offset_at_group_start(cx: &mut TestAppContext) {
         let resolver: Arc<dyn RunnableResolver> = Arc::new(FirstRunResolver);
         let alpha_offset = GROUPED_SOURCE
@@ -740,7 +740,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_local_extras_override_shared_extras_with_same_key(cx: &mut TestAppContext) {
         let resolver: Arc<dyn RunnableResolver> = Arc::new(OverrideSharedResolver);
         let runnables = collect_runnables(cx, GROUPED_SOURCE, GROUPED_QUERY, Some(resolver));

@@ -1,6 +1,6 @@
 use core::num;
 
-use gpui::App;
+use gpui_runtime::App;
 use language::CursorShape;
 use project::project_settings::DiagnosticSeverity;
 pub use settings::{

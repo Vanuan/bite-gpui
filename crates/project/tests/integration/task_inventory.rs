@@ -120,7 +120,7 @@ mod test_inventory {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_task_list_sorting(cx: &mut TestAppContext) {
     init_test(cx);
     let inventory = cx.update(|cx| Inventory::new(cx));
@@ -300,7 +300,7 @@ async fn test_task_list_sorting(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_reloading_debug_scenarios(cx: &mut TestAppContext) {
     init_test(cx);
     let inventory = cx.update(|cx| Inventory::new(cx));
@@ -409,7 +409,7 @@ async fn test_reloading_debug_scenarios(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_inventory_static_task_filters(cx: &mut TestAppContext) {
     init_test(cx);
     let inventory = cx.update(|cx| Inventory::new(cx));
@@ -560,7 +560,7 @@ async fn test_inventory_static_task_filters(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_zed_tasks_take_precedence_over_vscode(cx: &mut TestAppContext) {
     init_test(cx);
     let inventory = cx.update(|cx| Inventory::new(cx));

@@ -9,7 +9,7 @@ use gpui::{
     WindowOptions, black, canvas, div, green, point, prelude::*, px, rgb, size, transparent_black,
     white,
 };
-use gpui_platform::application;
+use gpui::application;
 
 struct WindowShadow {}
 
@@ -111,7 +111,7 @@ impl Render for WindowShadow {
                             .when(!tiling.right, |div| div.border_r(border_size))
                             .when(!tiling.is_tiled(), |div| {
                                 div.shadow(vec![
-                                    gpui::BoxShadow::new(
+                                    gpui_runtime::BoxShadow::new(
                                         px(0.),
                                         px(0.),
                                         Hsla {
@@ -128,7 +128,7 @@ impl Render for WindowShadow {
                     .on_mouse_move(|_e, _, cx| {
                         cx.stop_propagation();
                     })
-                    .bg(gpui::rgb(0xCCCCFF))
+                    .bg(gpui_types::rgb(0xCCCCFF))
                     .size_full()
                     .flex()
                     .flex_col()
@@ -153,7 +153,7 @@ impl Render for WindowShadow {
                                         .h(px(100.0))
                                         .bg(green())
                                         .shadow(vec![
-                                            gpui::BoxShadow::new(
+                                            gpui_runtime::BoxShadow::new(
                                                 px(0.),
                                                 px(0.),
                                                 Hsla {
@@ -247,6 +247,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

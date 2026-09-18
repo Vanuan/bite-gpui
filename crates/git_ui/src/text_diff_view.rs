@@ -344,7 +344,7 @@ impl Item for TextDiffView {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         cx: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<SplittableEditor>() {
@@ -363,7 +363,7 @@ impl Item for TextDiffView {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         self.diff_editor.read(cx).for_each_project_item(cx, f)
     }
@@ -483,7 +483,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_against_empty_selection_uses_full_buffer_selection(
         cx: &mut TestAppContext,
     ) {
@@ -506,7 +506,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_against_multiline_selection_expands_to_full_lines(
         cx: &mut TestAppContext,
     ) {
@@ -529,7 +529,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_against_single_line_selection(cx: &mut TestAppContext) {
         base_test(
             path!("/test"),
@@ -548,7 +548,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_with_leading_whitespace_against_line(cx: &mut TestAppContext) {
         base_test(
             path!("/test"),
@@ -567,7 +567,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_against_line_with_leading_whitespace(cx: &mut TestAppContext) {
         base_test(
             path!("/test"),
@@ -586,7 +586,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_against_line_with_leading_whitespace_included_in_selection(
         cx: &mut TestAppContext,
     ) {
@@ -607,7 +607,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_with_leading_whitespace_against_line_with_leading_whitespace(
         cx: &mut TestAppContext,
     ) {
@@ -628,7 +628,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_with_leading_whitespace_against_line_with_leading_whitespace_included_in_selection(
         cx: &mut TestAppContext,
     ) {
@@ -649,7 +649,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_against_partial_selection_expands_to_include_trailing_characters(
         cx: &mut TestAppContext,
     ) {
@@ -670,7 +670,7 @@ mod tests {
         .await;
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_from_multibuffer_with_selection(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -759,7 +759,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_diffing_clipboard_from_multibuffer_with_empty_selection(cx: &mut TestAppContext) {
         init_test(cx);
 

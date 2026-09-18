@@ -1945,7 +1945,7 @@ pub fn surrounding_markers(
 #[cfg(test)]
 mod test {
     use editor::{Editor, EditorMode, MultiBuffer, test::editor_test_context::EditorTestContext};
-    use gpui::KeyBinding;
+    use gpui_runtime::KeyBinding;
     use indoc::indoc;
     use text::Point;
 
@@ -1971,8 +1971,8 @@ mod test {
         "
     };
 
-    #[gpui::test]
-    async fn test_change_word_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_word_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.simulate_at_each_offset("c i w", WORD_LOCATIONS)
@@ -1989,8 +1989,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_word_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_word_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.simulate_at_each_offset("d i w", WORD_LOCATIONS)
@@ -2007,8 +2007,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_visual_word_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_word_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         /*
@@ -2036,8 +2036,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_word_object_with_count(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_word_object_with_count(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("ˇone two three four").await;
@@ -2153,8 +2153,8 @@ mod test {
         "},
     ];
 
-    #[gpui::test]
-    async fn test_change_paragraph_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_paragraph_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         for paragraph_example in PARAGRAPH_EXAMPLES {
@@ -2167,8 +2167,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_delete_paragraph_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_paragraph_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         for paragraph_example in PARAGRAPH_EXAMPLES {
@@ -2181,8 +2181,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_visual_paragraph_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_paragraph_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         const EXAMPLES: &[&str] = &[
@@ -2219,8 +2219,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_change_paragraph_object_with_soft_wrap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_paragraph_object_with_soft_wrap(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         const WRAPPING_EXAMPLE: &str = indoc! {"
@@ -2241,8 +2241,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_paragraph_object_with_soft_wrap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_paragraph_object_with_soft_wrap(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         const WRAPPING_EXAMPLE: &str = indoc! {"
@@ -2263,8 +2263,8 @@ mod test {
             .assert_matches();
     }
 
-    #[gpui::test]
-    async fn test_delete_paragraph_whitespace(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_paragraph_whitespace(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state(indoc! {"
@@ -2281,8 +2281,8 @@ mod test {
         "});
     }
 
-    #[gpui::test]
-    async fn test_visual_paragraph_object_with_soft_wrap(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_visual_paragraph_object_with_soft_wrap(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         const WRAPPING_EXAMPLE: &str = indoc! {"
@@ -2314,8 +2314,8 @@ mod test {
         ('(', ')'), // Parentheses
     ];
 
-    #[gpui::test]
-    async fn test_change_surrounding_character_objects(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_change_surrounding_character_objects(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         for (start, end) in SURROUNDING_OBJECTS {
@@ -2337,8 +2337,8 @@ mod test {
                 .assert_matches();
         }
     }
-    #[gpui::test]
-    async fn test_singleline_surrounding_character_objects(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_singleline_surrounding_character_objects(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_wrap(12).await;
 
@@ -2408,8 +2408,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_multiline_surrounding_character_objects(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_multiline_surrounding_character_objects(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         cx.set_state(
@@ -2528,9 +2528,9 @@ mod test {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_singleline_surrounding_character_objects_with_escape(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state(indoc! {
@@ -2552,8 +2552,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_vertical_bars(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_vertical_bars(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.set_state(
             indoc! {"
@@ -2593,8 +2593,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_argument_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_argument_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Generic arguments
@@ -2651,8 +2651,8 @@ mod test {
         cx.assert_state("let a = [«test::call(first_arg)ˇ»]", Mode::Visual);
     }
 
-    #[gpui::test]
-    async fn test_indent_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_indent_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Base use case
@@ -2739,8 +2739,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_delete_surrounding_character_objects(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_delete_surrounding_character_objects(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         for (start, end) in SURROUNDING_OBJECTS {
@@ -2763,8 +2763,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_anyquotes_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_anyquotes_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.update(|_, cx| {
             cx.bind_keys([KeyBinding::new(
@@ -2915,8 +2915,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_miniquotes_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_miniquotes_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new_typescript(cx).await;
 
         const TEST_CASES: &[(&str, &str, &str, Mode)] = &[
@@ -3078,8 +3078,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_anybrackets_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_anybrackets_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.update(|_, cx| {
             cx.bind_keys([KeyBinding::new(
@@ -3241,8 +3241,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_minibrackets_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_minibrackets_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         cx.update(|_, cx| {
             cx.bind_keys([KeyBinding::new(
@@ -3454,8 +3454,8 @@ mod test {
         }
     }
 
-    #[gpui::test]
-    async fn test_minibrackets_multibuffer(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_minibrackets_multibuffer(cx: &mut gpui_runtime::TestAppContext) {
         // Initialize test context with the TypeScript language loaded, so we
         // can actually get brackets definition.
         let mut cx = VimTestContext::new(cx, true).await;
@@ -3531,8 +3531,8 @@ mod test {
         });
     }
 
-    #[gpui::test]
-    async fn test_minibrackets_trailing_space(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_minibrackets_trailing_space(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
         cx.set_shared_state("(trailingˇ whitespace          )")
             .await;
@@ -3544,8 +3544,8 @@ mod test {
             .assert_eq("trailing whitespace          ");
     }
 
-    #[gpui::test]
-    async fn test_tags(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_tags(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new_html(cx).await;
 
         cx.set_state("<html><head></head><body><b>hˇi!</b></body>", Mode::Normal);
@@ -3623,8 +3623,8 @@ mod test {
             Mode::Visual,
         );
     }
-    #[gpui::test]
-    async fn test_around_containing_word_indent(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_around_containing_word_indent(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = NeovimBackedTestContext::new(cx).await;
 
         cx.set_shared_state("    ˇconst f = (x: unknown) => {")
@@ -3656,8 +3656,8 @@ mod test {
         cx.shared_clipboard().await.assert_eq("const ");
     }
 
-    #[gpui::test]
-    async fn test_arrow_function_text_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_arrow_function_text_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new_typescript(cx).await;
 
         cx.set_state(
@@ -3845,8 +3845,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_arrow_function_in_jsx(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_arrow_function_in_jsx(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new_tsx(cx).await;
 
         cx.set_state(
@@ -4042,8 +4042,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_subword_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_subword_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // Setup custom keybindings for subword object so we can use the

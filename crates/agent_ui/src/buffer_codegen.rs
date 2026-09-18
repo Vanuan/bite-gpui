@@ -277,7 +277,7 @@ pub struct CodegenAlternative {
     status: CodegenStatus,
     generation: Task<()>,
     diff: Diff,
-    _subscription: gpui::Subscription,
+    _subscription: gpui_runtime::Subscription,
     builder: Arc<PromptBuilder>,
     active: bool,
     edits: Vec<(Range<Anchor>, String)>,
@@ -1639,7 +1639,7 @@ mod tests {
         Stream,
         stream::{self},
     };
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use indoc::indoc;
     use language::{Buffer, Point};
     use language_model::fake_provider::FakeLanguageModel;
@@ -1652,7 +1652,7 @@ mod tests {
     use settings::SettingsStore;
     use std::{future, sync::Arc};
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_transform_autoindent(cx: &mut TestAppContext, mut rng: StdRng) {
         init_test(cx);
 
@@ -1714,7 +1714,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_autoindent_when_generating_past_indentation(
         cx: &mut TestAppContext,
         mut rng: StdRng,
@@ -1778,7 +1778,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_autoindent_when_generating_before_indentation(
         cx: &mut TestAppContext,
         mut rng: StdRng,
@@ -1842,7 +1842,7 @@ mod tests {
         );
     }
 
-    #[gpui::test(iterations = 10)]
+    #[gpui_runtime::test(iterations = 10)]
     async fn test_autoindent_respects_tabs_in_selection(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1897,7 +1897,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_inactive_codegen_alternative(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -1961,7 +1961,7 @@ mod tests {
     // When not streaming tool calls, we strip backticks as part of parsing the model's
     // plain text response. This is a regression test for a bug where we stripped
     // backticks incorrectly.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_allows_model_to_output_backticks(cx: &mut TestAppContext) {
         init_test(cx);
         let text = "- Improved; `cmd+click` behavior. Now requires `cmd` to be pressed before the click starts or it doesn't run. ([#44579](https://github.com/zed-industries/zed/pull/44579); thanks [Zachiah](https://github.com/Zachiah))";
@@ -2006,7 +2006,7 @@ mod tests {
     // Regression test: a second rewrite tool use with a *shorter* replacement_text
     // than the first would cause an index-out-of-bounds panic because the
     // chars_read_so_far counter was shared across all tool use IDs.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_rejects_multiple_rewrite_tool_calls(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2030,7 +2030,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_ignores_non_tool_events(cx: &mut TestAppContext) {
         let (buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2095,7 +2095,7 @@ mod tests {
         )));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_errors_when_stopped_without_tool_call(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2124,7 +2124,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_errors_on_eof_without_tool_call(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2145,7 +2145,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_accepts_failure_message(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2169,7 +2169,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_errors_on_invalid_tool_json(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2198,7 +2198,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_errors_when_incomplete_rewrite_stops(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2225,7 +2225,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_errors_when_incomplete_rewrite_reaches_eof(
         cx: &mut TestAppContext,
     ) {
@@ -2248,7 +2248,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_errors_when_interrupted_after_complete_rewrite(
         cx: &mut TestAppContext,
     ) {
@@ -2274,7 +2274,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_errors_when_interrupted_after_failure_message(
         cx: &mut TestAppContext,
     ) {
@@ -2300,7 +2300,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_requires_failure_message_to_complete(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2331,7 +2331,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_rejects_failure_after_rewrite(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2358,7 +2358,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_rejects_rewrite_after_failure(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2382,7 +2382,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_rejects_rewrite_after_partial_failure(cx: &mut TestAppContext) {
         let (buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2410,7 +2410,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_propagates_stream_error_before_rewrite(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion_results(&codegen, cx);
@@ -2428,7 +2428,7 @@ mod tests {
         assert_eq!(error.as_deref(), Some("provider stream failed"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_propagates_stream_error_after_rewrite(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion_results(&codegen, cx);
@@ -2449,7 +2449,7 @@ mod tests {
         assert_eq!(error.as_deref(), Some("provider stream failed"));
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_tool_completion_errors_on_invalid_tool_input(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         let events_tx = simulate_tool_based_completion(&codegen, cx);
@@ -2482,7 +2482,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_start_clears_previous_failure(cx: &mut TestAppContext) {
         let (_buffer, codegen) = new_tool_based_codegen(cx);
         cx.update(|cx| AgentSettings::register(cx));
@@ -2515,7 +2515,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_strip_invalid_spans_from_codeblock() {
         assert_chunks("Lorem ipsum dolor", "Lorem ipsum dolor").await;
         assert_chunks("```\nLorem ipsum dolor", "Lorem ipsum dolor").await;

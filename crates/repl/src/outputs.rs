@@ -845,7 +845,7 @@ impl Render for ExecutionView {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use runtimelib::{
         ClearOutput, ErrorOutput, ExecutionState, InputRequest, JupyterMessage,
         JupyterMessageContent, MimeType, Status, Stdio, StreamContent,
@@ -891,7 +891,7 @@ mod tests {
 
     async fn init_test(
         cx: &mut TestAppContext,
-    ) -> (gpui::VisualTestContext, WeakEntity<workspace::Workspace>) {
+    ) -> (gpui_runtime::VisualTestContext, WeakEntity<workspace::Workspace>) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);
             cx.set_global(settings_store);
@@ -905,12 +905,12 @@ mod tests {
             .read_with(cx, |mw, _| mw.workspace().clone())
             .unwrap();
         let weak_workspace = workspace.downgrade();
-        let visual_cx = gpui::VisualTestContext::from_window(window.into(), cx);
+        let visual_cx = gpui_runtime::VisualTestContext::from_window(window.into(), cx);
         (visual_cx, weak_workspace)
     }
 
     fn create_execution_view(
-        cx: &mut gpui::VisualTestContext,
+        cx: &mut gpui_runtime::VisualTestContext,
         weak_workspace: WeakEntity<workspace::Workspace>,
     ) -> Entity<ExecutionView> {
         cx.update(|_window, cx| {
@@ -918,7 +918,7 @@ mod tests {
         })
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_push_message_stream_content(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -943,7 +943,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_push_message_stream_appends(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -976,7 +976,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_push_message_error_output(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -1011,7 +1011,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_push_message_clear_output_immediate(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -1036,7 +1036,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_push_message_clear_output_deferred(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -1069,7 +1069,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_push_message_status_transitions(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -1115,7 +1115,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_push_message_status_idle_emits_finished_empty(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -1149,7 +1149,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_handle_input_request_creates_pending_input(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -1178,7 +1178,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_handle_input_request_with_password(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -1205,7 +1205,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_submit_input_emits_reply_event(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);
@@ -1254,7 +1254,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_status_idle_clears_pending_input(cx: &mut TestAppContext) {
         let (mut cx, workspace) = init_test(cx).await;
         let execution_view = create_execution_view(&mut cx, workspace);

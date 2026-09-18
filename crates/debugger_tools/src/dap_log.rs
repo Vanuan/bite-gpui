@@ -78,7 +78,7 @@ pub struct LogStore {
 
 struct ProjectState {
     debug_sessions: BTreeMap<SessionId, DebugAdapterState>,
-    _subscriptions: [gpui::Subscription; 2],
+    _subscriptions: [gpui_runtime::Subscription; 2],
 }
 
 struct DebugAdapterState {
@@ -519,7 +519,7 @@ impl Render for DapLogToolbarItemView {
             .and_then(|session_id| menu_rows.iter().find(|row| row.session_id == session_id));
 
         let dap_menu: PopoverMenu<_> = PopoverMenu::new("DapLogView")
-            .anchor(gpui::Anchor::TopLeft)
+            .anchor(gpui_types::Anchor::TopLeft)
             .trigger(Button::new(
                 "debug_client_menu_header",
                 current_client

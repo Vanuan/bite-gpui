@@ -3,7 +3,7 @@ mod sign_in;
 use std::sync::Arc;
 
 use copilot::GlobalCopilotAuth;
-use gpui::AppContext;
+use gpui_runtime::AppContext;
 use language::language_settings::AllLanguageSettings;
 use project::DisableAiSettings;
 use settings::SettingsStore;

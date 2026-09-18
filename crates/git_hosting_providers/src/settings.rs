@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 use git::GitHostingProviderRegistry;
-use gpui::App;
+use gpui_runtime::App;
 use settings::{
     GitHostingProviderConfig, GitHostingProviderKind, RegisterSetting, Settings, SettingsStore,
 };

@@ -1523,7 +1523,7 @@ struct EditorInlineAssists {
     scroll_lock: Option<InlineAssistScrollLock>,
     highlight_updates: watch::Sender<()>,
     _update_highlights: Task<Result<()>>,
-    _subscriptions: Vec<gpui::Subscription>,
+    _subscriptions: Vec<gpui_runtime::Subscription>,
 }
 
 struct InlineAssistScrollLock {
@@ -1842,8 +1842,8 @@ pub mod evals {
         cx: &mut TestAppContext,
     ) -> InlineAssistantOutput
     where
-        SetupF: FnOnce(&mut gpui::VisualTestContext),
-        TestF: FnOnce(&mut gpui::VisualTestContext),
+        SetupF: FnOnce(&mut gpui_runtime::VisualTestContext),
+        TestF: FnOnce(&mut gpui_runtime::VisualTestContext),
     {
         let fs = FakeFs::new(cx.executor());
         let app_state = cx.update(|cx| workspace::AppState::test(cx));
@@ -2063,7 +2063,7 @@ pub mod evals {
         let prompt = prompt.into();
 
         eval_utils::eval(iterations, expected_pass_ratio, NoProcessor, move || {
-            let dispatcher = gpui::TestDispatcher::new(rand::random());
+            let dispatcher = gpui_platform::TestDispatcher::new(rand::random());
             let mut cx = TestAppContext::build(dispatcher, None);
             cx.skip_drawing();
 

@@ -1,8 +1,8 @@
-use gpui::Hsla;
+use gpui_types::Hsla;
 use mermaid_render::MermaidTheme;
 
 fn rgb(r: u8, g: u8, b: u8) -> Hsla {
-    gpui::Rgba {
+    gpui_types::Rgba {
         r: r as f32 / 255.0,
         g: g as f32 / 255.0,
         b: b as f32 / 255.0,

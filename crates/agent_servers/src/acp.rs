@@ -2568,7 +2568,7 @@ pub mod test_support {
 
     pub async fn connect_fake_acp_connection(
         project: Entity<Project>,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> FakeAcpConnectionHarness {
         cx.update(|cx| {
             let store = settings::SettingsStore::test(cx);
@@ -2593,7 +2593,7 @@ pub mod test_support {
     pub async fn connect_fake_acp_connection_with_auth_elicitation(
         project: Entity<Project>,
         request: acp::CreateElicitationRequest,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> (
         FakeAcpConnectionHarness,
         async_channel::Receiver<acp::CreateElicitationResponse>,
@@ -2625,7 +2625,7 @@ pub mod test_support {
         project: Entity<Project>,
         request: acp::CreateElicitationRequest,
         completion: acp::CompleteElicitationNotification,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> (
         FakeAcpConnectionHarness,
         async_channel::Receiver<acp::CreateElicitationResponse>,
@@ -2661,7 +2661,7 @@ mod tests {
     use feature_flags::FeatureFlag as _;
     use settings::Settings as _;
 
-    fn init_feature_flags_test(cx: &mut gpui::TestAppContext) {
+    fn init_feature_flags_test(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| {
             let mut settings_store = SettingsStore::test(cx);
             settings_store.register_setting::<feature_flags::FeatureFlagsSettings>();
@@ -2670,9 +2670,9 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn client_capabilities_include_elicitation_without_acp_beta(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_feature_flags_test(cx);
         let capabilities = client_capabilities_for_agent(&AgentId::new("codex-acp"));
@@ -2684,9 +2684,9 @@ mod tests {
         assert!(elicitation.url.is_some());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn request_scoped_elicitation_during_auth_uses_connection_store(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_feature_flags_test(cx);
         cx.update(|cx| {
@@ -2764,9 +2764,9 @@ mod tests {
         auth_task.await.expect("auth should complete");
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn request_scoped_url_elicitation_completion_before_consent_is_ignored(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         init_feature_flags_test(cx);
         cx.update(|cx| {
@@ -2858,8 +2858,8 @@ mod tests {
         auth_task.await.expect("auth should complete");
     }
 
-    #[gpui::test]
-    async fn request_scoped_elicitation_ignores_open_sessions(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn request_scoped_elicitation_ignores_open_sessions(cx: &mut gpui_runtime::TestAppContext) {
         init_feature_flags_test(cx);
         cx.update(|cx| {
             cx.update_flags(false, vec![AcpBetaFeatureFlag::NAME.to_string()]);
@@ -3333,9 +3333,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn session_list_includes_additional_directories_in_work_dirs(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let connection = connect_session_list_test_agent(
             vec![
@@ -3376,7 +3376,7 @@ mod tests {
 
     async fn connect_session_list_test_agent(
         sessions: Vec<acp::SessionInfo>,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> ConnectionTo<Agent> {
         let (client_transport, agent_transport) = agent_client_protocol::Channel::duplex();
         let sessions = Arc::new(sessions);
@@ -3413,9 +3413,9 @@ mod tests {
             .expect("failed to receive ACP connection")
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn additional_directories_support_respects_agent_capability(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         cx.update(|cx| {
             let store = settings::SettingsStore::test(cx);
@@ -3460,7 +3460,7 @@ mod tests {
 
     async fn connect_session_delete_test_agent(
         deleted_sessions: Arc<std::sync::Mutex<Vec<acp::SessionId>>>,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> ConnectionTo<Agent> {
         let (client_transport, agent_transport) = agent_client_protocol::Channel::duplex();
 
@@ -3500,8 +3500,8 @@ mod tests {
             .expect("failed to receive ACP connection")
     }
 
-    #[gpui::test]
-    async fn settings_changes_refresh_active_connection_defaults(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn settings_changes_refresh_active_connection_defaults(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| {
             let store = settings::SettingsStore::test(cx);
             cx.set_global(store);
@@ -3560,8 +3560,8 @@ mod tests {
         assert_eq!(harness.connection.defaults.config_option("mode"), None);
     }
 
-    #[gpui::test]
-    async fn default_config_options_apply_boolean_defaults(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn default_config_options_apply_boolean_defaults(cx: &mut gpui_runtime::TestAppContext) {
         let (connection, set_config_requests) = connect_config_defaults_test_agent(cx).await;
         connection.defaults.set(
             None,
@@ -3605,7 +3605,7 @@ mod tests {
     }
 
     async fn connect_config_defaults_test_agent(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> (
         AcpConnection,
         Arc<Mutex<Vec<acp::SetSessionConfigOptionRequest>>>,
@@ -3673,9 +3673,9 @@ mod tests {
         (connection, set_config_requests)
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn session_list_delete_sends_session_delete_when_supported(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let deleted_sessions = Arc::new(std::sync::Mutex::new(Vec::new()));
         let connection = connect_session_delete_test_agent(deleted_sessions.clone(), cx).await;
@@ -3694,8 +3694,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn session_list_delete_does_not_send_when_unsupported(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn session_list_delete_does_not_send_when_unsupported(cx: &mut gpui_runtime::TestAppContext) {
         let deleted_sessions = Arc::new(std::sync::Mutex::new(Vec::new()));
         let connection = connect_session_delete_test_agent(deleted_sessions.clone(), cx).await;
         let session_list = AcpSessionList::new(connection, false);
@@ -3719,9 +3719,9 @@ mod tests {
     }
 
     #[cfg(not(windows))]
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn startup_returns_error_when_agent_exits_before_initialization(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         cx.update(|cx| {
             let store = settings::SettingsStore::test(cx);
@@ -3779,7 +3779,7 @@ mod tests {
     }
 
     async fn connect_fake_agent(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> (
         Rc<AcpConnection>,
         Entity<project::Project>,
@@ -3987,9 +3987,9 @@ mod tests {
         )
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_loaded_sessions_keep_state_until_last_handle_drops(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let (
             connection,
@@ -4072,9 +4072,9 @@ mod tests {
     // `session/load` request. These notifications must be applied to the
     // reconstructed thread, not dropped because the session hasn't been
     // registered yet.
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_load_session_replays_notifications_sent_before_response(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let (
             connection,
@@ -4138,9 +4138,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dropping_loader_during_in_flight_load_closes_session(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let (
             connection,
@@ -4224,9 +4224,9 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_dropping_one_loader_during_load_preserves_other_concurrent_loader(
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) {
         let (
             connection,
@@ -4319,7 +4319,7 @@ mod tests {
         );
     }
 
-    fn release_dropped_entities(cx: &mut gpui::TestAppContext) {
+    fn release_dropped_entities(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|_| ());
         cx.run_until_parked();
     }

@@ -1,4 +1,4 @@
-use gpui::Context;
+use gpui_runtime::Context;
 use settings::SettingsStore;
 use std::time::Duration;
 use ui::App;

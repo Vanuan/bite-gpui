@@ -10,7 +10,7 @@ use workspace::{AppState, MultiWorkspace};
 
 use crate::{CandidateInfo, DirectoryState, OpenPathDelegate};
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_path_prompt(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -125,7 +125,7 @@ async fn test_open_path_prompt(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_path_prompt_completion(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -237,7 +237,7 @@ async fn test_open_path_prompt_completion(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(not(target_os = "windows"), ignore)]
 async fn test_open_path_prompt_on_windows(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
@@ -324,7 +324,7 @@ async fn test_open_path_prompt_on_windows(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_new_path_prompt(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -372,7 +372,7 @@ async fn test_new_path_prompt(cx: &mut TestAppContext) {
     assert_eq!(collect_match_candidates(&picker, cx), vec!["dir1"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_path_prompt_panics_with_stale_highlight_positions(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -405,7 +405,7 @@ async fn test_open_path_prompt_panics_with_stale_highlight_positions(cx: &mut Te
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_open_path_prompt_with_show_hidden(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state
@@ -440,7 +440,7 @@ async fn test_open_path_prompt_with_show_hidden(cx: &mut TestAppContext) {
     assert_eq!(collect_match_candidates(&picker, cx), vec![".hidden"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dismiss_cancels_in_flight_match(cx: &mut TestAppContext) {
     let app_state = init_test(cx);
     app_state

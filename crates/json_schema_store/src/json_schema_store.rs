@@ -93,7 +93,7 @@ pub struct SchemaStore {
     lsp_stores: Vec<WeakEntity<LspStore>>,
 }
 
-impl gpui::Global for SchemaStore {}
+impl gpui_runtime::Global for SchemaStore {}
 
 enum ChangedSchemas {
     Settings,
@@ -622,12 +622,12 @@ fn schema_file_match(path: &std::path::Path) -> String {
 mod tests {
     use super::*;
     use fs::FakeFs;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use language::FakeLspAdapter;
     use project::Project;
     use settings::SettingsStore;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_project_settings_schema_includes_available_lsp_adapters(cx: &mut TestAppContext) {
         cx.update(|cx| {
             let settings_store = SettingsStore::test(cx);

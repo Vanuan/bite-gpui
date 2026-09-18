@@ -143,8 +143,8 @@ mod test {
 
     use crate::{state::Mode, test::VimTestContext};
 
-    #[gpui::test]
-    async fn test_select_word_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_select_word_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
         let start = indoc! {"
                 The quick brˇowˇnˇ
@@ -185,8 +185,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_select_any_pair_object(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_select_any_pair_object(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // The innermost surrounding pair wins, regardless of its kind.
@@ -276,8 +276,8 @@ mod test {
         cx.assert_state("«ˇ(baz)» foo", Mode::HelixNormal);
     }
 
-    #[gpui::test]
-    async fn test_helix_treesitter_object_keys(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_treesitter_object_keys(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new(cx, true).await;
 
         // In Helix, `t` is the type text object, not an HTML tag.
@@ -319,8 +319,8 @@ mod test {
         );
     }
 
-    #[gpui::test]
-    async fn test_helix_xml_element_object_key(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_helix_xml_element_object_key(cx: &mut gpui_runtime::TestAppContext) {
         let mut cx = VimTestContext::new_html(cx).await;
 
         // In Helix, `x` is the (X)HTML element text object.

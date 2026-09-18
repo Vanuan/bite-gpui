@@ -1884,7 +1884,7 @@ mod tests {
         assert_eq!(lines.next(), None);
     }
 
-    #[gpui::test(iterations = 100)]
+    #[gpui_runtime::test(iterations = 100)]
     fn test_random_rope(mut rng: StdRng) {
         let operations = env::var("OPERATIONS")
             .map(|i| i.parse().expect("invalid `OPERATIONS` variable"))
@@ -2415,7 +2415,7 @@ mod tests {
         assert_eq!(rope.len(), 5);
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     fn test_push_front_random(mut rng: StdRng) {
         let initial_len = rng.random_range(0..=64);
         let initial_text: String = RandomCharIter::new(&mut rng).take(initial_len).collect();
@@ -2474,7 +2474,7 @@ mod tests {
         }
     }
 
-    #[gpui::test(iterations = 50)]
+    #[gpui_runtime::test(iterations = 50)]
     fn test_push_front_large_prefix(mut rng: StdRng) {
         let initial_len = rng.random_range(0..=32);
         let initial_text: String = RandomCharIter::new(&mut rng).take(initial_len).collect();

@@ -2440,11 +2440,11 @@ impl Render for ContextMenu {
 
 #[cfg(test)]
 mod tests {
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
     use super::*;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn can_navigate_back_over_headers(cx: &mut TestAppContext) {
         let cx = cx.add_empty_window();
         let context_menu = cx.update(|window, cx| {

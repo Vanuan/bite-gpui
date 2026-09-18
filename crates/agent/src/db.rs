@@ -782,7 +782,7 @@ mod tests {
     use super::*;
     use chrono::{DateTime, TimeZone, Utc};
     use collections::HashMap;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use std::sync::Arc;
 
     #[test]
@@ -829,7 +829,7 @@ mod tests {
         }
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_list_threads_orders_by_created_at(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
 
@@ -860,7 +860,7 @@ mod tests {
         assert_eq!(entries[1].id, older_id);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_save_thread_replaces_metadata(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
 
@@ -962,7 +962,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sandbox_grants_roundtrip_through_save_load(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
         let thread_id = session_id("sandbox-grants-thread");
@@ -1002,7 +1002,7 @@ mod tests {
         assert_eq!(loaded.sandbox_grants, grants);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_sandboxed_terminal_temp_dir_roundtrips_through_save_load(
         cx: &mut TestAppContext,
     ) {
@@ -1033,7 +1033,7 @@ mod tests {
         std::fs::remove_dir_all(temp_dir).unwrap();
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_thread_removes_sandboxed_terminal_temp_dir(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
         let thread_id = session_id("sandbox-temp-dir-delete-thread");
@@ -1058,7 +1058,7 @@ mod tests {
         assert!(!temp_dir.exists());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_delete_thread_deletes_subagent_threads(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
 
@@ -1114,7 +1114,7 @@ mod tests {
         assert_eq!(remaining_ids, vec![unrelated_id]);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_subagent_context_roundtrips_through_save_load(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
 
@@ -1148,7 +1148,7 @@ mod tests {
         assert_eq!(context.depth, 2);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_non_subagent_thread_has_no_subagent_context(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
 
@@ -1175,7 +1175,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_folder_paths_roundtrip(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
 
@@ -1199,7 +1199,7 @@ mod tests {
         assert_eq!(threads.len(), 1);
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_folder_paths_empty_when_not_set(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
 
@@ -1234,7 +1234,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_scroll_position_roundtrips_through_save_load(cx: &mut TestAppContext) {
         let database = ThreadsDatabase::new(cx.executor()).unwrap();
 

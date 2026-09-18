@@ -274,9 +274,9 @@ mod tests {
         assert!(!profile.is_context_server_tool_enabled("other_server", "any_tool"));
     }
 
-    #[gpui::test]
-    fn unmodified_default_detection(cx: &mut gpui::App) {
-        use gpui::UpdateGlobal as _;
+    #[gpui_runtime::test]
+    fn unmodified_default_detection(cx: &mut gpui_runtime::App) {
+        use gpui_runtime::UpdateGlobal as _;
 
         let store = SettingsStore::test(cx);
         cx.set_global(store);

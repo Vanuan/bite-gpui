@@ -98,8 +98,8 @@ use util::{
 };
 use worktree::WorktreeModelHandle as _;
 
-#[gpui::test]
-async fn test_block_via_channel(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_block_via_channel(cx: &mut gpui_runtime::TestAppContext) {
     cx.executor().allow_parking();
 
     let (tx, mut rx) = futures::channel::mpsc::unbounded();
@@ -114,8 +114,8 @@ async fn test_block_via_channel(cx: &mut gpui::TestAppContext) {
     rx.next().await.unwrap();
 }
 
-#[gpui::test]
-async fn test_block_via_smol(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_block_via_smol(cx: &mut gpui_runtime::TestAppContext) {
     cx.executor().allow_parking();
 
     let io_task = smol::unblock(move || {
@@ -131,9 +131,9 @@ async fn test_block_via_smol(cx: &mut gpui::TestAppContext) {
     task.await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_default_session_work_dirs_prefers_directory_worktrees_over_single_file_parents(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -173,9 +173,9 @@ async fn test_default_session_work_dirs_prefers_directory_worktrees_over_single_
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_default_session_work_dirs_falls_back_to_home_for_empty_project(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -192,8 +192,8 @@ async fn test_default_session_work_dirs_falls_back_to_home_for_empty_project(
 // While POSIX symbolic links are somewhat supported on Windows, they are an opt in by the user, and thus
 // we assume that they are not supported out of the box.
 #[cfg(not(windows))]
-#[gpui::test]
-async fn test_symlinks(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_symlinks(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
 
@@ -239,8 +239,8 @@ async fn test_symlinks(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_editorconfig_support(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_editorconfig_support(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let dir = TempTree::new(json!({
@@ -380,8 +380,8 @@ async fn test_editorconfig_support(cx: &mut gpui::TestAppContext) {
     assert_eq!(Some(settings_readme.tab_size), NonZeroU32::new(8));
 }
 
-#[gpui::test]
-async fn test_external_editorconfig_support(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_external_editorconfig_support(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -435,8 +435,8 @@ async fn test_external_editorconfig_support(cx: &mut gpui::TestAppContext) {
     assert_eq!(Some(settings_txt.tab_size), NonZeroU32::new(4));
 }
 
-#[gpui::test]
-async fn test_internal_editorconfig_root_stops_traversal(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_internal_editorconfig_root_stops_traversal(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -473,8 +473,8 @@ async fn test_internal_editorconfig_root_stops_traversal(cx: &mut gpui::TestAppC
     });
 }
 
-#[gpui::test]
-async fn test_external_editorconfig_root_stops_traversal(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_external_editorconfig_root_stops_traversal(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -514,8 +514,8 @@ async fn test_external_editorconfig_root_stops_traversal(cx: &mut gpui::TestAppC
     });
 }
 
-#[gpui::test]
-async fn test_external_editorconfig_root_in_parent_stops_traversal(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_external_editorconfig_root_in_parent_stops_traversal(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -557,8 +557,8 @@ async fn test_external_editorconfig_root_in_parent_stops_traversal(cx: &mut gpui
     });
 }
 
-#[gpui::test]
-async fn test_external_editorconfig_shared_across_worktrees(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_external_editorconfig_shared_across_worktrees(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -613,9 +613,9 @@ async fn test_external_editorconfig_shared_across_worktrees(cx: &mut gpui::TestA
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_external_editorconfig_not_loaded_without_internal_config(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -656,8 +656,8 @@ async fn test_external_editorconfig_not_loaded_without_internal_config(
     });
 }
 
-#[gpui::test]
-async fn test_external_editorconfig_modification_triggers_refresh(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_external_editorconfig_modification_triggers_refresh(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -720,8 +720,8 @@ async fn test_external_editorconfig_modification_triggers_refresh(cx: &mut gpui:
     });
 }
 
-#[gpui::test]
-async fn test_adding_worktree_discovers_external_editorconfigs(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_adding_worktree_discovers_external_editorconfigs(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -787,8 +787,8 @@ async fn test_adding_worktree_discovers_external_editorconfigs(cx: &mut gpui::Te
     });
 }
 
-#[gpui::test]
-async fn test_removing_worktree_cleans_up_external_editorconfig(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_removing_worktree_cleans_up_external_editorconfig(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -843,9 +843,9 @@ async fn test_removing_worktree_cleans_up_external_editorconfig(cx: &mut gpui::T
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_shared_external_editorconfig_cleanup_with_multiple_worktrees(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -936,8 +936,8 @@ async fn test_shared_external_editorconfig_cleanup_with_multiple_worktrees(
     });
 }
 
-#[gpui::test]
-async fn test_git_provider_project_setting(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_git_provider_project_setting(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
         GitHostingProviderRegistry::default_global(cx);
@@ -1001,8 +1001,8 @@ async fn test_git_provider_project_setting(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_managing_project_specific_settings(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_managing_project_specific_settings(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     TaskStore::init(None);
 
@@ -1204,8 +1204,8 @@ async fn test_managing_project_specific_settings(cx: &mut gpui::TestAppContext) 
     );
 }
 
-#[gpui::test]
-async fn test_invalid_local_tasks_shows_toast_with_doc_link(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_invalid_local_tasks_shows_toast_with_doc_link(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     TaskStore::init(None);
 
@@ -1262,8 +1262,8 @@ async fn test_invalid_local_tasks_shows_toast_with_doc_link(cx: &mut gpui::TestA
     );
 }
 
-#[gpui::test]
-async fn test_fallback_to_single_worktree_tasks(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_fallback_to_single_worktree_tasks(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     TaskStore::init(None);
 
@@ -1354,9 +1354,9 @@ async fn test_fallback_to_single_worktree_tasks(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_running_multiple_instances_of_a_single_server_in_one_worktree(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     pub(crate) struct PyprojectTomlManifestProvider;
 
@@ -1572,8 +1572,8 @@ async fn test_running_multiple_instances_of_a_single_server_in_one_worktree(
     assert_eq!(server.server_id(), LanguageServerId(1));
 }
 
-#[gpui::test]
-async fn test_managing_language_servers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_managing_language_servers(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -1976,8 +1976,8 @@ async fn test_managing_language_servers(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_late_lsp_adapter_registration(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_late_lsp_adapter_registration(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2054,8 +2054,8 @@ async fn test_late_lsp_adapter_registration(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_language_server_relative_path(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_language_server_relative_path(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let settings_json_contents = json!({
@@ -2138,8 +2138,8 @@ async fn test_language_server_relative_path(cx: &mut gpui::TestAppContext) {
     assert_eq!(lsp_path.to_string_lossy(), path!("lsp_on_path.exe"));
 }
 
-#[gpui::test]
-async fn test_language_server_tilde_path(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_language_server_tilde_path(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let settings_json_contents = json!({
@@ -2199,9 +2199,9 @@ async fn test_language_server_tilde_path(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rescan_fs_change_is_reported_to_language_servers_as_changed(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -2290,8 +2290,8 @@ async fn test_rescan_fs_change_is_reported_to_language_servers_as_changed(
     );
 }
 
-#[gpui::test]
-async fn test_reporting_fs_changes_to_language_servers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_reporting_fs_changes_to_language_servers(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2597,8 +2597,8 @@ async fn test_reporting_fs_changes_to_language_servers(cx: &mut gpui::TestAppCon
     );
 }
 
-#[gpui::test]
-async fn test_single_file_worktrees_diagnostics(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_single_file_worktrees_diagnostics(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2703,8 +2703,8 @@ async fn test_single_file_worktrees_diagnostics(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_omitted_diagnostics(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_omitted_diagnostics(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -2848,8 +2848,8 @@ async fn test_omitted_diagnostics(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_disk_based_diagnostics_progress(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_disk_based_diagnostics_progress(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let progress_token = "the-progress-token";
@@ -2984,8 +2984,8 @@ async fn test_disk_based_diagnostics_progress(cx: &mut gpui::TestAppContext) {
     assert_eq!(futures::poll!(events.next()), Poll::Pending);
 }
 
-#[gpui::test]
-async fn test_restarting_server_with_diagnostics_running(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_restarting_server_with_diagnostics_running(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let progress_token = "the-progress-token";
@@ -3086,8 +3086,8 @@ async fn test_restarting_server_with_diagnostics_running(cx: &mut gpui::TestAppC
     });
 }
 
-#[gpui::test]
-async fn test_restarting_server_with_diagnostics_published(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_restarting_server_with_diagnostics_published(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3172,8 +3172,8 @@ async fn test_restarting_server_with_diagnostics_published(cx: &mut gpui::TestAp
     });
 }
 
-#[gpui::test]
-async fn test_restarted_server_reporting_invalid_buffer_version(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_restarted_server_reporting_invalid_buffer_version(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3217,9 +3217,9 @@ async fn test_restarted_server_reporting_invalid_buffer_version(cx: &mut gpui::T
     assert_eq!(notification.version, 0);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_selecting_a_language_clears_the_old_servers_diagnostics(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -3282,9 +3282,9 @@ async fn test_selecting_a_language_clears_the_old_servers_diagnostics(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_selecting_a_language_clears_diagnostics_when_the_server_keeps_other_buffers(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -3372,9 +3372,9 @@ async fn test_selecting_a_language_clears_diagnostics_when_the_server_keeps_othe
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_registry_reload_detaches_buffers_from_language_servers(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -3431,8 +3431,8 @@ async fn test_registry_reload_detaches_buffers_from_language_servers(
     );
 }
 
-#[gpui::test]
-async fn test_cancel_language_server_work(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_cancel_language_server_work(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let progress_token = "the-progress-token";
@@ -3503,8 +3503,8 @@ async fn test_cancel_language_server_work(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_long_lines_disable_language_servers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_long_lines_disable_language_servers(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3562,8 +3562,8 @@ async fn test_long_lines_disable_language_servers(cx: &mut gpui::TestAppContext)
     );
 }
 
-#[gpui::test]
-async fn test_max_buffer_line_length_can_be_overridden(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_max_buffer_line_length_can_be_overridden(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3613,8 +3613,8 @@ async fn test_max_buffer_line_length_can_be_overridden(cx: &mut gpui::TestAppCon
     );
 }
 
-#[gpui::test]
-async fn test_toggling_enable_language_server(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_toggling_enable_language_server(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -3731,9 +3731,9 @@ async fn test_toggling_enable_language_server(cx: &mut gpui::TestAppContext) {
         .await;
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_updating_lsp_settings_sends_one_did_change_configuration(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -3793,8 +3793,8 @@ async fn test_updating_lsp_settings_sends_one_did_change_configuration(
     );
 }
 
-#[gpui::test(iterations = 3)]
-async fn test_transforming_diagnostics(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 3)]
+async fn test_transforming_diagnostics(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let text = "
@@ -4085,8 +4085,8 @@ async fn test_transforming_diagnostics(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_markup_content_diagnostic_messages(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_markup_content_diagnostic_messages(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let text = "
@@ -4183,9 +4183,9 @@ async fn test_markup_content_diagnostic_messages(cx: &mut gpui::TestAppContext) 
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_code_actions_downgrade_cross_server_markup_diagnostics(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -4318,8 +4318,8 @@ async fn test_code_actions_downgrade_cross_server_markup_diagnostics(
     assert!(code_actions.await.unwrap().unwrap().is_empty());
 }
 
-#[gpui::test]
-async fn test_empty_diagnostic_ranges(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_empty_diagnostic_ranges(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let text = concat!(
@@ -4394,8 +4394,8 @@ async fn test_empty_diagnostic_ranges(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_diagnostic_range_spanning_line_terminator(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_diagnostic_range_spanning_line_terminator(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     // Some language servers (e.g. Pyright, ruff, pyrefly, ty on a missing `:`)
@@ -4459,8 +4459,8 @@ async fn test_diagnostic_range_spanning_line_terminator(cx: &mut gpui::TestAppCo
     });
 }
 
-#[gpui::test]
-async fn test_diagnostics_from_multiple_language_servers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_diagnostics_from_multiple_language_servers(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4520,9 +4520,9 @@ async fn test_diagnostics_from_multiple_language_servers(cx: &mut gpui::TestAppC
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostic_summaries_cleared_on_worktree_entry_removal(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -4598,8 +4598,8 @@ async fn test_diagnostic_summaries_cleared_on_worktree_entry_removal(
     });
 }
 
-#[gpui::test]
-async fn test_stored_diagnostics_not_replayed_after_entry_removal(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_stored_diagnostics_not_replayed_after_entry_removal(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4658,8 +4658,8 @@ async fn test_stored_diagnostics_not_replayed_after_entry_removal(cx: &mut gpui:
     });
 }
 
-#[gpui::test]
-async fn test_diagnostic_summaries_cleared_on_server_restart(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_diagnostic_summaries_cleared_on_server_restart(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4737,8 +4737,8 @@ async fn test_diagnostic_summaries_cleared_on_server_restart(cx: &mut gpui::Test
     });
 }
 
-#[gpui::test]
-async fn test_diagnostic_summaries_cleared_on_buffer_reload(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_diagnostic_summaries_cleared_on_buffer_reload(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -4845,9 +4845,9 @@ async fn test_diagnostic_summaries_cleared_on_buffer_reload(cx: &mut gpui::TestA
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostic_summaries_cleared_on_buffer_close_without_workspace_diagnostics(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let (project, mut fake_servers) = diagnostics_pull_project(
         cx,
@@ -4933,9 +4933,9 @@ async fn test_diagnostic_summaries_cleared_on_buffer_close_without_workspace_dia
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_diagnostic_summaries_retained_on_buffer_close_with_workspace_diagnostics(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let (project, mut fake_servers) = diagnostics_pull_project(
         cx,
@@ -5028,8 +5028,8 @@ async fn test_diagnostic_summaries_retained_on_buffer_close_with_workspace_diagn
     });
 }
 
-#[gpui::test]
-async fn test_workspace_diagnostics_pull_timeout_releases_waiters(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_workspace_diagnostics_pull_timeout_releases_waiters(cx: &mut gpui_runtime::TestAppContext) {
     let (project, mut fake_servers) = diagnostics_pull_project(
         cx,
         json!({ "a.rs": "one two three" }),
@@ -5076,8 +5076,8 @@ async fn test_workspace_diagnostics_pull_timeout_releases_waiters(cx: &mut gpui:
     );
 }
 
-#[gpui::test]
-async fn test_workspace_diagnostics_long_poll_is_kept_open(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_workspace_diagnostics_long_poll_is_kept_open(cx: &mut gpui_runtime::TestAppContext) {
     let workspace_requests = Arc::new(atomic::AtomicUsize::new(0));
     let partial_result_token = Arc::new(Mutex::new(None));
     let (project, mut fake_servers) = diagnostics_pull_project(
@@ -5181,9 +5181,9 @@ async fn test_workspace_diagnostics_long_poll_is_kept_open(cx: &mut gpui::TestAp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspace_diagnostics_refresh_during_open_request_pulls_again(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let workspace_requests = Arc::new(atomic::AtomicUsize::new(0));
     let (first_response_tx, first_response_rx) = oneshot::channel::<()>();
@@ -5262,8 +5262,8 @@ async fn test_workspace_diagnostics_refresh_during_open_request_pulls_again(
     );
 }
 
-#[gpui::test]
-async fn test_workspace_diagnostics_refreshes_coalesce(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_workspace_diagnostics_refreshes_coalesce(cx: &mut gpui_runtime::TestAppContext) {
     let workspace_requests = Arc::new(atomic::AtomicUsize::new(0));
     let (first_response_tx, first_response_rx) = oneshot::channel::<()>();
     let first_response_rx = Arc::new(Mutex::new(Some(first_response_rx)));
@@ -5341,9 +5341,9 @@ async fn test_workspace_diagnostics_refreshes_coalesce(cx: &mut gpui::TestAppCon
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspace_diagnostics_refresh_during_failed_request_pulls_again(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let workspace_requests = Arc::new(atomic::AtomicUsize::new(0));
     let (first_response_tx, first_response_rx) = oneshot::channel::<()>();
@@ -5419,8 +5419,8 @@ async fn test_workspace_diagnostics_refresh_during_failed_request_pulls_again(
     );
 }
 
-#[gpui::test]
-async fn test_cross_buffer_pull_respects_inter_file_dependencies(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_cross_buffer_pull_respects_inter_file_dependencies(cx: &mut gpui_runtime::TestAppContext) {
     for inter_file_dependencies in [false, true] {
         let pulled_uris = Arc::new(Mutex::new(Vec::new()));
         let (project, mut fake_servers) =
@@ -5505,9 +5505,9 @@ async fn test_cross_buffer_pull_respects_inter_file_dependencies(cx: &mut gpui::
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspace_diagnostics_repulled_after_server_closes_request(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let workspace_requests = Arc::new(atomic::AtomicUsize::new(0));
     let (project, mut fake_servers) = diagnostics_pull_project(
@@ -5575,8 +5575,8 @@ async fn test_workspace_diagnostics_repulled_after_server_closes_request(
     );
 }
 
-#[gpui::test]
-async fn test_document_diagnostics_content_modified_is_suppressed(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_document_diagnostics_content_modified_is_suppressed(cx: &mut gpui_runtime::TestAppContext) {
     let (project, mut fake_servers) = diagnostics_pull_project(
         cx,
         json!({ "a.rs": "one two three" }),
@@ -5618,9 +5618,9 @@ async fn test_document_diagnostics_content_modified_is_suppressed(cx: &mut gpui:
         .expect("ContentModified pull failures must be suppressed instead of surfaced");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspace_diagnostics_stale_partial_results_are_ignored(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let partial_result_token = Arc::new(Mutex::new(None));
     let (project, mut fake_servers) = diagnostics_pull_project(
@@ -5751,8 +5751,8 @@ async fn test_workspace_diagnostics_stale_partial_results_are_ignored(
     });
 }
 
-#[gpui::test]
-async fn test_workspace_diagnostics_server_cancellation_retriggers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_workspace_diagnostics_server_cancellation_retriggers(cx: &mut gpui_runtime::TestAppContext) {
     let workspace_requests = Arc::new(atomic::AtomicUsize::new(0));
     let (project, mut fake_servers) = diagnostics_pull_project(
         cx,
@@ -5810,8 +5810,8 @@ async fn test_workspace_diagnostics_server_cancellation_retriggers(cx: &mut gpui
     );
 }
 
-#[gpui::test]
-async fn test_document_diagnostics_server_cancellation_retriggers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_document_diagnostics_server_cancellation_retriggers(cx: &mut gpui_runtime::TestAppContext) {
     let document_requests = Arc::new(atomic::AtomicUsize::new(0));
     let (project, mut fake_servers) = diagnostics_pull_project(
         cx,
@@ -5905,9 +5905,9 @@ async fn test_document_diagnostics_server_cancellation_retriggers(cx: &mut gpui:
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspace_diagnostics_refresh_is_answered_before_pulling(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let document_pulls_received = Arc::new(atomic::AtomicUsize::new(0));
     let (project, mut fake_servers) = diagnostics_pull_project(
@@ -5983,9 +5983,9 @@ async fn test_workspace_diagnostics_refresh_is_answered_before_pulling(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_workspace_diagnostics_pulls_recover_after_repeated_failures(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let healthy = Arc::new(atomic::AtomicBool::new(false));
     let workspace_requests = Arc::new(atomic::AtomicUsize::new(0));
@@ -6061,8 +6061,8 @@ async fn test_workspace_diagnostics_pulls_recover_after_repeated_failures(
     );
 }
 
-#[gpui::test]
-async fn test_edits_from_lsp2_with_past_version(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edits_from_lsp2_with_past_version(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let text = "
@@ -6216,8 +6216,8 @@ async fn test_edits_from_lsp2_with_past_version(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_edits_from_lsp2_with_edits_on_adjacent_lines(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edits_from_lsp2_with_edits_on_adjacent_lines(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let text = "
@@ -6327,9 +6327,9 @@ async fn test_edits_from_lsp2_with_edits_on_adjacent_lines(cx: &mut gpui::TestAp
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_edits_from_lsp_with_replacement_followed_by_adjacent_insertion(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -6383,8 +6383,8 @@ async fn test_edits_from_lsp_with_replacement_followed_by_adjacent_insertion(
     });
 }
 
-#[gpui::test]
-async fn test_invalid_edits_from_lsp2(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_invalid_edits_from_lsp2(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let text = "
@@ -6514,8 +6514,8 @@ fn chunks_with_diagnostics<T: ToOffset + ToPoint>(
     chunks
 }
 
-#[gpui::test]
-async fn test_edits_from_lsp_with_crlf_line_endings(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_edits_from_lsp_with_crlf_line_endings(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let text = "
@@ -6614,8 +6614,8 @@ async fn test_edits_from_lsp_with_crlf_line_endings(cx: &mut gpui::TestAppContex
     });
 }
 
-#[gpui::test]
-async fn test_lsp_server_document_matches_buffer_line_endings(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_lsp_server_document_matches_buffer_line_endings(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     fn offset_of(document: &str, position: lsp::Position) -> usize {
@@ -6750,8 +6750,8 @@ async fn test_lsp_server_document_matches_buffer_line_endings(cx: &mut gpui::Tes
     );
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_definition(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_definition(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -6851,8 +6851,8 @@ async fn test_definition(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test]
-async fn test_completions_with_text_edit(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_completions_with_text_edit(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -6935,9 +6935,9 @@ async fn test_completions_with_text_edit(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_completion_registration_honors_document_selector(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -7167,9 +7167,9 @@ async fn test_dynamic_completion_registration_honors_document_selector(
     assert_eq!(completion_request_count.load(atomic::Ordering::SeqCst), 2);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_diagnostic_registrations_honor_their_own_document_selectors(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -7289,9 +7289,9 @@ async fn test_dynamic_diagnostic_registrations_honor_their_own_document_selector
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_unregistering_dynamic_completion_preserves_static_capability(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -7452,8 +7452,8 @@ async fn test_unregistering_dynamic_completion_preserves_static_capability(
     );
 }
 
-#[gpui::test]
-async fn test_completions_with_edit_ranges(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_completions_with_edit_ranges(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7590,8 +7590,8 @@ async fn test_completions_with_edit_ranges(cx: &mut gpui::TestAppContext) {
     }
 }
 
-#[gpui::test]
-async fn test_completions_without_edit_ranges(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_completions_without_edit_ranges(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7697,8 +7697,8 @@ async fn test_completions_without_edit_ranges(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_completions_with_carriage_returns(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_completions_with_carriage_returns(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -7766,9 +7766,9 @@ async fn test_completions_with_carriage_returns(cx: &mut gpui::TestAppContext) {
     assert_eq!(completions[0].new_text, "fully\nQualified\nName");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_supports_range_formatting_ignores_unrelated_language_servers(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     cx.update(|cx| {
@@ -7845,8 +7845,8 @@ async fn test_supports_range_formatting_ignores_unrelated_language_servers(
     }));
 }
 
-#[gpui::test]
-async fn test_range_formatting_prefers_range_capable_current_server(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_range_formatting_prefers_range_capable_current_server(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
         SettingsStore::update_global(cx, |store, cx| {
@@ -7949,8 +7949,8 @@ async fn test_range_formatting_prefers_range_capable_current_server(cx: &mut gpu
     );
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_apply_code_actions_with_commands(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_apply_code_actions_with_commands(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8093,8 +8093,8 @@ async fn test_apply_code_actions_with_commands(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_rename_file_to_new_directory(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_rename_file_to_new_directory(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
     let expected_contents = "content";
@@ -8203,8 +8203,8 @@ async fn test_rename_file_to_new_directory(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_save_file(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_save_file(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8239,8 +8239,8 @@ async fn test_save_file(cx: &mut gpui::TestAppContext) {
     assert_eq!(new_text, buffer.update(cx, |buffer, _| buffer.text()));
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_save_file_spawns_language_server(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_save_file_spawns_language_server(cx: &mut gpui_runtime::TestAppContext) {
     // Issue: #24349
     init_test(cx);
 
@@ -8319,8 +8319,8 @@ async fn test_save_file_spawns_language_server(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test(iterations = 30)]
-async fn test_file_changes_multiple_times_on_disk(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 30)]
+async fn test_file_changes_multiple_times_on_disk(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8370,8 +8370,8 @@ async fn test_file_changes_multiple_times_on_disk(cx: &mut gpui::TestAppContext)
     });
 }
 
-#[gpui::test(iterations = 30)]
-async fn test_edit_buffer_while_it_reloads(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 30)]
+async fn test_edit_buffer_while_it_reloads(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8430,8 +8430,8 @@ async fn test_edit_buffer_while_it_reloads(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_save_in_single_file_worktree(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_save_in_single_file_worktree(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8465,8 +8465,8 @@ async fn test_save_in_single_file_worktree(cx: &mut gpui::TestAppContext) {
     assert_eq!(new_text, buffer.update(cx, |buffer, _| buffer.text()));
 }
 
-#[gpui::test]
-async fn test_save_as(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_save_as(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8519,8 +8519,8 @@ async fn test_save_as(cx: &mut gpui::TestAppContext) {
     assert_eq!(opened_buffer, buffer);
 }
 
-#[gpui::test]
-async fn test_save_as_existing_file(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_save_as_existing_file(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8586,8 +8586,8 @@ async fn test_save_as_existing_file(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test(retries = 5)]
-async fn test_rescan_and_remote_updates(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(retries = 5)]
+async fn test_rescan_and_remote_updates(cx: &mut gpui_runtime::TestAppContext) {
     use worktree::WorktreeModelHandle as _;
 
     init_test(cx);
@@ -8609,11 +8609,11 @@ async fn test_rescan_and_remote_updates(cx: &mut gpui::TestAppContext) {
 
     let project = Project::test(RealFs::new(None, cx.executor()), [dir.path()], cx).await;
 
-    let buffer_for_path = |path: &'static str, cx: &mut gpui::TestAppContext| {
+    let buffer_for_path = |path: &'static str, cx: &mut gpui_runtime::TestAppContext| {
         let buffer = project.update(cx, |p, cx| p.open_local_buffer(dir.path().join(path), cx));
         async move { buffer.await.unwrap() }
     };
-    let id_for_path = |path: &'static str, cx: &mut gpui::TestAppContext| {
+    let id_for_path = |path: &'static str, cx: &mut gpui_runtime::TestAppContext| {
         project.update(cx, |project, cx| {
             let tree = project.worktrees(cx).next().unwrap();
             tree.read(cx)
@@ -8755,8 +8755,8 @@ async fn test_rescan_and_remote_updates(cx: &mut gpui::TestAppContext) {
 }
 
 #[cfg(target_os = "linux")]
-#[gpui::test(retries = 5)]
-async fn test_recreated_directory_receives_child_events(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(retries = 5)]
+async fn test_recreated_directory_receives_child_events(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
 
@@ -8800,8 +8800,8 @@ async fn test_recreated_directory_receives_child_events(cx: &mut gpui::TestAppCo
     });
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_buffer_identity_across_renames(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_buffer_identity_across_renames(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8819,7 +8819,7 @@ async fn test_buffer_identity_across_renames(cx: &mut gpui::TestAppContext) {
     let tree = project.update(cx, |project, cx| project.worktrees(cx).next().unwrap());
     let tree_id = tree.update(cx, |tree, _| tree.id());
 
-    let id_for_path = |path: &'static str, cx: &mut gpui::TestAppContext| {
+    let id_for_path = |path: &'static str, cx: &mut gpui_runtime::TestAppContext| {
         project.update(cx, |project, cx| {
             let tree = project.worktrees(cx).next().unwrap();
             tree.read(cx)
@@ -8854,8 +8854,8 @@ async fn test_buffer_identity_across_renames(cx: &mut gpui::TestAppContext) {
     buffer.update(cx, |buffer, _| assert!(!buffer.is_dirty()));
 }
 
-#[gpui::test]
-async fn test_buffer_deduping(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_buffer_deduping(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -8900,8 +8900,8 @@ async fn test_buffer_deduping(cx: &mut gpui::TestAppContext) {
     assert_eq!(buffer_a_3.entity_id(), buffer_a_id);
 }
 
-#[gpui::test]
-async fn test_buffer_is_dirty(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_buffer_is_dirty(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9094,8 +9094,8 @@ async fn test_buffer_is_dirty(cx: &mut gpui::TestAppContext) {
     cx.update(|cx| assert!(buffer3.read(cx).is_dirty()));
 }
 
-#[gpui::test]
-async fn test_dirty_buffer_reloads_after_undo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_dirty_buffer_reloads_after_undo(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9163,8 +9163,8 @@ async fn test_dirty_buffer_reloads_after_undo(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_buffer_file_change_to_binary_fails(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_buffer_file_change_to_binary_fails(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9196,8 +9196,8 @@ async fn test_buffer_file_change_to_binary_fails(cx: &mut gpui::TestAppContext) 
     });
 }
 
-#[gpui::test]
-async fn test_buffer_file_changes_on_disk(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_buffer_file_changes_on_disk(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let (initial_contents, initial_offsets) =
@@ -9279,8 +9279,8 @@ async fn test_buffer_file_changes_on_disk(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_buffer_line_endings(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_buffer_line_endings(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9341,8 +9341,8 @@ async fn test_buffer_line_endings(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_line_ending_user_settings_on_format(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_line_ending_user_settings_on_format(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let cases = [
@@ -9441,8 +9441,8 @@ async fn test_line_ending_user_settings_on_format(cx: &mut gpui::TestAppContext)
     }
 }
 
-#[gpui::test]
-async fn test_line_ending_editorconfig_on_format_and_save(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_line_ending_editorconfig_on_format_and_save(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let cases = [
@@ -9533,8 +9533,8 @@ async fn test_line_ending_editorconfig_on_format_and_save(cx: &mut gpui::TestApp
     }
 }
 
-#[gpui::test]
-async fn test_line_ending_initialization_for_new_buffers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_line_ending_initialization_for_new_buffers(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let cases = [
@@ -9587,7 +9587,7 @@ async fn test_line_ending_initialization_for_new_buffers(cx: &mut gpui::TestAppC
 }
 
 async fn assert_line_endings_after_format(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
     project: &Entity<Project>,
     worktree_id: WorktreeId,
     case_name: &str,
@@ -9624,8 +9624,8 @@ async fn assert_line_endings_after_format(
     }
 }
 
-#[gpui::test]
-async fn test_grouped_diagnostics(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_grouped_diagnostics(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -9904,8 +9904,8 @@ async fn test_grouped_diagnostics(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_lsp_rename_notifications(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_lsp_rename_notifications(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -10041,8 +10041,8 @@ async fn test_lsp_rename_notifications(cx: &mut gpui::TestAppContext) {
     assert_eq!(resolved_workspace_edit.get(), Some(&expected_edit));
 }
 
-#[gpui::test]
-async fn test_dynamic_call_hierarchy_followups_use_prepared_server(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_dynamic_call_hierarchy_followups_use_prepared_server(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -10154,8 +10154,8 @@ async fn test_dynamic_call_hierarchy_followups_use_prepared_server(cx: &mut gpui
     assert_eq!(outgoing_request_count.load(atomic::Ordering::SeqCst), 1);
 }
 
-#[gpui::test]
-async fn test_dynamic_rename_registration_routes_prepare_rename(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_dynamic_rename_registration_routes_prepare_rename(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -10238,9 +10238,9 @@ async fn test_dynamic_rename_registration_routes_prepare_rename(cx: &mut gpui::T
     assert_eq!(range, 6..9);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_rename_registration_without_prepare_provider_skips_prepare_rename(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -10335,8 +10335,8 @@ async fn test_dynamic_rename_registration_without_prepare_provider_skips_prepare
     );
 }
 
-#[gpui::test]
-async fn test_prepare_rename_prefers_server_with_prepare_support(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_prepare_rename_prefers_server_with_prepare_support(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -10462,9 +10462,9 @@ async fn test_prepare_rename_prefers_server_with_prepare_support(cx: &mut gpui::
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_perform_rename_falls_back_when_prepared_server_is_gone(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -10555,9 +10555,9 @@ async fn test_perform_rename_falls_back_when_prepared_server_is_gone(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_perform_rename_falls_back_when_server_unregisters_rename(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -10685,9 +10685,9 @@ async fn test_perform_rename_falls_back_when_server_unregisters_rename(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_formatting_registrations_honor_document_selectors(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     cx.update(|cx| {
@@ -10732,7 +10732,7 @@ async fn test_dynamic_formatting_registrations_honor_document_selectors(
             async move { Ok(None) }
         }
     });
-    let format_buffer = |cx: &mut gpui::TestAppContext| {
+    let format_buffer = |cx: &mut gpui_runtime::TestAppContext| {
         project.update(cx, |project, cx| {
             project.format(
                 HashSet::from_iter([buffer.clone()]),
@@ -10795,9 +10795,9 @@ async fn test_dynamic_formatting_registrations_honor_document_selectors(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_formatting_registration_with_pattern_only_selector_fails_open(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     cx.update(|cx| {
@@ -10880,9 +10880,9 @@ async fn test_dynamic_formatting_registration_with_pattern_only_selector_fails_o
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_formatting_registration_with_empty_selector_matches_nothing(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     cx.update(|cx| {
@@ -10965,9 +10965,9 @@ async fn test_dynamic_formatting_registration_with_empty_selector_matches_nothin
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_formatting_registration_honors_language_selector(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     cx.update(|cx| {
@@ -11012,7 +11012,7 @@ async fn test_dynamic_formatting_registration_honors_language_selector(
             async move { Ok(None) }
         }
     });
-    let format_buffer = |cx: &mut gpui::TestAppContext| {
+    let format_buffer = |cx: &mut gpui_runtime::TestAppContext| {
         project.update(cx, |project, cx| {
             project.format(
                 HashSet::from_iter([buffer.clone()]),
@@ -11075,9 +11075,9 @@ async fn test_dynamic_formatting_registration_honors_language_selector(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_range_formatting_registrations_honor_document_selectors(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     cx.update(|cx| {
@@ -11129,7 +11129,7 @@ async fn test_dynamic_range_formatting_registrations_honor_document_selectors(
             buffer.anchor_before(0)..buffer.anchor_after(buffer.len()),
         )
     });
-    let format_ranges = |cx: &mut gpui::TestAppContext| {
+    let format_ranges = |cx: &mut gpui_runtime::TestAppContext| {
         let ranges = std::collections::BTreeMap::from_iter([(buffer_id, vec![range.clone()])]);
         project.update(cx, |project, cx| {
             project.format(
@@ -11193,9 +11193,9 @@ async fn test_dynamic_range_formatting_registrations_honor_document_selectors(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_on_type_formatting_registration_routes_matching_trigger(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -11283,8 +11283,8 @@ async fn test_dynamic_on_type_formatting_registration_routes_matching_trigger(
     );
 }
 
-#[gpui::test]
-async fn test_rename(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_rename(cx: &mut gpui_runtime::TestAppContext) {
     // hi
     init_test(cx);
 
@@ -11439,8 +11439,8 @@ async fn test_rename(cx: &mut gpui::TestAppContext) {
 // two files' contents. The edited content must end up in the renamed file, and
 // the open buffer must follow the rename regardless of the order the filesystem
 // watcher reports the change (hence the seed iterations).
-#[gpui::test(iterations = 30)]
-async fn test_rename_that_also_renames_file(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 30)]
+async fn test_rename_that_also_renames_file(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -11540,8 +11540,8 @@ async fn test_rename_that_also_renames_file(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_search(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -11617,8 +11617,8 @@ async fn test_search(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_search_multiline_crlf(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_multiline_crlf(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -11685,8 +11685,8 @@ async fn test_search_multiline_crlf(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_search_with_inclusions(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_with_inclusions(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let search_query = "file";
@@ -11809,8 +11809,8 @@ async fn test_search_with_inclusions(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_search_with_exclusions(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_with_exclusions(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let search_query = "file";
@@ -11933,8 +11933,8 @@ async fn test_search_with_exclusions(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_search_with_buffer_exclusions(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_with_buffer_exclusions(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let search_query = "file";
@@ -12061,8 +12061,8 @@ async fn test_search_with_buffer_exclusions(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_search_with_exclusions_and_inclusions(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_with_exclusions_and_inclusions(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let search_query = "file";
@@ -12175,8 +12175,8 @@ async fn test_search_with_exclusions_and_inclusions(cx: &mut gpui::TestAppContex
     );
 }
 
-#[gpui::test]
-async fn test_search_multiple_worktrees_with_inclusions(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_multiple_worktrees_with_inclusions(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12274,8 +12274,8 @@ async fn test_search_multiple_worktrees_with_inclusions(cx: &mut gpui::TestAppCo
     );
 }
 
-#[gpui::test]
-async fn test_search_in_gitignored_dirs(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_in_gitignored_dirs(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.background_executor.clone());
@@ -12399,8 +12399,8 @@ async fn test_search_in_gitignored_dirs(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_visibility_for_paths_in_gitignored_dirs(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_visibility_for_paths_in_gitignored_dirs(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12467,8 +12467,8 @@ async fn test_visibility_for_paths_in_gitignored_dirs(cx: &mut gpui::TestAppCont
     });
 }
 
-#[gpui::test]
-async fn test_search_with_unicode(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_with_unicode(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12550,8 +12550,8 @@ async fn test_search_with_unicode(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_search_in_unopened_non_utf8_files(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_search_in_unopened_non_utf8_files(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let text = "// 你好世界 hello\n// 这是一个中文注释，包含很多汉字，用来帮助编码检测器正确判断文件编码。\n// 编码检测需要足够多的中文内容才能可靠工作。\n";
@@ -12661,8 +12661,8 @@ async fn test_search_in_unopened_non_utf8_files(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_create_entry(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_create_entry(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12704,8 +12704,8 @@ async fn test_create_entry(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_multiple_language_server_hovers(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multiple_language_server_hovers(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12886,8 +12886,8 @@ async fn test_multiple_language_server_hovers(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_hovers_with_empty_parts(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_hovers_with_empty_parts(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -12960,8 +12960,8 @@ async fn test_hovers_with_empty_parts(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_code_actions_only_kinds(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_code_actions_only_kinds(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -13039,8 +13039,8 @@ async fn test_code_actions_only_kinds(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_code_actions_include_related_information(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_code_actions_include_related_information(cx: &mut gpui_runtime::TestAppContext) {
     let (project, buffer, _handle, fake_servers) =
         code_action_project(&["test-language-server"], cx).await;
     let fake_server = &fake_servers[0];
@@ -13145,8 +13145,8 @@ async fn test_code_actions_include_related_information(cx: &mut gpui::TestAppCon
     assert!(code_actions_task.await.unwrap().unwrap().is_empty());
 }
 
-#[gpui::test]
-async fn test_code_actions_without_related_information(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_code_actions_without_related_information(cx: &mut gpui_runtime::TestAppContext) {
     let (project, buffer, _handle, fake_servers) =
         code_action_project(&["test-language-server"], cx).await;
     let fake_server = &fake_servers[0];
@@ -13191,9 +13191,9 @@ async fn test_code_actions_without_related_information(cx: &mut gpui::TestAppCon
     assert!(code_actions_task.await.unwrap().unwrap().is_empty());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_code_actions_with_primary_diagnostic_outside_of_the_range(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let (project, buffer, _handle, fake_servers) =
         code_action_project(&["test-language-server"], cx).await;
@@ -13250,8 +13250,8 @@ async fn test_code_actions_with_primary_diagnostic_outside_of_the_range(
     assert!(code_actions_task.await.unwrap().unwrap().is_empty());
 }
 
-#[gpui::test]
-async fn test_code_actions_preserve_supporting_diagnostic_entry(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_code_actions_preserve_supporting_diagnostic_entry(cx: &mut gpui_runtime::TestAppContext) {
     let (project, buffer, _handle, fake_servers) =
         code_action_project(&["test-language-server"], cx).await;
     let fake_server = &fake_servers[0];
@@ -13352,8 +13352,8 @@ async fn test_code_actions_preserve_supporting_diagnostic_entry(cx: &mut gpui::T
     assert!(code_actions_task.await.unwrap().unwrap().is_empty());
 }
 
-#[gpui::test]
-async fn test_code_actions_related_information_follows_edits(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_code_actions_related_information_follows_edits(cx: &mut gpui_runtime::TestAppContext) {
     let (project, buffer, _handle, fake_server) = code_action_project_with(
         FakeLspAdapter {
             name: "test-language-server",
@@ -13434,9 +13434,9 @@ async fn test_code_actions_related_information_follows_edits(cx: &mut gpui::Test
     assert!(code_actions_task.await.unwrap().unwrap().is_empty());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_code_actions_related_information_of_disk_based_diagnostics(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let (project, buffer, _handle, fake_server) = code_action_project_with(
         FakeLspAdapter {
@@ -13517,8 +13517,8 @@ async fn test_code_actions_related_information_of_disk_based_diagnostics(
     assert!(code_actions_task.await.unwrap().unwrap().is_empty());
 }
 
-#[gpui::test]
-async fn test_code_actions_related_information_drifts_across_merges(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_code_actions_related_information_drifts_across_merges(cx: &mut gpui_runtime::TestAppContext) {
     let (project, buffer, _handle, fake_server) = code_action_project_with(
         FakeLspAdapter {
             name: "test-language-server",
@@ -13640,9 +13640,9 @@ async fn test_code_actions_related_information_drifts_across_merges(cx: &mut gpu
     assert!(code_actions_task.await.unwrap().unwrap().is_empty());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_code_actions_with_related_information_from_multiple_servers(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let (project, buffer, _handle, fake_servers) =
         code_action_project(&["first-language-server", "second-language-server"], cx).await;
@@ -13751,9 +13751,9 @@ async fn test_code_actions_with_related_information_from_multiple_servers(
     assert!(code_actions_task.await.unwrap().unwrap().is_empty());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_dynamic_code_action_registrations_use_matching_options(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -13858,9 +13858,9 @@ async fn test_dynamic_code_action_registrations_use_matching_options(
     assert_eq!(code_actions.len(), 1);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_format_code_actions_skip_resolve_from_non_matching_registration(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -13977,9 +13977,9 @@ async fn test_format_code_actions_skip_resolve_from_non_matching_registration(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_code_actions_without_requested_kinds_do_not_send_only_filter(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -14063,8 +14063,8 @@ async fn test_code_actions_without_requested_kinds_do_not_send_only_filter(
     );
 }
 
-#[gpui::test]
-async fn test_multiple_language_server_actions(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_multiple_language_server_actions(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -14223,8 +14223,8 @@ async fn test_multiple_language_server_actions(cx: &mut gpui::TestAppContext) {
     );
 }
 
-#[gpui::test]
-async fn test_reordering_worktrees(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_reordering_worktrees(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -14421,8 +14421,8 @@ async fn test_reordering_worktrees(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_unstaged_diff_for_buffer(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_unstaged_diff_for_buffer(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let staged_contents = r#"
@@ -14516,8 +14516,8 @@ async fn test_unstaged_diff_for_buffer(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_reopening_unstaged_diff_after_drop(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_reopening_unstaged_diff_after_drop(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let staged_contents = r#"
@@ -14619,8 +14619,8 @@ async fn test_reopening_unstaged_diff_after_drop(cx: &mut gpui::TestAppContext) 
     });
 }
 
-#[gpui::test]
-async fn test_staged_diff_for_buffer(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_staged_diff_for_buffer(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let committed_contents = r#"
@@ -14757,8 +14757,8 @@ async fn test_staged_diff_for_buffer(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_base_text_buffers_released_when_diffs_dropped(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_base_text_buffers_released_when_diffs_dropped(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let committed_contents = "one\ntwo\nthree\n";
@@ -14854,8 +14854,8 @@ async fn test_base_text_buffers_released_when_diffs_dropped(cx: &mut gpui::TestA
     });
 }
 
-#[gpui::test]
-async fn test_staged_diff_without_unstaged_diff(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_staged_diff_without_unstaged_diff(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let committed_contents = "one\ntwo\nthree\n";
@@ -14933,8 +14933,8 @@ async fn test_staged_diff_without_unstaged_diff(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_uncommitted_diff_for_buffer(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_uncommitted_diff_for_buffer(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let committed_contents = r#"
@@ -15125,8 +15125,8 @@ async fn test_uncommitted_diff_for_buffer(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_staging_hunks(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_staging_hunks(cx: &mut gpui_runtime::TestAppContext) {
     use DiffHunkSecondaryStatus::*;
     init_test(cx);
 
@@ -15422,8 +15422,8 @@ async fn test_staging_hunks(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_uncommitted_diff_opened_before_unstaged_diff(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_uncommitted_diff_opened_before_unstaged_diff(cx: &mut gpui_runtime::TestAppContext) {
     use DiffHunkSecondaryStatus::*;
     init_test(cx);
 
@@ -15503,8 +15503,8 @@ async fn test_uncommitted_diff_opened_before_unstaged_diff(cx: &mut gpui::TestAp
     });
 }
 
-#[gpui::test(seeds(340, 472))]
-async fn test_staging_hunks_with_delayed_fs_event(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(seeds(340, 472))]
+async fn test_staging_hunks_with_delayed_fs_event(cx: &mut gpui_runtime::TestAppContext) {
     use DiffHunkSecondaryStatus::*;
     init_test(cx);
 
@@ -15728,8 +15728,8 @@ async fn test_staging_hunks_with_delayed_fs_event(cx: &mut gpui::TestAppContext)
     });
 }
 
-#[gpui::test]
-async fn test_restaging_hunk_after_optimistic_unstage(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_restaging_hunk_after_optimistic_unstage(cx: &mut gpui_runtime::TestAppContext) {
     use DiffHunkSecondaryStatus::*;
     init_test(cx);
 
@@ -15889,8 +15889,8 @@ async fn test_restaging_hunk_after_optimistic_unstage(cx: &mut gpui::TestAppCont
     );
 }
 
-#[gpui::test]
-async fn test_staging_non_utf8_hunk_preserves_index_encoding(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_staging_non_utf8_hunk_preserves_index_encoding(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let committed_text = "строка один\nстрока два\n";
@@ -15955,11 +15955,11 @@ async fn test_staging_non_utf8_hunk_preserves_index_encoding(cx: &mut gpui::Test
     );
 }
 
-#[gpui::test(iterations = 25)]
+#[gpui_runtime::test(iterations = 25)]
 async fn test_staging_random_hunks(
     mut rng: StdRng,
     _executor: BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let operations = env::var("OPERATIONS")
         .map(|i| i.parse().expect("invalid `OPERATIONS` variable"))
@@ -16130,11 +16130,11 @@ async fn test_staging_random_hunks(
     });
 }
 
-#[gpui::test(iterations = 25)]
+#[gpui_runtime::test(iterations = 25)]
 async fn test_staging_random_hunks_with_edits(
     mut rng: StdRng,
     _executor: BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     let operations = env::var("OPERATIONS")
         .map(|i| i.parse().expect("invalid `OPERATIONS` variable"))
@@ -16173,7 +16173,7 @@ async fn test_staging_random_hunks_with_edits(
     #[allow(clippy::type_complexity)]
     fn capture_diff_state(
         diff: &Entity<BufferDiff>,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> (
         String,
         Option<String>,
@@ -16196,7 +16196,7 @@ async fn test_staging_random_hunks_with_edits(
         })
     }
 
-    fn assert_settled(diff: &Entity<BufferDiff>, name: &str, cx: &mut gpui::TestAppContext) {
+    fn assert_settled(diff: &Entity<BufferDiff>, name: &str, cx: &mut gpui_runtime::TestAppContext) {
         diff.read_with(cx, |diff, cx| {
             let snapshot = diff.snapshot(cx);
             let buffer_snapshot = snapshot.buffer_snapshot().clone();
@@ -16636,8 +16636,8 @@ async fn test_staging_random_hunks_with_edits(
     );
 }
 
-#[gpui::test]
-async fn test_single_file_diffs(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_single_file_diffs(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let committed_contents = r#"
@@ -16711,9 +16711,9 @@ async fn test_single_file_diffs(cx: &mut gpui::TestAppContext) {
 }
 
 // TODO: Should we test this on Windows also?
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg(not(windows))]
-async fn test_staging_hunk_preserve_executable_permission(cx: &mut gpui::TestAppContext) {
+async fn test_staging_hunk_preserve_executable_permission(cx: &mut gpui_runtime::TestAppContext) {
     use std::os::unix::fs::PermissionsExt;
     init_test(cx);
     cx.executor().allow_parking();
@@ -16798,10 +16798,10 @@ async fn test_staging_hunk_preserve_executable_permission(cx: &mut gpui::TestApp
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repository_and_path_for_project_path(
     background_executor: BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let fs = FakeFs::new(background_executor);
@@ -16888,8 +16888,8 @@ async fn test_repository_and_path_for_project_path(
     });
 }
 
-#[gpui::test]
-async fn test_home_dir_as_git_repository(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_home_dir_as_git_repository(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
     let home = paths::home_dir();
@@ -16946,8 +16946,8 @@ async fn test_home_dir_as_git_repository(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_git_repository_status(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_git_repository_status(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
 
@@ -17131,8 +17131,8 @@ async fn test_git_repository_status(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_git_repository_status_removes_directory_descendants(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_git_repository_status_removes_directory_descendants(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
 
@@ -17226,8 +17226,8 @@ async fn test_git_repository_status_removes_directory_descendants(cx: &mut gpui:
 }
 
 #[cfg(target_os = "linux")]
-#[gpui::test(retries = 5)]
-async fn test_git_events_after_project_excludes_dot_git(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(retries = 5)]
+async fn test_git_events_after_project_excludes_dot_git(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
 
@@ -17317,9 +17317,9 @@ async fn test_git_events_after_project_excludes_dot_git(cx: &mut gpui::TestAppCo
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[ignore]
-async fn test_git_status_postprocessing(cx: &mut gpui::TestAppContext) {
+async fn test_git_status_postprocessing(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
 
@@ -17423,10 +17423,10 @@ fn merge_pending_ops_snapshots(
     target
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repository_pending_ops_staging(
-    executor: gpui::BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    executor: gpui_platform::BackgroundExecutor,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -17593,10 +17593,10 @@ async fn test_repository_pending_ops_staging(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repository_pending_ops_long_running_staging(
-    executor: gpui::BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    executor: gpui_platform::BackgroundExecutor,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -17708,10 +17708,10 @@ async fn test_repository_pending_ops_long_running_staging(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repository_pending_ops_stage_all(
-    executor: gpui::BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    executor: gpui_platform::BackgroundExecutor,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -17843,10 +17843,10 @@ async fn test_repository_pending_ops_stage_all(
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_project_group_keys_remain_distinct_for_sibling_repo_subdirectories(
-    executor: gpui::BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    executor: gpui_platform::BackgroundExecutor,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -17926,10 +17926,10 @@ fn project_worktree_paths(
     })
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_project_group_keys_match_for_bare_repo_linked_worktrees(
-    executor: gpui::BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    executor: gpui_platform::BackgroundExecutor,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -18029,10 +18029,10 @@ async fn test_project_group_keys_match_for_bare_repo_linked_worktrees(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_project_group_key_groups_nested_linked_worktree_under_main_repo(
-    executor: gpui::BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    executor: gpui_platform::BackgroundExecutor,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -18081,10 +18081,10 @@ async fn test_project_group_key_groups_nested_linked_worktree_under_main_repo(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repository_subfolder_git_status(
-    executor: gpui::BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    executor: gpui_platform::BackgroundExecutor,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
 
@@ -18173,8 +18173,8 @@ async fn test_repository_subfolder_git_status(
 
 // TODO: this test is flaky (especially on Windows but at least sometimes on all platforms).
 #[cfg(any())]
-#[gpui::test]
-async fn test_conflicted_cherry_pick(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_conflicted_cherry_pick(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
 
@@ -18251,8 +18251,8 @@ async fn test_conflicted_cherry_pick(cx: &mut gpui::TestAppContext) {
     pretty_assertions::assert_eq!(conflicts, []);
 }
 
-#[gpui::test]
-async fn test_update_gitignore(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_update_gitignore(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
     fs.insert_tree(
@@ -18325,9 +18325,9 @@ async fn test_update_gitignore(cx: &mut gpui::TestAppContext) {
 // This is a limitation of the Windows.
 // See: https://stackoverflow.com/questions/41365318/access-is-denied-when-renaming-folder
 // See: https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_rename_information
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(target_os = "windows", ignore)]
-async fn test_rename_work_directory(cx: &mut gpui::TestAppContext) {
+async fn test_rename_work_directory(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
     let root = TempTree::new(json!({
@@ -18420,9 +18420,9 @@ async fn test_rename_work_directory(cx: &mut gpui::TestAppContext) {
 // limitation of the Windows. See:
 // See: https://stackoverflow.com/questions/41365318/access-is-denied-when-renaming-folder
 // See: https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-_file_rename_information
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg_attr(target_os = "windows", ignore)]
-async fn test_file_status(cx: &mut gpui::TestAppContext) {
+async fn test_file_status(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
     const IGNORE_RULE: &str = "**/target";
@@ -18639,8 +18639,8 @@ async fn test_file_status(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_bare_dot_git_changed_event_refreshes_git_state(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_bare_dot_git_changed_event_refreshes_git_state(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -18713,9 +18713,9 @@ async fn test_bare_dot_git_changed_event_refreshes_git_state(cx: &mut gpui::Test
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[ignore]
-async fn test_ignored_dirs_events(cx: &mut gpui::TestAppContext) {
+async fn test_ignored_dirs_events(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
 
@@ -18874,10 +18874,10 @@ async fn test_ignored_dirs_events(cx: &mut gpui::TestAppContext) {
 // todo(jk): turning this test off until we rework it in such a way so that it is not so susceptible
 // to different timings/ordering of events.
 #[ignore]
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_odd_events_for_ignored_dirs(
     executor: BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let fs = FakeFs::new(executor);
@@ -19005,10 +19005,10 @@ async fn test_odd_events_for_ignored_dirs(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_repos_in_invisible_worktrees(
     executor: BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let fs = FakeFs::new(executor);
@@ -19067,8 +19067,8 @@ async fn test_repos_in_invisible_worktrees(
     pretty_assertions::assert_eq!(repos, [Path::new(path!("/root/dir1/dep1")).into()]);
 }
 
-#[gpui::test(iterations = 10)]
-async fn test_rescan_with_gitignore(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test(iterations = 10)]
+async fn test_rescan_with_gitignore(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.update(|cx| {
         cx.update_global::<SettingsStore, _>(|store, cx| {
@@ -19209,8 +19209,8 @@ async fn test_rescan_with_gitignore(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_git_worktrees_and_submodules(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_git_worktrees_and_submodules(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -19381,8 +19381,8 @@ async fn test_git_worktrees_and_submodules(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_repository_deduplication(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_repository_deduplication(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.background_executor.clone());
     fs.insert_tree(
@@ -19428,8 +19428,8 @@ async fn test_repository_deduplication(cx: &mut gpui::TestAppContext) {
     pretty_assertions::assert_eq!(repos, [Path::new(path!("/root/project")).into()]);
 }
 
-#[gpui::test]
-async fn test_buffer_changed_file_path_updates_git_diff(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_buffer_changed_file_path_updates_git_diff(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let file_1_committed = String::from(r#"file_1_committed"#);
@@ -19545,7 +19545,7 @@ async fn test_buffer_changed_file_path_updates_git_diff(cx: &mut gpui::TestAppCo
 async fn search(
     project: &Entity<Project>,
     query: SearchQuery,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) -> Result<HashMap<String, Vec<Range<usize>>>> {
     let search_rx = project.update(cx, |project, cx| project.search(query, cx));
     let mut results = HashMap::default();
@@ -19578,8 +19578,8 @@ async fn search(
         .collect())
 }
 
-#[gpui::test]
-async fn test_undo_encoding_change(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_undo_encoding_change(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -19642,8 +19642,8 @@ async fn test_undo_encoding_change(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_initial_scan_complete(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_initial_scan_complete(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -19721,7 +19721,7 @@ struct DiagnosticsPullServer {
 }
 
 async fn diagnostics_pull_project(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
     files: serde_json::Value,
     server: DiagnosticsPullServer,
 ) -> (
@@ -19758,7 +19758,7 @@ async fn diagnostics_pull_project(
     (project, fake_servers)
 }
 
-pub fn init_test(cx: &mut gpui::TestAppContext) {
+pub fn init_test(cx: &mut gpui_runtime::TestAppContext) {
     zlog::init_test();
 
     cx.update(|cx| {
@@ -19847,7 +19847,7 @@ fn python_lang(fs: Arc<FakeFs>) -> Arc<Language> {
             &self,
             _: &Toolchain,
             _: ShellKind,
-            _: &gpui::App,
+            _: &gpui_runtime::App,
         ) -> futures::future::BoxFuture<'static, Vec<String>> {
             Box::pin(async { vec![] })
         }
@@ -20143,10 +20143,10 @@ fn git_status(work_dir: &Path) -> collections::HashMap<String, String> {
         .collect()
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_find_project_path_abs(
     background_executor: BackgroundExecutor,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     // find_project_path should work with absolute paths
     init_test(cx);
@@ -20227,8 +20227,8 @@ async fn test_find_project_path_abs(
     });
 }
 
-#[gpui::test]
-async fn test_git_worktree_remove(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_git_worktree_remove(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let fs = FakeFs::new(cx.executor());
@@ -20340,8 +20340,8 @@ async fn test_git_worktree_remove(cx: &mut gpui::TestAppContext) {
     assert!(active_repo_path.is_none());
 }
 
-#[gpui::test]
-async fn test_optimistic_hunks_in_staged_files(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_optimistic_hunks_in_staged_files(cx: &mut gpui_runtime::TestAppContext) {
     use DiffHunkSecondaryStatus::*;
     init_test(cx);
 
@@ -20485,8 +20485,8 @@ async fn test_optimistic_hunks_in_staged_files(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_read_only_files_setting(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_read_only_files_setting(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     // Configure read_only_files setting
@@ -20561,8 +20561,8 @@ async fn test_read_only_files_setting(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
-async fn test_read_only_files_empty_setting(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_read_only_files_empty_setting(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     // Explicitly set read_only_files to empty (default behavior)
@@ -20620,9 +20620,9 @@ async fn test_read_only_files_empty_setting(cx: &mut gpui::TestAppContext) {
     });
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg(not(windows))]
-async fn test_os_read_only_files_open_as_read_only(cx: &mut gpui::TestAppContext) {
+async fn test_os_read_only_files_open_as_read_only(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     cx.executor().allow_parking();
 
@@ -20653,8 +20653,8 @@ async fn test_os_read_only_files_open_as_read_only(cx: &mut gpui::TestAppContext
     });
 }
 
-#[gpui::test]
-async fn test_read_only_files_with_lock_files(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_read_only_files_with_lock_files(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     // Configure to make lock files read-only
@@ -20733,11 +20733,11 @@ async fn test_read_only_files_with_lock_files(cx: &mut gpui::TestAppContext) {
 }
 
 mod disable_ai_settings_tests {
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use project::*;
     use settings::{Settings, SettingsStore};
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_disable_ai_settings_security(cx: &mut TestAppContext) {
         cx.update(|cx| {
             settings::init(cx);
@@ -20782,7 +20782,7 @@ mod disable_ai_settings_tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_disable_ai_project_level_settings(cx: &mut TestAppContext) {
         use settings::{LocalSettingsKind, LocalSettingsPath, SettingsLocation, SettingsStore};
         use worktree::WorktreeId;
@@ -20884,8 +20884,8 @@ mod disable_ai_settings_tests {
     }
 }
 
-#[gpui::test]
-async fn test_worktree_released_when_creation_caller_is_cancelled(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_worktree_released_when_creation_caller_is_cancelled(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
     fs.insert_tree(path!("/project"), serde_json::json!({ "a.rs": "" }))
@@ -20923,9 +20923,9 @@ async fn test_worktree_released_when_creation_caller_is_cancelled(cx: &mut gpui:
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_initial_scan_completes_when_creation_caller_is_cancelled(
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) {
     init_test(cx);
     let fs = FakeFs::new(cx.executor());
@@ -20968,8 +20968,8 @@ async fn test_initial_scan_completes_when_creation_caller_is_cancelled(
 /// rows after a partial stage. The mismatched hunk then rendered as staged
 /// while git still had it unstaged, and unstaging it inserted a duplicate
 /// copy of its contents into the index on every click.
-#[gpui::test]
-async fn test_staging_hunks_with_ambiguous_placement(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn test_staging_hunks_with_ambiguous_placement(cx: &mut gpui_runtime::TestAppContext) {
     init_test(cx);
 
     let committed_contents = concat!(
@@ -21059,7 +21059,7 @@ async fn test_staging_hunks_with_ambiguous_placement(cx: &mut gpui::TestAppConte
     fn hunk_states(
         uncommitted_diff: &Entity<BufferDiff>,
         snapshot: &language::BufferSnapshot,
-        cx: &mut gpui::TestAppContext,
+        cx: &mut gpui_runtime::TestAppContext,
     ) -> Vec<(Range<Point>, DiffHunkSecondaryStatus)> {
         uncommitted_diff.read_with(cx, |diff, cx| {
             diff.snapshot(cx)
@@ -21184,7 +21184,7 @@ fn expected_related_information(
 
 async fn code_action_project_with(
     adapter: FakeLspAdapter,
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) -> (
     Entity<Project>,
     Entity<Buffer>,
@@ -21221,7 +21221,7 @@ async fn code_action_project_with(
 
 async fn code_action_project(
     server_names: &[&'static str],
-    cx: &mut gpui::TestAppContext,
+    cx: &mut gpui_runtime::TestAppContext,
 ) -> (
     Entity<Project>,
     Entity<Buffer>,

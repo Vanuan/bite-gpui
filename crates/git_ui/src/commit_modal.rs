@@ -71,7 +71,7 @@ pub struct CommitModal {
 }
 
 impl Focusable for CommitModal {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.commit_editor.focus_handle(cx)
     }
 }
@@ -340,7 +340,7 @@ impl CommitModal {
                     }))
                 }
             })
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.),
                 y: px(2.),
             })
@@ -412,7 +412,7 @@ impl CommitModal {
                 Tooltip::for_action_title("Switch Branch", &zed_actions::git::Branch),
             )
             .anchor(Anchor::BottomLeft)
-            .offset(gpui::Point {
+            .offset(gpui_types::Point {
                 x: px(0.0),
                 y: px(-2.0),
             });

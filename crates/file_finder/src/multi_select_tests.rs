@@ -182,7 +182,7 @@ impl TestContext {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn open_selection_as_tabs(cx: &mut TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
@@ -198,7 +198,7 @@ async fn open_selection_as_tabs(cx: &mut TestAppContext) {
     cx.assert_active_pane_items(&["b.rs", "c.rs"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn tabbing_a_selected_row_deselects_it(cx: &mut TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
@@ -209,7 +209,7 @@ async fn tabbing_a_selected_row_deselects_it(cx: &mut TestAppContext) {
     cx.assert_selected(&["c.rs"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn selection_pins_to_top_across_queries(cx: &mut TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
@@ -223,7 +223,7 @@ async fn selection_pins_to_top_across_queries(cx: &mut TestAppContext) {
     assert_eq!(cx.match_names(), ["c.rs", "b.rs"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn deselecting_survives_queries(cx: &mut TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
@@ -240,7 +240,7 @@ async fn deselecting_survives_queries(cx: &mut TestAppContext) {
     assert_eq!(cx.match_names(), ["a.rs"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn create_new_file_row_is_not_selectable(cx: &mut TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
@@ -254,7 +254,7 @@ async fn create_new_file_row_is_not_selectable(cx: &mut TestAppContext) {
     cx.assert_selected(&[]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn open_selection_in_one_split(cx: &mut TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
@@ -269,7 +269,7 @@ async fn open_selection_in_one_split(cx: &mut TestAppContext) {
     cx.assert_active_pane_items(&["b.rs", "c.rs"]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn secondary_confirm_opens_one_split_per_file(cx: &mut TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 

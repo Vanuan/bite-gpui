@@ -11,7 +11,7 @@ use serde_json::json;
 use tests::{init_test, init_test_workspace};
 use util::path;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_handle_output_event(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -159,7 +159,7 @@ async fn test_handle_output_event(executor: BackgroundExecutor, cx: &mut TestApp
         .unwrap();
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_escape_code_processing(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     init_test(cx);
 
@@ -357,7 +357,7 @@ async fn test_escape_code_processing(executor: BackgroundExecutor, cx: &mut Test
         .unwrap();
 }
 
-// #[gpui::test]
+// #[gpui_runtime::test]
 // async fn test_grouped_output(executor: BackgroundExecutor, cx: &mut TestAppContext) {
 //     init_test(cx);
 
@@ -644,7 +644,7 @@ async fn test_escape_code_processing(executor: BackgroundExecutor, cx: &mut Test
 // }
 
 // todo(debugger): enable this again
-// #[gpui::test]
+// #[gpui_runtime::test]
 // async fn test_evaluate_expression(executor: BackgroundExecutor, cx: &mut TestAppContext) {
 //     init_test(cx);
 

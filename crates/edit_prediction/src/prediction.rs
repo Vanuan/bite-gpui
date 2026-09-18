@@ -9,9 +9,9 @@ use zeta_prompt::{Zeta2PromptInput, Zeta3PromptInput};
 #[derive(Clone, Default, Debug, PartialEq, Eq, Hash)]
 pub struct EditPredictionId(pub SharedString);
 
-impl From<EditPredictionId> for gpui::ElementId {
+impl From<EditPredictionId> for gpui_runtime::ElementId {
     fn from(value: EditPredictionId) -> Self {
-        gpui::ElementId::Name(value.0)
+        gpui_runtime::ElementId::Name(value.0)
     }
 }
 
@@ -179,7 +179,7 @@ mod tests {
     use language::{Buffer, ToOffset as _};
     use zeta_prompt::Zeta2PromptInput;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_edit_prediction_basic_interpolation(cx: &mut TestAppContext) {
         let buffer = cx.new(|cx| Buffer::local("Lorem ipsum dolor", cx));
         let edits: Arc<[(Range<Anchor>, Arc<str>)]> = cx.update(|cx| {

@@ -17,7 +17,7 @@ use serde_json::json;
 use tempfile::TempDir;
 use util::path;
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_watcher_diagnostics_do_not_change_event_delivery(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor);
     let root = Path::new(path!("/root"));
@@ -67,7 +67,7 @@ async fn test_watcher_diagnostics_do_not_change_event_delivery(executor: Backgro
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fake_fs(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor.clone());
     fs.insert_tree(
@@ -121,7 +121,7 @@ async fn test_fake_fs(executor: BackgroundExecutor) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_recursive_with_single_file(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor.clone());
     fs.insert_tree(
@@ -174,7 +174,7 @@ async fn test_copy_recursive_with_single_file(executor: BackgroundExecutor) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_recursive_with_single_dir(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor.clone());
     fs.insert_tree(
@@ -257,7 +257,7 @@ async fn test_copy_recursive_with_single_dir(executor: BackgroundExecutor) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_recursive(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor.clone());
     fs.insert_tree(
@@ -336,7 +336,7 @@ async fn test_copy_recursive(executor: BackgroundExecutor) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_recursive_with_overwriting(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor.clone());
     fs.insert_tree(
@@ -408,7 +408,7 @@ async fn test_copy_recursive_with_overwriting(executor: BackgroundExecutor) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_copy_recursive_with_ignoring(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor.clone());
     fs.insert_tree(
@@ -480,7 +480,7 @@ async fn test_copy_recursive_with_ignoring(executor: BackgroundExecutor) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_realfs_atomic_write(executor: BackgroundExecutor) {
     // With the file handle still open, the file should be replaced
     // https://github.com/zed-industries/zed/issues/30054
@@ -492,22 +492,22 @@ async fn test_realfs_atomic_write(executor: BackgroundExecutor) {
     // drop(file);  // We still hold the file handle here
     let content = std::fs::read_to_string(&file_to_be_replaced).unwrap();
     assert_eq!(content, "Hello");
-    gpui::block_on(fs.atomic_write(file_to_be_replaced.clone(), "World".into())).unwrap();
+    gpui_platform::block_on(fs.atomic_write(file_to_be_replaced.clone(), "World".into())).unwrap();
     let content = std::fs::read_to_string(&file_to_be_replaced).unwrap();
     assert_eq!(content, "World");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_realfs_atomic_write_non_existing_file(executor: BackgroundExecutor) {
     let fs = RealFs::new(None, executor);
     let temp_dir = TempDir::new().unwrap();
     let file_to_be_replaced = temp_dir.path().join("file.txt");
-    gpui::block_on(fs.atomic_write(file_to_be_replaced.clone(), "Hello".into())).unwrap();
+    gpui_platform::block_on(fs.atomic_write(file_to_be_replaced.clone(), "Hello".into())).unwrap();
     let content = std::fs::read_to_string(&file_to_be_replaced).unwrap();
     assert_eq!(content, "Hello");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg(target_os = "windows")]
 async fn test_realfs_canonicalize(executor: BackgroundExecutor) {
     use util::paths::SanitizedPath;
@@ -522,7 +522,7 @@ async fn test_realfs_canonicalize(executor: BackgroundExecutor) {
     assert!(canonicalized.is_ok());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_rename(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor.clone());
     fs.insert_tree(
@@ -581,7 +581,7 @@ async fn test_rename(executor: BackgroundExecutor) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg(any(target_os = "macos", target_os = "linux", target_os = "windows"))]
 async fn test_realfs_parallel_rename_without_overwrite_preserves_losing_source(
     executor: BackgroundExecutor,
@@ -609,7 +609,7 @@ async fn test_realfs_parallel_rename_without_overwrite_preserves_losing_source(
     assert_eq!(source_a.exists() as u8 + source_b.exists() as u8, 1);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg(any(target_os = "macos", target_os = "linux", target_os = "windows"))]
 async fn test_realfs_rename_ignore_if_exists_leaves_source_and_target_unchanged(
     executor: BackgroundExecutor,
@@ -640,7 +640,7 @@ async fn test_realfs_rename_ignore_if_exists_leaves_source_and_target_unchanged(
     assert_eq!(std::fs::read_to_string(&target).unwrap(), "from target");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fake_fs_rename_ignore_if_exists_leaves_source_and_target_unchanged(
     executor: BackgroundExecutor,
 ) {
@@ -689,7 +689,7 @@ async fn test_fake_fs_rename_ignore_if_exists_leaves_source_and_target_unchanged
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fake_fs_rename_onto_itself_keeps_the_file(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor);
     fs.insert_tree(
@@ -716,7 +716,7 @@ async fn test_fake_fs_rename_onto_itself_keeps_the_file(executor: BackgroundExec
     assert_eq!(fs.load(path).await.unwrap(), "content");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg(unix)]
 async fn test_realfs_executable_metadata(executor: BackgroundExecutor) {
     use std::os::unix::fs::PermissionsExt as _;
@@ -734,7 +734,7 @@ async fn test_realfs_executable_metadata(executor: BackgroundExecutor) {
     std::fs::set_permissions(&executable_path, permissions).unwrap();
 
     let fs = RealFs::new(None, executor);
-    gpui::block_on(fs.create_symlink(&symlink_path, PathBuf::from("executable.sh"))).unwrap();
+    gpui_platform::block_on(fs.create_symlink(&symlink_path, PathBuf::from("executable.sh"))).unwrap();
 
     let non_executable_metadata = fs
         .metadata(&non_executable_path)
@@ -759,14 +759,14 @@ async fn test_realfs_executable_metadata(executor: BackgroundExecutor) {
     assert!(symlink_metadata.is_executable);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg(unix)]
 async fn test_realfs_broken_symlink_metadata(executor: BackgroundExecutor) {
     let tempdir = TempDir::new().unwrap();
     let path = tempdir.path();
     let fs = RealFs::new(None, executor);
     let symlink_path = path.join("symlink");
-    gpui::block_on(fs.create_symlink(&symlink_path, PathBuf::from("file_a.txt"))).unwrap();
+    gpui_platform::block_on(fs.create_symlink(&symlink_path, PathBuf::from("file_a.txt"))).unwrap();
     let metadata = fs
         .metadata(&symlink_path)
         .await
@@ -779,14 +779,14 @@ async fn test_realfs_broken_symlink_metadata(executor: BackgroundExecutor) {
     // don't care about len or mtime on symlinks?
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[cfg(unix)]
 async fn test_realfs_symlink_loop_metadata(executor: BackgroundExecutor) {
     let tempdir = TempDir::new().unwrap();
     let path = tempdir.path();
     let fs = RealFs::new(None, executor);
     let symlink_path = path.join("symlink");
-    gpui::block_on(fs.create_symlink(&symlink_path, PathBuf::from("symlink"))).unwrap();
+    gpui_platform::block_on(fs.create_symlink(&symlink_path, PathBuf::from("symlink"))).unwrap();
     let metadata = fs
         .metadata(&symlink_path)
         .await
@@ -799,7 +799,7 @@ async fn test_realfs_symlink_loop_metadata(executor: BackgroundExecutor) {
     // don't care about len or mtime on symlinks?
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fake_fs_trash(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor.clone());
     fs.insert_tree(
@@ -845,7 +845,7 @@ async fn test_fake_fs_trash(executor: BackgroundExecutor) {
     assert_eq!(fs.files(), vec![PathBuf::from(path!("/root/file_b.txt"))]);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fake_fs_restore(executor: BackgroundExecutor) {
     let fs = FakeFs::new(executor.clone());
     fs.insert_tree(
@@ -1011,7 +1011,7 @@ async fn watcher_delivered_event(
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_realfs_watcher_diagnostics(executor: BackgroundExecutor, cx: &mut TestAppContext) {
     cx.executor().allow_parking();
     let fs = RealFs::new(None, executor.clone());
@@ -1086,7 +1086,7 @@ async fn test_realfs_watcher_diagnostics(executor: BackgroundExecutor, cx: &mut 
 ///   to pass on Linux (notify reconstructs paths from the watch path you pass),
 ///   which is itself a useful demonstration that this is an FSEvents-specific
 ///   bug.
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_realfs_watch_aliased_watch_paths_deliver_events(
     executor: BackgroundExecutor,
     cx: &mut TestAppContext,
@@ -1262,7 +1262,7 @@ async fn test_realfs_watch_aliased_watch_paths_deliver_events(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 #[ignore = "stress test; run explicitly when needed"]
 async fn test_realfs_watch_stress_reports_missed_paths(
     executor: BackgroundExecutor,
@@ -1349,7 +1349,7 @@ async fn test_realfs_watch_stress_reports_missed_paths(
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn restore_can_be_retried_after_collision(cx: &mut TestAppContext) {
     let fs = FakeFs::new(cx.background_executor.clone());
     let path = path!("/root/a.txt");

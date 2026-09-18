@@ -355,9 +355,9 @@ impl Global for GlobalPromptStore {}
 #[cfg(test)]
 mod tests {
     use super::*;
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_built_in_prompt_load(cx: &mut TestAppContext) {
         cx.executor().allow_parking();
 

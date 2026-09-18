@@ -64,7 +64,7 @@ impl EditPredictionContextView {
         project: Entity<Project>,
         client: &Arc<Client>,
         user_store: &Entity<UserStore>,
-        window: &mut gpui::Window,
+        window: &mut gpui_runtime::Window,
         cx: &mut Context<Self>,
     ) -> Self {
         let store = EditPredictionStore::global(client, user_store, cx);
@@ -92,7 +92,7 @@ impl EditPredictionContextView {
     fn handle_store_event(
         &mut self,
         event: DebugEvent,
-        window: &mut gpui::Window,
+        window: &mut gpui_runtime::Window,
         cx: &mut Context<Self>,
     ) {
         match event {
@@ -381,7 +381,7 @@ impl Item for EditPredictionContextView {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         _: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<Editor>() {
@@ -392,7 +392,7 @@ impl Item for EditPredictionContextView {
     }
 }
 
-impl gpui::Render for EditPredictionContextView {
+impl gpui_runtime::Render for EditPredictionContextView {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl ui::IntoElement {
         v_flex()
             .key_context("EditPredictionContext")

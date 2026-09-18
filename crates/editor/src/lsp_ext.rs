@@ -201,7 +201,7 @@ mod tests {
 
     use super::find_specific_language_server_in_selection;
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_find_language_server_at_end_of_file(cx: &mut TestAppContext) {
         init_test(cx, |_| {});
 

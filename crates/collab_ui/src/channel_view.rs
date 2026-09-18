@@ -431,7 +431,7 @@ impl Render for ChannelView {
 }
 
 impl Focusable for ChannelView {
-    fn focus_handle(&self, cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, cx: &App) -> gpui_runtime::FocusHandle {
         self.editor.read(cx).focus_handle(cx)
     }
 }
@@ -444,7 +444,7 @@ impl Item for ChannelView {
         type_id: TypeId,
         self_handle: &'a Entity<Self>,
         _: &'a App,
-    ) -> Option<gpui::AnyEntity> {
+    ) -> Option<gpui_runtime::AnyEntity> {
         if type_id == TypeId::of::<Self>() {
             Some(self_handle.clone().into())
         } else if type_id == TypeId::of::<Editor>() {
@@ -473,7 +473,7 @@ impl Item for ChannelView {
         }
     }
 
-    fn tab_content(&self, params: TabContentParams, _: &Window, cx: &App) -> gpui::AnyElement {
+    fn tab_content(&self, params: TabContentParams, _: &Window, cx: &App) -> gpui_runtime::AnyElement {
         let (name, status) = self.get_channel(cx);
         h_flex()
             .gap_2()

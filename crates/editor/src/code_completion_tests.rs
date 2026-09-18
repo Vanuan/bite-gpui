@@ -1,6 +1,6 @@
 use crate::code_context_menus::CompletionsMenu;
 use fuzzy::{StringMatch, StringMatchCandidate};
-use gpui::TestAppContext;
+use gpui_runtime::TestAppContext;
 use language::CodeLabel;
 use lsp::{CompletionItem, CompletionItemKind, LanguageServerId};
 use project::{Completion, CompletionSource};
@@ -9,7 +9,7 @@ use std::sync::Arc;
 use std::sync::atomic::AtomicBool;
 use text::{Anchor, BufferId};
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sort_kind(cx: &mut TestAppContext) {
     let completions = vec![
         CompletionBuilder::function("floorf128", None, "80000000"),
@@ -33,7 +33,7 @@ async fn test_sort_kind(cx: &mut TestAppContext) {
     assert_eq!(matches[0].score, matches[1].score);
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fuzzy_score(cx: &mut TestAppContext) {
     // first character sensitive over sort_text and sort_kind
     {
@@ -120,7 +120,7 @@ async fn test_fuzzy_score(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sort_text(cx: &mut TestAppContext) {
     // sort text takes precedance over sort_kind, when fuzzy is same
     {
@@ -152,7 +152,7 @@ async fn test_sort_text(cx: &mut TestAppContext) {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sort_snippet(cx: &mut TestAppContext) {
     let completions = vec![
         CompletionBuilder::constant("println", None, "7fffffff"),
@@ -164,7 +164,7 @@ async fn test_sort_snippet(cx: &mut TestAppContext) {
     assert_eq!(matches[0].string, "println!(…)");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sort_exact(cx: &mut TestAppContext) {
     // sort_text takes over if no exact match
     let completions = vec![
@@ -193,7 +193,7 @@ async fn test_sort_exact(cx: &mut TestAppContext) {
     assert_eq!(matches[0].string, "into");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_sort_positions(cx: &mut TestAppContext) {
     // positions take precedence over fuzzy score and sort_text
     let completions = vec![
@@ -217,7 +217,7 @@ async fn test_sort_positions(cx: &mut TestAppContext) {
     assert_eq!(matches[0].string, "rounded-full");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_case_sensitive_match_tie_breaker(cx: &mut TestAppContext) {
     let completions = vec![
         CompletionBuilder::variable("abc", None, "11"),
@@ -288,7 +288,7 @@ async fn test_case_sensitive_match_tie_breaker(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_fuzzy_over_sort_positions(cx: &mut TestAppContext) {
     let completions = vec![
         CompletionBuilder::variable("lsp_document_colors", None, "7fffffff"), // 0.29 fuzzy score
@@ -310,7 +310,7 @@ async fn test_fuzzy_over_sort_positions(cx: &mut TestAppContext) {
     assert_eq!(matches[2].string, "fetch_code_lens");
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 async fn test_semver_label_sort_by_latest_version(cx: &mut TestAppContext) {
     let mut versions = [
         "10.4.112",

@@ -521,7 +521,7 @@ impl Render for TelemetryLogView {
                     .flex_grow_1()
                     .child(
                         list(self.list_state.clone(), cx.processor(Self::render_entry))
-                            .with_sizing_behavior(gpui::ListSizingBehavior::Auto)
+                            .with_sizing_behavior(gpui_runtime::ListSizingBehavior::Auto)
                             .size_full(),
                     )
                     .vertical_scrollbar_for(&self.list_state, window, cx)

@@ -286,7 +286,7 @@ impl WrapMap {
             }];
 
             if total_rows < WRAP_YIELD_ROW_INTERVAL {
-                let edits = gpui::block_on(new_snapshot.update(
+                let edits = gpui_platform::block_on(new_snapshot.update(
                     tab_snapshot,
                     &tab_edits,
                     wrap_width,
@@ -391,7 +391,7 @@ impl WrapMap {
             if update_passes + total_new_rows < WRAP_YIELD_ROW_INTERVAL {
                 let mut wrap_edits = Patch::default();
                 for (tab_snapshot, tab_edits) in pending_edits {
-                    let edits = gpui::block_on(snapshot.update(
+                    let edits = gpui_platform::block_on(snapshot.update(
                         tab_snapshot,
                         &tab_edits,
                         wrap_width,
@@ -1473,14 +1473,14 @@ mod tests {
     use text::Rope;
     use theme::LoadThemes;
 
-    #[gpui::test]
-    async fn test_prev_row_boundary(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_prev_row_boundary(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         fn test_wrap_snapshot(
             text: &str,
             soft_wrap_every: usize, // font size multiple
-            cx: &mut gpui::TestAppContext,
+            cx: &mut gpui_runtime::TestAppContext,
         ) -> WrapSnapshot {
             let text_system = cx.read(|cx| cx.text_system().clone());
             let tab_size = 4.try_into().unwrap();
@@ -1538,8 +1538,8 @@ mod tests {
         assert_eq!(row.0, 3);
     }
 
-    #[gpui::test]
-    async fn test_invisibles_become_width_measured_elements(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_invisibles_become_width_measured_elements(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let text_system = cx.read(|cx| cx.text_system().clone());
@@ -1603,8 +1603,8 @@ mod tests {
         );
     }
 
-    #[gpui::test]
-    async fn test_invisibles_wrap_at_replacement_glyph_width(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_invisibles_wrap_at_replacement_glyph_width(cx: &mut gpui_runtime::TestAppContext) {
         init_test(cx);
 
         let text_system = cx.read(|cx| cx.text_system().clone());
@@ -1647,8 +1647,8 @@ mod tests {
         }
     }
 
-    #[gpui::test(iterations = 100)]
-    async fn test_random_wraps(cx: &mut gpui::TestAppContext, mut rng: StdRng) {
+    #[gpui_runtime::test(iterations = 100)]
+    async fn test_random_wraps(cx: &mut gpui_runtime::TestAppContext, mut rng: StdRng) {
         // todo this test is flaky
         init_test(cx);
 
@@ -1883,7 +1883,7 @@ mod tests {
         wrap_map.read_with(cx, |map, _| assert!(map.pending_edits.is_empty()));
     }
 
-    fn init_test(cx: &mut gpui::TestAppContext) {
+    fn init_test(cx: &mut gpui_runtime::TestAppContext) {
         cx.update(|cx| {
             let settings = SettingsStore::test(cx);
             cx.set_global(settings);

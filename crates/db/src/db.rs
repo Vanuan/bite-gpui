@@ -62,7 +62,7 @@ impl AppDatabase {
     /// migrations in dependency order.
     pub fn new() -> Self {
         let db_dir = database_dir();
-        let connection = gpui::block_on(open_db::<AppMigrator>(db_dir, *RELEASE_CHANNEL));
+        let connection = gpui_platform::block_on(open_db::<AppMigrator>(db_dir, *RELEASE_CHANNEL));
         Self(connection)
     }
 
@@ -71,7 +71,7 @@ impl AppDatabase {
     #[cfg(any(test, feature = "test-support"))]
     pub fn test_new() -> Self {
         let name = format!("test-db-{}", uuid::Uuid::new_v4());
-        let connection = gpui::block_on(open_test_db::<AppMigrator>(&name));
+        let connection = gpui_platform::block_on(open_test_db::<AppMigrator>(&name));
         Self(connection)
     }
 
@@ -263,7 +263,7 @@ macro_rules! static_connection {
         impl $t {
             /// Returns an instance backed by the per-App database if set,
             /// or the shared fallback connection otherwise.
-            pub fn global(cx: &$crate::gpui::App) -> Self {
+            pub fn global(cx: &$crate::gpui_runtime::App) -> Self {
                 $t($crate::AppDatabase::global(cx).clone())
             }
 
@@ -302,7 +302,7 @@ mod tests {
     use crate::open_db;
 
     // Test bad migration panics
-    #[gpui::test]
+    #[gpui_runtime::test]
     #[should_panic]
     async fn test_bad_migration_panics() {
         enum BadDB {}
@@ -324,8 +324,8 @@ mod tests {
     }
 
     /// Test that DB exists but corrupted (causing recreate)
-    #[gpui::test]
-    async fn test_db_corruption(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test]
+    async fn test_db_corruption(cx: &mut gpui_runtime::TestAppContext) {
         cx.executor().allow_parking();
 
         enum CorruptedDB {}
@@ -361,8 +361,8 @@ mod tests {
     }
 
     /// Test that DB exists but corrupted (causing recreate)
-    #[gpui::test(iterations = 30)]
-    async fn test_simultaneous_db_corruption(cx: &mut gpui::TestAppContext) {
+    #[gpui_runtime::test(iterations = 30)]
+    async fn test_simultaneous_db_corruption(cx: &mut gpui_runtime::TestAppContext) {
         cx.executor().allow_parking();
 
         enum CorruptedDB {}
@@ -396,7 +396,7 @@ mod tests {
         for _ in 0..10 {
             let tmp_path = tempdir.path().to_path_buf();
             let guard = thread::spawn(move || {
-                let good_db = gpui::block_on(open_db::<GoodDB>(
+                let good_db = gpui_platform::block_on(open_db::<GoodDB>(
                     tmp_path.as_path(),
                     release_channel::ReleaseChannel::Dev,
                 ));

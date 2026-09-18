@@ -1,4 +1,4 @@
-use gpui::Pixels;
+use gpui_types::Pixels;
 use settings::{IntoGpui, RegisterSetting, Settings};
 use workspace::dock::DockPosition;
 

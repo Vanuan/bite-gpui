@@ -552,7 +552,7 @@ impl Item for ImageView {
     fn for_each_project_item(
         &self,
         cx: &App,
-        f: &mut dyn FnMut(gpui::EntityId, &dyn project::ProjectItem),
+        f: &mut dyn FnMut(gpui_runtime::EntityId, &dyn project::ProjectItem),
     ) {
         f(self.image_item.entity_id(), self.image_item.read(cx))
     }
@@ -833,7 +833,7 @@ impl ProjectItem for ImageView {
 
 pub struct ImageViewToolbarControls {
     image_view: Option<WeakEntity<ImageView>>,
-    _subscription: Option<gpui::Subscription>,
+    _subscription: Option<gpui_runtime::Subscription>,
     zoom_editor: Option<Entity<Editor>>,
     _zoom_subscription: Option<Subscription>,
 }
@@ -860,7 +860,7 @@ impl ImageViewToolbarControls {
             editor.set_text(zoom_percentage.to_string(), window, cx);
             editor.set_text_style_refinement(gpui::TextStyleRefinement {
                 color: Some(cx.theme().colors().text),
-                text_align: Some(gpui::TextAlign::Center),
+                text_align: Some(gpui_runtime::TextAlign::Center),
                 font_size: Some(TextSize::Small.rems(cx).into()),
                 ..Default::default()
             });
@@ -1195,7 +1195,7 @@ mod tests {
         cx.read(|cx| image.is_asset_cached(cx))
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_reloading_removes_replaced_image_from_asset_cache(cx: &mut TestAppContext) {
         init_test(cx);
         let (project, image_item) = open_test_image(cx).await;
@@ -1228,7 +1228,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_superseded_in_flight_image_is_removed_from_asset_cache(cx: &mut TestAppContext) {
         init_test(cx);
         let (project, image_item) = open_test_image(cx).await;
@@ -1266,7 +1266,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_superseded_constructor_prefetch_is_removed_from_asset_cache(
         cx: &mut TestAppContext,
     ) {
@@ -1292,7 +1292,7 @@ mod tests {
         );
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_releasing_one_split_keeps_shared_atlas_entry(cx: &mut TestAppContext) {
         init_test(cx);
         let (project, image_item) = open_test_image(cx).await;

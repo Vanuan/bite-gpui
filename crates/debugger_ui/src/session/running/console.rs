@@ -368,7 +368,7 @@ impl Console {
                     })
                 },
             )
-            .anchor(gpui::Anchor::TopRight)
+            .anchor(gpui_types::Anchor::TopRight)
     }
 
     fn render_console(&self, cx: &Context<Self>) -> impl IntoElement {
@@ -502,7 +502,7 @@ impl Render for Console {
 }
 
 impl Focusable for Console {
-    fn focus_handle(&self, _cx: &App) -> gpui::FocusHandle {
+    fn focus_handle(&self, _cx: &App) -> gpui_runtime::FocusHandle {
         self.focus_handle.clone()
     }
 }
@@ -801,7 +801,7 @@ mod tests {
     use super::*;
     use crate::tests::init_test;
     use editor::{MultiBufferOffset, test::editor_test_context::EditorTestContext};
-    use gpui::TestAppContext;
+    use gpui_runtime::TestAppContext;
     use language::Point;
 
     #[track_caller]
@@ -843,7 +843,7 @@ mod tests {
         pretty_assertions::assert_eq!(expect, cx.display_text());
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     fn test_background_color_fetcher_preserves_default_background(cx: &mut TestAppContext) {
         init_test(cx);
 
@@ -860,7 +860,7 @@ mod tests {
         });
     }
 
-    #[gpui::test]
+    #[gpui_runtime::test]
     async fn test_determine_completion_replace_range(cx: &mut TestAppContext) {
         init_test(cx);
 

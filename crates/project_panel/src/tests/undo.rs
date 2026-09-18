@@ -255,7 +255,7 @@ impl TestContext {
     /// b.txt
     /// ```
     /// a and b are empty, x has the text "content" inside
-    async fn new(cx: &mut gpui::TestAppContext) -> TestContext {
+    async fn new(cx: &mut gpui_runtime::TestAppContext) -> TestContext {
         Self::new_with_tree(
             cx,
             json!({
@@ -266,7 +266,7 @@ impl TestContext {
         .await
     }
 
-    async fn new_with_tree(cx: &mut gpui::TestAppContext, tree: Value) -> TestContext {
+    async fn new_with_tree(cx: &mut gpui_runtime::TestAppContext, tree: Value) -> TestContext {
         project_panel_tests::init_test(cx);
         cx.update(register_project_item::<Editor>);
 
@@ -313,8 +313,8 @@ impl TestContext {
     }
 }
 
-#[gpui::test]
-async fn rename_undo_redo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn rename_undo_redo(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.rename("a.txt", "renamed.txt").await;
@@ -327,8 +327,8 @@ async fn rename_undo_redo(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["b.txt", "renamed.txt"]);
 }
 
-#[gpui::test]
-async fn rename_with_dir_undo_redo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn rename_with_dir_undo_redo(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     // Renaming a file like `a.txt` to `files/a.txt` will create the `files`
@@ -378,8 +378,8 @@ async fn rename_with_dir_undo_redo(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["a.txt", "b.txt", "files/", "files/external.txt"]);
 }
 
-#[gpui::test]
-async fn create_undo_redo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn create_undo_redo(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
     let path = path("/workspace/c.txt");
 
@@ -401,8 +401,8 @@ async fn create_undo_redo(cx: &mut gpui::TestAppContext) {
     assert_eq!(cx.fs.load(Path::new(&path)).await.unwrap(), "Hello!");
 }
 
-#[gpui::test]
-async fn undo_create_cancel_trash(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn undo_create_cancel_trash(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.create_file("c.txt").await;
@@ -416,8 +416,8 @@ async fn undo_create_cancel_trash(cx: &mut gpui::TestAppContext) {
     cx.assert_not_exists("c.txt");
 }
 
-#[gpui::test]
-async fn undo_create_dirty_file(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn undo_create_dirty_file(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.create_file("c.txt").await;
@@ -440,8 +440,8 @@ async fn undo_create_dirty_file(cx: &mut gpui::TestAppContext) {
     cx.assert_not_exists("c.txt");
 }
 
-#[gpui::test]
-async fn create_dir_undo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn create_dir_undo(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.create_directory("new_dir").await;
@@ -451,8 +451,8 @@ async fn create_dir_undo(cx: &mut gpui::TestAppContext) {
     cx.assert_not_exists("new_dir");
 }
 
-#[gpui::test]
-async fn cut_paste_undo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn cut_paste_undo(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.create_directory("files").await;
@@ -467,8 +467,8 @@ async fn cut_paste_undo(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["b.txt", "files/", "files/a.txt"]);
 }
 
-#[gpui::test]
-async fn drag_undo_redo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn drag_undo_redo(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.create_directory("src").await;
@@ -485,8 +485,8 @@ async fn drag_undo_redo(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["a.txt", "b.txt", "a.rs", "src/"]);
 }
 
-#[gpui::test]
-async fn drag_multiple_undo_redo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn drag_multiple_undo_redo(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.create_directory("src").await;
@@ -503,8 +503,8 @@ async fn drag_multiple_undo_redo(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["a.txt", "b.txt", "x.rs", "y.rs", "src/"]);
 }
 
-#[gpui::test]
-async fn two_sequential_undos(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn two_sequential_undos(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.rename("a.txt", "x.txt").await;
@@ -519,8 +519,8 @@ async fn two_sequential_undos(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["a.txt", "b.txt"]);
 }
 
-#[gpui::test]
-async fn undo_without_history(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn undo_without_history(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     // Undoing without any history should just result in the filesystem state
@@ -529,8 +529,8 @@ async fn undo_without_history(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["a.txt", "b.txt"])
 }
 
-#[gpui::test]
-async fn trash_undo_redo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn trash_undo_redo(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.trash(&["a.txt", "b.txt"]).await;
@@ -544,8 +544,8 @@ async fn trash_undo_redo(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&[]);
 }
 
-#[gpui::test]
-async fn trash_directory_undo_redo(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn trash_directory_undo_redo(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new_with_tree(
         cx,
         json!({
@@ -576,8 +576,8 @@ async fn trash_directory_undo_redo(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["a.txt"]);
 }
 
-#[gpui::test]
-async fn trash_continues_when_one_entry_fails(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn trash_continues_when_one_entry_fails(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new_with_tree(
         cx,
         json!({
@@ -598,8 +598,8 @@ async fn trash_continues_when_one_entry_fails(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["0_dir/", "a.txt", "b.txt"]);
 }
 
-#[gpui::test]
-async fn record_via_collab(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn record_via_collab(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     // Manually update the `UndoManager::is_via_collab` field in order to
@@ -621,8 +621,8 @@ async fn record_via_collab(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["b.txt", "renamed.txt"]);
 }
 
-#[gpui::test]
-async fn undo_redo_unavailable_for_read_only_collab_guest(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn undo_redo_unavailable_for_read_only_collab_guest(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
     let focus_handle = cx
         .panel
@@ -655,8 +655,8 @@ async fn undo_redo_unavailable_for_read_only_collab_guest(cx: &mut gpui::TestApp
     });
 }
 
-#[gpui::test]
-async fn excluded_create_is_not_recorded(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn excluded_create_is_not_recorded(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new_with_tree(
         cx,
         json!({
@@ -694,8 +694,8 @@ async fn excluded_create_is_not_recorded(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&["a.txt", "token.secret", "banana.secret"]);
 }
 
-#[gpui::test]
-async fn cancel_partial_trash_batch(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn cancel_partial_trash_batch(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.trash(&["a.txt", "b.txt"]).await;
@@ -711,8 +711,8 @@ async fn cancel_partial_trash_batch(cx: &mut gpui::TestAppContext) {
     cx.assert_fs_state_is(&[]);
 }
 
-#[gpui::test]
-async fn batch_trash_warns_about_unsaved_changes(cx: &mut gpui::TestAppContext) {
+#[gpui_runtime::test]
+async fn batch_trash_warns_about_unsaved_changes(cx: &mut gpui_runtime::TestAppContext) {
     let mut cx = TestContext::new(cx).await;
 
     cx.trash(&["a.txt", "b.txt"]).await;

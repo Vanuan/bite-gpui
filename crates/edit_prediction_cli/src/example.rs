@@ -5,7 +5,7 @@ use anyhow::{Context as _, Result};
 use collections::HashMap;
 use edit_prediction::example_spec::ExampleSpec;
 use edit_prediction::udiff::OpenedBuffers;
-use gpui::Entity;
+use gpui_runtime::Entity;
 use http_client::Url;
 use language::{Anchor, Buffer};
 use project::Project;

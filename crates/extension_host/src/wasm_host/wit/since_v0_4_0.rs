@@ -1,7 +1,7 @@
 use crate::wasm_host::WasmState;
 use anyhow::Result;
 use extension::{KeyValueStoreDelegate, ProjectDelegate, WorktreeDelegate};
-use gpui::BackgroundExecutor;
+use gpui_platform::BackgroundExecutor;
 use semver::Version;
 use std::sync::{Arc, OnceLock};
 use wasmtime::component::{Linker, Resource};

@@ -10,7 +10,7 @@ fn current_parameter() -> HighlightStyle {
     }
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_markdown_string_1(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![lsp::SignatureInformation {
@@ -55,7 +55,7 @@ fn test_create_signature_help_markdown_string_1(cx: &mut TestAppContext) {
     )
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_markdown_string_2(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![lsp::SignatureInformation {
@@ -101,7 +101,7 @@ fn test_create_signature_help_markdown_string_2(cx: &mut TestAppContext) {
     )
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_markdown_string_3(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![
@@ -154,7 +154,7 @@ fn test_create_signature_help_markdown_string_3(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_markdown_string_4(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![
@@ -207,7 +207,7 @@ fn test_create_signature_help_markdown_string_4(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_markdown_string_5(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![
@@ -260,7 +260,7 @@ fn test_create_signature_help_markdown_string_5(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_markdown_string_6(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![
@@ -313,7 +313,7 @@ fn test_create_signature_help_markdown_string_6(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_markdown_string_7(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![
@@ -381,7 +381,7 @@ fn test_create_signature_help_markdown_string_7(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_markdown_string_8(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![],
@@ -392,7 +392,7 @@ fn test_create_signature_help_markdown_string_8(cx: &mut TestAppContext) {
     assert!(maybe_markdown.is_none());
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_markdown_string_9(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![lsp::SignatureInformation {
@@ -428,7 +428,7 @@ fn test_create_signature_help_markdown_string_9(cx: &mut TestAppContext) {
     );
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_parameter_documentation(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![lsp::SignatureInformation {
@@ -480,7 +480,7 @@ fn test_parameter_documentation(cx: &mut TestAppContext) {
     assert_eq!(signature.active_parameter, Some(0));
 }
 
-#[gpui::test]
+#[gpui_runtime::test]
 fn test_create_signature_help_implements_utf16_spec(cx: &mut TestAppContext) {
     let signature_help = lsp::SignatureHelp {
         signatures: vec![lsp::SignatureInformation {
