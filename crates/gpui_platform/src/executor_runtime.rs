@@ -5,9 +5,8 @@ use futures::prelude::*;
 use gpui_util::{TryFutureExt, TryFutureExtBacktrace};
 use scheduler::Instant;
 use scheduler::Scheduler;
-use std::{future::Future, marker::PhantomData, rc::Rc, sync::Arc, time::Duration};
+use std::{future::Future, marker::PhantomData, mem, pin::Pin, rc::Rc, sync::Arc, time::Duration};
 #[cfg(not(target_family = "wasm"))]
-use std::{mem, pin::Pin};
 
 pub use scheduler::{
     DedicatedExecutor, FallibleTask, LocalExecutor as SchedulerLocalExecutor, Priority, Task,
