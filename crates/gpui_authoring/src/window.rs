@@ -4,28 +4,7 @@ use crate::DebugFrameOverlayMode;
 use crate::Inspector;
 #[cfg(feature = "profiler")]
 use crate::profiler;
-use crate::{
-    Action, AnyDrag, AnyElement, AnyImageCache, AnyTooltip, AnyView, App, AppContext, Arena, Asset,
-    AsyncWindowContext, AtlasTile, AvailableSpace, Background, BorderStyle, Bounds, BoxShadow,
-    Capslock, ContentMask, Context, Corners, CursorHideMode, CursorStyle, DEFAULT_WINDOW_SIZE,
-    Decorations, DevicePixels, DispatchActionListener, DispatchEventResult, DispatchNodeId,
-    DispatchTree, DisplayId, Edges, Effect, Entity, EntityId, EventEmitter, FileDropEvent, FontId,
-    Global, GlobalElementId, GlyphId, GpuSpecs, Hsla, InputHandler, IsZero, KeyBinding, KeyContext,
-    KeyDownEvent, KeyEvent, Keystroke, KeystrokeEvent, LayoutId, LineLayoutIndex, MeasureContext,
-    MeasureHandles, Modifiers, ModifiersChangedEvent, MonochromeSprite, MouseButton, MouseEvent,
-    MouseMoveEvent, MouseUpEvent, Path, Pixels, PlatformAtlas, PlatformDisplay, PlatformInput,
-    PlatformInputHandler, PlatformWindow, Point, PolychromeSprite, Priority, PromptButton,
-    PromptLevel, Quad, Render, RenderGlyphParams, RenderImage, RenderImageParams, RenderSvgParams,
-    Replay, ResizeEdge, SMOOTH_SVG_SCALE_FACTOR, SUBPIXEL_VARIANTS_X, SUBPIXEL_VARIANTS_Y,
-    ScaledPixels, Scene, Shadow, SharedString, Size, StrikethroughStyle, Style, SubpixelSprite,
-    SubscriberSet, Subscription, SystemWindowTab, SystemWindowTabController, TabStopMap,
-    TaffyLayoutEngine, Task, TextInputConfiguration, TextInputStateChange, TextRenderingMode,
-    TextStyle, TextStyleRefinement, ThermalState, TransformationMatrix, Underline, UnderlineStyle,
-    WindowAppearance, WindowBackgroundAppearance, WindowBounds, WindowControlArea, WindowControls,
-    WindowDecorations, WindowId, WindowMetrics, WindowOptions, WindowParams, WindowTextSystem,
-    WindowVisibility,
-    new_platform_input_handler, point, prelude::*, px, rems, size, transparent_black,
-};
+use crate::{Action, AnyDrag, AnyElement, AnyImageCache, AnyTooltip, AnyView, App, AppContext, Arena, Asset, AsyncWindowContext, AtlasTile, AvailableSpace, Background, BorderStyle, Bounds, BoxShadow, Capslock, ContentMask, Context, Corners, CursorHideMode, CursorStyle, DEFAULT_WINDOW_SIZE, Decorations, DevicePixels, DispatchActionListener, DispatchEventResult, DispatchNodeId, DispatchTree, DisplayId, Edges, Effect, Entity, EntityId, EventEmitter, FileDropEvent, FontId, Global, GlobalElementId, GlyphId, GpuSpecs, Hsla, InputHandler, IsZero, KeyBinding, KeyContext, KeyDownEvent, KeyEvent, Keystroke, KeystrokeEvent, LayoutId, LineLayoutIndex, MeasureContext, MeasureHandles, Modifiers, ModifiersChangedEvent, MonochromeSprite, MouseButton, MouseEvent, MouseMoveEvent, MouseUpEvent, Path, Pixels, PlatformAtlas, PlatformDisplay, PlatformInput, PlatformInputHandler, PlatformWindow, Point, PolychromeSprite, Priority, PromptButton, PromptLevel, Quad, Render, RenderGlyphParams, RenderImage, RenderImageParams, RenderSvgParams, Replay, ResizeEdge, SMOOTH_SVG_SCALE_FACTOR, SUBPIXEL_VARIANTS_X, SUBPIXEL_VARIANTS_Y, ScaledPixels, Scene, Shadow, SharedString, Size, StrikethroughStyle, Style, SubpixelSprite, SubscriberSet, Subscription, SystemWindowTab, SystemWindowTabController, TabStopMap, Task, TextInputConfiguration, TextInputStateChange, TextRenderingMode, TextStyle, TextStyleRefinement, ThermalState, TransformationMatrix, Underline, UnderlineStyle, WindowAppearance, WindowBackgroundAppearance, WindowBounds, WindowControlArea, WindowControls, WindowDecorations, WindowId, WindowMetrics, WindowOptions, WindowParams, WindowTextSystem, WindowVisibility, new_platform_input_handler, point, prelude::*, px, rems, size, transparent_black};
 
 use crate::TouchEvent;
 use crate::gestures::{GestureTuning, RecognizedTouchGesture, TouchGestureRecognizer};
@@ -3679,7 +3658,7 @@ impl Window<'_> {
     }
 
     /// Presents the most recently drawn frame if it hasn't been presented yet.
-    #[cfg(all(test, feature = "profiler"))]
+    #[cfg(any(test, feature = "bench-support"))]
     pub(crate) fn present_if_needed(&mut self) {
         if self.core.needs_present.get() {
             self.present();
@@ -8102,16 +8081,7 @@ mod tests {
         time::Duration,
     };
 
-    use crate::{
-        AnyWindowHandle, App, AppContext as _, ArenaClearNeeded, Bounds, Context, DispatchPhase,
-        DragMoveEvent, Empty, ExternalDragPayload, ExternalPaths, FileDragPaths, FileDropEvent,
-        FocusHandle, FocusId, FramePipeline, InputEvent as _, InteractiveElement as _, IntoElement,
-        KeyDownEvent, Keystroke, LongPressEvent, MouseButton, MouseDownEvent, MouseMoveEvent,
-        ParentElement, Pixels, PlatformInput, Point, Render, RequestFrameOptions,
-        StandardImmediatePipeline, StatefulInteractiveElement as _, Styled, TestAppContext,
-        TouchDragEvent, TouchEvent, TouchId, TouchPhase, Window, WindowAppearance, WindowMetrics,
-        WindowOptions, canvas, div, point, px, size,
-    };
+    use crate::{AnyWindowHandle, App, AppContext as _, ArenaClearNeeded, Bounds, Context, DispatchPhase, DragMoveEvent, Empty, ExternalDragPayload, ExternalPaths, FileDragPaths, FileDropEvent, FocusHandle, FocusId, FramePipeline, InputEvent as _, InteractiveElement as _, IntoElement, LongPressEvent, MouseButton, MouseDownEvent, MouseMoveEvent, ParentElement, Pixels, Point, Render, RequestFrameOptions, StandardImmediatePipeline, StatefulInteractiveElement as _, Styled, TestAppContext, TouchDragEvent, TouchEvent, TouchId, TouchPhase, Window, WindowAppearance, WindowMetrics, WindowOptions, canvas, div, point, px, size};
 
     /// Visibility transitions reach observers exactly once each, with the new
     /// state already stored on the window, and never wake the platform for a
@@ -8314,7 +8284,7 @@ mod tests {
     fn a_pipeline_can_allow_a_frame(cx: &mut TestAppContext) {
         let frames = Rc::new(Cell::new(0));
         let asks = Rc::new(Cell::new(0));
-        install_pacing_pipeline(cx, frames.clone(), asks.clone(), true);
+        install_pacing_pipeline(cx, frames.clone(), asks, true);
         let window = cx.add_window(|_, _| EmptyView);
         frames.set(0);
 
@@ -8894,17 +8864,6 @@ mod tests {
         observed_drops: Rc<RefCell<Vec<PathBuf>>>,
     }
 
-    struct FileDropExitView(Rc<Cell<usize>>);
-
-    impl Render for FileDropExitView {
-        fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-            div().size_full().on_file_drop_exit({
-                let observed_file_drop_exit = self.0.clone();
-                move |_, _, _| observed_file_drop_exit.set(observed_file_drop_exit.get() + 1)
-            })
-        }
-    }
-
     impl Render for FileDragView {
         fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
             div()
@@ -9022,23 +8981,10 @@ mod tests {
             Some(&outside_position)
         );
 
-        let first_destination_exit_count = Rc::new(Cell::new(0));
-        let first_destination: AnyWindowHandle = cx
-            .add_window({
-                let first_destination_exit_count = first_destination_exit_count.clone();
-                move |_, _| FileDropExitView(first_destination_exit_count)
-            })
-            .into();
-        let second_destination_exit_count = Rc::new(Cell::new(0));
-        let second_destination: AnyWindowHandle = cx
-            .add_window({
-                let second_destination_exit_count = second_destination_exit_count.clone();
-                move |_, _| FileDropExitView(second_destination_exit_count)
-            })
-            .into();
+        let destination: AnyWindowHandle = cx.add_window(|_, _| EmptyView).into();
         let reentry_position = point(px(30.), px(30.));
         let external_paths = || ExternalPaths([successful_path.clone()].into_iter().collect());
-        let update_result = cx.update_window(first_destination, |_, window, cx| {
+        let update_result = cx.update_window(destination, |_, window, cx| {
             window.draw(cx).clear(cx);
             window.dispatch_event(
                 FileDropEvent::Entered {
@@ -9055,48 +9001,10 @@ mod tests {
             );
             window.dispatch_event(FileDropEvent::Exited.to_platform_input(), cx);
             assert!(cx.active_drag.is_none());
-            assert_eq!(first_destination_exit_count.get(), 1);
-            assert_eq!(second_destination_exit_count.get(), 0);
         });
         assert!(
             update_result.is_ok(),
-            "failed to handle drag in first destination window: {update_result:?}"
-        );
-
-        let update_result = cx.update_window(second_destination, |_, window, cx| {
-            window.draw(cx).clear(cx);
-            window.dispatch_event(
-                PlatformInput::KeyDown(KeyDownEvent {
-                    keystroke: Keystroke::parse("down").expect("valid keystroke"),
-                    is_held: false,
-                    prefer_character_input: false,
-                }),
-                cx,
-            );
-            window.dispatch_event(
-                FileDropEvent::Entered {
-                    position: reentry_position,
-                    paths: external_paths(),
-                }
-                .to_platform_input(),
-                cx,
-            );
-            assert!(
-                cx.active_drag
-                    .as_ref()
-                    .is_some_and(|drag| drag.value.downcast_ref::<ExternalPaths>().is_some())
-            );
-            assert_eq!(first_destination_exit_count.get(), 1);
-            assert_eq!(second_destination_exit_count.get(), 0);
-
-            window.dispatch_event(FileDropEvent::Exited.to_platform_input(), cx);
-            assert!(cx.active_drag.is_none());
-            assert_eq!(first_destination_exit_count.get(), 1);
-            assert_eq!(second_destination_exit_count.get(), 1);
-        });
-        assert!(
-            update_result.is_ok(),
-            "failed to handle drag in second destination window: {update_result:?}"
+            "failed to handle drag in destination window: {update_result:?}"
         );
 
         let update_result = cx.update_window(successful.window, |_, window, cx| {

@@ -1236,7 +1236,6 @@ impl Element for InteractiveText {
                         build_tooltip,
                         check_is_hovered,
                         check_is_hovered_during_prepaint,
-                        interactive_state.long_press_tooltip_active.clone(),
                         None,
                         window,
                     );
