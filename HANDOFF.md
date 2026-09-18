@@ -34,7 +34,12 @@ wrong in this tree.
 | `bite_master` | `4b47ceb9d3` (`upstream/main` at the time) | 14 | the reshaped stack, rebased onto main |
 | `bite_v1.21.0-pre` | `808200ff7c` (tag `v1.21.0-pre`) | 13 | the same architecture on the pre-release tag |
 | `bite_v1.20.2` | `7c451e694f` (tag `v1.20.2`) | 26 | back-port: 13 replay + 13 back-port commits |
-| `bite_v1.19.x` | `a4a4c16576` (`upstream/v1.19.x`) | 22 | back-port: 13 replay + 9 back-port commits |
+| `bite_v1.19.x` | `a4a4c16576` (`upstream/v1.19.x`) | 23 | back-port: 13 replay + 10 back-port commits |
+
+Both back-ports pass `cargo check --workspace` (0 errors, 0 warnings) and
+`cargo clippy --workspace --all-targets` (0 diagnostics); `bite_v1.19.x` also
+passes the architecture-closure lint with `--all-features`. No test suite has
+been run on any branch.
 
 `bite_v1.19.x` is based on the live `upstream/v1.19.x` branch, not the `v1.19.2`
 tag: the tag is 7 commits behind the branch.
