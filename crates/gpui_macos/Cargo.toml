@@ -23,7 +23,6 @@ screen-capture = ["gpui_platform/screen-capture"]
 gpui_engine.workspace = true
 gpui_platform.workspace = true
 
-objc2-screen-capture-kit.workspace = true
 [target.'cfg(target_os = "macos")'.dependencies]
 accesskit.workspace = true
 accesskit_macos.workspace = true
@@ -55,6 +54,7 @@ objc.workspace = true
 objc2.workspace = true
 objc2-app-kit.workspace = true
 objc2-foundation.workspace = true
+objc2-screen-capture-kit.workspace = true
 objc2-user-notifications.workspace = true
 parking_lot.workspace = true
 pathfinder_geometry.workspace = true

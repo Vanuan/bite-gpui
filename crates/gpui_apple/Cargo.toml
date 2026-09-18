@@ -21,7 +21,6 @@ runtime_shaders = []
 gpui_platform.workspace = true
 gpui_engine.workspace = true
 
-objc2.workspace = true
 [target.'cfg(target_os = "macos")'.dependencies]
 anyhow.workspace = true
 block.workspace = true
@@ -36,6 +35,7 @@ image.workspace = true
 log.workspace = true
 metal.workspace = true
 objc.workspace = true
+objc2.workspace = true
 parking_lot.workspace = true
 
 [target.'cfg(target_os = "macos")'.build-dependencies]
