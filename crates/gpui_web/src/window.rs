@@ -93,7 +93,7 @@ pub struct WebWindow {
     inner: Rc<WebWindowInner>,
     display: Rc<dyn PlatformDisplay>,
     lifecycle: Rc<Cell<WebWindowLifecycle>>,
-    active_window: Rc<RefCell<Option<AnyWindowHandle>>>,
+    active_window: Rc<RefCell<Option<WindowId>>>,
     _raf_closure: Closure<dyn FnMut()>,
     _resize_observer: Option<web_sys::ResizeObserver>,
     _resize_observer_closure: Closure<dyn FnMut(js_sys::Array)>,
@@ -140,14 +140,14 @@ impl WebWindow {
 
     #[allow(clippy::too_many_arguments)]
     pub(crate) fn new(
-        _handle: AnyWindowHandle,
+        _handle: WindowId,
         _params: WindowParams,
         context: &WgpuContext,
         canvas: web_sys::HtmlCanvasElement,
         surface: wgpu::Surface<'static>,
         browser_window: web_sys::Window,
         lifecycle: Rc<Cell<WebWindowLifecycle>>,
-        active_window: Rc<RefCell<Option<AnyWindowHandle>>>,
+        active_window: Rc<RefCell<Option<WindowId>>>,
     ) -> anyhow::Result<Self> {
         let document = browser_window
             .document()

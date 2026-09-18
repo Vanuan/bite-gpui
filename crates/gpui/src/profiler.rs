@@ -26,8 +26,7 @@ pub use actions::{ActionStatistics, ActionTiming, take_action_stats};
 use serde::{Deserialize, Serialize};
 
 #[cfg(feature = "profiler")]
-use crate::{Action, App, WindowId};
-use crate::{SharedString, TasksIncluded};
+use crate::{Action, App, SharedString, TasksIncluded, WindowId};
 
 #[cfg(feature = "profiler")]
 #[doc(hidden)]
@@ -686,6 +685,16 @@ pub fn save_task_timing() {
     THREAD_TIMINGS.with(|timings| {
         timings.lock().save_task_timing(yielded_at);
     });
+}
+
+/// Installs gpui's task profiler into the platform hook point.
+///
+/// Platform backends report runnable polling through
+/// [`gpui_platform::profiler::update_running_task`] and
+/// [`gpui_platform::profiler::save_task_timing`]; this wires those calls to
+/// the timing machinery in this module. Repeated calls are ignored.
+pub fn install_profiler_hooks() {
+    gpui_platform::profiler::set_task_profiler(update_running_task, save_task_timing);
 }
 
 #[doc(hidden)]
