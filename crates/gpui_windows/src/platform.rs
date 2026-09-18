@@ -28,6 +28,7 @@ use windows::{
 };
 
 use crate::*;
+use gpui_backend::{NoopTextSystem, PlatformTextSystem};
 use gpui_platform::*;
 
 pub struct WindowsPlatform {
@@ -122,7 +123,7 @@ impl WindowsPlatform {
         } else {
             (
                 None,
-                Arc::new(gpui_platform::NoopTextSystem::new()) as Arc<dyn PlatformTextSystem>,
+                Arc::new(NoopTextSystem::new()) as Arc<dyn PlatformTextSystem>,
                 None,
             )
         };

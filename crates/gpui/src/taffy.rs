@@ -1,19 +1,16 @@
+//! Conversion from GPUI's [`Style`] to `taffy` styles.
+//!
+//! The layout engine itself lives in `gpui_backend`; this module stays in the
+//! facade because the conversion names GPUI's styling types.
+
 use crate::{
-    AbsoluteLength, App, AvailableSpace, Bounds, DefiniteLength, Edges, GridTemplate, Length,
-    Pixels, Point, Size, Style, Window, size,
-    util::{
-        ceil_to_device_pixel, round_half_toward_zero, round_stroke_to_device_pixel,
-        round_to_device_pixel,
-    },
+    AbsoluteLength, DefiniteLength, Edges, GridTemplate, Length, Pixels, Size, Style,
+    util::{round_stroke_to_device_pixel, round_to_device_pixel},
 };
-use collections::{FxHashMap, FxHashSet};
-use stacksafe::{StackSafe, stacksafe};
 use std::{fmt::Debug, ops::Range};
 use taffy::{
-    TaffyTree, TraversePartialTree as _,
     geometry::{Rect as TaffyRect, Size as TaffySize},
     prelude::{max_content, min_content},
-    tree::NodeId,
 };
 
 type NodeMeasureFn = StackSafe<
