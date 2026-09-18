@@ -53,8 +53,13 @@ pub trait TextSystem: Send + Sync + Any {
     fn disable_missing_glyph_reporting(&self);
 
     /// Reports missing glyphs as if the platform text system had observed them.
-    #[cfg(any(test, feature = "test-support"))]
-    fn report_missing_glyphs_in_test(&self, missing_glyphs: Vec<MissingGlyph>);
+    ///
+    /// Defaults to doing nothing, for systems with no report stream. The
+    /// declaration is deliberately not feature-gated: a `#[cfg]` here reflects
+    /// *this* crate's feature selection, and feature unification can enable it
+    /// without the implementing crate's matching feature - which leaves that
+    /// implementation reporting `E0046 missing report_missing_glyphs_in_test`.
+    fn report_missing_glyphs_in_test(&self, _missing_glyphs: Vec<MissingGlyph>) {}
 
     /// The font for a font id, if it was resolved through this system.
     fn get_font_for_id(&self, id: FontId) -> Option<Font>;
