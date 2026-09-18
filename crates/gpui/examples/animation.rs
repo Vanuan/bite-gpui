@@ -3,12 +3,12 @@
 use std::time::Duration;
 
 use anyhow::Result;
+use gpui::application;
 use gpui::{
     Animation, AnimationExt as _, App, AssetSource, Bounds, Context, SharedString, Transformation,
     Window, WindowBounds, WindowOptions, bounce, div, ease_in_out, percentage, prelude::*, px,
     size, svg,
 };
-use gpui_platform::application;
 
 struct Assets {}
 
@@ -129,6 +129,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

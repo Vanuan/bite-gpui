@@ -1,4 +1,7 @@
-use crate::{FontId, GlyphId, Pixels, PlatformTextSystem, Point, SharedString, Size, point, px};
+use crate::{
+    FontRun, LineLayout, Pixels, PlatformTextSystem, Point, ShapedRun, SharedString, Size, point,
+    px,
+};
 use collections::FxHashMap;
 use parking_lot::{Mutex, RwLock, RwLockUpgradableReadGuard};
 use smallvec::SmallVec;
@@ -11,119 +14,60 @@ use std::{
 
 use super::LineWrapper;
 
-/// A laid out and styled line of text
-#[derive(Default, Debug)]
-pub struct LineLayout {
-    /// The font size for this line
-    pub font_size: Pixels,
-    /// The width of the line
-    pub width: Pixels,
-    /// The ascent of the line
-    pub ascent: Pixels,
-    /// The descent of the line
-    pub descent: Pixels,
-    /// The shaped runs that make up this line
-    pub runs: Vec<ShapedRun>,
-    /// The length of the line in utf-8 bytes
-    pub len: usize,
-}
+pub(crate) fn compute_wrap_boundaries(
+    layout: &LineLayout,
+    text: &str,
+    wrap_width: Pixels,
+    max_lines: Option<usize>,
+) -> SmallVec<[WrapBoundary; 1]> {
+    let mut boundaries = SmallVec::new();
+    let mut first_non_whitespace_ix = None;
+    let mut last_candidate_ix = None;
+    let mut last_candidate_x = px(0.);
+    let mut last_boundary = WrapBoundary {
+        run_ix: 0,
+        glyph_ix: 0,
+    };
+    let mut last_boundary_x = px(0.);
+    let mut prev_ch = '\0';
+    let mut glyphs = layout
+        .runs
+        .iter()
+        .enumerate()
+        .flat_map(move |(run_ix, run)| {
+            run.glyphs.iter().enumerate().map(move |(glyph_ix, glyph)| {
+                let character = text[glyph.index..].chars().next().unwrap();
+                (
+                    WrapBoundary { run_ix, glyph_ix },
+                    character,
+                    glyph.position.x,
+                )
+            })
+        })
+        .peekable();
 
-/// A run of text that has been shaped .
-#[derive(Debug, Clone)]
-pub struct ShapedRun {
-    /// The font id for this run
-    pub font_id: FontId,
-    /// The glyphs that make up this run
-    pub glyphs: Vec<ShapedGlyph>,
-}
+    while let Some((boundary, ch, x)) = glyphs.next() {
+        if ch == '\n' {
+            continue;
+        }
 
-/// A single glyph, ready to paint.
-#[derive(Clone, Debug)]
-pub struct ShapedGlyph {
-    /// The ID for this glyph, as determined by the text system.
-    pub id: GlyphId,
-
-    /// The position of this glyph in its containing line.
-    pub position: Point<Pixels>,
-
-    /// The index of this glyph in the original text.
-    pub index: usize,
-
-    /// Whether this glyph is an emoji
-    pub is_emoji: bool,
-}
-
-impl LineLayout {
-    /// The index for the character at the given x coordinate
-    pub fn index_for_x(&self, x: Pixels) -> Option<usize> {
-        if x >= self.width {
-            None
+        // Here is very similar to `LineWrapper::wrap_line` to determine text wrapping,
+        // but there are some differences, so we have to duplicate the code here.
+        if LineWrapper::is_word_char(ch) {
+            if prev_ch == ' ' && ch != ' ' && first_non_whitespace_ix.is_some() {
+                last_candidate_ix = Some(boundary);
+                last_candidate_x = x;
+            }
         } else {
-            for run in self.runs.iter().rev() {
-                for glyph in run.glyphs.iter().rev() {
-                    if glyph.position.x <= x {
-                        return Some(glyph.index);
-                    }
-                }
-            }
-            Some(0)
-        }
-    }
-
-    /// closest_index_for_x returns the character boundary closest to the given x coordinate
-    /// (e.g. to handle aligning up/down arrow keys)
-    pub fn closest_index_for_x(&self, x: Pixels) -> usize {
-        let mut prev_index = 0;
-        let mut prev_x = px(0.);
-
-        for run in self.runs.iter() {
-            for glyph in run.glyphs.iter() {
-                if glyph.position.x >= x {
-                    if glyph.position.x - x < x - prev_x {
-                        return glyph.index;
-                    } else {
-                        return prev_index;
-                    }
-                }
-                prev_index = glyph.index;
-                prev_x = glyph.position.x;
+            if ch != ' ' && first_non_whitespace_ix.is_some() {
+                last_candidate_ix = Some(boundary);
+                last_candidate_x = x;
             }
         }
 
-        if self.len == 1 {
-            if x > self.width / 2. {
-                return 1;
-            } else {
-                return 0;
-            }
+        if ch != ' ' && first_non_whitespace_ix.is_none() {
+            first_non_whitespace_ix = Some(boundary);
         }
-
-        self.len
-    }
-
-    /// The x position of the character at the given index
-    pub fn x_for_index(&self, index: usize) -> Pixels {
-        for run in &self.runs {
-            for glyph in &run.glyphs {
-                if glyph.index >= index {
-                    return glyph.position.x;
-                }
-            }
-        }
-        self.width
-    }
-
-    /// The corresponding Font at the given index
-    pub fn font_id_for_index(&self, index: usize) -> Option<FontId> {
-        for run in &self.runs {
-            for glyph in &run.glyphs {
-                if glyph.index >= index {
-                    return Some(run.font_id);
-                }
-            }
-        }
-        None
-    }
 
     fn compute_wrap_boundaries(
         &self,
@@ -162,49 +106,19 @@ impl LineLayout {
                 continue;
             }
 
-            // Here is very similar to `LineWrapper::wrap_line` to determine text wrapping,
-            // but there are some differences, so we have to duplicate the code here.
-            if LineWrapper::is_word_char(ch) {
-                if prev_ch == ' ' && ch != ' ' && first_non_whitespace_ix.is_some() {
-                    last_candidate_ix = Some(boundary);
-                    last_candidate_x = x;
-                }
+            if let Some(last_candidate_ix) = last_candidate_ix.take() {
+                last_boundary = last_candidate_ix;
+                last_boundary_x = last_candidate_x;
             } else {
-                if ch != ' ' && first_non_whitespace_ix.is_some() {
-                    last_candidate_ix = Some(boundary);
-                    last_candidate_x = x;
-                }
+                last_boundary = boundary;
+                last_boundary_x = x;
             }
-
-            if ch != ' ' && first_non_whitespace_ix.is_none() {
-                first_non_whitespace_ix = Some(boundary);
-            }
-
-            let next_x = glyphs.peek().map_or(self.width, |(_, _, x)| *x);
-            let width = next_x - last_boundary_x;
-
-            if width > wrap_width && boundary > last_boundary {
-                // When used line_clamp, we should limit the number of lines.
-                if let Some(max_lines) = max_lines
-                    && boundaries.len() >= max_lines.saturating_sub(1)
-                {
-                    break;
-                }
-
-                if let Some(last_candidate_ix) = last_candidate_ix.take() {
-                    last_boundary = last_candidate_ix;
-                    last_boundary_x = last_candidate_x;
-                } else {
-                    last_boundary = boundary;
-                    last_boundary_x = x;
-                }
-                boundaries.push(last_boundary);
-            }
-            prev_ch = ch;
+            boundaries.push(last_boundary);
         }
-
-        boundaries
+        prev_ch = ch;
     }
+
+    boundaries
 }
 
 /// A line of text that has been wrapped to fit a given width
@@ -547,7 +461,7 @@ impl LineLayoutCache {
             let text = SharedString::from(text);
             let unwrapped_layout = self.layout_line::<&SharedString>(&text, font_size, runs, None);
             let wrap_boundaries = if let Some(wrap_width) = wrap_width {
-                unwrapped_layout.compute_wrap_boundaries(text.as_ref(), wrap_width, max_lines)
+                compute_wrap_boundaries(&unwrapped_layout, text.as_ref(), wrap_width, max_lines)
             } else {
                 SmallVec::new()
             };
@@ -809,14 +723,7 @@ fn apply_force_width_to_layout(layout: &mut LineLayout, force_width: Pixels) {
     }
 }
 
-/// A run of text with a single font.
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-#[expect(missing_docs)]
-pub struct FontRun {
-    pub len: usize,
-    pub font_id: FontId,
-}
-
+/// A laid out and styled line of text
 trait AsCacheKeyRef {
     fn as_cache_key_ref(&self) -> CacheKeyRef<'_>;
 }
@@ -960,7 +867,7 @@ impl AsCacheKeyRef for CacheKeyRef<'_> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::GlyphId;
+    use crate::{FontId, GlyphId, ShapedGlyph};
 
     fn glyph_at(x: f32, index: usize) -> ShapedGlyph {
         ShapedGlyph {

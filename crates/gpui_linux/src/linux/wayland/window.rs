@@ -46,7 +46,8 @@ use gpui_wgpu::{CompositorGpuHint, WgpuRenderer, WgpuSurfaceConfig, wgpu};
 #[derive(Default)]
 pub(crate) struct Callbacks {
     request_frame: Option<Box<dyn FnMut(RequestFrameOptions)>>,
-    input: Option<Box<dyn FnMut(gpui::PlatformInput) -> gpui::DispatchEventResult>>,
+    input:
+        Option<Box<dyn FnMut(gpui_platform::PlatformInput) -> gpui_platform::DispatchEventResult>>,
     active_status_change: Option<Box<dyn FnMut(bool)>>,
     hover_status_change: Option<Box<dyn FnMut(bool)>>,
     resize: Option<Box<dyn FnMut(Size<Pixels>, f32)>>,
@@ -119,7 +120,7 @@ pub struct WaylandWindowState {
     tiling: Tiling,
     window_bounds: Bounds<Pixels>,
     client: WaylandClientStatePtr,
-    handle: AnyWindowHandle,
+    handle: WindowId,
     active: bool,
     hovered: bool,
     pub(crate) force_render_after_recovery: bool,
@@ -540,7 +541,7 @@ pub struct WaylandWindowStatePtr {
 
 impl WaylandWindowState {
     pub(crate) fn new(
-        handle: AnyWindowHandle,
+        handle: WindowId,
         surface: wl_surface::WlSurface,
         surface_state: WaylandSurfaceState,
         appearance: WindowAppearance,
@@ -736,7 +737,7 @@ impl WaylandWindow {
     }
 
     pub fn new(
-        handle: AnyWindowHandle,
+        handle: WindowId,
         globals: Globals,
         gpu_context: gpui_wgpu::GpuContext,
         compositor_gpu: Option<CompositorGpuHint>,
@@ -791,7 +792,7 @@ impl WaylandWindow {
 }
 
 impl WaylandWindowStatePtr {
-    pub fn handle(&self) -> AnyWindowHandle {
+    pub fn handle(&self) -> WindowId {
         self.state.borrow().handle
     }
 
@@ -1665,7 +1666,10 @@ impl PlatformWindow for WaylandWindow {
         self.0.callbacks.borrow_mut().request_frame = Some(callback);
     }
 
-    fn on_input(&self, callback: Box<dyn FnMut(PlatformInput) -> gpui::DispatchEventResult>) {
+    fn on_input(
+        &self,
+        callback: Box<dyn FnMut(PlatformInput) -> gpui_platform::DispatchEventResult>,
+    ) {
         self.0.callbacks.borrow_mut().input = Some(callback);
     }
 
@@ -1783,7 +1787,7 @@ impl PlatformWindow for WaylandWindow {
         state.client.start_external_drag(&state.surface, payload)
     }
 
-    fn start_window_resize(&self, edge: gpui::ResizeEdge) {
+    fn start_window_resize(&self, edge: gpui_platform::ResizeEdge) {
         let state = self.borrow();
         if let Some(toplevel) = state.surface_state.toplevel() {
             toplevel.resize(
@@ -1913,7 +1917,7 @@ impl PlatformWindow for WaylandWindow {
         }
     }
 
-    fn a11y_init(&self, callbacks: gpui::A11yCallbacks) {
+    fn a11y_init(&self, callbacks: gpui_platform::A11yCallbacks) {
         let activation_handler = TrivialActivationHandler {
             callback: callbacks.activation,
         };

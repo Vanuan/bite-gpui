@@ -1,10 +1,11 @@
 use crate::{
-    AnyWindowHandle, BackgroundExecutor, ClipboardItem, CursorStyle, DevicePixels,
-    DummyKeyboardMapper, ForegroundExecutor, Keymap, NoopTextSystem, PathPromptOptions, Platform,
-    PlatformDisplay, PlatformHeadlessRenderer, PlatformKeyboardLayout, PlatformKeyboardMapper,
-    PlatformTextSystem, PromptButton, ScreenCaptureFrame, ScreenCaptureSource, ScreenCaptureStream,
-    SharedString, SourceMetadata, SystemNotification, SystemNotificationResponse, Task,
-    TestDisplay, TestWindow, ThermalState, WindowAppearance, WindowParams, size,
+    ActivityGuard, AnyWindowHandle, BackgroundExecutor, ClipboardItem, CursorStyle, DevicePixels,
+    DummyKeyboardMapper, ForegroundExecutor, Keymap, MenuCommandId, NoopTextSystem,
+    PathPromptOptions, Platform, PlatformDisplay, PlatformHeadlessRenderer, PlatformKeyboardLayout,
+    PlatformKeyboardMapper, PlatformMenu, PlatformMenuItem, PlatformTextSystem, PromptButton,
+    ScreenCaptureFrame, ScreenCaptureSource, ScreenCaptureStream, SharedString, SourceMetadata,
+    SystemNotification, SystemNotificationResponse, Task, TestDisplay, TestWindow, ThermalState,
+    WindowAppearance, WindowId, WindowParams, size,
 };
 use anyhow::Result;
 use collections::VecDeque;
@@ -388,7 +389,7 @@ impl Platform for TestPlatform {
         rx
     }
 
-    fn active_window(&self) -> Option<crate::AnyWindowHandle> {
+    fn active_window(&self) -> Option<WindowId> {
         self.active_window
             .borrow()
             .as_ref()
@@ -397,7 +398,7 @@ impl Platform for TestPlatform {
 
     fn open_window(
         &self,
-        handle: AnyWindowHandle,
+        handle: WindowId,
         params: WindowParams,
     ) -> anyhow::Result<Box<dyn crate::PlatformWindow>> {
         let renderer = self.headless_renderer_factory.as_ref().and_then(|f| f());
@@ -506,11 +507,11 @@ impl Platform for TestPlatform {
 
     fn add_recent_document(&self, _paths: &Path) {}
 
-    fn on_app_menu_action(&self, _callback: Box<dyn FnMut(&dyn crate::Action)>) {}
+    fn on_app_menu_action(&self, _callback: Box<dyn FnMut(MenuCommandId)>) {}
 
     fn on_will_open_app_menu(&self, _callback: Box<dyn FnMut()>) {}
 
-    fn on_validate_app_menu_command(&self, _callback: Box<dyn FnMut(&dyn crate::Action) -> bool>) {}
+    fn on_validate_app_menu_command(&self, _callback: Box<dyn FnMut(MenuCommandId) -> bool>) {}
 
     fn app_path(&self) -> Result<std::path::PathBuf> {
         unimplemented!()

@@ -1,11 +1,14 @@
 #![cfg_attr(target_family = "wasm", no_main)]
 
+#[path = "example_support/fonts.rs"]
+mod example_support;
+
+use gpui::application;
 use gpui::{
     Background, Bounds, ColorSpace, Context, Path, PathBuilder, Pixels, Render, TitlebarOptions,
     Window, WindowBounds, WindowOptions, canvas, div, linear_color_stop, linear_gradient, point,
     prelude::*, px, rgb, size,
 };
-use gpui_platform::application;
 
 const DEFAULT_WINDOW_WIDTH: Pixels = px(1024.0);
 const DEFAULT_WINDOW_HEIGHT: Pixels = px(768.0);
@@ -102,6 +105,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }

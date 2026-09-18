@@ -12,7 +12,9 @@
 
 use std::time::{Duration, Instant};
 
-use crate::{Axis, IsZero, Pixels, Point, TouchPhase, px};
+use crate::{Axis, GestureEvent, GestureTuning, InputEvent, IsZero, LongPressEvent, Modifiers, MouseButton, MouseDownEvent, MouseEvent, MouseUpEvent, Pixels, PlatformInput, Point, ScrollDelta, ScrollPhysics, ScrollWheelEvent, TouchDragEvent, TouchEvent, TouchId, TouchPhase, point, px, seal::Sealed};
+use scheduler::Instant;
+use smallvec::SmallVec;
 
 const SCROLL_EVENT_SEPARATION: Duration = Duration::from_millis(28);
 

@@ -2,12 +2,12 @@
 
 use std::{ops::Range, rc::Rc, time::Duration};
 
+use gpui::application;
 use gpui::{
     App, Bounds, Context, MouseDownEvent, MouseMoveEvent, MouseUpEvent, Pixels, Point, Render,
     SharedString, UniformListScrollHandle, Window, WindowBounds, WindowOptions, canvas, div, point,
     prelude::*, px, rgb, size, uniform_list,
 };
-use gpui_platform::application;
 
 const TOTAL_ITEMS: usize = 10000;
 const SCROLLBAR_THUMB_WIDTH: Pixels = px(8.);
@@ -483,6 +483,6 @@ fn main() {
 #[cfg(target_family = "wasm")]
 #[wasm_bindgen::prelude::wasm_bindgen(start)]
 pub fn start() {
-    gpui_platform::web_init();
+    gpui::web_init();
     run_example();
 }
