@@ -920,6 +920,7 @@ yawc = { git = "https://github.com/zed-industries/yawc", rev = "71a452f551cac178
 zeroize = "1.8"
 zstd = "0.11"
 
+arc-swap = "1.9.0"
 [workspace.dependencies.windows]
 version = "0.62"
 features = [
