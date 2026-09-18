@@ -13,8 +13,7 @@ use markdown::{CopyButtonVisibility, Markdown, MarkdownElement};
 use multi_buffer::Anchor;
 use ordered_float::OrderedFloat;
 use project::lsp_store::CompletionDocumentation;
-use project::{CodeAction, Completion, CompletionGroup, TaskSourceKind};
-use project::{CompletionDisplayOptions, CompletionSource};
+use project::{CodeAction, Completion, CompletionDisplayOptions, CompletionGroup, CompletionSource, TaskSourceKind};
 use task::DebugScenario;
 use task::TaskContext;
 
@@ -2019,14 +2018,14 @@ impl CodeActionsMenu {
         &mut self,
         max_size: Size<Pixels>,
         window: &mut Window,
-        _cx: &mut Context<Editor>,
+        cx: &mut Context<Editor>,
     ) -> Option<AnyElement> {
         let Some(action) = self.actions.get(self.selected_item) else {
             return None;
         };
 
         let label = action.menu_label();
-        let text_system = window.text_system();
+        let text_system = cx.text_system().clone();
         let mut line_wrapper = text_system.line_wrapper(
             window.text_style().font(),
             window.text_style().font_size.to_pixels(window.rem_size()),
