@@ -105,6 +105,8 @@ util_macros.workspace = true
 web-time.workspace = true
 ztracing.workspace = true
 
+chrono.workspace = true
+ttf-parser = "0.25"
 [target.'cfg(target_family = "wasm")'.dependencies]
 console_error_panic_hook.workspace = true
 getrandom = { version = "0.3.4", features = ["wasm_js"] }
@@ -143,3 +145,10 @@ ignored = [
     "tracing",
 ]
 ignored-paths = ["src/_ownership_and_data_flow.rs"]
+
+
+[target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dependencies]
+async-channel = { version = "2.5.0", default-features = false }
+
+[target.'cfg(not(all(target_arch = "wasm32", target_os = "unknown")))'.dependencies]
+async-channel.workspace = true
