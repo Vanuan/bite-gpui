@@ -1,8 +1,7 @@
-use crate::{
-    FontRun, LineLayout, Pixels, PlatformTextSystem, Point, ShapedRun, SharedString, Size, point,
-    px,
-};
+use crate::{FontRun, LineLayout, PlatformTextSystem, ShapedRun};
 use collections::FxHashMap;
+use gpui_shared_string::SharedString;
+use gpui_types::{Pixels, Point, Size, point, px};
 use parking_lot::{Mutex, RwLock, RwLockUpgradableReadGuard};
 use smallvec::SmallVec;
 use std::{
@@ -12,7 +11,7 @@ use std::{
     sync::Arc,
 };
 
-use super::LineWrapper;
+use crate::LineWrapper;
 
 pub(crate) fn compute_wrap_boundaries(
     layout: &LineLayout,
@@ -191,7 +190,7 @@ impl WrappedLineLayout {
 
     fn _index_for_position(
         &self,
-        mut position: Point<Pixels>,
+        position: Point<Pixels>,
         line_height: Pixels,
         closest: bool,
     ) -> Result<usize, usize> {
@@ -249,7 +248,7 @@ impl WrappedLineLayout {
     /// Returns the pixel position for the given byte index.
     pub fn position_for_index(&self, index: usize, line_height: Pixels) -> Option<Point<Pixels>> {
         let mut line_start_ix = 0;
-        let mut line_end_indices = self
+        let line_end_indices = self
             .wrap_boundaries
             .iter()
             .map(|wrap_boundary| {
@@ -277,7 +276,9 @@ impl WrappedLineLayout {
     }
 }
 
-pub(crate) struct LineLayoutCache {
+/// A per-window cache of shaped and wrapped line layouts, retaining the
+/// previous frame so reused layouts survive a frame boundary.
+pub struct LineLayoutCache {
     previous_frame: Mutex<FrameCache>,
     current_frame: RwLock<FrameCache>,
     platform_text_system: Arc<dyn PlatformTextSystem>,
@@ -302,6 +303,8 @@ struct FrameCache {
     used_wrapped_lines_by_hash: Vec<Arc<HashedCacheKey>>,
 }
 
+/// A saved position in a [`LineLayoutCache`], used to reuse or truncate the
+/// layouts produced during a frame.
 #[derive(Clone, Default)]
 pub(crate) struct LineLayoutIndex {
     lines_index: usize,
@@ -319,6 +322,7 @@ impl LineLayoutCache {
         }
     }
 
+    /// Saves the current cache position so it can be reused or truncated later.
     pub fn layout_index(&self) -> LineLayoutIndex {
         let frame = self.current_frame.read();
         LineLayoutIndex {
@@ -329,6 +333,7 @@ impl LineLayoutCache {
         }
     }
 
+    /// Re-inserts layouts from the previous frame created before `range`.
     pub fn reuse_layouts(&self, range: Range<LineLayoutIndex>) {
         let mut previous_frame = &mut *self.previous_frame.lock();
         let mut current_frame = &mut *self.current_frame.write();
@@ -368,6 +373,7 @@ impl LineLayoutCache {
         }
     }
 
+    /// Drops layouts created after `index`, keeping the cache consistent.
     pub fn truncate_layouts(&self, index: LineLayoutIndex) {
         let mut current_frame = &mut *self.current_frame.write();
         current_frame.used_lines.truncate(index.lines_index);
@@ -382,6 +388,7 @@ impl LineLayoutCache {
             .truncate(index.wrapped_lines_by_hash_index);
     }
 
+    /// Ages the current frame into the previous frame and clears the current one.
     pub fn finish_frame(&self) {
         let mut prev_frame = self.previous_frame.lock();
         let mut curr_frame = self.current_frame.write();
@@ -397,6 +404,7 @@ impl LineLayoutCache {
         curr_frame.used_wrapped_lines_by_hash.clear();
     }
 
+    /// Shapes and wraps `text`, reusing a cached layout when the inputs match.
     pub fn layout_wrapped_line<Text>(
         &self,
         text: Text,
@@ -462,6 +470,7 @@ impl LineLayoutCache {
         }
     }
 
+    /// Shapes a single line of `text`, reusing a cached layout when the inputs match.
     pub fn layout_line<Text>(
         &self,
         text: Text,

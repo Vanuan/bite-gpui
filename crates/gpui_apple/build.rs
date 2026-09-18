@@ -26,8 +26,6 @@ mod macos_build {
     fn generate_shader_bindings() -> PathBuf {
         let output_path = PathBuf::from(env::var("OUT_DIR").unwrap()).join("scene.h");
 
-        let gpui_dir = find_gpui_crate_dir();
-
         let mut config = Config {
             include_guard: Some("SCENE_H".into()),
             language: cbindgen::Language::C,
@@ -70,19 +68,20 @@ mod macos_build {
 
         let crate_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
 
-        // Source files from gpui that define types used in shaders
-        let gpui_src_paths = [
-            gpui_dir.join("src/scene.rs"),
-            gpui_dir.join("src/geometry.rs"),
-            gpui_dir.join("src/color.rs"),
-            gpui_dir.join("src/window.rs"),
-            gpui_dir.join("src/platform.rs"),
+        // Source files that define the types used in the shaders. These live in
+        // `gpui_types` and `gpui_backend` since the engine carve-out.
+        let shader_src_paths = [
+            find_sibling_crate_dir("gpui_backend").join("src/scene.rs"),
+            find_sibling_crate_dir("gpui_backend").join("src/atlas.rs"),
+            find_sibling_crate_dir("gpui_types").join("src/geometry.rs"),
+            find_sibling_crate_dir("gpui_types").join("src/color.rs"),
+            find_sibling_crate_dir("gpui_types").join("src/scene.rs"),
         ];
 
         // Source files from this crate
         let local_src_paths = [crate_dir.join("src/metal_renderer.rs")];
 
-        for src_path in gpui_src_paths.iter().chain(local_src_paths.iter()) {
+        for src_path in shader_src_paths.iter().chain(local_src_paths.iter()) {
             println!("cargo:rerun-if-changed={}", src_path.display());
             builder = builder.with_src(src_path);
         }
