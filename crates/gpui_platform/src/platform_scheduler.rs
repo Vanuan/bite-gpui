@@ -1,8 +1,9 @@
-use crate::{PlatformDispatcher, RunnableMeta};
+use crate::PlatformDispatcher;
 use async_task::Runnable;
 use chrono::{DateTime, Utc};
 use futures::channel::oneshot;
 use scheduler::Instant;
+use scheduler::RunnableMeta;
 use scheduler::{
     Clock, LocalExecutor, Priority, Scheduler, SessionId, Task, TestScheduler, Timer,
     spawn_dedicated_thread,
@@ -28,17 +29,23 @@ pub struct PlatformScheduler {
     dispatcher: Arc<dyn PlatformDispatcher>,
     clock: Arc<PlatformClock>,
     next_session_id: AtomicU16,
+    #[cfg(feature = "profiler")]
+    foreground_runnables: crate::profiler::ForegroundRunnableCounter,
 }
 
 impl PlatformScheduler {
+    /// Creates a scheduler that dispatches work through the given platform dispatcher.
     pub fn new(dispatcher: Arc<dyn PlatformDispatcher>) -> Self {
         Self {
             dispatcher: dispatcher.clone(),
             clock: Arc::new(PlatformClock { dispatcher }),
             next_session_id: AtomicU16::new(0),
+            #[cfg(feature = "profiler")]
+            foreground_runnables: crate::profiler::foreground_runnable_counter(),
         }
     }
 
+    /// Creates a foreground executor backed by this scheduler.
     pub fn foreground_executor(self: &Arc<Self>) -> LocalExecutor {
         let session_id = self.next_session_id();
         let scheduler = Arc::downgrade(self);
@@ -51,6 +58,11 @@ impl PlatformScheduler {
 
     fn next_session_id(&self) -> SessionId {
         SessionId::new(self.next_session_id.fetch_add(1, Ordering::SeqCst))
+    }
+
+    #[cfg(feature = "profiler")]
+    pub(crate) fn foreground_runnable_counter(&self) -> crate::profiler::ForegroundRunnableCounter {
+        self.foreground_runnables.clone()
     }
 }
 

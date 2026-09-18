@@ -24,7 +24,7 @@ use windows::{
 use windows_numerics::Vector2;
 
 use crate::*;
-use gpui::*;
+use gpui_platform::*;
 
 #[derive(Debug)]
 struct FontInfo {
@@ -469,7 +469,7 @@ impl DirectWriteState {
         let family = if family == SYSTEM_UI_FONT_NAME {
             system_ui_font_name
         } else {
-            gpui::font_name_with_fallbacks_shared(&family, &system_ui_font_name)
+            gpui_platform::font_name_with_fallbacks_shared(&family, &system_ui_font_name)
         };
         let fontset = unsafe { collection.GetFontSet().log_err()? };
         let font_family_h = HSTRING::from(family.as_str());
@@ -693,7 +693,7 @@ impl DirectWriteState {
         let baseline_origin_x =
             params.subpixel_variant.x as f32 / SUBPIXEL_VARIANTS_X as f32 / params.scale_factor;
         let baseline_origin_y = params.subpixel_variant.y as f32
-            / gpui::SUBPIXEL_VARIANTS_Y as f32
+            / gpui_platform::SUBPIXEL_VARIANTS_Y as f32
             / params.scale_factor;
 
         let mut rendering_mode = DWRITE_RENDERING_MODE1::default();
@@ -1932,6 +1932,18 @@ const DEFAULT_LOCALE_NAME: PCWSTR = windows::core::w!("en-US");
 #[cfg(test)]
 mod tests {
     use crate::direct_write::ClusterAnalyzer;
+    use crate::directx_devices::DirectXDevices;
+    use anyhow::Result;
+    use gpui_platform::{
+        DevicePixels, Font, PlatformTextSystem, RenderGlyphParams, Rgba, bounds, point, px, size,
+    };
+    use std::ffi::c_void;
+    use windows::Win32::Graphics::Direct3D11::{
+        D3D11_BIND_RENDER_TARGET, D3D11_RENDER_TARGET_VIEW_DESC, D3D11_RENDER_TARGET_VIEW_DESC_0,
+        D3D11_RTV_DIMENSION_TEXTURE2D, D3D11_SUBRESOURCE_DATA, D3D11_TEX2D_RTV,
+        D3D11_TEXTURE2D_DESC, D3D11_USAGE_DEFAULT,
+    };
+    use windows::Win32::Graphics::Dxgi::Common::{DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_SAMPLE_DESC};
 
     #[test]
     fn test_cluster_map() {
