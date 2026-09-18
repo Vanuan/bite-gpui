@@ -7954,6 +7954,7 @@ dependencies = [
  "etagere",
  "gpui",
  "gpui_engine",
+ "gpui_engine_default",
  "gpui_platform",
  "gpui_util",
  "itertools 0.14.0",

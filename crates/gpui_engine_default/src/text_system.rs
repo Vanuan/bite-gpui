@@ -555,7 +555,6 @@ impl TextSystem for DefaultTextSystem {
         self.missing_glyph_reporter.reset();
     }
 
-    #[cfg(any(test, feature = "test-support"))]
     fn report_missing_glyphs_in_test(&self, missing_glyphs: Vec<MissingGlyph>) {
         self.missing_glyph_reporter.report(missing_glyphs);
     }
