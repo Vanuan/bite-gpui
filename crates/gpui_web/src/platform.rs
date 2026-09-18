@@ -9,9 +9,10 @@ use futures::channel::oneshot;
 use gpui::{
     Action, AnyWindowHandle, BackgroundExecutor, ClipboardEntry, ClipboardItem, ClipboardReadError,
     ClipboardString, CursorStyle, DummyKeyboardMapper, ForegroundExecutor, GestureTuning, Image,
-    ImageFormat, Keymap, Menu, MenuItem, PathPromptOptions, Platform, PlatformDisplay,
-    PlatformGestures, PlatformKeyboardLayout, PlatformKeyboardMapper, PlatformTextSystem,
-    PlatformWindow, ScrollPhysics, Task, ThermalState, WindowAppearance, WindowKind, WindowParams,
+    ImageFormat, Keymap, Menu, MenuCommandId, MenuItem, PathPromptOptions, Platform,
+    PlatformDisplay, PlatformGestures, PlatformKeyboardLayout, PlatformKeyboardMapper, PlatformMenu,
+    PlatformMenuItem, PlatformTextSystem, PlatformWindow, ScrollPhysics, Task, ThermalState,
+    WindowAppearance, WindowId, WindowKind, WindowParams,
     popup::PopupNotSupportedError,
 };
 use gpui_wgpu::{PreparedWebGraphics, WebBackendPreference, WgpuContext, wgpu};
