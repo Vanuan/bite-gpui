@@ -45,15 +45,15 @@ use crate::InspectorElementRegistry;
 use crate::{
     Action, ActionBuildError, ActionRegistry, ActivityGuard, Any, AnyView, AnyWindowHandle,
     AppContext, Arena, ArenaBox, Asset, AssetSource, BackgroundExecutor, Bounds, ClipboardItem,
-    ClipboardReadError, CursorStyle, DispatchPhase, DisplayId, EventEmitter, ExternalDragPayload,
-    FocusHandle, FocusMap, ForegroundExecutor, FramePipeline, Global, KeyBinding, KeyContext,
-    Keymap, Keystroke, LayoutEngine, LayoutId, Menu, MenuCommandId, MenuItem, MissingGlyph,
-    OwnedMenu, OwnedMenuItem, PathPromptOptions, Pixels, Platform, PlatformDisplay,
-    PlatformKeyboardLayout, PlatformKeyboardMapper, Point, Priority, PromptBuilder, PromptButton,
-    PromptHandle, PromptLevel, Render, RenderImage, RenderablePromptHandle, Reservation,
-    ScreenCaptureSource, SharedString, StandardImmediatePipeline, SubscriberSet, Subscription,
-    SvgRenderer, SystemNotification, SystemNotificationResponse, SystemWindowTab, Task,
-    TextRenderingMode, TextSystem, ThermalState, Window, WindowAppearance, WindowButtonLayout,
+    ClipboardReadError, CursorStyle, DefaultTextSystem, DispatchPhase, DisplayId, EventEmitter,
+    ExternalDragPayload, FocusHandle, FocusMap, ForegroundExecutor, FramePipeline, Global,
+    KeyBinding, KeyContext, Keymap, Keystroke, LayoutEngine, LayoutId, Menu, MenuCommandId,
+    MenuItem, MissingGlyph, OwnedMenu, OwnedMenuItem, PathPromptOptions, Pixels, Platform,
+    PlatformDisplay, PlatformKeyboardLayout, PlatformKeyboardMapper, Point, Priority, PromptBuilder,
+    PromptButton, PromptHandle, PromptLevel, Render, RenderImage, RenderablePromptHandle,
+    Reservation, ScreenCaptureSource, SharedString, StandardImmediatePipeline, SubscriberSet,
+    Subscription, SvgRenderer, SystemNotification, SystemNotificationResponse, SystemWindowTab,
+    Task, TextRenderingMode, TextSystem, ThermalState, Window, WindowAppearance, WindowButtonLayout,
     WindowHandle, WindowHost, WindowId, WindowInvalidator,
     colors::{Colors, GlobalColors},
     hash, init_app_menus, resolve_dock_menu, resolve_menus,
@@ -565,7 +565,7 @@ enum PlatformOwnedDragState {
 pub struct App {
     pub(crate) this: Weak<AppCell>,
     pub(crate) platform: Rc<dyn Platform>,
-    text_system: Arc<TextSystem>,
+    text_system: Arc<dyn TextSystem>,
     /// Creates a fresh layout engine for each window. Injected at application
     /// construction so windows drive layout through the [`LayoutEngine`] trait
     /// without naming an implementation.
@@ -689,7 +689,7 @@ impl App {
         let foreground_journal = crate::profiler::journal::install_foreground_journal();
         let synced_animation_epoch = background_executor.now();
 
-        let text_system = Arc::new(TextSystem::new(platform.text_system()));
+        let text_system = Arc::new(DefaultTextSystem::new(platform.text_system()));
         let entities = EntityMap::new();
         let keyboard_layout = platform.keyboard_layout();
         let keyboard_mapper = platform.keyboard_mapper();
@@ -1856,8 +1856,44 @@ impl App {
     }
 
     /// Accessor for the text system.
-    pub fn text_system(&self) -> &Arc<TextSystem> {
+    pub fn text_system(&self) -> &Arc<dyn TextSystem> {
         &self.text_system
+    }
+
+    /// Invokes a callback with grapheme clusters that exhausted font fallback.
+    ///
+    /// Registering a callback replaces the previous callback and enables missing-glyph
+    /// detection. The callback runs on the foreground executor after shaping has
+    /// released its internal locks. Dropping its subscription disables detection until
+    /// another callback is registered.
+    ///
+    /// Reports are queued without blocking shaping, then deduplicated before delivery.
+    /// The bounded queue can drop reports on overflow. Dropped reports may be reported
+    /// again when the text is reshaped; no retry is scheduled automatically.
+    pub fn on_missing_glyphs(
+        &self,
+        callback: impl FnMut(&[MissingGlyph], &mut App) + 'static,
+    ) -> Subscription {
+        let registration = self.missing_glyph_callback.replace(Box::new(callback));
+
+        if let Some(mut receiver) = self.text_system.take_missing_glyph_receiver() {
+            let callback = self.missing_glyph_callback.clone();
+            self.spawn(async move |cx| {
+                while let Some(missing_glyphs) = receiver.recv().await {
+                    cx.update(|cx| callback.invoke(&missing_glyphs, cx));
+                }
+            })
+            .detach();
+        }
+        self.text_system.enable_missing_glyph_reporting();
+
+        let callback = self.missing_glyph_callback.clone();
+        let text_system = self.text_system.clone();
+        Subscription::new(move || {
+            if callback.remove(&registration) {
+                text_system.disable_missing_glyph_reporting();
+            }
+        })
     }
 
     /// Check whether a global of the given type has been assigned.
@@ -2702,6 +2738,12 @@ impl App {
         factory: Rc<dyn Fn(WindowId) -> Box<dyn FramePipeline>>,
     ) {
         self.frame_pipeline_factory = factory;
+    }
+
+    /// Replaces the text system used to shape and lay out text.
+    #[doc(hidden)]
+    pub fn set_text_system(&mut self, text_system: Arc<dyn TextSystem>) {
+        self.text_system = text_system;
     }
 
     /// Sets the arguments to pass when restarting the application.
