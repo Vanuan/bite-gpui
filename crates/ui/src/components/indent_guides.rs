@@ -1,7 +1,6 @@
 use std::{cmp::Ordering, ops::Range, rc::Rc};
 
-use gpui::{AnyElement, App, Bounds, Entity, Hsla, Point, fill, point, size};
-use gpui::{DispatchPhase, Hitbox, HitboxBehavior, MouseButton, MouseDownEvent, MouseMoveEvent};
+use gpui::{AnyElement, App, Bounds, DispatchPhase, Entity, Hitbox, HitboxBehavior, Hsla, MouseButton, MouseDownEvent, MouseMoveEvent, Point, fill, point, size};
 use smallvec::SmallVec;
 
 use crate::prelude::*;
@@ -290,7 +289,6 @@ impl Element for IndentGuidesElement {
     fn request_layout(
         &mut self,
         _id: Option<&gpui::GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         window: &mut Window,
         cx: &mut App,
     ) -> (gpui::LayoutId, Self::RequestLayoutState) {
@@ -300,7 +298,6 @@ impl Element for IndentGuidesElement {
     fn prepaint(
         &mut self,
         _id: Option<&gpui::GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         window: &mut Window,
@@ -328,7 +325,6 @@ impl Element for IndentGuidesElement {
     fn paint(
         &mut self,
         _id: Option<&gpui::GlobalElementId>,
-        _inspector_id: Option<&gpui::InspectorElementId>,
         _bounds: Bounds<Pixels>,
         _request_layout: &mut Self::RequestLayoutState,
         prepaint: &mut Self::PrepaintState,
