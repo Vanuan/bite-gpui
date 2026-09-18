@@ -1,7 +1,7 @@
 use crate::{CompositorGpuHint, WgpuAtlas, WgpuContext};
 use anyhow::{Context as _, Result};
 use bytemuck::{Pod, Zeroable};
-use gpui_backend::{
+use gpui_engine::{
     AtlasTextureId, Path, PlatformAtlas, PrimitiveBatch, Scene, SceneRenderer,
     get_gamma_correction_ratios,
 };
@@ -2204,6 +2204,7 @@ mod tests {
     use super::*;
     use gpui::{BorderStyle, ColorSpace, ContentMask, Corners, Edges, Hsla, linear_color_stop, linear_gradient};
     use gpui_backend::{MonochromeSprite, PolychromeSprite, Quad, SubpixelSprite, Underline};
+    use gpui_engine::{MonochromeSprite, PolychromeSprite, Quad, SubpixelSprite, Underline};
     use gpui_platform::{MonochromeSprite, PolychromeSprite, Quad, Shadow, SubpixelSprite, Underline};
 
     #[test]
