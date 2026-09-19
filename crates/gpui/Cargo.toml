@@ -64,6 +64,11 @@ screen-capture = [
 ]
 windows-manifest = ["dep:embed-resource"]
 profiler = ["gpui_authoring/profiler"]
+# This release spells the profiler's two histograms as features of their own.
+# The architecture folds both into `profiler`, which is what the base's
+# calls to them meant, so they forward rather than the base's manifests moving.
+input-latency-histogram = ["profiler"]
+frame-duration-histogram = ["profiler"]
 font-kit = ["dep:font-kit", "gpui_macos?/font-kit"]
 
 [lib]
