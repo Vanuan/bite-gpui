@@ -37,6 +37,8 @@ mod asset_cache;
 mod assets;
 /// The default colors used by GPUI.
 pub mod colors;
+#[cfg(feature = "profiler")]
+mod debug_overlay;
 mod element;
 mod elements;
 mod engine_layout;
@@ -104,6 +106,8 @@ pub(crate) use arena::*;
 pub use asset_cache::*;
 pub use assets::*;
 pub use ctor::ctor;
+#[cfg(feature = "profiler")]
+pub use debug_overlay::*;
 pub use element::*;
 pub use elements::*;
 pub use executor::*;
