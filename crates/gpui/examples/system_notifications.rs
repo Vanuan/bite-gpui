@@ -2,9 +2,6 @@
 
 //! Demonstrates posting, replacing, dismissing, and responding to system notifications.
 
-#[path = "example_support/fonts.rs"]
-mod example_support;
-
 use gpui::application;
 use gpui::{
     App, Bounds, Context, Div, SharedString, Stateful, SystemNotification,

@@ -1,8 +1,5 @@
 #![cfg_attr(target_family = "wasm", no_main)]
 
-#[path = "example_support/fonts.rs"]
-mod example_support;
-
 use gpui::application;
 use gpui::{App, Context, Render, Window, WindowOptions, div, img, prelude::*};
 use std::path::PathBuf;
