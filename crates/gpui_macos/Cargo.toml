@@ -66,6 +66,7 @@ uuid.workspace = true
 # The macOS test-only window implementation depends on test-only APIs from both
 # GPUI and the extracted renderer. A dependency does not inherit this crate's
 # `cfg(test)`, so dev-dependencies enable those APIs only for test builds.
+objc2-screen-capture-kit.workspace = true
 [target.'cfg(target_os = "macos")'.dev-dependencies]
 gpui = { workspace = true, features = ["test-support"] }
 gpui_apple = { workspace = true, features = ["test-support"] }

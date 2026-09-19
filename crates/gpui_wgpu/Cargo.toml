@@ -48,6 +48,7 @@ wgpu = { workspace = true, features = ["webgl"] }
 criterion.workspace = true
 naga = { version = "29.0.4", features = ["wgsl-in"] }
 
+gpui = { workspace = true, features = ["test-support"] }
 [[bench]]
 name = "layout_line"
 harness = false
