@@ -183,11 +183,15 @@ static ACTION_STATISTICS: spin::Mutex<ActionStatistics> =
 
 #[doc(hidden)]
 #[cfg(feature = "profiler")]
-pub(crate) fn update_running_action(action: &(dyn Action + 'static), cx: &mut crate::App) {
+pub(crate) fn update_running_action(
+    action: &(dyn Action + 'static),
+    cx: &mut crate::App,
+) -> &'static str {
     let now = Instant::now();
     let action = action.type_id();
     let action = cx.actions.try_resolve_action(&action).unwrap_or("un-named");
     ACTION_STATISTICS.lock().update_running_action(action, now);
+    action
 }
 
 #[doc(hidden)]
