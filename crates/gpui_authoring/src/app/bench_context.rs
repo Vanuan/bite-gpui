@@ -13,9 +13,8 @@ use crate::{
     AnyView, AnyWindowHandle, App, AppCell, AppContext, BackgroundExecutor, BenchDispatcher, Bounds,
     BoundsExt, Context, Empty, Entity, EntityId, Focusable, ForegroundExecutor, Global, Platform,
     PlatformDispatcherExt, PlatformHeadlessRenderer, PlatformTextSystem, Render, Reservation,
-    SceneRenderer, Task,
-    TestPlatform, ThreadedDispatcher, VisualContext, Window, WindowBounds, WindowHandle,
-    WindowOptions,
+    SceneRenderer, Task, TestPlatform, TestWindow, ThreadedDispatcher, VisualContext, Window,
+    WindowBounds, WindowHandle, WindowOptions,
     app::GpuiBorrow,
     profiler::{self, FrameTiming, FrameTimingCollector},
 };
