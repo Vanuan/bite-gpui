@@ -202,7 +202,7 @@ impl WrapMap {
 
             let text_system = cx.text_system();
             let (font, font_size) = self.font_with_size.clone();
-            let mut line_wrapper = text_system.line_wrapper(font, font_size);
+            let mut line_wrapper = text_system.clone().line_wrapper(font, font_size);
             let tab_snapshot = new_snapshot.tab_snapshot.clone();
             let total_rows = tab_snapshot.max_point().row() as usize + 1;
             let range = TabPoint::zero()..tab_snapshot.max_point();
