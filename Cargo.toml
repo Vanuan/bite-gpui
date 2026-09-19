@@ -907,7 +907,6 @@ walkdir = "2.5"
 wasm-encoder = "0.252"
 wasmparser = "0.252"
 wasmtime = { version = "36", default-features = false, features = [
-    "anyhow",
     "async",
     "demangle",
     "runtime",
