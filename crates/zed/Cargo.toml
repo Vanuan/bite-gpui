@@ -120,6 +120,7 @@ gpui = { workspace = true, features = [
     "input-latency-histogram",
     "profiler",
     "screen-capture",
+    "platform",
     "font-kit",
     "wayland",
     "x11",
