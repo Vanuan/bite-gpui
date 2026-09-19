@@ -16,6 +16,11 @@ multithreaded = ["dep:wasm_thread", "scheduler/wasm-threads"]
 [lib]
 path = "src/gpui_web.rs"
 
+[dependencies]
+unicode-properties = "=0.1.3"
+unicode-script = "0.5.7"
+unicode-segmentation = "1.10"
+
 [target.'cfg(target_family = "wasm")'.dependencies]
 gpui_engine.workspace = true
 gpui_platform.workspace = true
@@ -56,11 +61,13 @@ web-sys = { version = "0.3", features = [
     "Element",
     "EventTarget",
     "File",
+    "FocusOptions",
     "HtmlCanvasElement",
     "HtmlElement",
     "HtmlTextAreaElement",
     "IdleDeadline",
     "IdleRequestOptions",
+    "ImageData",
     "InputEvent",
     "KeyboardEvent",
     "Location",
@@ -68,6 +75,8 @@ web-sys = { version = "0.3", features = [
     "MediaQueryListEvent",
     "MouseEvent",
     "Navigator",
+    "OffscreenCanvas",
+    "OffscreenCanvasRenderingContext2d",
     "PointerEvent",
     "ReadableStream",
     "ReadableStreamDefaultReader",
@@ -79,6 +88,7 @@ web-sys = { version = "0.3", features = [
     "ResizeObserverOptions",
     "Screen",
     "Storage",
+    "TextMetrics",
     "VisualViewport",
     "Headers",
     "Request",
@@ -90,16 +100,10 @@ web-sys = { version = "0.3", features = [
     "Window",
 ] }
 
-[package.metadata.cargo-shear]
-ignored = ["scheduler"]
-
-
-[dependencies]
-unicode-properties = "=0.1.3"
-unicode-script = "0.5.7"
-unicode-segmentation = "1.10"
-
 [dev-dependencies]
 anyhow.workspace = true
 gpui.workspace = true
 smallvec.workspace = true
+
+[package.metadata.cargo-shear]
+ignored = ["scheduler"]
