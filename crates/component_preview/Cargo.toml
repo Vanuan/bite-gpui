@@ -50,7 +50,6 @@ ui_input.workspace = true
 uuid.workspace = true
 workspace.workspace = true
 
-gpui_platform = { workspace = true, features = ["screen-capture", "font-kit", "wayland", "x11"] }
 
 [[example]]
 name = "component_preview"
