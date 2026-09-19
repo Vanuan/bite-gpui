@@ -20,7 +20,7 @@ env_logger.workspace = true
 extension.workspace = true
 futures.workspace = true
 fs.workspace = true
-gpui_platform.workspace = true
+gpui = { workspace = true, features = ["platform"] }
 language.workspace = true
 log.workspace = true
 reqwest_client.workspace = true
