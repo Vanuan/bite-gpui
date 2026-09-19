@@ -2203,6 +2203,8 @@ dependencies = [
  "cexpr",
  "clang-sys",
  "itertools 0.11.0",
+ "log",
+ "prettyplease",
  "proc-macro2",
  "quote",
  "regex",
@@ -6151,7 +6153,7 @@ dependencies = [
  "extension",
  "fs",
  "futures 0.3.32",
- "gpui_platform",
+ "gpui",
  "http_client",
  "language",
  "log",
@@ -7521,12 +7523,11 @@ version = "0.2.2"
 dependencies = [
  "anyhow",
  "backtrace",
- "bindgen 0.71.1",
- "bitflags 2.13.1",
- "chrono",
+ "bindgen 0.72.1",
  "collections",
  "embed-resource",
  "env_logger 0.11.8",
+ "futures 0.3.32",
  "gpui_authoring",
  "gpui_linux",
  "gpui_macos",
@@ -7548,11 +7549,9 @@ dependencies = [
  "serde_json",
  "unicode-segmentation",
  "wasm-bindgen",
- "web-time",
- "windows 0.61.3",
+ "web-sys",
  "zed-font-kit",
  "zed-scap",
- "ztracing",
 ]
 
 [[package]]
@@ -7576,6 +7575,7 @@ dependencies = [
  "log",
  "metal",
  "objc",
+ "objc2 0.6.4",
  "parking_lot",
 ]
 
@@ -7598,7 +7598,7 @@ dependencies = [
  "derive_more",
  "env_logger 0.11.8",
  "etagere",
- "futures 0.3.34",
+ "futures 0.3.32",
  "futures-concurrency",
  "getrandom 0.3.4",
  "gpui_engine",
@@ -7648,7 +7648,7 @@ dependencies = [
  "wasm-bindgen",
  "web-sys",
  "web-time",
- "windows 0.62.2",
+ "windows 0.61.3",
  "ztracing",
 ]
 
@@ -7679,7 +7679,8 @@ dependencies = [
  "anyhow",
  "async-channel 2.5.0",
  "collections",
- "futures 0.3.34",
+ "derive_more",
+ "futures 0.3.32",
  "gpui_engine",
  "gpui_shared_string",
  "gpui_types",
@@ -7773,6 +7774,7 @@ dependencies = [
  "objc2 0.6.4",
  "objc2-app-kit 0.3.2",
  "objc2-foundation 0.3.2",
+ "objc2-screen-capture-kit",
  "objc2-user-notifications",
  "parking_lot",
  "pathfinder_geometry",
@@ -7823,7 +7825,7 @@ dependencies = [
  "core-video",
  "derive_more",
  "etagere",
- "futures 0.3.34",
+ "futures 0.3.32",
  "gpui_engine",
  "gpui_shared_string",
  "gpui_types",
@@ -7842,11 +7844,11 @@ dependencies = [
  "serde_json",
  "slotmap",
  "smallvec",
- "strum 0.28.0",
+ "strum 0.27.2",
  "thiserror 2.0.17",
  "uuid",
  "waker-fn",
- "windows 0.62.2",
+ "windows 0.61.3",
  "zed-scap",
 ]
 
@@ -7919,6 +7921,10 @@ dependencies = [
  "parking_lot",
  "raw-window-handle",
  "scheduler",
+ "smallvec",
+ "unicode-properties",
+ "unicode-script",
+ "unicode-segmentation",
  "uuid",
  "wasm-bindgen",
  "wasm-bindgen-futures",
@@ -7968,7 +7974,8 @@ dependencies = [
  "dunce",
  "etagere",
  "futures 0.3.32",
- "gpui",
+ "gpui_engine",
+ "gpui_platform",
  "gpui_util",
  "image",
  "itertools 0.14.0",
@@ -10670,7 +10677,6 @@ dependencies = [
  "env_logger 0.11.8",
  "fs",
  "gpui",
- "gpui_platform",
  "html5ever 0.27.0",
  "image",
  "indoc",
@@ -11882,7 +11888,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d49e936b501e5c5bf01fda3a9452ff86dc3ea98ad5f283e1455153142d97518c"
 dependencies = [
  "bitflags 2.13.1",
- "objc2 0.6.3",
+ "block2 0.6.2",
+ "objc2 0.6.4",
  "objc2-core-foundation",
  "objc2-foundation 0.3.2",
 ]
@@ -12088,17 +12095,6 @@ dependencies = [
  "bitflags 2.13.1",
  "block2 0.6.2",
  "objc2 0.6.4",
- "objc2-foundation 0.3.2",
-]
-
-[[package]]
-name = "objc2-open-directory"
-version = "0.3.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb82bed227edf5201dfedf072bba4015a33d3d4a98519837295a90f0a23f676d"
-dependencies = [
- "objc2 0.6.4",
- "objc2-core-foundation",
  "objc2-foundation 0.3.2",
 ]
 
