@@ -418,9 +418,9 @@ impl<V: View> Element for ViewElement<V> {
                             let paint_start = window.paint_index();
 
                             if let Some(element) = element {
-                                let refreshing = mem::replace(&mut window.refreshing, true);
+                                let refreshing = mem::replace(&mut window.core.refreshing, true);
                                 element.paint(window, cx);
-                                window.refreshing = refreshing;
+                                window.core.refreshing = refreshing;
                             } else {
                                 window.reuse_paint(element_state.paint_range.clone());
                             }
@@ -557,18 +557,6 @@ pub(crate) fn paint_view(
         } else {
             element.as_mut().unwrap().paint(window, cx);
         }
-    });
-}
-
-#[inline(never)]
-fn paint_component(
-    name: &'static str,
-    element: &mut Option<AnyElement>,
-    window: &mut Window,
-    cx: &mut App,
-) {
-    window.with_id(ElementId::Name(name.into()), |window| {
-        element.as_mut().unwrap().paint(window, cx);
     });
 }
 
