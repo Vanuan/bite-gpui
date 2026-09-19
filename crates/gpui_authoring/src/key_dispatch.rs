@@ -650,245 +650,6 @@ mod tests {
         )
     }
 
-    struct PendingInputTestView {
-        focus_handle: FocusHandle,
-        action_count: Rc<Cell<usize>>,
-        secondary_action_count: Rc<Cell<usize>>,
-    }
-
-    #[derive(Clone)]
-    struct PendingTextInputTestView {
-        focus_handle: FocusHandle,
-        text: Rc<RefCell<String>>,
-        action_count: Rc<Cell<usize>>,
-    }
-
-    impl PendingTextInputTestView {
-        fn new(cx: &mut Context<Self>) -> Self {
-            Self {
-                focus_handle: cx.focus_handle(),
-                text: Rc::default(),
-                action_count: Rc::default(),
-            }
-        }
-    }
-
-    impl Element for PendingTextInputTestView {
-        type RequestLayoutState = ();
-        type PrepaintState = ();
-
-        fn id(&self) -> Option<ElementId> {
-            Some("pending-text-input-test".into())
-        }
-
-        fn source_location(&self) -> Option<&'static panic::Location<'static>> {
-            None
-        }
-
-        fn request_layout(
-            &mut self,
-            _: Option<&GlobalElementId>,
-            window: &mut Window,
-            cx: &mut App,
-        ) -> (LayoutId, Self::RequestLayoutState) {
-            (window.request_layout(Style::default(), [], cx), ())
-        }
-
-        fn prepaint(
-            &mut self,
-            _: Option<&GlobalElementId>,
-            _: Bounds<Pixels>,
-            _: &mut Self::RequestLayoutState,
-            window: &mut Window,
-            cx: &mut App,
-        ) -> Self::PrepaintState {
-            window.set_focus_handle(&self.focus_handle, cx);
-        }
-
-        fn paint(
-            &mut self,
-            _: Option<&GlobalElementId>,
-            _: Bounds<Pixels>,
-            _: &mut Self::RequestLayoutState,
-            _: &mut Self::PrepaintState,
-            window: &mut Window,
-            cx: &mut App,
-        ) {
-            let mut key_context = KeyContext::default();
-            key_context.add("Terminal");
-            window.set_key_context(key_context);
-            window.handle_input(&self.focus_handle, self.clone(), cx);
-            let action_count = self.action_count.clone();
-            window.on_action(
-                std::any::TypeId::of::<TestAction>(),
-                move |_, phase, _, _| {
-                    if phase == DispatchPhase::Bubble {
-                        action_count.set(action_count.get() + 1);
-                    }
-                },
-            );
-        }
-    }
-
-    impl IntoElement for PendingTextInputTestView {
-        type Element = Self;
-
-        fn into_element(self) -> Self::Element {
-            self
-        }
-    }
-
-    impl InputHandler for PendingTextInputTestView {
-        fn selected_text_range(
-            &mut self,
-            _: bool,
-            _: &mut Window,
-            _: &mut App,
-        ) -> Option<UTF16Selection> {
-            None
-        }
-
-        fn marked_text_range(&mut self, _: &mut Window, _: &mut App) -> Option<Range<usize>> {
-            None
-        }
-
-        fn text_for_range(
-            &mut self,
-            _: Range<usize>,
-            _: &mut Option<Range<usize>>,
-            _: &mut Window,
-            _: &mut App,
-        ) -> Option<String> {
-            None
-        }
-
-        fn replace_text_in_range(
-            &mut self,
-            replacement_range: Option<Range<usize>>,
-            text: &str,
-            _: &mut Window,
-            _: &mut App,
-        ) {
-            if replacement_range.is_some() {
-                unimplemented!()
-            }
-            self.text.borrow_mut().push_str(text)
-        }
-
-        fn replace_and_mark_text_in_range(
-            &mut self,
-            replacement_range: Option<Range<usize>>,
-            new_text: &str,
-            _: Option<Range<usize>>,
-            _: &mut Window,
-            _: &mut App,
-        ) {
-            if replacement_range.is_some() {
-                unimplemented!()
-            }
-            self.text.borrow_mut().push_str(new_text)
-        }
-
-        fn unmark_text(&mut self, _: &mut Window, _: &mut App) {}
-
-        fn prefers_ime_for_printable_keys(&mut self, _: &mut Window, _: &mut App) -> bool {
-            true
-        }
-
-        fn bounds_for_range(
-            &mut self,
-            _: Range<usize>,
-            _: &mut Window,
-            _: &mut App,
-        ) -> Option<Bounds<Pixels>> {
-            None
-        }
-
-        fn character_index_for_point(
-            &mut self,
-            _: Point<Pixels>,
-            _: &mut Window,
-            _: &mut App,
-        ) -> Option<usize> {
-            None
-        }
-    }
-
-    impl Render for PendingTextInputTestView {
-        fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-            self.clone()
-        }
-    }
-
-    struct PendingInputTimeoutPauseOwner;
-
-    impl Render for PendingInputTestView {
-        fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
-            use crate::{InteractiveElement as _, Styled as _};
-            let action_count = self.action_count.clone();
-            let secondary_action_count = self.secondary_action_count.clone();
-            crate::div()
-                .key_context("Terminal")
-                .track_focus(&self.focus_handle)
-                .size_full()
-                .on_action(move |_: &TestAction, _, _| {
-                    action_count.set(action_count.get() + 1);
-                })
-                .on_action(move |_: &SecondaryTestAction, _, _| {
-                    secondary_action_count.set(secondary_action_count.get() + 1);
-                })
-        }
-    }
-
-    fn setup_pending_input_test(
-        cx: &mut TestAppContext,
-        bindings: impl IntoIterator<Item = KeyBinding>,
-    ) -> (&mut VisualTestContext, Rc<Cell<usize>>, Rc<Cell<usize>>) {
-        cx.update(|cx| cx.bind_keys(bindings));
-
-        let action_count = Rc::new(Cell::new(0));
-        let secondary_action_count = Rc::new(Cell::new(0));
-        let (view, cx) = cx.add_window_view(|_, cx| PendingInputTestView {
-            focus_handle: cx.focus_handle(),
-            action_count: action_count.clone(),
-            secondary_action_count: secondary_action_count.clone(),
-        });
-        let focus_handle = cx.update(|_, cx| view.read(cx).focus_handle.clone());
-        cx.update(|window, cx| {
-            window.focus(&focus_handle, cx);
-            window.activate_window();
-        });
-
-        (cx, action_count, secondary_action_count)
-    }
-
-    fn setup_pending_input_timeout_test(
-        cx: &mut TestAppContext,
-    ) -> (&mut VisualTestContext, Rc<Cell<usize>>, Rc<Cell<usize>>) {
-        setup_pending_input_test(
-            cx,
-            [
-                KeyBinding::new("ctrl-b", TestAction, Some("Terminal")),
-                KeyBinding::new("ctrl-b h", SecondaryTestAction, Some("Terminal")),
-                KeyBinding::new("ctrl-b h j", TestAction, Some("Terminal")),
-            ],
-        )
-    }
-
-    fn query_prefers_ime_for_printable_keys(cx: &mut VisualTestContext) -> Option<bool> {
-        let mut platform_window = cx.test_window(cx.window_handle());
-        let mut input_handler = platform_window.take_input_handler()?;
-        let prefers_ime = input_handler.query_prefers_ime_for_printable_keys();
-        platform_window.set_input_handler(input_handler);
-        Some(prefers_ime)
-    }
-
-    fn simulate_pending_binding(cx: &mut VisualTestContext) {
-        cx.simulate_modifiers_change(crate::Modifiers::control());
-        cx.simulate_keystrokes("ctrl-b");
-        cx.simulate_modifiers_change(crate::Modifiers::default());
-    }
-
     #[test]
     fn test_keybinding_for_action_bounds() {
         let tree = test_dispatch_tree(vec![KeyBinding::new(
@@ -1303,7 +1064,6 @@ mod tests {
             fn request_layout(
                 &mut self,
                 _: Option<&GlobalElementId>,
-                _: Option<&InspectorElementId>,
                 window: &mut Window,
                 cx: &mut App,
             ) -> (LayoutId, Self::RequestLayoutState) {
@@ -1312,7 +1072,6 @@ mod tests {
             fn prepaint(
                 &mut self,
                 _: Option<&GlobalElementId>,
-                _: Option<&InspectorElementId>,
                 _: Bounds<Pixels>,
                 _: &mut Self::RequestLayoutState,
                 window: &mut Window,
@@ -1323,7 +1082,6 @@ mod tests {
             fn paint(
                 &mut self,
                 _: Option<&GlobalElementId>,
-                _: Option<&InspectorElementId>,
                 _: Bounds<Pixels>,
                 _: &mut Self::RequestLayoutState,
                 _: &mut Self::PrepaintState,

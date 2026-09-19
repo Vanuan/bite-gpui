@@ -86,9 +86,9 @@ pub fn current_platform(headless: bool) -> Rc<dyn Platform> {
     }
 }
 
-/// Returns a new [`HeadlessRenderer`] for the current platform, if available.
-#[cfg(feature = "test-support")]
-pub fn current_headless_renderer() -> Option<Box<dyn gpui::PlatformHeadlessRenderer>> {
+/// Returns a new [`crate::SceneRenderer`] for the current platform, if available.
+#[cfg(any(feature = "bench-support", feature = "test-support"))]
+pub fn current_headless_renderer() -> Option<Box<dyn crate::SceneRenderer>> {
     #[cfg(target_os = "macos")]
     {
         Some(Box::new(
