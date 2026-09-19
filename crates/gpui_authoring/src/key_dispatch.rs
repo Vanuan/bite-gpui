@@ -1220,8 +1220,8 @@ mod tests {
         let prefers_ime_after_blur = {
             let mut platform_window = cx.test_window(cx.window_handle());
             let mut input_handler = platform_window.take_input_handler();
-            cx.update(|window, cx| {
-                window.blur(cx);
+            cx.update(|window, _| {
+                window.blur();
                 assert!(!window.has_pending_keystrokes());
                 assert!(window.pending_input_keystrokes().is_none());
             });

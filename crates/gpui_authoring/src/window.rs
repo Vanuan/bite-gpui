@@ -2537,9 +2537,7 @@ impl Window<'_> {
     }
 
     /// Remove focus from all elements within this context's window.
-    pub fn blur(&mut self, cx: &mut App) {
-        self.clear_pending_keystrokes(cx);
-
+    pub fn blur(&mut self) {
         if !self.core.focus_enabled {
             return;
         }
@@ -2552,8 +2550,8 @@ impl Window<'_> {
     }
 
     /// Blur the window and don't allow anything in it to be focused again.
-    pub fn disable_focus(&mut self, cx: &mut App) {
-        self.blur(cx);
+    pub fn disable_focus(&mut self) {
+        self.blur();
         self.core.focus_enabled = false;
     }
 
@@ -7334,7 +7332,7 @@ impl Window<'_> {
                 }
             }
             accesskit::Action::Blur => {
-                self.blur(cx);
+                self.blur();
             }
             _ => {
                 log::debug!(

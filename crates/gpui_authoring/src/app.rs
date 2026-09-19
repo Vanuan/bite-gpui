@@ -47,12 +47,13 @@ use crate::{
     ExternalDragPayload, FocusHandle, FocusMap, ForegroundExecutor, FramePipeline, Global,
     KeyBinding, KeyContext, Keymap, Keystroke, LayoutEngine, LayoutId, Menu, MenuCommandId,
     MenuItem, MissingGlyph, OwnedMenu, OwnedMenuItem, PathPromptOptions, Pixels, Platform,
-    PlatformDisplay, PlatformKeyboardLayout, PlatformKeyboardMapper, Point, Priority, PromptBuilder,
-    PromptButton, PromptHandle, PromptLevel, Render, RenderImage, RenderablePromptHandle,
-    Reservation, ScreenCaptureSource, SharedString, StandardImmediatePipeline, SubscriberSet,
-    Subscription, SvgRenderer, SystemNotification, SystemNotificationResponse, SystemWindowTab,
-    Task, TextRenderingMode, TextSystem, ThermalState, Window, WindowAppearance, WindowButtonLayout,
-    WindowHandle, WindowHost, WindowId, WindowInvalidator,
+    PlatformDisplay, PlatformKeyboardLayout, PlatformKeyboardMapper, Point, Priority,
+    PromptBuilder, PromptButton, PromptHandle, PromptLevel, Render, RenderImage,
+    RenderablePromptHandle, Reservation, ScreenCaptureSource, SharedString,
+    StandardImmediatePipeline, SubscriberSet, Subscription, SvgRenderer, SystemNotification,
+    SystemNotificationResponse, SystemWindowTab, Task, TextRenderingMode, TextSystem, ThermalState,
+    Window, WindowAppearance, WindowButtonLayout, WindowHandle, WindowHost, WindowId,
+    WindowInvalidator,
     colors::{Colors, GlobalColors},
     hash, init_app_menus, resolve_dock_menu, resolve_menus,
 };
@@ -1796,9 +1797,9 @@ impl App {
                 if focus.ref_count.load(SeqCst) == 0 {
                     for window_handle in self.windows() {
                         window_handle
-                            .update(self, |_, window, cx| {
+                            .update(self, |_, window, _cx| {
                                 if window.core.focus == Some(handle_id) {
-                                    window.blur(cx);
+                                    window.blur();
                                 }
                             })
                             .unwrap();
