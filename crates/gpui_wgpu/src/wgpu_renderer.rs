@@ -2203,9 +2203,8 @@ impl RenderingParameters {
 mod tests {
     use super::*;
     use gpui::{BorderStyle, ColorSpace, ContentMask, Corners, Edges, Hsla, linear_color_stop, linear_gradient};
-    use gpui_backend::{MonochromeSprite, PolychromeSprite, Quad, SubpixelSprite, Underline};
     use gpui_engine::{MonochromeSprite, PolychromeSprite, Quad, SubpixelSprite, Underline};
-    use gpui_platform::{MonochromeSprite, PolychromeSprite, Quad, Shadow, SubpixelSprite, Underline};
+    use gpui_platform::Shadow;
 
     #[test]
     fn webgl_shader_is_valid_wgsl_without_storage_buffers() {

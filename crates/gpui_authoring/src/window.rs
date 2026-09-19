@@ -9872,14 +9872,14 @@ mod tests {
             canvas(
                 |_, _, _| {},
                 move |_, _, window, _| {
-                    window.content_mask_stack.push(ContentMask {
+                    window.frame_state.content_mask_stack.push(ContentMask {
                         bounds: Bounds::from_corners(
                             point(px(-1000.), px(-1000.)),
                             point(px(1000.), px(1000.)),
                         ),
                     });
                     paint(window);
-                    window.content_mask_stack.pop();
+                    window.frame_state.content_mask_stack.pop();
                 },
             )
             .size_full()
@@ -9898,10 +9898,13 @@ mod tests {
         }
     }
 
-    fn paint_test_underlines(window: &mut Window, paint: impl FnOnce(&mut Window)) -> &[Underline] {
-        window.next_frame.scene.clear();
+    fn paint_test_underlines<'a>(
+        window: &'a mut Window<'_>,
+        paint: impl FnOnce(&mut Window),
+    ) -> &'a [Underline] {
+        window.frame_state.next_frame.scene.clear();
         paint(window);
-        &window.next_frame.scene.underlines
+        &window.frame_state.next_frame.scene.underlines
     }
 
     fn assert_same_underline_geometry(actual: &Underline, expected: &Underline) {
@@ -9975,6 +9978,7 @@ mod inspector_tests {
                 window.draw(cx).clear(cx);
                 assert_eq!(child_widths.borrow().as_slice(), &[px(10.); 3]);
                 let path = window
+                    .frame_state
                     .rendered_frame
                     .next_inspector_instance_ids
                     .iter()
@@ -9985,11 +9989,12 @@ mod inspector_tests {
                     instance_id: 1,
                 };
                 let position = window
+                    .frame_state
                     .rendered_frame
                     .hitboxes
                     .iter()
                     .find(|hitbox| {
-                        window.rendered_frame.inspector_hitboxes.get(&hitbox.id)
+                        window.frame_state.rendered_frame.inspector_hitboxes.get(&hitbox.id)
                             == Some(&selected_id)
                     })
                     .expect("middle sibling is pickable")
@@ -10018,6 +10023,7 @@ mod inspector_tests {
                 assert!(!window.is_inspector_picking(cx));
                 assert_eq!(
                     window
+                        .core
                         .inspector
                         .as_ref()
                         .expect("open inspector")
@@ -10100,7 +10106,7 @@ mod inspector_tests {
                     .as_slice(),
                 &[px(10.); 3]
             );
-            for frame in [&window.rendered_frame, &window.next_frame] {
+            for frame in [&window.frame_state.rendered_frame, &window.frame_state.next_frame] {
                 assert_eq!(frame.next_inspector_instance_ids.capacity(), 0);
                 assert_eq!(frame.inspector_hitboxes.capacity(), 0);
             }
