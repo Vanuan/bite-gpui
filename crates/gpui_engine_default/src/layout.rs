@@ -13,11 +13,7 @@ use gpui_types::{
     round_to_device_pixel, size,
 };
 use taffy::{TaffyTree, TraversePartialTree as _, tree::NodeId};
-
-#[cfg(feature = "stacker")]
-type StackSafe<T> = stacksafe::StackSafe<T>;
-#[cfg(not(feature = "stacker"))]
-type StackSafe<T> = T;
+use stacksafe::{StackSafe, stacksafe};
 
 type NodeMeasureFn = StackSafe<BoxedMeasureFn>;
 
@@ -97,7 +93,6 @@ impl TaffyLayoutEngine {
         taffy_style: taffy::style::Style,
         measure: BoxedMeasureFn,
     ) -> LayoutId {
-        #[cfg(feature = "stacker")]
         let measure = StackSafe::new(measure);
 
         let node = self
@@ -188,7 +183,7 @@ impl TaffyLayoutEngine {
 
     /// Computes the layout of `id` within `available_space`, invoking stored
     /// measure callbacks with `context`.
-    #[cfg_attr(feature = "stacker", stacksafe::stacksafe)]
+    #[stacksafe]
     pub fn compute_layout(
         &mut self,
         id: LayoutId,

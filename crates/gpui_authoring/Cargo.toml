@@ -41,7 +41,6 @@ bench = ["bench-support"]
 inspector = ["gpui_macros/inspector"]
 leak-detection = ["backtrace"]
 profiler = ["dep:hdrhistogram", "gpui_platform/profiler"]
-stacker = ["dep:stacksafe", "gpui_engine_default/stacker"]
 
 [lib]
 path = "src/gpui_authoring.rs"
@@ -92,7 +91,7 @@ serde_json.workspace = true
 slotmap.workspace = true
 smallvec.workspace = true
 async-channel.workspace = true
-stacksafe = { workspace = true, optional = true }
+stacksafe.workspace = true
 strum.workspace = true
 sum_tree.workspace = true
 thiserror.workspace = true
