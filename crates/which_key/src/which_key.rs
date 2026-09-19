@@ -3,7 +3,7 @@
 mod which_key_modal;
 mod which_key_settings;
 
-use gpui::{App, Keystroke};
+use gpui::{App, KeybindingKeystroke, Keystroke, PlatformKeyboardMapper, SharedString, Window};
 use settings::Settings;
 use std::{sync::LazyLock, time::Duration};
 use util::ResultExt;
