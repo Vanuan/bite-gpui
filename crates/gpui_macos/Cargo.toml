@@ -69,7 +69,6 @@ gpui_apple.workspace = true
 objc2-screen-capture-kit.workspace = true
 [target.'cfg(target_os = "macos")'.build-dependencies]
 cbindgen.workspace = true
-gpui.workspace = true
 
 # When this crate is itself being tested (cargo test -p gpui_macos), its own
 # cfg(test) flag enables impls of test-only traits like PlatformHeadlessRenderer
