@@ -30,9 +30,6 @@
 //!     - "2. Run tests"
 //!     - "3. Ship it"
 
-#[path = "example_support/fonts.rs"]
-mod example_support;
-
 use gpui::application;
 use gpui::{
     AccessibleAction, App, Bounds, Context, FocusHandle, KeyBinding, Role, SharedString, Toggled,

@@ -7,9 +7,6 @@
 //! Run the app: cargo run -p gpui --example testing
 //! Run tests:   cargo test -p gpui --example testing --features test-support
 
-#[path = "example_support/fonts.rs"]
-mod example_support;
-
 use gpui::application;
 use gpui::{
     App, Bounds, Context, FocusHandle, Focusable, Render, Task, Window, WindowBounds,

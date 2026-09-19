@@ -226,7 +226,7 @@ impl<T> PriorityQueueReceiver<T> {
     }
 
     /// Returns the number of queued elements across all priorities.
-    pub(crate) fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         let queues = self.state.queues.lock();
         queues.high_priority.len() + queues.medium_priority.len() + queues.low_priority.len()
     }
@@ -405,7 +405,7 @@ mod tests {
 
     #[test]
     fn all_tasks_get_yielded() {
-        let (tx, mut rx) = PriorityQueueReceiver::new();
+        let (tx, rx) = PriorityQueueReceiver::new();
         tx.send(Priority::Medium, 20).unwrap();
         tx.send(Priority::High, 30).unwrap();
         tx.send(Priority::Low, 10).unwrap();
