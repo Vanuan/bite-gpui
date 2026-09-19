@@ -19,405 +19,81 @@ use taffy::{
     prelude::{max_content, min_content},
 };
 
-type NodeMeasureFn = StackSafe<
-    Box<
-        dyn FnMut(
-            Size<Option<Pixels>>,
-            Size<AvailableSpace>,
-            &mut Window,
-            &mut App,
-        ) -> Size<Pixels>,
-    >,
->;
-
-struct NodeContext {
-    measure: NodeMeasureFn,
-}
-pub struct TaffyLayoutEngine {
-    taffy: TaffyTree<NodeContext>,
-    absolute_layout_bounds: FxHashMap<LayoutId, Bounds<Pixels>>,
-    /// Unrounded absolute border-box top-left per-node coordinate in device pixels.
-    absolute_outer_origins: FxHashMap<LayoutId, Point<f32>>,
-    computed_layouts: FxHashSet<LayoutId>,
-    layout_bounds_scratch_space: Vec<LayoutId>,
-}
-
-const EXPECT_MESSAGE: &str = "we should avoid taffy layout errors by construction if possible";
-
-impl TaffyLayoutEngine {
-    pub fn new() -> Self {
-        let mut taffy = TaffyTree::new();
-        taffy.disable_rounding();
-        TaffyLayoutEngine {
-            taffy,
-            absolute_layout_bounds: FxHashMap::default(),
-            absolute_outer_origins: FxHashMap::default(),
-            computed_layouts: FxHashSet::default(),
-            layout_bounds_scratch_space: Vec::new(),
-        }
-    }
-
-    pub fn clear(&mut self) {
-        self.taffy.clear();
-        self.absolute_layout_bounds.clear();
-        self.absolute_outer_origins.clear();
-        self.computed_layouts.clear();
-    }
-
-    pub fn request_layout(
-        &mut self,
-        style: Style,
-        rem_size: Pixels,
-        scale_factor: f32,
-        children: &[LayoutId],
-    ) -> LayoutId {
-        let taffy_style = style.to_taffy(rem_size, scale_factor);
-
-        if children.is_empty() {
-            self.taffy
-                .new_leaf(taffy_style)
-                .expect(EXPECT_MESSAGE)
-                .into()
-        } else {
-            self.taffy
-                // This is safe because LayoutId is repr(transparent) to taffy::tree::NodeId.
-                .new_with_children(taffy_style, LayoutId::to_taffy_slice(children))
-                .expect(EXPECT_MESSAGE)
-                .into()
-        }
-    }
-
-    pub fn request_measured_layout(
-        &mut self,
-        style: Style,
-        rem_size: Pixels,
-        scale_factor: f32,
-        measure: impl FnMut(
-            Size<Option<Pixels>>,
-            Size<AvailableSpace>,
-            &mut Window,
-            &mut App,
-        ) -> Size<Pixels>
-        + 'static,
-    ) -> LayoutId {
-        let taffy_style = style.to_taffy(rem_size, scale_factor);
-
-        self.taffy
-            .new_leaf_with_context(
-                taffy_style,
-                NodeContext {
-                    measure: StackSafe::new(Box::new(measure)),
-                },
-            )
-            .expect(EXPECT_MESSAGE)
-            .into()
-    }
-
-    /// Treats any `auto` dimension of the given node's style as filling `size`.
-    ///
-    /// This is applied to window roots before layout so they behave like the
-    /// root element on the web, which stretches to fill the initial containing
-    /// block (the viewport) unless given an explicit size. Explicitly styled
-    /// dimensions are preserved.
-    pub fn stretch_auto_size_to_fill(
-        &mut self,
-        id: LayoutId,
-        size: Size<Pixels>,
-        scale_factor: f32,
-    ) {
-        let style = self.taffy.style(id.0).expect(EXPECT_MESSAGE);
-        let stretch_width = style.size.width.is_auto();
-        let stretch_height = style.size.height.is_auto();
-        if !stretch_width && !stretch_height {
-            return;
-        }
-        let mut style = style.clone();
-        if stretch_width {
-            style.size.width =
-                taffy::style::Dimension::length(round_to_device_pixel(size.width.0, scale_factor));
-        }
-        if stretch_height {
-            style.size.height =
-                taffy::style::Dimension::length(round_to_device_pixel(size.height.0, scale_factor));
-        }
-        self.taffy.set_style(id.0, style).expect(EXPECT_MESSAGE);
-    }
-
-    // Used to understand performance
-    #[allow(dead_code)]
-    fn count_all_children(&self, parent: LayoutId) -> anyhow::Result<u32> {
-        let mut count = 0;
-
-        for child in self.taffy.children(parent.0)? {
-            // Count this child.
-            count += 1;
-
-            // Count all of this child's children.
-            count += self.count_all_children(LayoutId(child))?
-        }
-
-        Ok(count)
-    }
-
-    // Used to understand performance
-    #[allow(dead_code)]
-    fn max_depth(&self, depth: u32, parent: LayoutId) -> anyhow::Result<u32> {
-        println!(
-            "{parent:?} at depth {depth} has {} children",
-            self.taffy.child_count(parent.0)
-        );
-
-        let mut max_child_depth = 0;
-
-        for child in self.taffy.children(parent.0)? {
-            max_child_depth = std::cmp::max(max_child_depth, self.max_depth(0, LayoutId(child))?);
-        }
-
-        Ok(depth + 1 + max_child_depth)
-    }
-
-    // Used to understand performance
-    #[allow(dead_code)]
-    fn get_edges(&self, parent: LayoutId) -> anyhow::Result<Vec<(LayoutId, LayoutId)>> {
-        let mut edges = Vec::new();
-
-        for child in self.taffy.children(parent.0)? {
-            edges.push((parent, LayoutId(child)));
-
-            edges.extend(self.get_edges(LayoutId(child))?);
-        }
-
-        Ok(edges)
-    }
-
-    #[stacksafe]
-    pub fn compute_layout(
-        &mut self,
-        id: LayoutId,
-        available_space: Size<AvailableSpace>,
-        window: &mut Window,
-        cx: &mut App,
-    ) {
-        // Leaving this here until we have a better instrumentation approach.
-        // println!("Laying out {} children", self.count_all_children(id)?);
-        // println!("Max layout depth: {}", self.max_depth(0, id)?);
-
-        // Output the edges (branches) of the tree in Mermaid format for visualization.
-        // println!("Edges:");
-        // for (a, b) in self.get_edges(id)? {
-        //     println!("N{} --> N{}", u64::from(a), u64::from(b));
-        // }
-        //
-
-        if !self.computed_layouts.insert(id) {
-            let stack = &mut self.layout_bounds_scratch_space;
-            stack.push(id);
-            while let Some(id) = stack.pop() {
-                self.absolute_layout_bounds.remove(&id);
-                self.absolute_outer_origins.remove(&id);
-                stack.extend(
-                    self.taffy
-                        .children(id.into())
-                        .expect(EXPECT_MESSAGE)
-                        .into_iter()
-                        .map(LayoutId::from),
-                );
-            }
-        }
-
-        let scale_factor = window.scale_factor();
-
-        let transform = |v: AvailableSpace| match v {
-            AvailableSpace::Definite(pixels) => {
-                AvailableSpace::Definite(Pixels(pixels.0 * scale_factor))
-            }
-            AvailableSpace::MinContent => AvailableSpace::MinContent,
-            AvailableSpace::MaxContent => AvailableSpace::MaxContent,
-        };
-        let available_space = size(
-            transform(available_space.width),
-            transform(available_space.height),
-        );
-
-        self.taffy
-            .compute_layout_with_measure(
-                id.into(),
-                available_space.into(),
-                |known_dimensions, available_space, _id, node_context, _style| {
-                    let Some(node_context) = node_context else {
-                        return taffy::geometry::Size::default();
-                    };
-
-                    let known_dimensions = Size {
-                        width: known_dimensions.width.map(|e| Pixels(e / scale_factor)),
-                        height: known_dimensions.height.map(|e| Pixels(e / scale_factor)),
-                    };
-
-                    let available_space: Size<AvailableSpace> = available_space.into();
-                    let untransform = |ev: AvailableSpace| match ev {
-                        AvailableSpace::Definite(pixels) => {
-                            AvailableSpace::Definite(Pixels(pixels.0 / scale_factor))
-                        }
-                        AvailableSpace::MinContent => AvailableSpace::MinContent,
-                        AvailableSpace::MaxContent => AvailableSpace::MaxContent,
-                    };
-                    let available_space = size(
-                        untransform(available_space.width),
-                        untransform(available_space.height),
-                    );
-
-                    let measured_size: Size<Pixels> =
-                        (node_context.measure)(known_dimensions, available_space, window, cx);
-                    snap_measured_size_to_device_pixels(measured_size, scale_factor).into()
-                },
-            )
-            .expect(EXPECT_MESSAGE);
-    }
-
-    // Pixel snapping
-    //
-    // Painting primitives at non-integer pixel coordinates produces blurry
-    // output. Pixel snapping converts layout coordinates into integer
-    // device-pixel coordinates so painted edges land exactly on physical
-    // pixel boundaries.
-    //
-    // Non-integer coordinates can arise for several reasons, including:
-    //   - flex distribution, percentages, centering, and text measurement
-    //     can produce fractional element sizes and positions;
-    //   - at fractional scale factors (for example 125% or 150%), integer
-    //     logical-pixel values can map to non-integer device-pixel values.
-    //
-    // We pixel-snap by rounding in device-pixel space, after multiplying
-    // by `scale_factor`, so that snapping targets physical pixels. Bounds
-    // are divided by `scale_factor` before being returned to GPUI.
-    //
-    // Midpoints are rounded toward zero. This is a stylistic choice: a
-    // 1-logical-pixel line at 150% scale should render as 1 dp rather than
-    // 2 dp.
-    //
-    // Pixel snapping is done in two phases:
-    //
-    //  1. Pre-layout metric snapping. Before Taffy computes layout, all
-    //     authored absolute lengths are rounded in `to_taffy`. This
-    //     includes borders, padding, gaps, and explicit sizes.
-    //     Custom-measured leaf nodes have their measured sizes rounded up
-    //     to integer device-pixel lengths.
-    //
-    //  2. Post-layout edge snapping. After Taffy resolves the tree, layout
-    //     relationships such as flex shares, grid tracks, percentages, and
-    //     centering can produce new fractional edge positions. Boxes now
-    //     have edges in absolute coordinates, and snapping must decide
-    //     where those edges land on the device-pixel grid.
-    //
-    // Ideally, post-layout snapping would satisfy:
-    //
-    //  - Edge closure. Two raw layout edges at the same absolute position
-    //    should snap to the same pixel column.
-    //  - Translation stability. A component's internal geometry should not
-    //    change when it moves to a new absolute position.
-    //
-    // These goals are in tension because rounding is not associative.
-    // The simple local schemes make different tradeoffs:
-    //
-    //  - Absolute edge rounding gives each window coordinate one answer,
-    //    so coincident edges always close globally. But a span's snapped
-    //    length is `round(far) - round(near)`, which may change by 1 dp
-    //    as its absolute origin moves.
-    //
-    //  - Parent-relative edge rounding rounds each child inside its
-    //    parent's coordinate space. This guarantees translation stability,
-    //    but a shared edge reached through different parents can
-    //    accumulate different rounding, causing non-closure between
-    //    cousins.
-    //
-    //  - Length rounding rounds each width, height, and thickness
-    //    independently and then places boxes from those rounded lengths.
-    //    Sizes stay stable under translation, but neighboring boxes derive
-    //    their shared boundary from different sources, so closure is not
-    //    guaranteed.
-    //
-    // We apply absolute edge rounding for each element's outer box in
-    // post-layout rounding to preserve closure. Border and padding widths
-    // are not touched by post-layout rounding; they keep their pre-layout
-    // rounded value so that they remain stable under translation.
-    //
-    // This gives both closure and translation stability in the case that
-    // all local metrics are integer device-pixel lengths. Pre-layout
-    // rounding covers that in most cases. The exception is metrics
-    // resolved by layout relationships, such as percentages. Outer box
-    // edges will still close globally, and painted border widths are still
-    // snapped independently, but the raw content-box origin can carry a
-    // 1dp residual into descendants.
-
-    pub fn layout_bounds(&mut self, id: LayoutId, scale_factor: f32) -> Bounds<Pixels> {
-        if let Some(layout) = self.absolute_layout_bounds.get(&id).cloned() {
-            return layout;
-        }
-
-        let layout = self.taffy.layout(id.into()).expect(EXPECT_MESSAGE);
-        let layout_location = layout.location;
-        let layout_size = layout.size;
-        let parent = self.taffy.parent(id.0);
-
-        let absolute_outer_origin = match parent {
-            Some(parent_id) => {
-                let parent_id = LayoutId::from(parent_id);
-                self.layout_bounds(parent_id, scale_factor);
-                let parent_origin = *self
-                    .absolute_outer_origins
-                    .get(&parent_id)
-                    .expect("parent absolute outer origin should be cached");
-                parent_origin + Point::from(layout_location)
-            }
-            None => Point::from(layout_location),
-        };
-        self.absolute_outer_origins
-            .insert(id, absolute_outer_origin);
-
-        let absolute_far = absolute_outer_origin + Point::from(Size::from(layout_size));
-        let snapped_bounds = Bounds::from_corners(
-            absolute_outer_origin.map(round_half_toward_zero),
-            absolute_far.map(round_half_toward_zero),
-        );
-
-        let bounds = (snapped_bounds / scale_factor).map(Pixels);
-        self.absolute_layout_bounds.insert(id, bounds);
-        bounds
+fn to_taffy_align_items(value: AlignItems) -> taffy::style::AlignItems {
+    match value {
+        AlignItems::Start => taffy::style::AlignItems::START,
+        AlignItems::End => taffy::style::AlignItems::END,
+        AlignItems::FlexStart => taffy::style::AlignItems::FLEX_START,
+        AlignItems::FlexEnd => taffy::style::AlignItems::FLEX_END,
+        AlignItems::Center => taffy::style::AlignItems::CENTER,
+        AlignItems::Baseline => taffy::style::AlignItems::BASELINE,
+        AlignItems::Stretch => taffy::style::AlignItems::STRETCH,
     }
 }
 
-/// A unique identifier for a layout node, generated when requesting a layout from Taffy
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
-#[repr(transparent)]
-pub struct LayoutId(NodeId);
-
-impl LayoutId {
-    fn to_taffy_slice(node_ids: &[Self]) -> &[taffy::NodeId] {
-        // SAFETY: LayoutId is repr(transparent) to taffy::tree::NodeId.
-        unsafe { std::mem::transmute::<&[LayoutId], &[taffy::NodeId]>(node_ids) }
+fn to_taffy_align_content(value: AlignContent) -> taffy::style::AlignContent {
+    match value {
+        AlignContent::Start => taffy::style::AlignContent::START,
+        AlignContent::End => taffy::style::AlignContent::END,
+        AlignContent::FlexStart => taffy::style::AlignContent::FLEX_START,
+        AlignContent::FlexEnd => taffy::style::AlignContent::FLEX_END,
+        AlignContent::Center => taffy::style::AlignContent::CENTER,
+        AlignContent::Stretch => taffy::style::AlignContent::STRETCH,
+        AlignContent::SpaceBetween => taffy::style::AlignContent::SPACE_BETWEEN,
+        AlignContent::SpaceEvenly => taffy::style::AlignContent::SPACE_EVENLY,
+        AlignContent::SpaceAround => taffy::style::AlignContent::SPACE_AROUND,
     }
 }
 
-impl std::hash::Hash for LayoutId {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        u64::from(self.0).hash(state);
+fn to_taffy_display(value: Display) -> taffy::style::Display {
+    match value {
+        Display::Block => taffy::style::Display::Block,
+        Display::Flex => taffy::style::Display::Flex,
+        Display::Grid => taffy::style::Display::Grid,
+        Display::None => taffy::style::Display::None,
     }
 }
 
-impl From<NodeId> for LayoutId {
-    fn from(node_id: NodeId) -> Self {
-        Self(node_id)
+fn to_taffy_flex_wrap(value: FlexWrap) -> taffy::style::FlexWrap {
+    match value {
+        FlexWrap::NoWrap => taffy::style::FlexWrap::NoWrap,
+        FlexWrap::Wrap => taffy::style::FlexWrap::Wrap,
+        FlexWrap::WrapReverse => taffy::style::FlexWrap::WrapReverse,
     }
 }
 
-impl From<LayoutId> for NodeId {
-    fn from(layout_id: LayoutId) -> NodeId {
-        layout_id.0
+fn to_taffy_flex_direction(value: FlexDirection) -> taffy::style::FlexDirection {
+    match value {
+        FlexDirection::Row => taffy::style::FlexDirection::Row,
+        FlexDirection::Column => taffy::style::FlexDirection::Column,
+        FlexDirection::RowReverse => taffy::style::FlexDirection::RowReverse,
+        FlexDirection::ColumnReverse => taffy::style::FlexDirection::ColumnReverse,
     }
 }
 
-fn snap_measured_size_to_device_pixels(size: Size<Pixels>, scale_factor: f32) -> Size<f32> {
-    size.map(|d| ceil_to_device_pixel(d.0.max(0.0), scale_factor))
+fn to_taffy_overflow(value: Overflow) -> taffy::style::Overflow {
+    match value {
+        Overflow::Visible => taffy::style::Overflow::Visible,
+        Overflow::Clip => taffy::style::Overflow::Clip,
+        Overflow::Hidden => taffy::style::Overflow::Hidden,
+        Overflow::Scroll => taffy::style::Overflow::Scroll,
+    }
+}
+
+fn to_taffy_position(value: Position) -> taffy::style::Position {
+    match value {
+        Position::Relative => taffy::style::Position::Relative,
+        Position::Absolute => taffy::style::Position::Absolute,
+    }
+}
+
+/// Converts an engine layout style into the `taffy` style the layout tree owns.
+pub(crate) fn to_taffy_style(
+    style: &EngineLayoutStyle,
+    rem_size: Pixels,
+    scale_factor: f32,
+) -> taffy::style::Style {
+    style.to_taffy(rem_size, scale_factor)
 }
 
 fn border_widths_to_taffy(
