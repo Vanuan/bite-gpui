@@ -18,6 +18,7 @@ runtime_shaders = []
 font-kit = ["dep:font-kit"]
 screen-capture = ["gpui_platform/screen-capture"]
 
+bench-support = ["gpui_platform/bench-support", "gpui_apple/bench-support"]
 [dependencies]
 gpui_engine.workspace = true
 gpui_platform.workspace = true
@@ -64,6 +65,8 @@ smallvec.workspace = true
 strum.workspace = true
 uuid.workspace = true
 
+gpui_apple.workspace = true
+objc2-screen-capture-kit.workspace = true
 [target.'cfg(target_os = "macos")'.build-dependencies]
 cbindgen.workspace = true
 gpui.workspace = true
@@ -77,3 +80,5 @@ gpui.workspace = true
 # correct way to enable the feature exactly when needed.
 [target.'cfg(target_os = "macos")'.dev-dependencies]
 gpui = { workspace = true, features = ["test-support"] }
+
+gpui_apple = { workspace = true, features = ["test-support"] }
