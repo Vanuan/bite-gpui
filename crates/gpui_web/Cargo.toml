@@ -101,6 +101,10 @@ web-sys = { version = "0.3", features = [
 
 [dev-dependencies]
 anyhow.workspace = true
+# glyph_cache and run_replacements are compiled natively under `cfg(test)` (their
+# text-splitting logic is testable off wasm), and they import these two.
+gpui_engine.workspace = true
+gpui_platform.workspace = true
 gpui.workspace = true
 smallvec.workspace = true
 
