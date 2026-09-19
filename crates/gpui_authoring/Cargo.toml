@@ -29,25 +29,6 @@ test-support = [
     "http_client/test-support",
     "proptest",
 ]
-bench = ["test-support", "profiler", "dep:criterion"]
-inspector = ["gpui_macros/inspector"]
-leak-detection = ["backtrace"]
-wayland = ["gpui_platform/wayland", "gpui_linux?/wayland"]
-x11 = [
-    "scap?/x11",
-    "gpui_platform/x11",
-    "gpui_linux?/x11",
-]
-screen-capture = [
-    "scap",
-    "gpui_platform/screen-capture",
-    "gpui_linux?/screen-capture",
-    "gpui_macos?/screen-capture",
-    "gpui_windows?/screen-capture",
-]
-windows-manifest = ["dep:embed-resource"]
-profiler = ["dep:hdrhistogram"]
-
 bench-support = [
     "profiler",
     "dep:criterion",
@@ -55,7 +36,13 @@ bench-support = [
     "gpui_engine_default/bench-support",
     "gpui_platform/bench-support",
 ]
+# Preserve the published feature name while consumers migrate to `bench-support`.
+bench = ["bench-support"]
+inspector = ["gpui_macros/inspector"]
+leak-detection = ["backtrace"]
+profiler = ["dep:hdrhistogram", "gpui_platform/profiler"]
 stacker = ["dep:stacksafe", "gpui_engine_default/stacker"]
+
 [lib]
 path = "src/gpui_authoring.rs"
 doctest = false
