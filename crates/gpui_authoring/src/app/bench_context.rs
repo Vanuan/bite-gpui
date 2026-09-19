@@ -232,29 +232,32 @@ fn format_duration(duration: Duration) -> String {
 /// (e.g. a later benchmark in the same process).
 struct FrameTraceScope {
     collector: FrameTimingCollector,
-    was_already_enabled: bool,
+    _trace_guard: profiler::TraceGuard,
 }
 
 impl FrameTraceScope {
     fn start() -> Self {
-        let was_already_enabled = !profiler::set_frame_trace_enabled(true);
+        // The guard keeps collection enabled until the last scope ends, so
+        // nested measurements cannot disable tracing under each other.
+        let trace_guard = profiler::trace_scope();
         Self {
             collector: FrameTimingCollector::new(),
-            was_already_enabled,
+            _trace_guard: trace_guard,
         }
     }
 
     fn finish(mut self) -> Vec<FrameTiming> {
-        self.collector.collect_unseen()
+        // The buffer holds the architecture's `FrameEvent`s; this release's
+        // frame tracing reported the draw half of each one.
+        self.collector
+            .collect_unseen()
+            .into_iter()
+            .filter_map(|event| match event {
+                profiler::FrameEvent::Draw(timing) => Some(timing),
+                profiler::FrameEvent::Present(_) => None,
+            })
+            .collect()
         // Dropping `self` restores the previous tracing state.
-    }
-}
-
-impl Drop for FrameTraceScope {
-    fn drop(&mut self) {
-        if !self.was_already_enabled {
-            profiler::set_frame_trace_enabled(false);
-        }
     }
 }
 
