@@ -1796,9 +1796,9 @@ impl App {
                 if focus.ref_count.load(SeqCst) == 0 {
                     for window_handle in self.windows() {
                         window_handle
-                            .update(self, |_, window, cx| {
+                            .update(self, |_, window, _| {
                                 if window.core.focus == Some(handle_id) {
-                                    window.blur(cx);
+                                    window.blur();
                                 }
                             })
                             .unwrap();

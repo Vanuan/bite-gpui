@@ -20,7 +20,6 @@ use crate::{
 use anyhow::{Context as _, Result};
 use image::codecs::gif::GifDecoder;
 use image::{AnimationDecoder as _, DynamicImage, Frame};
-pub use scheduler::RunnableMeta;
 use smallvec::SmallVec;
 use std::io::Cursor;
 use std::{ops::Range, sync::Arc};
