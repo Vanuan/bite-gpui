@@ -2,8 +2,7 @@ use scheduler::Instant;
 use std::{rc::Rc, time::Duration};
 
 use crate::{
-    AnyElement, App, Element, ElementId, GlobalElementId, IntoElement,
-    ParentElement, Window,
+    AnyElement, App, Element, ElementId, GlobalElementId, IntoElement, ParentElement, Window,
 };
 
 pub use easing::*;

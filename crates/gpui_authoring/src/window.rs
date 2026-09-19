@@ -8086,19 +8086,17 @@ pub fn outline(
 mod tests {
     use std::{
         cell::{Cell, RefCell},
-        path::PathBuf,
         rc::Rc,
         time::Duration,
     };
 
     use crate::{
         AnyWindowHandle, App, AppContext as _, ArenaClearNeeded, Bounds, Context, DispatchPhase,
-        DragMoveEvent, Empty, ExternalDragPayload, ExternalPaths, FileDragPaths, FileDropEvent,
-        FocusHandle, FocusId, FramePipeline, InputEvent as _, InteractiveElement as _, IntoElement,
-        LongPressEvent, MouseButton, MouseDownEvent, MouseMoveEvent, ParentElement, Pixels, Point,
-        Render, RequestFrameOptions, StandardImmediatePipeline, StatefulInteractiveElement as _,
-        Styled, TestAppContext, TouchDragEvent, TouchEvent, TouchId, TouchPhase, Window,
-        WindowAppearance, WindowMetrics, WindowOptions, canvas, div, point, px, size,
+        Empty, FocusHandle, FocusId, FramePipeline, InputEvent as _, InteractiveElement as _,
+        IntoElement, LongPressEvent, ParentElement, Pixels, Point, Render, RequestFrameOptions,
+        StandardImmediatePipeline, Styled, TestAppContext, TouchDragEvent, TouchEvent, TouchId,
+        TouchPhase, Window, WindowAppearance, WindowMetrics, WindowOptions, canvas, div, point, px,
+        size,
     };
 
     /// Visibility transitions reach observers exactly once each, with the new
@@ -8875,7 +8873,6 @@ mod tests {
 
         assert_eq!(child_bounds.get().size, size(px(300.), px(200.)));
     }
-
 
     struct FocusForwarder {
         a: FocusHandle,

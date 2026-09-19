@@ -10,11 +10,11 @@ use anyhow::{Result, anyhow};
 use hdrhistogram::Histogram;
 
 use crate::{
-    AnyView, AnyWindowHandle, App, AppCell, AppContext, BackgroundExecutor, Bounds,
-    BoundsExt, Context, Empty, Entity, EntityId, Focusable, ForegroundExecutor, Global, Platform,
-    PlatformDispatcherExt, PlatformTextSystem, Render, Reservation,
-    SceneRenderer, Task, TestPlatform, TestWindow, ThreadedDispatcher, VisualContext, Window,
-    WindowBounds, WindowHandle, WindowOptions,
+    AnyView, AnyWindowHandle, App, AppCell, AppContext, BackgroundExecutor, Bounds, BoundsExt,
+    Context, Empty, Entity, EntityId, Focusable, ForegroundExecutor, Global, Platform,
+    PlatformDispatcherExt, PlatformTextSystem, Render, Reservation, SceneRenderer, Task,
+    TestPlatform, ThreadedDispatcher, VisualContext, Window, WindowBounds, WindowHandle,
+    WindowOptions,
     app::GpuiBorrow,
     profiler::{self, FrameTiming, FrameTimingCollector},
 };
@@ -259,52 +259,6 @@ impl FrameTraceScope {
             .collect()
         // Dropping `self` restores the previous tracing state.
     }
-}
-
-struct MeasuredTaskInput<Input> {
-    input: Input,
-    frame_trace_scope: Option<FrameTraceScope>,
-}
-
-struct MeasuredTaskOutput<Output> {
-    frame_trace_scope: Option<FrameTraceScope>,
-    report: BenchReport,
-    _output: Output,
-}
-
-impl<Output> Drop for MeasuredTaskOutput<Output> {
-    fn drop(&mut self) {
-        let frame_trace_scope = self
-            .frame_trace_scope
-            .take()
-            .expect("measured task output should retain its frame trace scope");
-        self.report
-            .record_frame_timings(frame_trace_scope.finish().iter());
-    }
-}
-
-fn run_task_to_completion<Output>(
-    foreground_executor: &ForegroundExecutor,
-    task: Task<Output>,
-) -> Output
-where
-    Output: 'static,
-{
-    let output = Rc::new(RefCell::new(None));
-    foreground_executor
-        .spawn({
-            let output = output.clone();
-            async move {
-                *output.borrow_mut() = Some(task.await);
-            }
-        })
-        .detach();
-
-    foreground_executor
-        .dispatcher()
-        .as_threaded()
-        .expect("BenchAppContext requires a ThreadedDispatcher")
-        .run_until(|| output.borrow_mut().take())
 }
 
 /// A GPUI app context for Criterion benchmarks.
