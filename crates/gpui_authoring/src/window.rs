@@ -3424,10 +3424,6 @@ impl Window<'_> {
         self.core.last_input_modality == InputModality::Keyboard
     }
 
-    pub(crate) fn last_input_was_touch(&self) -> bool {
-        self.core.last_input_modality == InputModality::Touch
-    }
-
     /// The current state of the keyboard's capslock
     pub fn capslock(&self) -> Capslock {
         self.core.capslock
@@ -7341,7 +7337,7 @@ impl Window<'_> {
                 }
             }
             accesskit::Action::Blur => {
-                self.blur(cx);
+                self.blur();
             }
             _ => {
                 log::debug!(
