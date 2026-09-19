@@ -62,6 +62,28 @@ impl BackgroundExecutor {
         self.inner.clone()
     }
 
+    /// Spawn a closure on a fresh session pinned to its own
+    /// [`SchedulerLocalExecutor`]. The closure runs on a new OS thread under the
+    /// platform scheduler, or on the test scheduler's loop in tests.
+    ///
+    /// Prefer this over [`Self::spawn`] for futures whose polls need more stack
+    /// than shared background threads guarantee. Dedicated threads get the
+    /// standard library's default 2 MiB, while `spawn` polls futures on whatever
+    /// threads the platform dispatcher provides - on macOS those are GCD workers
+    /// whose stacks are fixed at 512 KiB by the kernel.
+    ///
+    /// Kept from the base: `agent_servers` builds its ACP connection on it, and
+    /// the refactor's version of this file only has `prevent_app_nap`.
+    #[track_caller]
+    pub fn spawn_dedicated<F, Fut>(&self, f: F) -> Task<Fut::Output>
+    where
+        F: FnOnce(SchedulerLocalExecutor) -> Fut + Send + 'static,
+        Fut: Future + 'static,
+        Fut::Output: Send + Sync + 'static,
+    {
+        self.inner.spawn_dedicated(f)
+    }
+
     /// Prevents App Nap-style throttling while the returned guard is held.
     ///
     /// This does not prevent the system from entering idle sleep.
