@@ -95,7 +95,7 @@ impl<T> PriorityQueueState<T> {
     fn try_recv<'a>(
         &'a self,
     ) -> Result<Option<parking_lot::MutexGuard<'a, PriorityQueues<T>>>, RecvError> {
-        let mut queues = self.queues.lock();
+        let queues = self.queues.lock();
 
         let sender_count = self.sender_count.load(std::sync::atomic::Ordering::Relaxed);
         if queues.is_empty() && sender_count == 0 {
