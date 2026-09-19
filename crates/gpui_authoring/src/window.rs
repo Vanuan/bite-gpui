@@ -3426,10 +3426,6 @@ impl Window<'_> {
         self.core.last_input_modality == InputModality::Keyboard
     }
 
-    pub(crate) fn last_input_was_touch(&self) -> bool {
-        self.core.last_input_modality == InputModality::Touch
-    }
-
     /// The current state of the keyboard's capslock
     pub fn capslock(&self) -> Capslock {
         self.core.capslock
@@ -6547,11 +6543,6 @@ impl Window<'_> {
     /// Determine whether a potential multi-stroke key binding is in progress on this window.
     pub fn has_pending_keystrokes(&self) -> bool {
         self.pending_input().is_some()
-    }
-
-    #[cfg(test)]
-    pub(crate) fn pending_input_is_none(&self) -> bool {
-        self.core.pending_input.is_none()
     }
 
     pub(crate) fn clear_pending_keystrokes(&mut self, cx: &mut App) {

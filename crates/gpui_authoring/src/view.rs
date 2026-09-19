@@ -560,18 +560,6 @@ pub(crate) fn paint_view(
     });
 }
 
-#[inline(never)]
-fn paint_component(
-    name: &'static str,
-    element: &mut Option<AnyElement>,
-    window: &mut Window,
-    cx: &mut App,
-) {
-    window.with_id(ElementId::Name(name.into()), |window| {
-        element.as_mut().unwrap().paint(window, cx);
-    });
-}
-
 #[cfg(test)]
 mod tests {
     use std::{cell::Cell, rc::Rc};
