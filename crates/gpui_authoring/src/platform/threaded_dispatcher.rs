@@ -274,7 +274,13 @@ impl ThreadedDispatcher {
     /// Unlike [`Self::run_until_idle`], this waits across temporary quiescence.
     /// This is required when completion can arrive from an external worker that
     /// is not represented in the dispatcher's in-flight count.
-    #[cfg(any(test, feature = "bench"))]
+    ///
+    /// Readiness is checked before every main-thread runnable, so this returns
+    /// as soon as `ready` observes completion rather than after the queue
+    /// drains — deferred work that re-queues itself (idle sweeps, pollers)
+    /// must not extend a benchmark's measured interval past the completion it
+    /// awaits.
+    #[cfg(any(test, feature = "bench-support"))]
     pub(crate) fn run_until<R>(&self, mut ready: impl FnMut() -> Option<R>) -> R {
         assert!(
             self.is_main_thread(),
@@ -332,6 +338,14 @@ impl ThreadedDispatcher {
             "ThreadedDispatcher {{ inflight: {inflight}, pending_timers: {timers}, \
              main_queue_has_work: {main_queue_has_work} }}"
         )
+    }
+
+    /// Whether no main-thread work is queued, no background or timer
+    /// runnables are queued or running, and no armed timer is due. Timers
+    /// that aren't due yet are ignored, as in [`Self::run_until_idle`].
+    #[cfg(any(test, feature = "bench-support"))]
+    pub(crate) fn is_idle(&self) -> bool {
+        !self.main_queue_has_work() && !self.has_due_timer() && *self.idle.inflight.lock() == 0
     }
 
     fn has_due_timer(&self) -> bool {
