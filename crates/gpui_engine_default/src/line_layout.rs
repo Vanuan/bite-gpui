@@ -10,7 +10,10 @@ use std::{
     borrow::Borrow,
     hash::{Hash, Hasher},
     ops::Range,
-    sync::Arc,
+    sync::{
+        Arc,
+        atomic::{AtomicUsize, Ordering},
+    },
 };
 
 use gpui_engine::LineWrapper;
@@ -70,41 +73,15 @@ pub(crate) fn compute_wrap_boundaries(
             first_non_whitespace_ix = Some(boundary);
         }
 
-    fn compute_wrap_boundaries(
-        &self,
-        text: &str,
-        wrap_width: Pixels,
-        max_lines: Option<usize>,
-    ) -> SmallVec<[WrapBoundary; 1]> {
-        let mut boundaries = SmallVec::new();
-        let mut first_non_whitespace_ix = None;
-        let mut last_candidate_ix = None;
-        let mut last_candidate_x = px(0.);
-        let mut last_boundary = WrapBoundary {
-            run_ix: 0,
-            glyph_ix: 0,
-        };
-        let mut last_boundary_x = px(0.);
-        let mut prev_ch = '\0';
-        let mut glyphs = self
-            .runs
-            .iter()
-            .enumerate()
-            .flat_map(move |(run_ix, run)| {
-                run.glyphs.iter().enumerate().map(move |(glyph_ix, glyph)| {
-                    let character = text[glyph.index..].chars().next().unwrap();
-                    (
-                        WrapBoundary { run_ix, glyph_ix },
-                        character,
-                        glyph.position.x,
-                    )
-                })
-            })
-            .peekable();
+        let next_x = glyphs.peek().map_or(layout.width, |(_, _, x)| *x);
+        let width = next_x - last_boundary_x;
 
-        while let Some((boundary, ch, x)) = glyphs.next() {
-            if ch == '\n' {
-                continue;
+        if width > wrap_width && boundary > last_boundary {
+            // When used line_clamp, we should limit the number of lines.
+            if let Some(max_lines) = max_lines
+                && boundaries.len() >= max_lines.saturating_sub(1)
+            {
+                break;
             }
 
             if let Some(last_candidate_ix) = last_candidate_ix.take() {
@@ -128,6 +105,10 @@ pub struct LineLayoutCache {
     previous_frame: Mutex<FrameCache>,
     current_frame: RwLock<FrameCache>,
     platform_text_system: Arc<dyn PlatformTextSystem>,
+    /// Advances when [`TextSystem::add_fonts`] successfully changes the font database.
+    font_generation: Arc<AtomicUsize>,
+    /// Records the generation represented by both frame caches.
+    cached_font_generation: AtomicUsize,
 }
 
 #[derive(Default)]
@@ -150,18 +131,27 @@ struct FrameCache {
 }
 
 impl LineLayoutCache {
-    pub fn new(platform_text_system: Arc<dyn PlatformTextSystem>) -> Self {
+    /// Creates an empty cache backed by `platform_text_system`.
+    pub fn new(
+        platform_text_system: Arc<dyn PlatformTextSystem>,
+        font_generation: Arc<AtomicUsize>,
+    ) -> Self {
+        let cached_font_generation = font_generation.load(Ordering::Acquire);
         Self {
             previous_frame: Mutex::default(),
             current_frame: RwLock::default(),
             platform_text_system,
+            font_generation,
+            cached_font_generation: AtomicUsize::new(cached_font_generation),
         }
     }
 
     /// Saves the current cache position so it can be reused or truncated later.
     pub fn layout_index(&self) -> LineLayoutIndex {
+        let font_generation = self.clear_if_font_generation_changed();
         let frame = self.current_frame.read();
         LineLayoutIndex {
+            font_generation,
             lines_index: frame.used_lines.len(),
             wrapped_lines_index: frame.used_wrapped_lines.len(),
             lines_by_hash_index: frame.used_lines_by_hash.len(),
@@ -171,8 +161,14 @@ impl LineLayoutCache {
 
     /// Re-inserts layouts from the previous frame created before `range`.
     pub fn reuse_layouts(&self, range: Range<LineLayoutIndex>) {
-        let mut previous_frame = &mut *self.previous_frame.lock();
-        let mut current_frame = &mut *self.current_frame.write();
+        let font_generation = self.clear_if_font_generation_changed();
+        if range.start.font_generation != font_generation
+            || range.end.font_generation != font_generation
+        {
+            return;
+        }
+        let current_frame = &mut *self.current_frame.write();
+        let previous_frame = &mut *self.previous_frame.lock();
 
         for key in &previous_frame.used_lines[range.start.lines_index..range.end.lines_index] {
             if let Some((key, line)) = previous_frame.lines.remove_entry(key) {
@@ -211,7 +207,11 @@ impl LineLayoutCache {
 
     /// Drops layouts created after `index`, keeping the cache consistent.
     pub fn truncate_layouts(&self, index: LineLayoutIndex) {
-        let mut current_frame = &mut *self.current_frame.write();
+        let font_generation = self.clear_if_font_generation_changed();
+        if index.font_generation != font_generation {
+            return;
+        }
+        let current_frame = &mut *self.current_frame.write();
         current_frame.used_lines.truncate(index.lines_index);
         current_frame
             .used_wrapped_lines
@@ -226,8 +226,9 @@ impl LineLayoutCache {
 
     /// Ages the current frame into the previous frame and clears the current one.
     pub fn finish_frame(&self) {
-        let mut prev_frame = self.previous_frame.lock();
+        let _font_generation = self.clear_if_font_generation_changed();
         let mut curr_frame = self.current_frame.write();
+        let mut prev_frame = self.previous_frame.lock();
         std::mem::swap(&mut *prev_frame, &mut *curr_frame);
         curr_frame.lines.clear();
         curr_frame.wrapped_lines.clear();
@@ -253,6 +254,7 @@ impl LineLayoutCache {
         Text: AsRef<str>,
         SharedString: From<Text>,
     {
+        let _font_generation = self.clear_if_font_generation_changed();
         let key = &CacheKeyRef {
             text: text.as_ref(),
             font_size,
@@ -318,6 +320,7 @@ impl LineLayoutCache {
         Text: AsRef<str>,
         SharedString: From<Text>,
     {
+        let _font_generation = self.clear_if_font_generation_changed();
         let key = &CacheKeyRef {
             text: text.as_ref(),
             font_size,
@@ -376,6 +379,7 @@ impl LineLayoutCache {
         runs: &[FontRun],
         force_width: Option<Pixels>,
     ) -> Option<Arc<LineLayout>> {
+        let _font_generation = self.clear_if_font_generation_changed();
         let key_ref = HashedCacheKeyRef {
             text_hash,
             text_len,
@@ -433,6 +437,7 @@ impl LineLayoutCache {
         force_width: Option<Pixels>,
         materialize_text: impl FnOnce() -> SharedString,
     ) -> Arc<LineLayout> {
+        let _font_generation = self.clear_if_font_generation_changed();
         let key_ref = HashedCacheKeyRef {
             text_hash,
             text_len,
@@ -509,6 +514,24 @@ impl LineLayoutCache {
             .insert(key.clone(), layout.clone());
         current_frame.used_lines_by_hash.push(key);
         layout
+    }
+
+    fn clear_if_font_generation_changed(&self) -> usize {
+        let font_generation = self.font_generation.load(Ordering::Acquire);
+        if self.cached_font_generation.load(Ordering::Acquire) == font_generation {
+            return font_generation;
+        }
+
+        let mut current_frame = self.current_frame.write();
+        if self.cached_font_generation.load(Ordering::Acquire) == font_generation {
+            return font_generation;
+        }
+
+        *current_frame = FrameCache::default();
+        *self.previous_frame.lock() = FrameCache::default();
+        self.cached_font_generation
+            .store(font_generation, Ordering::Release);
+        font_generation
     }
 }
 

@@ -1,7 +1,7 @@
 use crate::{
     App, Bounds, DevicePixels, Half, Hsla, LineLayout, Pixels, Point, RenderGlyphParams, Result,
-    ShapedGlyph, ShapedRun, SharedString, StrikethroughStyle, TextAlign, UnderlineStyle, Window,
-    WrapBoundary, WrappedLineLayout, black, fill, point, px, size,
+    SharedString, StrikethroughStyle, TextAlign, UnderlineStyle, Window, WrapBoundary,
+    WrappedLineLayout, black, fill, point, px, size,
 };
 use derive_more::{Deref, DerefMut};
 use smallvec::SmallVec;
@@ -50,6 +50,31 @@ pub struct ShapedLine {
 }
 
 impl ShapedLine {
+    /// Returns a forward-only cursor for this shaped line.
+    pub fn cursor(&self) -> ShapedLineCursor<'_> {
+        assert_eq!(
+            self.len(),
+            self.text.len(),
+            "cannot split a shaped line with an adjusted length"
+        );
+        let byte_ordered = self
+            .layout
+            .runs
+            .iter()
+            .flat_map(|run| run.glyphs.iter().map(|glyph| glyph.index))
+            .is_sorted();
+        ShapedLineCursor {
+            line: self,
+            unordered_remainder: (!byte_ordered).then(|| self.clone()),
+            byte_index: 0,
+            run_index: 0,
+            glyph_index: 0,
+            decoration_index: 0,
+            decoration_offset: 0,
+            x_offset: px(0.),
+        }
+    }
+
     /// The length of the line in utf-8 bytes.
     #[allow(clippy::len_without_is_empty)]
     pub fn len(&self) -> usize {
@@ -139,38 +164,7 @@ impl ShapedLine {
     ///   split into two with adjusted lengths.
     /// - `font_size`, `ascent`, and `descent` are copied to both halves.
     pub fn split_at(&self, byte_index: usize) -> (ShapedLine, ShapedLine) {
-        let x_offset = self.layout.x_for_index(byte_index);
-
-        // Partition glyph runs. A single run may contribute glyphs to both halves.
-        let mut left_runs = Vec::new();
-        let mut right_runs = Vec::new();
-
-        for run in &self.layout.runs {
-            let split_pos = run.glyphs.partition_point(|g| g.index < byte_index);
-
-            if split_pos > 0 {
-                left_runs.push(ShapedRun {
-                    font_id: run.font_id,
-                    glyphs: run.glyphs[..split_pos].to_vec(),
-                });
-            }
-
-            if split_pos < run.glyphs.len() {
-                let right_glyphs = run.glyphs[split_pos..]
-                    .iter()
-                    .map(|g| ShapedGlyph {
-                        id: g.id,
-                        position: point(g.position.x - x_offset, g.position.y),
-                        index: g.index - byte_index,
-                        is_emoji: g.is_emoji,
-                    })
-                    .collect();
-                right_runs.push(ShapedRun {
-                    font_id: run.font_id,
-                    glyphs: right_glyphs,
-                });
-            }
-        }
+        let (left_layout, right_layout) = self.layout.split_at(byte_index);
 
         // Partition decoration runs. A run straddling the boundary is split into two.
         let mut left_decorations = SmallVec::new();
@@ -219,31 +213,14 @@ impl ShapedLine {
             SharedString::new(&self.text[byte_index..])
         };
 
-        let left_width = x_offset;
-        let right_width = self.layout.width - left_width;
-
         let left = ShapedLine {
-            layout: Arc::new(LineLayout {
-                font_size: self.layout.font_size,
-                width: left_width,
-                ascent: self.layout.ascent,
-                descent: self.layout.descent,
-                runs: left_runs,
-                len: byte_index,
-            }),
+            layout: Arc::new(left_layout),
             text: left_text,
             decoration_runs: left_decorations,
         };
 
         let right = ShapedLine {
-            layout: Arc::new(LineLayout {
-                font_size: self.layout.font_size,
-                width: right_width,
-                ascent: self.layout.ascent,
-                descent: self.layout.descent,
-                runs: right_runs,
-                len: self.layout.len - byte_index,
-            }),
+            layout: Arc::new(right_layout),
             text: right_text,
             decoration_runs: right_decorations,
         };
@@ -961,7 +938,7 @@ fn aligned_origin_x(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{FontId, GlyphId};
+    use crate::{FontId, GlyphId, ShapedGlyph, ShapedRun};
 
     /// Helper: build a ShapedLine from glyph descriptors without the platform text system.
     /// Each glyph is described as (byte_index, x_position).
@@ -1220,5 +1197,259 @@ mod tests {
         assert_eq!(right.decoration_runs[0].color, green);
         assert_eq!(right.decoration_runs[1].len, 1);
         assert_eq!(right.decoration_runs[1].color, blue);
+    }
+
+    #[test]
+    fn test_cursor_preserves_shaping_metadata_across_runs() {
+        let line = ShapedLine {
+            layout: Arc::new(LineLayout {
+                font_size: px(16.0),
+                width: px(50.0),
+                ascent: px(12.0),
+                descent: px(4.0),
+                runs: vec![
+                    ShapedRun {
+                        font_id: FontId(3),
+                        glyphs: vec![
+                            ShapedGlyph {
+                                id: GlyphId(11),
+                                position: point(px(0.0), px(1.0)),
+                                index: 0,
+                                is_emoji: true,
+                            },
+                            ShapedGlyph {
+                                id: GlyphId(12),
+                                position: point(px(17.0), px(1.0)),
+                                index: 1,
+                                is_emoji: false,
+                            },
+                            ShapedGlyph {
+                                id: GlyphId(13),
+                                position: point(px(19.0), px(-1.0)),
+                                index: 1,
+                                is_emoji: false,
+                            },
+                        ],
+                    },
+                    ShapedRun {
+                        font_id: FontId(8),
+                        glyphs: vec![
+                            ShapedGlyph {
+                                id: GlyphId(21),
+                                position: point(px(25.0), px(1.0)),
+                                index: 5,
+                                is_emoji: true,
+                            },
+                            ShapedGlyph {
+                                id: GlyphId(22),
+                                position: point(px(41.0), px(1.0)),
+                                index: 7,
+                                is_emoji: false,
+                            },
+                        ],
+                    },
+                ],
+                len: 10,
+            }),
+            text: "a😀bcdef".into(),
+            decoration_runs: SmallVec::new(),
+        };
+        let mut cursor = line.cursor();
+        let first = cursor.take_until(5);
+        assert_eq!(first.text.as_ref(), "a😀");
+        assert_eq!(first.runs[0].font_id, FontId(3));
+        assert_eq!(first.runs[0].glyphs[0].id, GlyphId(11));
+        assert!(first.runs[0].glyphs[0].is_emoji);
+        assert_eq!(first.runs[0].glyphs[1].index, 1);
+        assert_eq!(first.runs[0].glyphs[1].position, point(px(17.0), px(1.0)));
+        assert_eq!(first.runs[0].glyphs.len(), 3);
+        assert_eq!(first.runs[0].glyphs[2].index, 1);
+        assert_eq!(first.runs[0].glyphs[2].position, point(px(19.0), px(-1.0)));
+        assert_eq!(cursor.x_offset(), px(25.0));
+
+        let second = cursor.take_until(7);
+        assert_eq!(second.text.as_ref(), "bc");
+        assert_eq!(second.runs[0].font_id, FontId(8));
+        assert_eq!(second.runs[0].glyphs[0].id, GlyphId(21));
+        assert_eq!(second.runs[0].glyphs[0].index, 0);
+        assert_eq!(second.runs[0].glyphs[0].position, point(px(0.0), px(1.0)));
+        assert_eq!(cursor.x_offset(), px(41.0));
+
+        let final_part = cursor.take_until(10);
+        assert_eq!(final_part.text.as_ref(), "def");
+        assert_eq!(final_part.runs[0].font_id, FontId(8));
+        assert_eq!(final_part.runs[0].glyphs[0].id, GlyphId(22));
+        assert_eq!(final_part.runs[0].glyphs[0].index, 0);
+        assert_eq!(
+            final_part.runs[0].glyphs[0].position,
+            point(px(0.0), px(1.0))
+        );
+    }
+
+    #[test]
+    fn test_cursor_preserves_existing_visual_order_splitting() {
+        let line = make_shaped_line("abc", &[(0, 0.0), (2, 10.0), (1, 20.0)], 30.0, &[]);
+        let mut cursor = line.cursor();
+        let mut remainder = line.clone();
+        let mut previous_boundary = 0;
+        for boundary in [0, 1, 2, 3] {
+            let (expected, rest) = remainder.split_at(boundary - previous_boundary);
+            let actual = cursor.take_until(boundary);
+            assert_eq!(actual.text, expected.text);
+            assert_eq!(actual.width(), expected.width());
+            assert_eq!(actual.runs.len(), expected.runs.len());
+            for (actual, expected) in actual.runs.iter().zip(&expected.runs) {
+                assert_eq!(actual.font_id, expected.font_id);
+                assert_eq!(actual.glyphs.len(), expected.glyphs.len());
+                for (actual, expected) in actual.glyphs.iter().zip(&expected.glyphs) {
+                    assert_eq!(actual.id, expected.id);
+                    assert_eq!(actual.index, expected.index);
+                    assert_eq!(actual.position, expected.position);
+                }
+            }
+            assert_eq!(cursor.x_offset(), line.x_for_index(boundary));
+            remainder = rest;
+            previous_boundary = boundary;
+        }
+    }
+
+    #[test]
+    fn test_cursor_partitions_one_decoration_across_three_chunks() {
+        let line = make_shaped_line(
+            "abcdef",
+            &[
+                (0, 0.0),
+                (1, 10.0),
+                (2, 20.0),
+                (3, 30.0),
+                (4, 40.0),
+                (5, 50.0),
+            ],
+            60.0,
+            &[DecorationRun {
+                len: 6,
+                color: Hsla {
+                    h: 0.2,
+                    s: 0.4,
+                    l: 0.6,
+                    a: 1.0,
+                },
+                background_color: None,
+                underline: None,
+                strikethrough: None,
+            }],
+        );
+        let mut cursor = line.cursor();
+        assert_eq!(cursor.take_until(2).decoration_runs[0].len, 2);
+        assert_eq!(cursor.take_until(4).decoration_runs[0].len, 2);
+        assert_eq!(cursor.take_until(6).decoration_runs[0].len, 2);
+    }
+
+    #[test]
+    fn test_cursor_matches_successive_splits_at_ordered_boundaries() {
+        let decorations: Vec<_> = [2, 0, 3, 1]
+            .into_iter()
+            .map(|len| DecorationRun {
+                len,
+                color: Hsla {
+                    h: len as f32 / 10.0,
+                    s: 0.5,
+                    l: 0.5,
+                    a: 1.0,
+                },
+                background_color: Some(black()),
+                underline: None,
+                strikethrough: None,
+            })
+            .collect();
+        let line = make_shaped_line(
+            "abcdef",
+            &[(0, 5.0), (0, 5.0), (2, 15.0), (4, 25.0), (5, 35.0)],
+            45.0,
+            &decorations,
+        );
+        for first in 0..=line.len() {
+            for second in first..=line.len() {
+                let mut cursor = line.cursor();
+                let mut remainder = line.clone();
+                let mut previous_boundary = 0;
+                let mut total_width = px(0.0);
+                let mut text = String::new();
+                for boundary in [first, second, line.len(), line.len()] {
+                    let (expected, rest) = remainder.split_at(boundary - previous_boundary);
+                    let actual = cursor.take_until(boundary);
+                    assert_eq!(actual.text, expected.text);
+                    assert_eq!(actual.len(), expected.len());
+                    assert_eq!(actual.width(), expected.width());
+                    assert_eq!(actual.runs.len(), expected.runs.len());
+                    for (actual, expected) in actual.runs.iter().zip(&expected.runs) {
+                        assert_eq!(actual.font_id, expected.font_id);
+                        assert_eq!(actual.glyphs.len(), expected.glyphs.len());
+                        for (actual, expected) in actual.glyphs.iter().zip(&expected.glyphs) {
+                            assert_eq!(actual.id, expected.id);
+                            assert_eq!(actual.index, expected.index);
+                            assert_eq!(actual.position, expected.position);
+                        }
+                    }
+                    assert_eq!(actual.decoration_runs.len(), expected.decoration_runs.len());
+                    for (actual, expected) in
+                        actual.decoration_runs.iter().zip(&expected.decoration_runs)
+                    {
+                        assert_eq!(actual.len, expected.len);
+                        assert_eq!(actual.color, expected.color);
+                        assert_eq!(actual.background_color, expected.background_color);
+                    }
+                    total_width += actual.width();
+                    text.push_str(&actual.text);
+                    remainder = rest;
+                    previous_boundary = boundary;
+                }
+                assert_eq!(total_width, line.width());
+                assert_eq!(text, line.text.as_ref());
+            }
+        }
+    }
+
+    #[test]
+    fn test_cursor_empty_chunks_and_repeated_boundaries() {
+        let line = make_shaped_line("ab", &[(0, 5.0), (1, 15.0)], 20.0, &[]);
+        let mut cursor = line.cursor();
+        assert_eq!(cursor.take_until(0).text.as_ref(), "");
+        assert_eq!(cursor.take_until(0).text.as_ref(), "");
+        assert_eq!(cursor.take_until(1).text.as_ref(), "a");
+        assert_eq!(cursor.take_until(2).text.as_ref(), "b");
+        assert_eq!(cursor.take_until(2).text.as_ref(), "");
+        let empty = make_shaped_line("", &[], 0.0, &[]);
+        let piece = empty.cursor().take_until(0);
+        assert!(piece.text.is_empty());
+        assert!(piece.runs.is_empty());
+        assert_eq!(piece.width(), px(0.0));
+    }
+
+    #[test]
+    fn test_cursor_rejects_invalid_boundaries() {
+        let line = make_shaped_line("é", &[(0, 0.0)], 10.0, &[]);
+        let mut cursor = line.cursor();
+        assert!(
+            std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                cursor.take_until(1);
+            }))
+            .is_err()
+        );
+        let mut cursor = line.cursor();
+        cursor.take_until(2);
+        assert!(
+            std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                cursor.take_until(0);
+            }))
+            .is_err()
+        );
+        let mut cursor = line.cursor();
+        assert!(
+            std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+                cursor.take_until(3);
+            }))
+            .is_err()
+        );
     }
 }
