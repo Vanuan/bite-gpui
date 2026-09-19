@@ -431,8 +431,8 @@ thread_local! {
 }
 
 fn main() {
-    gpui_platform::web_init();
-    gpui_platform::application().run(|cx: &mut App| {
+    gpui::web_init();
+    gpui::application_with_web_backend(requested_backend()).run(|cx: &mut App| {
         let bounds = Bounds::centered(None, size(px(640.), px(560.)), cx);
         cx.open_window(
             WindowOptions {

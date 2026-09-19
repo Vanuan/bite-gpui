@@ -29,7 +29,6 @@ smallvec.workspace = true
 stacksafe.workspace = true
 taffy = "=0.13.0"
 
-derive_more = { workspace = true }
 [dev-dependencies]
 futures.workspace = true
 

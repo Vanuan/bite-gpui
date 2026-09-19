@@ -270,8 +270,65 @@ impl BenchDispatcher {
         }
     }
 
-    /// Runs all main-thread tasks that are queued right now, without waiting for
-    /// background work or timers to finish.
+    /// Drives main-thread work until `ready` returns a value.
+    ///
+    /// Unlike [`Self::run_until_idle`], this waits across temporary quiescence.
+    /// This is required when completion can arrive from an external worker that
+    /// is not represented in the dispatcher's in-flight count.
+    ///
+    /// Readiness is checked before every main-thread runnable, so this returns
+    /// as soon as `ready` observes completion rather than after the queue
+    /// drains — deferred work that re-queues itself (idle sweeps, pollers)
+    /// must not extend a benchmark's measured interval past the completion it
+    /// awaits.
+    #[cfg(any(test, feature = "bench-support"))]
+    pub(crate) fn run_until<R>(&self, mut ready: impl FnMut() -> Option<R>) -> R {
+        assert!(
+            self.is_main_thread(),
+            "run_until must be called on the threaded dispatcher's main thread"
+        );
+        loop {
+            if let Some(result) = ready() {
+                return result;
+            }
+            if self.run_one_main_task() {
+                continue;
+            }
+
+            let mut inflight = self.idle.inflight.lock();
+            if self.main_queue_has_work() {
+                continue;
+            }
+            self.idle.condvar.wait(&mut inflight);
+        }
+    }
+
+    /// Runs at most one queued main-thread task, returning whether one ran.
+    ///
+    /// [`Self::run_until`] steps tasks one at a time so it can observe
+    /// readiness between them: a task that perpetually re-queues itself (like
+    /// an idle-time sweep) would otherwise keep [`Self::drain_main_queue`]
+    /// looping past the completion the caller is waiting for.
+    #[cfg(any(test, feature = "bench"))]
+    fn run_one_main_task(&self) -> bool {
+        let runnable = self.main_receiver.lock().try_pop();
+        match runnable {
+            Ok(Some(runnable)) => {
+                let location = runnable.metadata().location;
+                let spawned = runnable.metadata().spawned;
+                profiler::update_running_task(spawned, location);
+                runnable.run();
+                profiler::save_task_timing();
+                true
+            }
+            Ok(None) | Err(_) => false,
+        }
+    }
+
+    /// Runs the main-thread tasks that were queued when the call began,
+    /// returning whether any ran. Tasks dispatched while running (e.g. a task
+    /// re-queuing itself after yielding) are left for the next call, as on
+    /// the platform run loops.
     pub fn run_ready_main_tasks(&self) -> bool {
         assert!(
             self.is_main_thread(),
@@ -308,6 +365,14 @@ impl BenchDispatcher {
             "BenchDispatcher {{ inflight: {inflight}, pending_timers: {timers}, \
              main_queue_has_work: {main_queue_has_work} }}"
         )
+    }
+
+    /// Whether no main-thread work is queued, no background or timer
+    /// runnables are queued or running, and no armed timer is due. Timers
+    /// that aren't due yet are ignored, as in [`Self::run_until_idle`].
+    #[cfg(any(test, feature = "bench-support"))]
+    pub(crate) fn is_idle(&self) -> bool {
+        !self.main_queue_has_work() && !self.has_due_timer() && *self.idle.inflight.lock() == 0
     }
 
     fn has_due_timer(&self) -> bool {
