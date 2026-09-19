@@ -14,7 +14,6 @@ doctest = false
 
 [features]
 default = []
-stacker = ["dep:stacksafe"]
 test-support = ["gpui_engine/test-support", "gpui_types/test-support"]
 bench-support = ["test-support", "gpui_engine/bench-support"]
 
@@ -27,7 +26,7 @@ gpui_types.workspace = true
 itertools.workspace = true
 parking_lot.workspace = true
 smallvec.workspace = true
-stacksafe = { workspace = true, optional = true }
+stacksafe.workspace = true
 taffy = "=0.13.0"
 
 derive_more = { workspace = true }
