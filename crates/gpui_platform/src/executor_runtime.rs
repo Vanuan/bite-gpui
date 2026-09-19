@@ -1,9 +1,14 @@
-use crate::{ActivityGuard, App, PlatformDispatcher, PlatformScheduler};
+use std::{future::Future, marker::PhantomData, rc::Rc, sync::Arc, time::Duration};
+#[cfg(not(target_family = "wasm"))]
+use std::{mem, pin::Pin};
+
+#[cfg(not(target_family = "wasm"))]
 use futures::channel::mpsc;
 use futures::prelude::*;
 use scheduler::Instant;
 use scheduler::Scheduler;
-use std::{future::Future, marker::PhantomData, mem, pin::Pin, rc::Rc, sync::Arc, time::Duration};
+
+use crate::{ActivityGuard, PlatformDispatcher, PlatformScheduler};
 
 pub use scheduler::{
     DedicatedExecutor, FallibleTask, LocalExecutor as SchedulerLocalExecutor, Priority,
@@ -57,25 +62,11 @@ impl BackgroundExecutor {
         self.inner.clone()
     }
 
-    /// Spawn a closure on a fresh session pinned to its own [`SchedulerLocalExecutor`].
-    /// The closure runs on a new OS thread under the platform scheduler, or on
-    /// the test scheduler's loop in tests.
+    /// Prevents App Nap-style throttling while the returned guard is held.
     ///
-    /// Prefer this over [`Self::spawn`] for futures whose polls need more stack
-    /// than shared background threads guarantee. Dedicated threads get the
-    /// standard library's default 2 MiB, while `spawn` polls futures on
-    /// whatever threads the platform dispatcher provides — on macOS those are
-    /// GCD workers whose stacks are fixed at 512 KiB by the kernel (see `PTH_DEFAULT_STACKSIZE` in
-    /// <https://github.com/apple-oss-distributions/libpthread/blob/42d026df5b07825070f60134b980a1ec2552dfee/kern/kern_internal.h#L154>),
-    /// the tightest background-stack budget of any platform.
-    #[track_caller]
-    pub fn spawn_dedicated<F, Fut>(&self, f: F) -> Task<Fut::Output>
-    where
-        F: FnOnce(SchedulerLocalExecutor) -> Fut + Send + 'static,
-        Fut: Future + 'static,
-        Fut::Output: Send + Sync + 'static,
-    {
-        self.inner.spawn_dedicated(f)
+    /// This does not prevent the system from entering idle sleep.
+    pub fn prevent_app_nap(&self, reason: &str) -> ActivityGuard {
+        self.dispatcher.prevent_app_nap(reason)
     }
 
     /// Enqueues the given future to be run to completion on a background thread.
@@ -107,8 +98,11 @@ impl BackgroundExecutor {
         }
     }
 
-    /// Scoped lets you start a number of tasks and waits
-    /// for all of them to complete before returning.
+    /// Runs background tasks that may borrow from their environment and waits for all of them to complete.
+    ///
+    /// Dropping the returned future cancels its tasks and synchronously waits for their futures to
+    /// be destroyed before returning.
+    #[cfg(not(target_family = "wasm"))]
     pub async fn scoped<'scope, F>(&self, scheduler: F)
     where
         F: FnOnce(&mut Scope<'scope>),
@@ -124,8 +118,12 @@ impl BackgroundExecutor {
         }
     }
 
-    /// Scoped lets you start a number of tasks and waits
-    /// for all of them to complete before returning.
+    /// Runs prioritized background tasks that may borrow from their environment and waits for all
+    /// of them to complete.
+    ///
+    /// Dropping the returned future cancels its tasks and synchronously waits for their futures to
+    /// be destroyed before returning.
+    #[cfg(not(target_family = "wasm"))]
     pub async fn scoped_priority<'scope, F>(&self, priority: Priority, scheduler: F)
     where
         F: FnOnce(&mut Scope<'scope>),
@@ -276,15 +274,18 @@ impl ForegroundExecutor {
                 return Self {
                     inner,
                     dispatcher,
+                    #[cfg(feature = "profiler")]
+                    foreground_runnables: Some(platform_scheduler.foreground_runnable_counter()),
                     not_send: PhantomData,
                 };
             };
 
         #[cfg(not(any(test, feature = "test-support")))]
-        let inner = {
-            let platform_scheduler = Arc::new(PlatformScheduler::new(dispatcher.clone()));
-            platform_scheduler.foreground_executor()
-        };
+        let platform_scheduler = Arc::new(PlatformScheduler::new(dispatcher.clone()));
+        #[cfg(not(any(test, feature = "test-support")))]
+        let inner = platform_scheduler.foreground_executor();
+        #[cfg(all(not(any(test, feature = "test-support")), feature = "profiler"))]
+        let foreground_runnables = Some(platform_scheduler.foreground_runnable_counter());
 
         #[cfg(any(test, feature = "test-support"))]
         let inner = {
@@ -296,9 +297,16 @@ impl ForegroundExecutor {
             })
         };
 
+        #[cfg(all(any(test, feature = "test-support"), feature = "profiler"))]
+        // The deterministic test scheduler does not invoke GPUI's task profiler
+        // hooks, so an increment here would have no matching decrement.
+        let foreground_runnables = None;
+
         Self {
             inner,
             dispatcher,
+            #[cfg(feature = "profiler")]
+            foreground_runnables,
             not_send: PhantomData,
         }
     }
@@ -345,8 +353,14 @@ impl ForegroundExecutor {
         R: 'static,
     {
         let dispatcher = self.dispatcher.clone();
+        #[cfg(feature = "profiler")]
+        let foreground_runnables = self.foreground_runnables.clone();
         self.inner
             .spawn_with_dispatch(future.boxed_local(), move |runnable| {
+                #[cfg(feature = "profiler")]
+                if let Some(foreground_runnables) = &foreground_runnables {
+                    foreground_runnables.queued();
+                }
                 dispatcher.dispatch_on_main_thread_when_idle(runnable, timeout);
             })
     }
@@ -361,7 +375,7 @@ impl ForegroundExecutor {
     }
 
     /// Used by the test harness to run an async test in a synchronous fashion.
-    #[cfg(any(test, feature = "test-support"))]
+    #[cfg(all(not(target_family = "wasm"), any(test, feature = "test-support")))]
     #[track_caller]
     pub fn block_test<R>(&self, future: impl Future<Output = R>) -> R {
         use std::cell::Cell;
@@ -384,11 +398,13 @@ impl ForegroundExecutor {
 
     /// Block the current thread until the given future resolves.
     /// Consider using `block_with_timeout` instead.
+    #[cfg(not(target_family = "wasm"))]
     pub fn block_on<R>(&self, future: impl Future<Output = R>) -> R {
         self.inner.block_on(future)
     }
 
     /// Block the current thread until the given future resolves or the timeout elapses.
+    #[cfg(not(target_family = "wasm"))]
     pub fn block_with_timeout<R, Fut: Future<Output = R>>(
         &self,
         duration: Duration,
@@ -409,6 +425,7 @@ impl ForegroundExecutor {
 }
 
 /// Scope manages a set of tasks that are enqueued and waited on together. See [`BackgroundExecutor::scoped`].
+#[cfg(not(target_family = "wasm"))]
 pub struct Scope<'a> {
     executor: BackgroundExecutor,
     priority: Priority,
@@ -418,6 +435,7 @@ pub struct Scope<'a> {
     lifetime: PhantomData<&'a ()>,
 }
 
+#[cfg(not(target_family = "wasm"))]
 impl<'a> Scope<'a> {
     fn new(executor: BackgroundExecutor, priority: Priority) -> Self {
         let (tx, rx) = mpsc::channel(1);
@@ -459,6 +477,7 @@ impl<'a> Scope<'a> {
     }
 }
 
+#[cfg(not(target_family = "wasm"))]
 impl Drop for Scope<'_> {
     fn drop(&mut self) {
         self.tx.take().unwrap();

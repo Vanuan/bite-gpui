@@ -33,7 +33,6 @@ use anyhow::{Context as _, Result, anyhow};
 use arc_swap::ArcSwap;
 use collections::{FxHashMap, FxHashSet};
 use derive_more::{Deref, DerefMut};
-use futures::FutureExt;
 use futures::channel::oneshot;
 use gpui_engine::FrameSession;
 use gpui_util::post_inc;
@@ -146,6 +145,8 @@ impl DispatchPhase {
 }
 
 struct WindowInvalidatorInner {
+    #[cfg(feature = "profiler")]
+    pub window_id: WindowId,
     pub dirty: bool,
     pub draw_phase: DrawPhase,
     pub dirty_views: FxHashSet<EntityId>,
@@ -157,8 +158,9 @@ struct WindowInvalidatorInner {
 
 /// Per-frame invalidation bookkeeping, drained at draw time and emitted to the
 /// frame profiler. Tracks when the current frame first became dirty and how
-/// many invalidations were coalesced into it. Only populated when the profiler
-/// is compiled in and `profiler::trace_enabled()` is set.
+/// many invalidations were coalesced into it, whenever the profiler is
+/// compiled in. Retention of the resulting per-frame records is what
+/// `profiler::trace_enabled()` controls, not this measurement.
 #[cfg(feature = "profiler")]
 #[derive(Default)]
 struct FrameDirtyAccumulator {
@@ -172,9 +174,11 @@ pub(crate) struct WindowInvalidator {
 }
 
 impl WindowInvalidator {
-    pub fn new() -> Self {
+    pub fn new(#[allow(unused_variables)] window_id: WindowId) -> Self {
         WindowInvalidator {
             inner: Rc::new(RefCell::new(WindowInvalidatorInner {
+                #[cfg(feature = "profiler")]
+                window_id,
                 dirty: true,
                 draw_phase: DrawPhase::None,
                 dirty_views: FxHashSet::default(),
@@ -192,11 +196,17 @@ impl WindowInvalidator {
         inner.dirty_views.insert(entity);
         if inner.draw_phase == DrawPhase::None {
             #[cfg(feature = "profiler")]
-            Self::record_frame_dirty(&mut inner);
+            let dirty_at = Self::record_frame_dirty(&mut inner);
             let became_dirty = !inner.dirty;
             inner.dirty = true;
             let waker = became_dirty.then(|| inner.platform_waker.clone()).flatten();
+            #[cfg(feature = "profiler")]
+            let window_id = inner.window_id;
             drop(inner);
+            #[cfg(feature = "profiler")]
+            if became_dirty {
+                profiler::journal::record_frame_pending(window_id, dirty_at);
+            }
             cx.push_effect(Effect::Notify { emitter: entity });
             if let Some(waker) = waker {
                 waker();
@@ -217,11 +227,17 @@ impl WindowInvalidator {
         inner.dirty = dirty;
         if dirty {
             inner.update_count += 1;
-            #[cfg(feature = "profiler")]
-            Self::record_frame_dirty(&mut inner);
         }
+        #[cfg(feature = "profiler")]
+        let dirty_at = dirty.then(|| Self::record_frame_dirty(&mut inner));
         let waker = became_dirty.then(|| inner.platform_waker.clone()).flatten();
+        #[cfg(feature = "profiler")]
+        let window_id = inner.window_id;
         drop(inner);
+        #[cfg(feature = "profiler")]
+        if became_dirty && let Some(dirty_at) = dirty_at {
+            profiler::journal::record_frame_pending(window_id, dirty_at);
+        }
         if let Some(waker) = waker {
             waker();
         }
@@ -256,11 +272,10 @@ impl WindowInvalidator {
     }
 
     #[cfg(feature = "profiler")]
-    fn record_frame_dirty(inner: &mut WindowInvalidatorInner) {
-        if profiler::trace_enabled() {
-            inner.frame_dirty.dirty_at.get_or_insert_with(Instant::now);
-            inner.frame_dirty.invalidations += 1;
-        }
+    fn record_frame_dirty(inner: &mut WindowInvalidatorInner) -> Instant {
+        let dirty_at = *inner.frame_dirty.dirty_at.get_or_insert_with(Instant::now);
+        inner.frame_dirty.invalidations += 1;
+        dirty_at
     }
 
     #[cfg(feature = "profiler")]
@@ -1244,21 +1259,12 @@ pub(crate) struct WindowHostCore {
     rem_size: Pixels,
     pub(crate) viewport_size: Size<Pixels>,
     pub(crate) root: Option<AnyView>,
-    pub(crate) element_id_stack: SmallVec<[ElementId; 32]>,
-    pub(crate) text_style_stack: Vec<TextStyleRefinement>,
-    pub(crate) rendered_entity_stack: Vec<EntityId>,
-    pub(crate) element_offset_stack: Vec<Point<Pixels>>,
-    pub(crate) element_opacity: f32,
-    pub(crate) content_mask_stack: Vec<ContentMask<Pixels>>,
-    pub(crate) requested_autoscroll: Option<Bounds<Pixels>>,
-    pub(crate) image_cache_stack: Vec<AnyImageCache>,
-    pub(crate) rendered_frame: Frame,
-    pub(crate) next_frame: Frame,
-    next_hitbox_id: HitboxId,
-    pub(crate) next_tooltip_id: TooltipId,
-    pub(crate) tooltip_bounds: Option<TooltipBounds>,
-    next_frame_callbacks: Rc<RefCell<Vec<FrameCallback>>>,
-    pub(crate) dirty_views: FxHashSet<EntityId>,
+    /// The [`TextInputConfiguration`] most recently forwarded to the platform
+    /// window, so that only actual changes are forwarded (reconfiguring a live
+    /// input session can restart the IME connection).
+    last_text_input_configuration: Option<TextInputConfiguration>,
+    focused_text_input_active: bool,
+    pub(crate) next_frame_callbacks: Rc<RefCell<Vec<FrameCallback>>>,
     focus_listeners: SubscriberSet<(), AnyWindowFocusListener>,
     pub(crate) focus_lost_listeners: SubscriberSet<(), AnyObserver>,
     default_prevented: bool,
@@ -1272,6 +1278,9 @@ pub(crate) struct WindowHostCore {
     pub(crate) appearance_observers: SubscriberSet<(), AnyObserver>,
     pub(crate) button_layout_observers: SubscriberSet<(), AnyObserver>,
     active: Rc<Cell<bool>>,
+    visibility: WindowVisibility,
+    pub(crate) visibility_observers:
+        SubscriberSet<(), Box<dyn FnMut(WindowVisibility, &mut Window, &mut App) -> bool>>,
     hovered: Rc<Cell<bool>>,
     pub(crate) needs_present: Rc<Cell<bool>>,
     /// Tracks recent input event timestamps to determine if input is arriving at a high rate.
@@ -1280,6 +1289,10 @@ pub(crate) struct WindowHostCore {
     #[cfg(feature = "profiler")]
     window_profiler: profiler::WindowProfiler,
     last_input_modality: InputModality,
+    touch_gestures: TouchGestureRecognizer,
+    touch_prediction_enabled: bool,
+    long_press_timer: Option<Task<()>>,
+    long_press_capture: Option<EntityId>,
     pub(crate) refreshing: bool,
     pub(crate) activation_observers: SubscriberSet<(), AnyObserver>,
     pub(crate) focus: Option<FocusId>,
@@ -1485,12 +1498,139 @@ pub(crate) enum DrawPhase {
     Focus,
 }
 
+pub(crate) const PENDING_INPUT_TIMEOUT: Duration = Duration::from_secs(1);
+
+/// Pending input for a potential multi-stroke key binding.
+pub struct PendingInputStatus<'a> {
+    keystrokes: &'a [Keystroke],
+    timeout: Option<PendingInputTimeoutStatus>,
+}
+
+impl<'a> PendingInputStatus<'a> {
+    /// Returns the keystrokes entered so far.
+    pub fn keystrokes(&self) -> &'a [Keystroke] {
+        self.keystrokes
+    }
+
+    /// Returns the timeout state for flushing this input, if it needs a timeout.
+    pub fn timeout(&self) -> Option<PendingInputTimeoutStatus> {
+        self.timeout
+    }
+}
+
+/// The timeout state for pending input.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct PendingInputTimeoutStatus {
+    duration: Duration,
+    remaining: Duration,
+    started_at: Option<Instant>,
+    paused: bool,
+}
+
+impl PendingInputTimeoutStatus {
+    /// Returns the full timeout duration.
+    pub fn duration(&self) -> Duration {
+        self.duration
+    }
+
+    /// Returns the duration remaining before pending input is flushed.
+    pub fn remaining(&self, cx: &App) -> Duration {
+        self.started_at
+            .map(|started_at| {
+                self.remaining
+                    .saturating_sub(cx.background_executor().now() - started_at)
+            })
+            .unwrap_or(self.remaining)
+    }
+
+    /// Returns whether the timeout is paused.
+    pub fn is_paused(&self) -> bool {
+        self.paused
+    }
+}
+
+#[derive(Debug)]
+struct PendingInputTimeout {
+    duration: Duration,
+    remaining: Duration,
+    state: PendingInputTimeoutState,
+}
+
+#[derive(Debug)]
+enum PendingInputTimeoutState {
+    Running { started_at: Instant, task: Task<()> },
+    Paused { pause: PendingInputTimeoutPause },
+}
+
+#[derive(Debug)]
+struct PendingInputTimeoutPause {
+    owner_id: EntityId,
+    _release_subscription: Subscription,
+}
+
+impl PendingInputTimeout {
+    fn is_paused(&self) -> bool {
+        matches!(&self.state, PendingInputTimeoutState::Paused { .. })
+    }
+
+    fn pause(&mut self, pause: PendingInputTimeoutPause, now: Instant) -> bool {
+        match std::mem::replace(&mut self.state, PendingInputTimeoutState::Paused { pause }) {
+            PendingInputTimeoutState::Running { started_at, task } => {
+                self.remaining = self.remaining.saturating_sub(now - started_at);
+                drop(task);
+                true
+            }
+            previous_state @ PendingInputTimeoutState::Paused { .. } => {
+                self.state = previous_state;
+                false
+            }
+        }
+    }
+
+    fn pause_owner_id(&self) -> Option<EntityId> {
+        match &self.state {
+            PendingInputTimeoutState::Running { .. } => None,
+            PendingInputTimeoutState::Paused { pause } => Some(pause.owner_id),
+        }
+    }
+
+    fn resume(&mut self, owner_id: EntityId, started_at: Instant, task: Task<()>) -> bool {
+        match std::mem::replace(
+            &mut self.state,
+            PendingInputTimeoutState::Running { started_at, task },
+        ) {
+            PendingInputTimeoutState::Paused { pause } if pause.owner_id == owner_id => true,
+            previous_state => {
+                self.state = previous_state;
+                false
+            }
+        }
+    }
+
+    fn reset_duration(&mut self, duration: Duration) {
+        self.duration = duration;
+        self.remaining = duration;
+    }
+
+    fn status(&self) -> PendingInputTimeoutStatus {
+        let (started_at, paused) = match &self.state {
+            PendingInputTimeoutState::Running { started_at, .. } => (Some(*started_at), false),
+            PendingInputTimeoutState::Paused { .. } => (None, true),
+        };
+        PendingInputTimeoutStatus {
+            duration: self.duration,
+            remaining: self.remaining,
+            started_at,
+            paused,
+        }
+    }
+}
+
 #[derive(Default, Debug)]
 struct PendingInput {
     keystrokes: SmallVec<[Keystroke; 1]>,
     focus: Option<FocusId>,
-    timer: Option<Task<()>>,
-    needs_timeout: bool,
+    timeout: Option<PendingInputTimeout>,
 }
 
 pub(crate) struct ElementStateBox {
@@ -1641,7 +1781,7 @@ impl WindowHost {
         let scale_factor = platform_window.scale_factor();
         let appearance = platform_window.appearance();
         let text_system = Arc::new(WindowTextSystem::new(cx.text_system().clone()));
-        let invalidator = WindowInvalidator::new();
+        let invalidator = WindowInvalidator::new(handle.window_id());
         let active = Rc::new(Cell::new(platform_window.is_active()));
         let visibility = platform_window.visibility();
         let metrics = Arc::new(ArcSwap::from_pointee(WindowMetrics {
@@ -1772,6 +1912,8 @@ impl WindowHost {
             let input_rate_tracker = input_rate_tracker.clone();
             let mut deferred_force_render = false;
             move |request_frame_options| {
+                #[cfg(feature = "profiler")]
+                let _foreground_turn = profiler::journal::foreground_turn();
                 // This must be checked before anything else: if this request
                 // arrived re-entrantly while a draw is on this thread's stack
                 // (e.g. via a nested message pump in the Windows window
@@ -1825,12 +1967,11 @@ impl WindowHost {
                     {
                         // Don't lose a pending forced render to throttling.
                         deferred_force_render |= force_render;
-                        // Must still complete the frame on platforms that require it.
-                        // On Wayland, `surface.frame()` was already called to request the
-                        // next frame callback, so we must call `surface.commit()` (via
-                        // `complete_frame`) or the compositor won't send another callback.
+                        // Deferred by throttling: ask demand-driven platforms to retry.
                         handle
-                            .update(&mut cx, |_, window, _| window.complete_frame())
+                            .update(&mut cx, |_, window, _| {
+                                window.core.platform_window.schedule_frame();
+                            })
                             .log_err();
                         // The demand that entered this branch (a deferred forced
                         // render or pending next-frame callbacks) is still
@@ -1887,7 +2028,11 @@ impl WindowHost {
 
                 handle
                     .update(&mut cx, |_, window, _| {
-                        window.complete_frame();
+                        if window.core.invalidator.is_dirty()
+                            || !window.core.next_frame_callbacks.borrow().is_empty()
+                        {
+                            window.core.platform_window.schedule_frame();
+                        }
                     })
                     .log_err();
 
@@ -1902,6 +2047,22 @@ impl WindowHost {
             }
         }));
         invalidator.set_platform_waker(platform_window.frame_waker());
+        platform_window.on_visual_viewport_changed(Box::new({
+            let mut cx = cx.to_async();
+            move || {
+                handle
+                    .update(&mut cx, |_, window, _| window.refresh())
+                    .log_err();
+            }
+        }));
+        platform_window.on_insets_changed(Box::new({
+            let mut cx = cx.to_async();
+            move |_| {
+                handle
+                    .update(&mut cx, |_, window, _| window.refresh())
+                    .log_err();
+            }
+        }));
         platform_window.on_resize(Box::new({
             let mut cx = cx.to_async();
             move |_, _| {
@@ -2078,78 +2239,101 @@ impl WindowHost {
 
         platform_window.map_window().unwrap();
 
-        Ok(Window {
-            handle,
-            invalidator,
-            removed: false,
-            platform_window,
-            display_id,
-            is_resizable,
-            is_minimizable,
-            sprite_atlas,
-            text_system,
-            text_rendering_mode: cx.text_rendering_mode.clone(),
-            rem_size: px(16.),
-            rem_size_override_stack: SmallVec::new(),
-            viewport_size: content_size,
-            layout_session: Rc::new(FrameSession::new(cx.new_layout_engine())),
-            inspector_element_id: None,
-            root: None,
-            element_id_stack: SmallVec::default(),
-            text_style_stack: Vec::new(),
-            rendered_entity_stack: Vec::new(),
-            element_offset_stack: Vec::new(),
-            content_mask_stack: Vec::new(),
-            element_opacity: 1.0,
-            requested_autoscroll: None,
-            rendered_frame: Frame::new(DispatchTree::new(cx.keymap.clone(), cx.actions.clone())),
-            next_frame: Frame::new(DispatchTree::new(cx.keymap.clone(), cx.actions.clone())),
-            next_frame_callbacks,
-            next_hitbox_id: HitboxId(0),
-            next_tooltip_id: TooltipId::default(),
-            tooltip_bounds: None,
-            dirty_views: FxHashSet::default(),
-            focus_listeners: SubscriberSet::new(),
-            focus_lost_listeners: SubscriberSet::new(),
-            focus_lost_path: SmallVec::new(),
-            default_prevented: true,
-            mouse_position,
-            mouse_hit_test: HitTest::default(),
-            modifiers,
-            capslock,
-            scale_factor,
-            bounds_observers: SubscriberSet::new(),
-            appearance,
-            appearance_observers: SubscriberSet::new(),
-            button_layout_observers: SubscriberSet::new(),
-            active,
-            hovered,
-            needs_present,
-            input_rate_tracker,
-            #[cfg(feature = "profiler")]
-            window_profiler: profiler::WindowProfiler::new(handle.window_id())?,
-            last_input_modality: InputModality::Mouse,
-            refreshing: false,
-            activation_observers: SubscriberSet::new(),
-            focus: None,
-            focus_enabled: true,
-            focus_generation: 0,
-            pending_input: None,
-            pending_modifier: ModifierState::default(),
-            pending_input_observers: SubscriberSet::new(),
-            prompt: None,
-            client_inset: None,
-            image_cache_stack: Vec::new(),
-            captured_hitbox: None,
-            #[cfg(any(feature = "inspector", debug_assertions))]
-            inspector: None,
-            #[cfg(feature = "profiler")]
-            debug_frame_overlay: crate::debug_overlay::DebugFrameOverlay::new(),
-            a11y: A11y::new(
-                a11y_active_flag,
-                accessibility_force_disabled,
-                initial_window_title,
-            ),
+        Ok(WindowHost {
+            core: WindowHostCore {
+                handle,
+                invalidator,
+                frame_pipeline: Rc::new(RefCell::new(cx.new_frame_pipeline(handle.window_id()))),
+                removed: false,
+                metrics,
+                platform_window,
+                display_id,
+                is_resizable,
+                is_minimizable,
+                sprite_atlas,
+                text_system,
+                text_rendering_mode: cx.text_rendering_mode.clone(),
+                rem_size: px(16.),
+                viewport_size: content_size,
+                root: None,
+                last_text_input_configuration: None,
+                focused_text_input_active: false,
+                next_frame_callbacks,
+                focus_listeners: SubscriberSet::new(),
+                focus_lost_listeners: SubscriberSet::new(),
+                default_prevented: true,
+                mouse_position,
+                mouse_hit_test: HitTest::default(),
+                modifiers,
+                capslock,
+                scale_factor,
+                bounds_observers: SubscriberSet::new(),
+                appearance,
+                appearance_observers: SubscriberSet::new(),
+                button_layout_observers: SubscriberSet::new(),
+                active,
+                visibility,
+                visibility_observers: SubscriberSet::new(),
+                hovered,
+                needs_present,
+                input_rate_tracker,
+                #[cfg(feature = "profiler")]
+                window_profiler: profiler::WindowProfiler::new(handle.window_id())?,
+                last_input_modality: InputModality::Mouse,
+                touch_gestures: TouchGestureRecognizer::new(
+                    cx.platform
+                        .gestures()
+                        .map_or_else(GestureTuning::default, |gestures| gestures.tuning()),
+                ),
+                touch_prediction_enabled: true,
+                long_press_timer: None,
+                long_press_capture: None,
+                refreshing: false,
+                activation_observers: SubscriberSet::new(),
+                focus: None,
+                focus_enabled: true,
+                focus_generation: 0,
+                pending_input: None,
+                pending_modifier: ModifierState::default(),
+                pending_input_observers: SubscriberSet::new(),
+                prompt: None,
+                client_inset: None,
+                captured_hitbox: None,
+                #[cfg(any(feature = "inspector", debug_assertions))]
+                inspector: None,
+                #[cfg(feature = "profiler")]
+                debug_frame_overlay: crate::debug_overlay::DebugFrameOverlay::new(),
+                a11y: A11y::new(
+                    a11y_active_flag,
+                    accessibility_force_disabled,
+                    initial_window_title,
+                ),
+            },
+            frame_state: WindowFrameState {
+                rem_size_override_stack: SmallVec::new(),
+                layout_session: Rc::new(FrameSession::new(cx.new_layout_engine())),
+                inspector_element_id: None,
+                dirty_views: FxHashSet::default(),
+                focus_lost_path: SmallVec::new(),
+                element_id_stack: SmallVec::default(),
+                text_style_stack: Vec::new(),
+                rendered_entity_stack: Vec::new(),
+                element_offset_stack: Vec::new(),
+                element_opacity: 1.0,
+                content_mask_stack: Vec::new(),
+                requested_autoscroll: None,
+                image_cache_stack: Vec::new(),
+                rendered_frame: Frame::new(DispatchTree::new(
+                    cx.keymap.clone(),
+                    cx.actions.clone(),
+                )),
+                next_frame: Frame::new(DispatchTree::new(cx.keymap.clone(), cx.actions.clone())),
+                next_hitbox_id: HitboxId(0),
+                next_tooltip_id: TooltipId::default(),
+                tooltip_bounds: None,
+                #[cfg(debug_assertions)]
+                frame_phase: FramePhase::Idle,
+            },
         })
     }
 }
@@ -2345,27 +2529,18 @@ impl Window<'_> {
             return;
         }
 
-        self.focus = Some(handle.id);
-        self.focus_generation = self.focus_generation.wrapping_add(1);
-        self.clear_pending_keystrokes();
-
-        // Avoid re-entrant entity updates by deferring observer notifications to the end of the
-        // current effect cycle, and only for this window.
-        let window_handle = self.handle;
-        cx.defer(move |cx| {
-            window_handle
-                .update(cx, |_, window, cx| {
-                    window.pending_input_changed(cx);
-                })
-                .ok();
-        });
+        self.core.focus = Some(handle.id);
+        self.core.focus_generation = self.core.focus_generation.wrapping_add(1);
+        self.clear_pending_keystrokes(cx);
 
         self.refresh();
     }
 
     /// Remove focus from all elements within this context's window.
-    pub fn blur(&mut self) {
-        if !self.focus_enabled {
+    pub fn blur(&mut self, cx: &mut App) {
+        self.clear_pending_keystrokes(cx);
+
+        if !self.core.focus_enabled {
             return;
         }
 
@@ -2377,9 +2552,9 @@ impl Window<'_> {
     }
 
     /// Blur the window and don't allow anything in it to be focused again.
-    pub fn disable_focus(&mut self) {
-        self.blur();
-        self.focus_enabled = false;
+    pub fn disable_focus(&mut self, cx: &mut App) {
+        self.blur(cx);
+        self.core.focus_enabled = false;
     }
 
     /// Move focus to next tab stop.
@@ -2668,7 +2843,8 @@ impl Window<'_> {
 
     /// Schedule the given closure to be run directly after the current frame is rendered.
     pub fn on_next_frame(&self, callback: impl FnOnce(&mut Window, &mut App) + 'static) {
-        RefCell::borrow_mut(&self.next_frame_callbacks).push(Box::new(callback));
+        RefCell::borrow_mut(&self.core.next_frame_callbacks).push(Box::new(callback));
+        self.core.platform_window.schedule_frame();
         // Next-frame callbacks create frame demand without dirtying the
         // window, so the platform's frame source must be woken explicitly.
         self.core.invalidator.wake_platform();
@@ -3259,10 +3435,6 @@ impl Window<'_> {
         self.core.capslock
     }
 
-    fn complete_frame(&self) {
-        self.platform_window.completed_frame();
-    }
-
     /// Produces a new frame and assigns it to `rendered_frame`. To actually show
     /// the contents of the new [`Scene`], use [`Self::present`].
     ///
@@ -3272,16 +3444,9 @@ impl Window<'_> {
     #[doc(hidden)]
     #[profiling::function]
     pub fn draw(&mut self, cx: &mut App) -> ArenaClearNeeded {
-        // Drain every draw in profiler builds so a stale first-invalidation
-        // timestamp can't leak across enable/disable of runtime tracing.
-        #[cfg(feature = "profiler")]
-        let frame_dirty = self.core.invalidator.take_frame_dirty();
-        #[cfg(feature = "profiler")]
-        self.core.window_profiler.begin_draw();
-
-        // Set up the per-App arena for element allocation during this draw.
-        // This ensures that multiple test Apps have isolated arenas.
-        let arena_scope = ElementArenaScope::enter(&cx.element_arena);
+        let pipeline = self.core.frame_pipeline.clone();
+        pipeline.borrow_mut().draw(self, cx)
+    }
 
     /// Opens a frame: samples the platform window, resets the scratch state a
     /// frame rebuilds, and takes ownership of the invalidations this frame owes.
@@ -3352,14 +3517,30 @@ impl Window<'_> {
         // paint_range indices remain valid for reuse_paint on the next frame.
         // Search backwards to find the last Some entry, since reuse_paint may
         // have copied None slots from the previous frame. (Fixes #50456)
-        if let Some(input_handler) = self
+        let focused_text_input_active = if let Some(mut input_handler) = self
+            .frame_state
             .next_frame
             .input_handlers
             .iter_mut()
             .rev()
             .find_map(|h| h.take())
         {
-            self.platform_window.set_input_handler(input_handler);
+            let accepts_text_input = input_handler.accepts_text_input(self, cx);
+            self.core.platform_window.set_input_handler(input_handler);
+            accepts_text_input
+        } else {
+            false
+        };
+        self.apply_text_input_configuration(cx);
+        if focused_text_input_active != self.core.focused_text_input_active {
+            self.core.focused_text_input_active = focused_text_input_active;
+            self.core
+                .platform_window
+                .text_input_state_changed(if focused_text_input_active {
+                    TextInputStateChange::FocusGained
+                } else {
+                    TextInputStateChange::FocusLost
+                });
         }
 
         self.frame_state.layout_session.clear();
@@ -3479,24 +3660,28 @@ impl Window<'_> {
 
     #[profiling::function]
     fn present(&mut self) {
-        self.platform_window.draw(&self.rendered_frame.scene);
         #[cfg(feature = "profiler")]
-        self.window_profiler.record_present(
-            self.active.get(),
-            !self.next_frame_callbacks.borrow().is_empty(),
+        let _foreground_turn = profiler::journal::foreground_turn();
+        #[cfg(feature = "profiler")]
+        let present_start = Instant::now();
+        self.core
+            .platform_window
+            .present(&mut |renderer| renderer.draw(&self.frame_state.rendered_frame.scene));
+        #[cfg(feature = "profiler")]
+        self.core.window_profiler.record_present(
+            present_start,
+            Instant::now(),
+            self.core.active.get(),
+            !self.core.next_frame_callbacks.borrow().is_empty(),
         );
         self.core.needs_present.set(false);
         profiling::finish_frame!();
     }
 
     /// Presents the most recently drawn frame if it hasn't been presented yet.
-    ///
-    /// Benchmarks drive drawing synchronously rather than through a platform
-    /// frame-request loop, so they call this after each measured update to
-    /// submit the frame like production presentation would.
-    #[cfg(feature = "bench")]
-    pub fn present_if_needed(&mut self) {
-        if self.needs_present.get() {
+    #[cfg(all(test, feature = "profiler"))]
+    pub(crate) fn present_if_needed(&mut self) {
+        if self.core.needs_present.get() {
             self.present();
         }
     }
@@ -4233,25 +4418,7 @@ impl Window<'_> {
     /// Note that the multiple calls to this method will only result in one `Asset::load` call at a
     /// time.
     pub fn use_asset<A: Asset>(&mut self, source: &A::Source, cx: &mut App) -> Option<A::Output> {
-        let (task, is_first) = cx.fetch_asset::<A>(source);
-        task.clone().now_or_never().or_else(|| {
-            if is_first {
-                let entity_id = self.current_view();
-                self.spawn(cx, {
-                    let task = task.clone();
-                    async move |cx| {
-                        task.await;
-
-                        cx.on_next_frame(move |_, cx| {
-                            cx.notify(entity_id);
-                        });
-                    }
-                })
-                .detach();
-            }
-
-            None
-        })
+        cx.asset_entry::<A>(source).use_by(self.current_view())
     }
 
     /// Asynchronously load an asset, if the asset hasn't finished loading or doesn't exist this will return None.
@@ -4260,8 +4427,7 @@ impl Window<'_> {
     /// Note that the multiple calls to this method will only result in one `Asset::load` call at a
     /// time.
     pub fn get_asset<A: Asset>(&mut self, source: &A::Source, cx: &mut App) -> Option<A::Output> {
-        let (task, _) = cx.fetch_asset::<A>(source);
-        task.now_or_never()
+        cx.fetch_asset::<A>(source)
     }
     /// Obtain the current element offset. This method should only be called during the
     /// prepaint phase of element drawing.
@@ -5682,12 +5848,12 @@ impl Window<'_> {
             .unwrap_or_else(|| action.name().to_string())
     }
 
-    /// Dispatch a mouse or keyboard event on the window.
+    /// Dispatch a mouse, keyboard, or touch event on the window.
     #[profiling::function]
     pub fn dispatch_event(&mut self, event: PlatformInput, cx: &mut App) -> DispatchEventResult {
         #[cfg(feature = "profiler")]
-        self.window_profiler.begin_input();
-        let update_count_before = self.invalidator.update_count();
+        self.core.window_profiler.begin_input(event.kind_name());
+        let update_count_before = self.core.invalidator.update_count();
         // Track input modality for focus-visible styling and hover suppression.
         // Hover is suppressed during keyboard modality so that keyboard navigation
         // doesn't show hover highlights on the item under the mouse cursor.
@@ -6169,7 +6335,7 @@ impl Window<'_> {
         }
 
         if !match_result.pending.is_empty() {
-            currently_pending.timer.take();
+            let previous_timeout = currently_pending.timeout.take();
             currently_pending.keystrokes = match_result.pending;
             currently_pending.focus = self.core.focus;
 
@@ -6183,39 +6349,24 @@ impl Window<'_> {
                     accepts
                 });
 
-            currently_pending.needs_timeout |=
-                match_result.pending_has_binding || text_input_requires_timeout;
-
-            if currently_pending.needs_timeout {
-                currently_pending.timer = Some(self.spawn(cx, async move |cx| {
-                    cx.background_executor.timer(Duration::from_secs(1)).await;
-                    cx.update(move |window, cx| {
-                        let Some(currently_pending) = window
-                            .pending_input
-                            .take()
-                            .filter(|pending| pending.focus == window.focus)
-                        else {
-                            return;
-                        };
-
-                        let node_id = window.focus_node_id_in_rendered_frame(window.focus);
-                        let dispatch_path =
-                            window.rendered_frame.dispatch_tree.dispatch_path(node_id);
-
-                        let to_replay = window
-                            .rendered_frame
-                            .dispatch_tree
-                            .flush_dispatch(currently_pending.keystrokes, &dispatch_path);
-
-                        window.pending_input_changed(cx);
-                        window.replay_pending_input(to_replay, cx)
-                    })
-                    .log_err();
-                }));
+            let needs_timeout = previous_timeout.is_some()
+                || match_result.pending_has_binding
+                || text_input_requires_timeout;
+            currently_pending.timeout = if needs_timeout {
+                match previous_timeout {
+                    Some(mut timeout) if timeout.is_paused() => {
+                        timeout.reset_duration(PENDING_INPUT_TIMEOUT);
+                        Some(timeout)
+                    }
+                    previous_timeout => {
+                        drop(previous_timeout);
+                        Some(self.new_pending_input_timeout(PENDING_INPUT_TIMEOUT, cx))
+                    }
+                }
             } else {
-                currently_pending.timer = None;
-            }
-            self.pending_input = Some(currently_pending);
+                None
+            };
+            self.core.pending_input = Some(currently_pending);
             self.pending_input_changed(cx);
             cx.propagate_event = false;
             return;
@@ -6393,27 +6544,122 @@ impl Window<'_> {
         }
     }
 
-    /// Pending input that can still complete a binding. Input left over from a previous focus can
-    /// never complete one.
-    fn active_pending_input(&self) -> Option<&PendingInput> {
-        self.pending_input
-            .as_ref()
-            .filter(|pending_input| pending_input.focus == self.focus)
-    }
-
     /// Determine whether a potential multi-stroke key binding is in progress on this window.
     pub fn has_pending_keystrokes(&self) -> bool {
-        self.active_pending_input().is_some()
+        self.pending_input().is_some()
     }
 
-    pub(crate) fn clear_pending_keystrokes(&mut self) {
-        self.pending_input.take();
+    #[cfg(test)]
+    pub(crate) fn pending_input_is_none(&self) -> bool {
+        self.core.pending_input.is_none()
+    }
+
+    pub(crate) fn clear_pending_keystrokes(&mut self, cx: &mut App) {
+        if self.core.pending_input.take().is_some() {
+            self.defer_pending_input_changed(cx);
+        }
+    }
+
+    /// Returns pending input that can still complete a multi-stroke key binding. Input left over
+    /// from a previous focus can never complete one.
+    pub fn pending_input(&self) -> Option<PendingInputStatus<'_>> {
+        self.core
+            .pending_input
+            .as_ref()
+            .filter(|pending_input| pending_input.focus == self.core.focus)
+            .map(|pending_input| PendingInputStatus {
+                keystrokes: pending_input.keystrokes.as_slice(),
+                timeout: pending_input
+                    .timeout
+                    .as_ref()
+                    .map(PendingInputTimeout::status),
+            })
+    }
+
+    /// Pauses or resumes the current pending input timeout on behalf of `owner`.
+    ///
+    /// A paused timeout resumes automatically if `owner` is released. Returns whether the timeout
+    /// state changed. A timeout paused by one owner cannot be resumed by another.
+    pub fn set_pending_input_timeout_paused<T: 'static>(
+        &mut self,
+        owner: &Entity<T>,
+        paused: bool,
+        cx: &mut App,
+    ) -> bool {
+        let owner_id = owner.entity_id();
+        if !paused {
+            return self.resume_pending_input_timeout(owner_id, cx);
+        }
+
+        let timeout = self
+            .core
+            .pending_input
+            .as_ref()
+            .filter(|pending_input| pending_input.focus == self.core.focus)
+            .and_then(|pending_input| pending_input.timeout.as_ref());
+        let Some(timeout) = timeout else {
+            return false;
+        };
+        if timeout.is_paused() {
+            return false;
+        }
+
+        let release_subscription = self.observe_release(owner, cx, move |_, window, cx| {
+            window.resume_pending_input_timeout(owner_id, cx);
+        });
+        let now = cx.background_executor().now();
+        let changed = self
+            .core
+            .pending_input
+            .as_mut()
+            .filter(|pending_input| pending_input.focus == self.core.focus)
+            .and_then(|pending_input| pending_input.timeout.as_mut())
+            .is_some_and(|timeout| {
+                timeout.pause(
+                    PendingInputTimeoutPause {
+                        owner_id,
+                        _release_subscription: release_subscription,
+                    },
+                    now,
+                )
+            });
+
+        if changed {
+            self.defer_pending_input_changed(cx);
+        }
+        changed
+    }
+
+    fn resume_pending_input_timeout(&mut self, owner_id: EntityId, cx: &mut App) -> bool {
+        let Some(remaining) = self
+            .core
+            .pending_input
+            .as_ref()
+            .and_then(|pending_input| pending_input.timeout.as_ref())
+            .filter(|timeout| timeout.pause_owner_id() == Some(owner_id))
+            .map(|timeout| timeout.remaining)
+        else {
+            return false;
+        };
+
+        let (started_at, task) = self.start_pending_input_timeout(remaining, cx);
+        let changed = self
+            .core
+            .pending_input
+            .as_mut()
+            .and_then(|pending_input| pending_input.timeout.as_mut())
+            .is_some_and(|timeout| timeout.resume(owner_id, started_at, task));
+
+        if changed {
+            self.defer_pending_input_changed(cx);
+        }
+        changed
     }
 
     /// Returns the currently pending input keystrokes that might result in a multi-stroke key binding.
     pub fn pending_input_keystrokes(&self) -> Option<&[Keystroke]> {
-        self.active_pending_input()
-            .map(|pending_input| pending_input.keystrokes.as_slice())
+        self.pending_input()
+            .map(|pending_input| pending_input.keystrokes())
     }
 
     fn replay_pending_input(&mut self, replays: SmallVec<[Replay; 1]>, cx: &mut App) {
@@ -7097,7 +7343,7 @@ impl Window<'_> {
                 }
             }
             accesskit::Action::Blur => {
-                self.blur();
+                self.blur(cx);
             }
             _ => {
                 log::debug!(
@@ -7378,6 +7624,7 @@ impl<V: 'static + Render> WindowHandle<V> {
             any_handle: AnyWindowHandle {
                 id,
                 state_type: TypeId::of::<V>(),
+                root_entity_type_name: std::any::type_name::<V>(),
             },
             state_type: PhantomData,
         }
@@ -7496,6 +7743,7 @@ impl<V: 'static> From<WindowHandle<V>> for AnyWindowHandle {
 pub struct AnyWindowHandle {
     pub(crate) id: WindowId,
     state_type: TypeId,
+    root_entity_type_name: &'static str,
 }
 
 impl AnyWindowHandle {
@@ -7851,6 +8099,7 @@ mod tests {
         cell::{Cell, RefCell},
         path::PathBuf,
         rc::Rc,
+        time::Duration,
     };
 
     use crate::{
@@ -8645,6 +8894,17 @@ mod tests {
         observed_drops: Rc<RefCell<Vec<PathBuf>>>,
     }
 
+    struct FileDropExitView(Rc<Cell<usize>>);
+
+    impl Render for FileDropExitView {
+        fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
+            div().size_full().on_file_drop_exit({
+                let observed_file_drop_exit = self.0.clone();
+                move |_, _, _| observed_file_drop_exit.set(observed_file_drop_exit.get() + 1)
+            })
+        }
+    }
+
     impl Render for FileDragView {
         fn render(&mut self, _: &mut Window, _: &mut Context<Self>) -> impl IntoElement {
             div()
@@ -8762,10 +9022,24 @@ mod tests {
             Some(&outside_position)
         );
 
-        let destination: AnyWindowHandle = cx.add_window(|_, _| EmptyView).into();
+        let first_destination_exit_count = Rc::new(Cell::new(0));
+        let first_destination: AnyWindowHandle = cx
+            .add_window({
+                let first_destination_exit_count = first_destination_exit_count.clone();
+                move |_, _| FileDropExitView(first_destination_exit_count)
+            })
+            .into();
+        let second_destination_exit_count = Rc::new(Cell::new(0));
+        let second_destination: AnyWindowHandle = cx
+            .add_window({
+                let second_destination_exit_count = second_destination_exit_count.clone();
+                move |_, _| FileDropExitView(second_destination_exit_count)
+            })
+            .into();
         let reentry_position = point(px(30.), px(30.));
         let external_paths = || ExternalPaths([successful_path.clone()].into_iter().collect());
-        let update_result = cx.update_window(destination, |_, window, cx| {
+        let update_result = cx.update_window(first_destination, |_, window, cx| {
+            window.draw(cx).clear(cx);
             window.dispatch_event(
                 FileDropEvent::Entered {
                     position: reentry_position,
@@ -8781,10 +9055,48 @@ mod tests {
             );
             window.dispatch_event(FileDropEvent::Exited.to_platform_input(), cx);
             assert!(cx.active_drag.is_none());
+            assert_eq!(first_destination_exit_count.get(), 1);
+            assert_eq!(second_destination_exit_count.get(), 0);
         });
         assert!(
             update_result.is_ok(),
-            "failed to handle drag in destination window: {update_result:?}"
+            "failed to handle drag in first destination window: {update_result:?}"
+        );
+
+        let update_result = cx.update_window(second_destination, |_, window, cx| {
+            window.draw(cx).clear(cx);
+            window.dispatch_event(
+                PlatformInput::KeyDown(KeyDownEvent {
+                    keystroke: Keystroke::parse("down").expect("valid keystroke"),
+                    is_held: false,
+                    prefer_character_input: false,
+                }),
+                cx,
+            );
+            window.dispatch_event(
+                FileDropEvent::Entered {
+                    position: reentry_position,
+                    paths: external_paths(),
+                }
+                .to_platform_input(),
+                cx,
+            );
+            assert!(
+                cx.active_drag
+                    .as_ref()
+                    .is_some_and(|drag| drag.value.downcast_ref::<ExternalPaths>().is_some())
+            );
+            assert_eq!(first_destination_exit_count.get(), 1);
+            assert_eq!(second_destination_exit_count.get(), 0);
+
+            window.dispatch_event(FileDropEvent::Exited.to_platform_input(), cx);
+            assert!(cx.active_drag.is_none());
+            assert_eq!(first_destination_exit_count.get(), 1);
+            assert_eq!(second_destination_exit_count.get(), 1);
+        });
+        assert!(
+            update_result.is_ok(),
+            "failed to handle drag in second destination window: {update_result:?}"
         );
 
         let update_result = cx.update_window(successful.window, |_, window, cx| {
