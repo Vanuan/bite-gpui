@@ -11,7 +11,7 @@ workspace = true
 
 [features]
 default = ["multithreaded"]
-multithreaded = ["dep:wasm_thread", "scheduler/wasm-threads"]
+multithreaded = ["dep:wasm_thread"]
 
 [lib]
 path = "src/gpui_web.rs"
@@ -24,7 +24,6 @@ unicode-segmentation = "1.10"
 [target.'cfg(target_family = "wasm")'.dependencies]
 gpui_engine.workspace = true
 gpui_platform.workspace = true
-scheduler.workspace = true
 parking_lot = { workspace = true, features = ["nightly"] }
 gpui_wgpu.workspace = true
 http_client.workspace = true
@@ -105,5 +104,3 @@ anyhow.workspace = true
 gpui.workspace = true
 smallvec.workspace = true
 
-[package.metadata.cargo-shear]
-ignored = ["scheduler"]

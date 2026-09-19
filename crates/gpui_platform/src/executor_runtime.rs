@@ -11,8 +11,7 @@ use scheduler::Scheduler;
 use crate::{ActivityGuard, PlatformDispatcher, PlatformScheduler};
 
 pub use scheduler::{
-    DedicatedExecutor, FallibleTask, LocalExecutor as SchedulerLocalExecutor, Priority,
-    RunnableMeta, Task,
+    FallibleTask, LocalExecutor as SchedulerLocalExecutor, Priority, RunnableMeta, Task,
 };
 
 /// A pointer to the executor that is currently running,
