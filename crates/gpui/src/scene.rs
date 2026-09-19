@@ -9,6 +9,8 @@ use crate::{
     Point, Radians, ScaledFilter, ScaledPixels, Size, bounds_tree::BoundsTree, point,
 };
 use smallvec::SmallVec;
+
+pub use gpui_types::DrawOrder;
 use std::{
     fmt::Debug,
     iter::Peekable,
@@ -25,9 +27,6 @@ pub use abi::{SCENE_BUFFER_LAYOUTS, SceneBufferLayout};
 #[allow(non_camel_case_types, unused)]
 #[expect(missing_docs)]
 pub type PathVertex_ScaledPixels = PathVertex<ScaledPixels>;
-
-#[expect(missing_docs)]
-pub type DrawOrder = u32;
 
 /// A boolean with the same four-byte representation in Rust and WGSL.
 /// Scene structs use it over one-byte [`bool`] to keep the storage-buffer ABI explicit.
