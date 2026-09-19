@@ -532,6 +532,7 @@ any_vec = "0.14"
 anyhow = "1.0.86"
 ashpd = { version = "0.13", default-features = false, features = [
     "async-io",
+    "inhibit",
     "notification",
     "open_uri",
     "file_chooser",
@@ -561,6 +562,8 @@ aws-credential-types = { version = "1.2.8", features = [
 ] }
 aws-sdk-bedrockruntime = { version = "1.112.0", features = [
     "behavior-version-latest",
+"default-https-client",
+"rt-tokio",
 ] }
 aws-sigv4 = { version = "1.4.0", features = ["http1"] }
 aws-smithy-runtime-api = { version = "1.9.2", features = ["http-1x", "client"] }
@@ -697,12 +700,24 @@ num-format = "0.4.4"
 objc = "0.2"
 objc2 = "0.6"
 objc2-app-kit = { version = "0.3.2", default-features = false, features = [
+    "NSAlert",
+    "NSApplication",
     "NSButton",
     "NSControl",
+    "NSDraggingItem",
     "NSGraphics",
+    "NSImage",
+    "NSOpenPanel",
+    "NSPanel",
+    "NSPasteboard",
     "NSResponder",
+    "NSSavePanel",
+    "NSScreen",
+    "NSTrackingArea",
     "NSView",
     "NSWindow",
+    "NSWorkspace",
+    "block2",
     "objc2-core-foundation",
 ] }
 objc2-foundation = { version = "=0.3.2", default-features = false, features = [
@@ -910,6 +925,13 @@ yawc = { git = "https://github.com/zed-industries/yawc", rev = "71a452f551cac178
 zeroize = "1.8"
 zstd = "0.11"
 
+arc-swap = "1.9.0"
+objc2-screen-capture-kit = { version = "=0.3.2", default-features = false, features = [
+    "block2",
+    "objc2-core-graphics",
+    "SCShareableContent",
+    "std"
+] }
 [workspace.dependencies.windows]
 version = "0.61"
 features = [
@@ -954,6 +976,7 @@ features = [
     "Win32_System_Ole",
     "Win32_System_Performance",
     "Win32_System_Pipes",
+    "Win32_System_Power",
     "Win32_System_RestartManager",
     "Win32_System_SystemInformation",
     "Win32_System_SystemServices",
