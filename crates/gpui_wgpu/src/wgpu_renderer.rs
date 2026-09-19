@@ -1,11 +1,12 @@
 use crate::{CompositorGpuHint, WgpuAtlas, WgpuContext};
 use bytemuck::{Pod, Zeroable};
-use gpui::{
-    AtlasTextureId, Background, Bounds, DevicePixels, GpuSpecs, MonochromeSprite, Path, Point,
-    PolychromeSprite, PrimitiveBatch, Quad, ScaledPixels, Scene, Shadow, Size, SubpixelSprite,
-    Underline, get_gamma_correction_ratios,
+use gpui_engine::{
+    AtlasTextureId, MonochromeSprite, Path, PlatformAtlas, PolychromeSprite, PrimitiveBatch, Quad,
+    Scene, SceneRenderer, SubpixelSprite, Underline, get_gamma_correction_ratios,
 };
-use gpui_platform::{Background, Bounds, DevicePixels, GpuSpecs, Point, ScaledPixels, Size};
+use gpui_platform::{
+    Background, Bounds, DevicePixels, GpuSpecs, Point, ScaledPixels, Shadow, Size,
+};
 use log::warn;
 #[cfg(not(target_family = "wasm"))]
 use raw_window_handle::{HasDisplayHandle, HasWindowHandle};
