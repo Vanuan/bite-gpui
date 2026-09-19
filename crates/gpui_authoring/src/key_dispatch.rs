@@ -1303,7 +1303,6 @@ mod tests {
             fn request_layout(
                 &mut self,
                 _: Option<&GlobalElementId>,
-                _: Option<&InspectorElementId>,
                 window: &mut Window,
                 cx: &mut App,
             ) -> (LayoutId, Self::RequestLayoutState) {
@@ -1312,7 +1311,6 @@ mod tests {
             fn prepaint(
                 &mut self,
                 _: Option<&GlobalElementId>,
-                _: Option<&InspectorElementId>,
                 _: Bounds<Pixels>,
                 _: &mut Self::RequestLayoutState,
                 window: &mut Window,
@@ -1323,7 +1321,6 @@ mod tests {
             fn paint(
                 &mut self,
                 _: Option<&GlobalElementId>,
-                _: Option<&InspectorElementId>,
                 _: Bounds<Pixels>,
                 _: &mut Self::RequestLayoutState,
                 _: &mut Self::PrepaintState,
@@ -1462,8 +1459,8 @@ mod tests {
         let prefers_ime_after_blur = {
             let mut platform_window = cx.test_window(cx.window_handle());
             let mut input_handler = platform_window.take_input_handler();
-            cx.update(|window, _| {
-                window.blur();
+            cx.update(|window, cx| {
+                window.blur(cx);
                 assert!(!window.has_pending_keystrokes());
                 assert!(window.pending_input_keystrokes().is_none());
             });
