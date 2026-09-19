@@ -49,9 +49,12 @@ wasm-bindgen-futures.workspace = true
 web-sys = { version = "0.3", features = ["HtmlCanvasElement"] }
 js-sys.workspace = true
 
+wgpu = { workspace = true, features = ["webgl"] }
 [dev-dependencies]
 criterion.workspace = true
 
+gpui = { workspace = true, features = ["test-support"] }
+naga = { version = "29.0.4", features = ["wgsl-in"] }
 [[bench]]
 name = "layout_line"
 harness = false
