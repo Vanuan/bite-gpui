@@ -710,8 +710,6 @@ pub struct App {
     pub(crate) mode: GpuiMode,
     pub(crate) cursor_hide_mode: CursorHideMode,
     pub(crate) reduce_motion: bool,
-    /// Origin of the shared clock that phase-locks synced repeating animations.
-    pub(crate) synced_animation_epoch: Instant,
     /// Whether the app was built with accessibility forcibly disabled. No
     /// accesskit APIs will be called when this flag is set.
     pub(crate) accessibility_force_disabled: bool,
@@ -752,7 +750,6 @@ impl App {
         crate::profiler::install_profiler_hooks();
         #[cfg(feature = "profiler")]
         let foreground_journal = crate::profiler::journal::install_foreground_journal();
-        let synced_animation_epoch = background_executor.now();
 
         let text_system = Arc::new(DefaultTextSystem::new(platform.text_system()));
         let entities = EntityMap::new();
@@ -830,7 +827,6 @@ impl App {
                 quitting: false,
                 cursor_hide_mode: CursorHideMode::default(),
                 reduce_motion: false,
-                synced_animation_epoch,
                 accessibility_force_disabled: false,
 
                 #[cfg(any(test, feature = "test-support", debug_assertions))]
