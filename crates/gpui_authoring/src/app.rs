@@ -3167,7 +3167,7 @@ mod test {
     #[cfg(unix)]
     use std::os::unix::ffi::OsStringExt;
 
-    use crate::{AppContext, Context, Empty, IntoElement, Render, TestAppContext, Window};
+    use crate::{AppContext, Context, DefaultTextSystemExt, Empty, FallbackFontClass, IntoElement, MissingGlyph, Render, TestAppContext, Window};
 
     struct RenderCounter(Rc<Cell<usize>>);
 
@@ -3193,6 +3193,73 @@ mod test {
         cx.to_async().refresh();
 
         assert_eq!(render_count.get(), render_count_before_refresh + 1);
+    }
+
+    #[gpui::test]
+    fn missing_glyph_callbacks_follow_subscription_lifetime(cx: &mut TestAppContext) {
+        let observed = Rc::new(RefCell::new(Vec::new()));
+        let subscription = cx.update(|cx| {
+            let observed = observed.clone();
+            cx.on_missing_glyphs(move |missing_glyphs, _| {
+                observed.borrow_mut().extend_from_slice(missing_glyphs);
+            })
+        });
+        cx.update(|cx| {
+            cx.text_system()
+                .as_default_text_system()
+                .expect("the test harness installs a DefaultTextSystem")
+                .report_missing_glyphs_in_test(vec![missing_glyph("active")]);
+        });
+        cx.run_until_parked();
+        assert_eq!(observed.borrow().as_slice(), &[missing_glyph("active")]);
+
+        let second_observed = Rc::new(RefCell::new(Vec::new()));
+        let second_subscription = cx.update(|cx| {
+            let second_observed = second_observed.clone();
+            cx.on_missing_glyphs(move |missing_glyphs, _| {
+                second_observed
+                    .borrow_mut()
+                    .extend_from_slice(missing_glyphs);
+            })
+        });
+        cx.update(|cx| {
+            cx.text_system()
+                .as_default_text_system()
+                .expect("the test harness installs a DefaultTextSystem")
+                .report_missing_glyphs_in_test(vec![missing_glyph("replacement")]);
+        });
+        cx.run_until_parked();
+        assert_eq!(observed.borrow().as_slice(), &[missing_glyph("active")]);
+        assert_eq!(
+            second_observed.borrow().as_slice(),
+            &[missing_glyph("replacement")]
+        );
+
+        drop(subscription);
+        cx.update(|cx| {
+            cx.text_system()
+                .as_default_text_system()
+                .expect("the test harness installs a DefaultTextSystem")
+                .report_missing_glyphs_in_test(vec![missing_glyph("after old drop")]);
+        });
+        cx.run_until_parked();
+        assert_eq!(
+            second_observed.borrow().as_slice(),
+            &[
+                missing_glyph("replacement"),
+                missing_glyph("after old drop")
+            ]
+        );
+
+        drop(second_subscription);
+        cx.update(|cx| {
+            cx.text_system()
+                .as_default_text_system()
+                .expect("the test harness installs a DefaultTextSystem")
+                .report_missing_glyphs_in_test(vec![missing_glyph("inactive")]);
+        });
+        cx.run_until_parked();
+        assert_eq!(second_observed.borrow().len(), 2);
     }
 
     #[test]
