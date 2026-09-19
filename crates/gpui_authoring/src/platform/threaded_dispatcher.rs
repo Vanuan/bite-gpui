@@ -308,7 +308,7 @@ impl ThreadedDispatcher {
     /// readiness between them: a task that perpetually re-queues itself (like
     /// an idle-time sweep) would otherwise keep [`Self::drain_main_queue`]
     /// looping past the completion the caller is waiting for.
-    #[cfg(any(test, feature = "bench"))]
+    #[cfg(any(test, feature = "bench-support"))]
     fn run_one_main_task(&self) -> bool {
         let runnable = self.main_receiver.lock().try_pop();
         match runnable {
