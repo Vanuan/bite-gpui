@@ -6,36 +6,149 @@
 
 use anyhow::{Context as _, Result, anyhow};
 use collections::{FxHashMap, FxHashSet};
-use core::fmt;
-use derive_more::{Add, Deref, FromStr, Sub};
-use gpui_engine::{Font, FontId, FontMetrics, FontRun, LineLayout, LineLayoutIndex, LineWrapper, LineWrapperHandle, MissingGlyph, MissingGlyphReports, MissingGlyphSink, PlatformTextSystem, RenderGlyphParams, TextRenderingMode, TextSystem, WrappedLineLayout, font};
+use gpui_engine::{
+    Font, FontId, FontMetrics, FontRun, LineLayout, LineLayoutIndex, LineWrapper, LineWrapperHandle,
+    MissingGlyph, MissingGlyphReports, MissingGlyphSink, PlatformTextSystem, RenderGlyphParams,
+    TextRenderingMode, TextSystem, WrappedLineLayout, font,
+};
 use gpui_shared_string::SharedString;
 use gpui_types::{Bounds, DevicePixels, Hsla, Pixels, Size, px};
 use itertools::Itertools;
 use parking_lot::{Mutex, RwLock, RwLockUpgradableReadGuard};
 use smallvec::{SmallVec, smallvec};
-use std::{
-    borrow::Cow,
-    cmp,
-    collections::VecDeque, fmt::{Debug, Display, Formatter}, hash::{Hash, Hasher},
-    ops::{Deref, DerefMut, Range},
-    sync::Arc,
+use std::borrow::Cow;
+use std::collections::VecDeque;
+use std::future::Future;
+use std::ops::Range;
+use std::pin::Pin;
+use std::sync::{
+    Arc,
+    atomic::{AtomicUsize, Ordering},
 };
 
-/// An opaque identifier for a specific font.
-#[derive(Hash, PartialEq, Eq, Clone, Copy, Debug)]
-#[repr(C)]
-pub struct FontId(pub usize);
+const MAX_REPORTED_MISSING_GLYPHS: usize = 1024;
 
-/// An opaque identifier for a specific font family.
-#[derive(Hash, PartialEq, Eq, Clone, Copy, Debug)]
-pub struct FontFamilyId(pub usize);
+#[derive(Default)]
+struct MissingGlyphState {
+    reported: FxHashSet<MissingGlyph>,
+    reported_order: VecDeque<MissingGlyph>,
+    generation: usize,
+}
 
-/// Number of subpixel glyph variants along the X axis.
-pub const SUBPIXEL_VARIANTS_X: u8 = 4;
+impl MissingGlyphState {
+    fn reset(&mut self, generation: usize) {
+        self.reported.clear();
+        self.reported_order.clear();
+        self.generation = generation;
+    }
+}
 
-/// Number of subpixel glyph variants along the Y axis.
-pub const SUBPIXEL_VARIANTS_Y: u8 = 1;
+struct QueuedMissingGlyph {
+    generation: usize,
+    missing_glyph: MissingGlyph,
+}
+
+/// Collects missing-glyph reports without invoking application code during layout.
+struct MissingGlyphReporter {
+    generation: Arc<AtomicUsize>,
+    sender: async_channel::Sender<QueuedMissingGlyph>,
+}
+
+impl MissingGlyphSink for MissingGlyphReporter {
+    fn report(&self, missing_glyphs: Vec<MissingGlyph>) {
+        if self.sender.is_closed() {
+            return;
+        }
+
+        let generation = self.generation.load(Ordering::Acquire);
+        // Repetitions within a line must not fill the queue before its other
+        // missing glyphs. Cross-report deduplication belongs to the receiver.
+        for missing_glyph in missing_glyphs.into_iter().unique() {
+            let queued = QueuedMissingGlyph {
+                generation,
+                missing_glyph,
+            };
+            if self.sender.try_send(queued).is_err() {
+                break;
+            }
+        }
+    }
+}
+
+impl MissingGlyphReporter {
+    fn reset(&self) {
+        self.generation.fetch_add(1, Ordering::AcqRel);
+    }
+}
+
+/// Receives batches of grapheme clusters that exhausted font fallback.
+pub struct MissingGlyphReceiver {
+    state: MissingGlyphState,
+    generation: Arc<AtomicUsize>,
+    receiver: async_channel::Receiver<QueuedMissingGlyph>,
+}
+
+impl MissingGlyphReceiver {
+    /// Waits until at least one new missing glyph has been observed.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`async_channel::RecvError`] if the reporting channel is closed.
+    pub async fn recv(
+        &mut self,
+    ) -> std::result::Result<Vec<MissingGlyph>, async_channel::RecvError> {
+        loop {
+            let queued = self.receiver.recv().await?;
+            let mut missing_glyphs = Vec::new();
+            for queued in std::iter::once(queued)
+                .chain(std::iter::from_fn(|| self.receiver.try_recv().ok()))
+                .take(MAX_REPORTED_MISSING_GLYPHS)
+            {
+                let generation = self.generation.load(Ordering::Acquire);
+                if self.state.generation != generation {
+                    self.state.reset(generation);
+                    missing_glyphs.clear();
+                }
+                if queued.generation != generation
+                    || !self.state.reported.insert(queued.missing_glyph.clone())
+                {
+                    continue;
+                }
+                self.state
+                    .reported_order
+                    .push_back(queued.missing_glyph.clone());
+                missing_glyphs.push(queued.missing_glyph);
+                if self.state.reported.len() > MAX_REPORTED_MISSING_GLYPHS
+                    && let Some(expired) = self.state.reported_order.pop_front()
+                {
+                    self.state.reported.remove(&expired);
+                }
+            }
+            if !missing_glyphs.is_empty() {
+                return Ok(missing_glyphs);
+            }
+            // A producer can keep refilling the queue with already-reported
+            // glyphs. Bound work per poll even when every report is filtered out.
+            let mut yielded = false;
+            std::future::poll_fn(|cx| {
+                if std::mem::replace(&mut yielded, true) {
+                    std::task::Poll::Ready(())
+                } else {
+                    cx.waker().wake_by_ref();
+                    std::task::Poll::Pending
+                }
+            })
+            .await;
+        }
+    }
+}
+
+impl Drop for MissingGlyphReceiver {
+    fn drop(&mut self) {
+        self.receiver.close();
+        while self.receiver.try_recv().is_ok() {}
+    }
+}
 
 impl MissingGlyphReports for MissingGlyphReceiver {
     fn recv(&mut self) -> Pin<Box<dyn Future<Output = Option<Vec<MissingGlyph>>> + Send + '_>> {
@@ -63,7 +176,12 @@ pub struct DefaultTextSystem {
 impl DefaultTextSystem {
     /// Create a new DefaultTextSystem with the given platform text system.
     pub fn new(platform_text_system: Arc<dyn PlatformTextSystem>) -> Self {
-        TextSystem {
+        let font_generation = Arc::<AtomicUsize>::default();
+        let line_layout_cache =
+            LineLayoutCache::new(platform_text_system.clone(), font_generation.clone());
+        let (sender, receiver) = async_channel::bounded(MAX_REPORTED_MISSING_GLYPHS);
+        let missing_glyph_generation = Arc::<AtomicUsize>::default();
+        DefaultTextSystem {
             platform_text_system,
             font_metrics: RwLock::default(),
             raster_bounds: RwLock::default(),
@@ -97,23 +215,46 @@ impl DefaultTextSystem {
         }
     }
 
-    /// Get a list of all available font names from the operating system.
+    /// The platform text system this engine wraps.
+    pub fn platform_text_system(&self) -> &Arc<dyn PlatformTextSystem> {
+        &self.platform_text_system
+    }
+
+    /// The generation that advances whenever [`Self::add_fonts`] installs fonts.
+    pub fn font_generation(&self) -> &Arc<AtomicUsize> {
+        &self.font_generation
+    }
+
+    /// Takes a pooled font-run buffer, or an empty one when the pool is dry.
+    pub fn take_font_runs(&self) -> Vec<FontRun> {
+        self.font_runs_pool.lock().pop().unwrap_or_default()
+    }
+
+    /// Returns a font-run buffer to the pool for reuse.
+    pub fn recycle_font_runs(&self, font_runs: Vec<FontRun>) {
+        self.font_runs_pool.lock().push(font_runs);
+    }
+
+    /// Get sorted, unique font family names available to the platform text system.
+    ///
+    /// Includes fonts registered with [`Self::add_fonts`].
     pub fn all_font_names(&self) -> Vec<String> {
         let mut names = self.platform_text_system.all_font_names();
-        names.extend(
-            self.fallback_font_stack
-                .iter()
-                .map(|font| font.family.to_string()),
-        );
-        names.push(".SystemUIFont".to_string());
         names.sort_unstable();
         names.dedup();
         names
     }
 
     /// Add a font's data to the text system.
+    ///
+    /// Cached font resolution and line layouts are invalidated after installation.
+    /// Layouts already in progress may complete against the previous font set.
     pub fn add_fonts(&self, fonts: Vec<Cow<'static, [u8]>>) -> Result<()> {
-        self.platform_text_system.add_fonts(fonts)
+        self.platform_text_system.add_fonts(fonts)?;
+        self.font_ids_by_font.write().clear();
+        self.missing_glyph_reporter.reset();
+        self.font_generation.fetch_add(1, Ordering::Release);
+        Ok(())
     }
 
     /// Get the FontId for the configure font family and style.
@@ -629,225 +770,61 @@ impl TextSystem for DefaultTextSystem {
     }
 }
 
-/// A styled run of text, for use in [`crate::TextLayout`].
-#[derive(Clone, Debug, PartialEq, Eq, Default)]
-pub struct TextRun {
-    /// A number of utf8 bytes
-    pub len: usize,
-    /// The font to use for this run.
-    pub font: Font,
-    /// The color
-    pub color: Hsla,
-    /// The background color (if any)
-    pub background_color: Option<Hsla>,
-    /// The underline style (if any)
-    pub underline: Option<UnderlineStyle>,
-    /// The strikethrough style (if any)
-    pub strikethrough: Option<StrikethroughStyle>,
-}
+#[cfg(test)]
+mod missing_glyph_tests {
+    use super::*;
+    use futures::FutureExt as _;
+    use gpui_engine::FallbackFontClass;
 
-#[cfg(all(target_os = "macos", test))]
-impl TextRun {
-    fn with_len(&self, len: usize) -> Self {
-        let mut this = self.clone();
-        this.len = len;
-        this
-    }
-}
+    #[test]
+    fn bounds_retained_missing_glyphs() {
+        let (reporter, mut receiver) = missing_glyph_channel();
+        reporter.report(
+            (0..MAX_REPORTED_MISSING_GLYPHS)
+                .map(|index| {
+                    MissingGlyph::new(index.to_string().into(), FallbackFontClass::Proportional)
+                })
+                .collect(),
+        );
+        assert!(receiver.recv().now_or_never().unwrap().is_ok());
 
-/// An identifier for a specific glyph, as returned by [`WindowTextSystem::layout_line`].
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-#[repr(C)]
-pub struct GlyphId(pub u32);
+        let newest = MissingGlyph::new("newest".into(), FallbackFontClass::Monospace);
+        reporter.report(vec![newest.clone()]);
+        assert!(receiver.recv().now_or_never().unwrap().is_ok());
 
-/// Parameters for rendering a glyph, used as cache keys for raster bounds.
-///
-/// This struct identifies a specific glyph rendering configuration including
-/// font, size, subpixel positioning, and scale factor. It's used to look up
-/// cached raster bounds and sprite atlas entries.
-#[derive(Clone, Debug, PartialEq)]
-#[expect(missing_docs)]
-pub struct RenderGlyphParams {
-    pub font_id: FontId,
-    pub glyph_id: GlyphId,
-    pub font_size: Pixels,
-    pub subpixel_variant: Point<u8>,
-    pub scale_factor: f32,
-    pub is_emoji: bool,
-    pub subpixel_rendering: bool,
-    pub dilation: u8,
-}
-
-impl Eq for RenderGlyphParams {}
-
-impl Hash for RenderGlyphParams {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.font_id.0.hash(state);
-        self.glyph_id.0.hash(state);
-        self.font_size.0.to_bits().hash(state);
-        self.subpixel_variant.hash(state);
-        self.scale_factor.to_bits().hash(state);
-        self.is_emoji.hash(state);
-        self.subpixel_rendering.hash(state);
-        self.dilation.hash(state);
-    }
-}
-
-/// The configuration details for identifying a specific font.
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct Font {
-    /// The font family name.
-    ///
-    /// The special name ".SystemUIFont" is used to identify the system UI font, which varies based on platform.
-    pub family: SharedString,
-
-    /// The font features to use.
-    pub features: FontFeatures,
-
-    /// The fallbacks fonts to use.
-    pub fallbacks: Option<FontFallbacks>,
-
-    /// The font weight.
-    pub weight: FontWeight,
-
-    /// The font style.
-    pub style: FontStyle,
-}
-
-impl Default for Font {
-    fn default() -> Self {
-        font(".SystemUIFont")
-    }
-}
-
-/// Get a [`Font`] for a given name.
-pub fn font(family: impl Into<SharedString>) -> Font {
-    Font {
-        family: family.into(),
-        features: FontFeatures::default(),
-        weight: FontWeight::default(),
-        style: FontStyle::default(),
-        fallbacks: None,
-    }
-}
-
-impl Font {
-    /// Set this Font to be bold
-    pub fn bold(mut self) -> Self {
-        self.weight = FontWeight::BOLD;
-        self
+        let state = &receiver.state;
+        assert_eq!(state.reported.len(), MAX_REPORTED_MISSING_GLYPHS);
+        assert_eq!(state.reported_order.len(), MAX_REPORTED_MISSING_GLYPHS);
+        assert!(state.reported.contains(&newest));
     }
 
-    /// Set this Font to be italic
-    pub fn italic(mut self) -> Self {
-        self.style = FontStyle::Italic;
-        self
-    }
-}
+    #[test]
+    fn dropping_receiver_closes_and_clears_reports() {
+        let (reporter, receiver) = missing_glyph_channel();
+        reporter.report(vec![missing_glyph("missing")]);
 
-/// A struct for storing font metrics.
-/// It is used to define the measurements of a typeface.
-#[derive(Clone, Copy, Debug)]
-pub struct FontMetrics {
-    /// The number of font units that make up the "em square",
-    /// a scalable grid for determining the size of a typeface.
-    pub units_per_em: u32,
+        drop(receiver);
 
-    /// The vertical distance from the baseline of the font to the top of the glyph covers.
-    pub ascent: f32,
-
-    /// The vertical distance from the baseline of the font to the bottom of the glyph covers.
-    pub descent: f32,
-
-    /// The recommended additional space to add between lines of type.
-    pub line_gap: f32,
-
-    /// The suggested position of the underline.
-    pub underline_position: f32,
-
-    /// The suggested thickness of the underline.
-    pub underline_thickness: f32,
-
-    /// The height of a capital letter measured from the baseline of the font.
-    pub cap_height: f32,
-
-    /// The height of a lowercase x.
-    pub x_height: f32,
-
-    /// The outer limits of the area that the font covers.
-    /// Corresponds to the xMin / xMax / yMin / yMax values in the OpenType `head` table
-    pub bounding_box: Bounds<f32>,
-}
-
-impl FontMetrics {
-    /// Returns the vertical distance from the baseline of the font to the top of the glyph covers in pixels.
-    pub fn ascent(&self, font_size: Pixels) -> Pixels {
-        Pixels((self.ascent / self.units_per_em as f32) * font_size.0)
+        assert!(reporter.sender.is_closed());
+        assert!(reporter.sender.is_empty());
     }
 
-    /// Returns the vertical distance from the baseline of the font to the bottom of the glyph covers in pixels.
-    pub fn descent(&self, font_size: Pixels) -> Pixels {
-        Pixels((self.descent / self.units_per_em as f32) * font_size.0)
+    fn missing_glyph_channel() -> (MissingGlyphReporter, MissingGlyphReceiver) {
+        let (sender, receiver) = async_channel::bounded(MAX_REPORTED_MISSING_GLYPHS);
+        let generation = Arc::<AtomicUsize>::default();
+        let reporter = MissingGlyphReporter {
+            generation: generation.clone(),
+            sender,
+        };
+        let receiver = MissingGlyphReceiver {
+            state: MissingGlyphState::default(),
+            generation,
+            receiver,
+        };
+        (reporter, receiver)
     }
 
-    /// Returns the recommended additional space to add between lines of type in pixels.
-    pub fn line_gap(&self, font_size: Pixels) -> Pixels {
-        Pixels((self.line_gap / self.units_per_em as f32) * font_size.0)
-    }
-
-    /// Returns the suggested position of the underline in pixels.
-    pub fn underline_position(&self, font_size: Pixels) -> Pixels {
-        Pixels((self.underline_position / self.units_per_em as f32) * font_size.0)
-    }
-
-    /// Returns the suggested thickness of the underline in pixels.
-    pub fn underline_thickness(&self, font_size: Pixels) -> Pixels {
-        Pixels((self.underline_thickness / self.units_per_em as f32) * font_size.0)
-    }
-
-    /// Returns the height of a capital letter measured from the baseline of the font in pixels.
-    pub fn cap_height(&self, font_size: Pixels) -> Pixels {
-        Pixels((self.cap_height / self.units_per_em as f32) * font_size.0)
-    }
-
-    /// Returns the height of a lowercase x in pixels.
-    pub fn x_height(&self, font_size: Pixels) -> Pixels {
-        Pixels((self.x_height / self.units_per_em as f32) * font_size.0)
-    }
-
-    /// Returns the outer limits of the area that the font covers in pixels.
-    pub fn bounding_box(&self, font_size: Pixels) -> Bounds<Pixels> {
-        (self.bounding_box / self.units_per_em as f32 * font_size.0).map(px)
-    }
-}
-
-/// Maps well-known virtual font names to their concrete equivalents.
-#[allow(unused)]
-pub fn font_name_with_fallbacks<'a>(name: &'a str, system: &'a str) -> &'a str {
-    // Note: the "Zed Plex" fonts were deprecated as we are not allowed to use "Plex"
-    // in a derived font name. They are essentially indistinguishable from IBM Plex/Lilex,
-    // and so retained here for backward compatibility.
-    match name {
-        ".SystemUIFont" => system,
-        ".ZedSans" | "Zed Plex Sans" => "IBM Plex Sans",
-        ".ZedMono" | "Zed Plex Mono" => "Lilex",
-        _ => name,
-    }
-}
-
-/// Like [`font_name_with_fallbacks`] but accepts and returns [`SharedString`] references.
-#[allow(unused)]
-pub fn font_name_with_fallbacks_shared<'a>(
-    name: &'a SharedString,
-    system: &'a SharedString,
-) -> &'a SharedString {
-    // Note: the "Zed Plex" fonts were deprecated as we are not allowed to use "Plex"
-    // in a derived font name. They are essentially indistinguishable from IBM Plex/Lilex,
-    // and so retained here for backward compatibility.
-    match name.as_str() {
-        ".SystemUIFont" => system,
-        ".ZedSans" | "Zed Plex Sans" => const { &SharedString::new_static("IBM Plex Sans") },
-        ".ZedMono" | "Zed Plex Mono" => const { &SharedString::new_static("Lilex") },
-        _ => name,
+    fn missing_glyph(grapheme: &'static str) -> MissingGlyph {
+        MissingGlyph::new(grapheme.into(), FallbackFontClass::Proportional)
     }
 }

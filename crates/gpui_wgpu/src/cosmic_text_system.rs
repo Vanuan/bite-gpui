@@ -4,11 +4,10 @@ use cosmic_text::{
     Attrs, AttrsList, Ellipsize, Family, Font as CosmicTextFont,
     FontFeatures as CosmicFontFeatures, FontSystem, ShapeBuffer, ShapeLine, Stretch, Style, Weight,
 };
-use gpui::{
-    Bounds, DevicePixels, Font, FontFallbacks, FontFeatures, FontId, FontMetrics, FontRun, GlyphId,
-    IsZero as _, LineLayout, Pixels, PlatformTextSystem, RenderGlyphParams, SUBPIXEL_VARIANTS_X,
-    SUBPIXEL_VARIANTS_Y, ShapedGlyph, ShapedRun, SharedString, Size, TextRenderingMode, point,
-    size,
+use gpui_engine::{
+    FallbackFontClass, Font, FontFallbacks, FontFeatures, FontId, FontMetrics, FontRun, GlyphId,
+    LineLayout, MissingGlyph, MissingGlyphSink, PlatformTextSystem, RenderGlyphParams,
+    SUBPIXEL_VARIANTS_X, SUBPIXEL_VARIANTS_Y, ShapedGlyph, ShapedRun, TextRenderingMode,
 };
 use gpui_platform::{Bounds, DevicePixels, IsZero as _, Pixels, SharedString, Size, point, size};
 
@@ -41,6 +40,12 @@ impl FontKey {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+struct LoadedFontKey {
+    database_id: cosmic_text::fontdb::ID,
+    font: FontKey,
+}
+
 struct CosmicTextSystemState {
     font_system: FontSystem,
     scratch: ShapeBuffer,
@@ -48,10 +53,12 @@ struct CosmicTextSystemState {
     pending_glyph_images: HashMap<RenderGlyphParams, swash::scale::image::Image>,
     /// Contains all already loaded fonts, including all faces. Indexed by `FontId`.
     loaded_fonts: Vec<LoadedFont>,
+    loaded_font_ids_by_key: HashMap<LoadedFontKey, FontId>,
     /// Caches the `FontId`s associated with a specific family to avoid iterating the font database
     /// for every font face in a family.
     font_ids_by_family_cache: HashMap<FontKey, SmallVec<[FontId; 4]>>,
     system_font_fallback: String,
+    missing_glyph_sink: Option<Arc<dyn MissingGlyphSink>>,
 }
 
 struct LoadedFont {
@@ -130,8 +137,10 @@ impl CosmicTextSystem {
             swash_scale_context: ScaleContext::new(),
             pending_glyph_images: HashMap::default(),
             loaded_fonts: Vec::new(),
+            loaded_font_ids_by_key: HashMap::default(),
             font_ids_by_family_cache: HashMap::default(),
             system_font_fallback: system_font_fallback.to_string(),
+            missing_glyph_sink: None,
         }))
     }
 
@@ -147,8 +156,10 @@ impl CosmicTextSystem {
             swash_scale_context: ScaleContext::new(),
             pending_glyph_images: HashMap::default(),
             loaded_fonts: Vec::new(),
+            loaded_font_ids_by_key: HashMap::default(),
             font_ids_by_family_cache: HashMap::default(),
             system_font_fallback: system_font_fallback.to_string(),
+            missing_glyph_sink: None,
         }))
     }
 }
@@ -156,6 +167,10 @@ impl CosmicTextSystem {
 impl PlatformTextSystem for CosmicTextSystem {
     fn add_fonts(&self, fonts: Vec<Cow<'static, [u8]>>) -> Result<()> {
         self.0.write().add_fonts(fonts)
+    }
+
+    fn set_missing_glyph_sink(&self, sink: Option<Arc<dyn MissingGlyphSink>>) {
+        self.0.write().missing_glyph_sink = sink;
     }
 
     fn all_font_names(&self) -> Vec<String> {
@@ -312,6 +327,7 @@ impl CosmicTextSystemState {
 
     #[profiling::function]
     fn add_fonts(&mut self, fonts: Vec<Cow<'static, [u8]>>) -> Result<()> {
+        self.font_ids_by_family_cache.clear();
         let db = self.font_system.db_mut();
         for bytes in fonts {
             db.load_font_source(cosmic_text::fontdb::Source::Binary(Arc::new(bytes)));
@@ -326,6 +342,12 @@ impl CosmicTextSystemState {
         features: &FontFeatures,
         fallbacks: Option<&FontFallbacks>,
     ) -> Result<SmallVec<[FontId; 4]>> {
+        let loaded_font_key = FontKey::new(
+            SharedString::from(name.to_owned()),
+            features.clone(),
+            fallbacks.cloned(),
+        );
+
         // recurse with `fallbacks = None` so a fallback family cannot pull in
         // another chain. missing fallback families are dropped so a typo in
         // settings still lets the primary family load.
@@ -374,10 +396,20 @@ impl CosmicTextSystemState {
         let cosmic_features = cosmic_font_features(features)?;
 
         let mut loaded_font_ids = SmallVec::new();
-        for (font_id, postscript_name) in families {
+        for (database_id, postscript_name) in families {
+            let key = LoadedFontKey {
+                database_id,
+                font: loaded_font_key.clone(),
+            };
+            if let Some(&font_id) = self.loaded_font_ids_by_key.get(&key) {
+                self.loaded_fonts[font_id.0].user_fallback_chain = Arc::clone(&user_fallback_chain);
+                loaded_font_ids.push(font_id);
+                continue;
+            }
+
             let font = self
                 .font_system
-                .get_font(font_id, cosmic_text::Weight::NORMAL)
+                .get_font(database_id, cosmic_text::Weight::NORMAL)
                 .context("Could not load font")?;
 
             // HACK: To let the storybook run and render Windows caption icons. We should actually do better font fallback.
@@ -401,6 +433,7 @@ impl CosmicTextSystemState {
                 is_known_emoji_font: check_is_known_emoji_font(&postscript_name),
                 user_fallback_chain: Arc::clone(&user_fallback_chain),
             });
+            self.loaded_font_ids_by_key.insert(key, font_id);
         }
 
         Ok(loaded_font_ids)
@@ -736,6 +769,18 @@ impl CosmicTextSystemState {
             };
         };
 
+        let missing_glyphs = self.missing_glyph_sink.as_ref().map(|_| {
+            self.missing_glyphs(
+                text,
+                font_runs,
+                layout
+                    .glyphs
+                    .iter()
+                    .filter(|glyph| glyph.glyph_id == 0)
+                    .map(|glyph| glyph.start),
+            )
+        });
+
         let mut runs: Vec<ShapedRun> = Vec::new();
         for glyph in &layout.glyphs {
             let mut font_id = FontId(glyph.metadata);
@@ -782,6 +827,10 @@ impl CosmicTextSystemState {
             }
         }
 
+        if let Some((sink, missing_glyphs)) = self.missing_glyph_sink.as_ref().zip(missing_glyphs) {
+            sink.report(missing_glyphs);
+        }
+
         LineLayout {
             font_size,
             width: layout.w.into(),
@@ -789,6 +838,80 @@ impl CosmicTextSystemState {
             descent: layout.max_descent.into(),
             runs,
             len: text.len(),
+        }
+    }
+
+    fn missing_glyphs(
+        &self,
+        text: &str,
+        font_runs: &[FontRun],
+        missing_text_indices: impl IntoIterator<Item = usize>,
+    ) -> Vec<MissingGlyph> {
+        let mut missing_text_indices = missing_text_indices.into_iter().peekable();
+        if missing_text_indices.peek().is_none() {
+            return Vec::new();
+        }
+        let mut missing_text_indices = missing_text_indices.collect::<Vec<_>>();
+        missing_text_indices.sort_unstable();
+        missing_text_indices.dedup();
+
+        let mut font_run_index = 0;
+        let mut font_run_end = font_runs.first().map_or(0, |font_run| font_run.len);
+        let mut missing_glyphs = Vec::new();
+        let mut missing_index = 0;
+        for (grapheme_start, grapheme) in text.grapheme_indices(true) {
+            let grapheme_end = grapheme_start + grapheme.len();
+            while missing_text_indices
+                .get(missing_index)
+                .is_some_and(|text_index| *text_index < grapheme_start)
+            {
+                missing_index += 1;
+            }
+            let Some(&text_index) = missing_text_indices.get(missing_index) else {
+                break;
+            };
+            if text_index >= grapheme_end {
+                continue;
+            }
+
+            while font_run_end <= text_index && font_run_index + 1 < font_runs.len() {
+                font_run_index += 1;
+                let Some(font_run) = font_runs.get(font_run_index) else {
+                    break;
+                };
+                font_run_end += font_run.len;
+            }
+            let font_class = self.fallback_font_class(
+                font_runs
+                    .get(font_run_index)
+                    .or_else(|| font_runs.last())
+                    .map(|font_run| font_run.font_id),
+            );
+            missing_glyphs.push(MissingGlyph::new(grapheme.into(), font_class));
+            while missing_text_indices
+                .get(missing_index)
+                .is_some_and(|text_index| *text_index < grapheme_end)
+            {
+                missing_index += 1;
+            }
+        }
+        missing_glyphs
+    }
+
+    fn fallback_font_class(&self, font_id: Option<FontId>) -> FallbackFontClass {
+        let Some(font_id) = font_id else {
+            return FallbackFontClass::Proportional;
+        };
+        let loaded_font = self.loaded_font(font_id);
+        let is_monospace = self
+            .font_system
+            .db()
+            .face(loaded_font.font.id())
+            .is_some_and(|face| face.monospaced);
+        if is_monospace {
+            FallbackFontClass::Monospace
+        } else {
+            FallbackFontClass::Proportional
         }
     }
 }
@@ -1118,6 +1241,7 @@ mod tests {
 
     const IBM_PLEX: &[u8] =
         include_bytes!("../../../assets/fonts/ibm-plex-sans/IBMPlexSans-Regular.ttf");
+    const LILEX: &[u8] = include_bytes!("../../../assets/fonts/lilex/Lilex-Regular.ttf");
 
     /// Every code point of `Bidi_Class=B`, each of which starts a new bidi
     /// paragraph and so can split one line into mixed-direction paragraphs.
@@ -1129,6 +1253,31 @@ mod tests {
         let text_system = CosmicTextSystem::new_without_system_fonts("IBM Plex Sans");
         text_system.add_fonts(vec![Cow::Borrowed(IBM_PLEX)])?;
         Ok(text_system)
+    }
+
+    #[test]
+    fn font_properties_describe_the_selected_face() -> Result<()> {
+        let text_system = text_system()?;
+        let regular = gpui::font("IBM Plex Sans");
+        let regular_id = text_system.font_id(&regular)?;
+        for (weight, style) in [
+            (gpui::FontWeight::MEDIUM, gpui::FontStyle::Normal),
+            (gpui::FontWeight::BOLD, gpui::FontStyle::Italic),
+            (gpui::FontWeight::NORMAL, gpui::FontStyle::Oblique),
+        ] {
+            let requested = Font {
+                weight,
+                style,
+                ..regular.clone()
+            };
+            let font_id = text_system.font_id(&requested)?;
+            assert_eq!(font_id, regular_id);
+            assert_eq!(
+                text_system.font_weight_and_style(font_id)?,
+                (gpui::FontWeight::NORMAL, gpui::FontStyle::Normal)
+            );
+        }
+        Ok(())
     }
 
     fn layout_text(text_system: &CosmicTextSystem, text: &str) -> Result<LineLayout> {
