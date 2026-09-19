@@ -232,30 +232,79 @@ fn format_duration(duration: Duration) -> String {
 /// (e.g. a later benchmark in the same process).
 struct FrameTraceScope {
     collector: FrameTimingCollector,
-    was_already_enabled: bool,
+    _trace_guard: profiler::TraceGuard,
 }
 
 impl FrameTraceScope {
     fn start() -> Self {
-        let was_already_enabled = !profiler::set_frame_trace_enabled(true);
+        // The guard keeps collection enabled until the last scope ends, so
+        // nested measurements cannot disable tracing under each other.
+        let trace_guard = profiler::trace_scope();
         Self {
             collector: FrameTimingCollector::new(),
-            was_already_enabled,
+            _trace_guard: trace_guard,
         }
     }
 
     fn finish(mut self) -> Vec<FrameTiming> {
-        self.collector.collect_unseen()
+        // The buffer holds the architecture's `FrameEvent`s; this release's
+        // frame tracing reported the draw half of each one.
+        self.collector
+            .collect_unseen()
+            .into_iter()
+            .filter_map(|event| match event {
+                profiler::FrameEvent::Draw(timing) => Some(timing),
+                profiler::FrameEvent::Present(_) => None,
+            })
+            .collect()
         // Dropping `self` restores the previous tracing state.
     }
 }
 
-impl Drop for FrameTraceScope {
+struct MeasuredTaskInput<Input> {
+    input: Input,
+    frame_trace_scope: Option<FrameTraceScope>,
+}
+
+struct MeasuredTaskOutput<Output> {
+    frame_trace_scope: Option<FrameTraceScope>,
+    report: BenchReport,
+    _output: Output,
+}
+
+impl<Output> Drop for MeasuredTaskOutput<Output> {
     fn drop(&mut self) {
-        if !self.was_already_enabled {
-            profiler::set_frame_trace_enabled(false);
-        }
+        let frame_trace_scope = self
+            .frame_trace_scope
+            .take()
+            .expect("measured task output should retain its frame trace scope");
+        self.report
+            .record_frame_timings(frame_trace_scope.finish().iter());
     }
+}
+
+fn run_task_to_completion<Output>(
+    foreground_executor: &ForegroundExecutor,
+    task: Task<Output>,
+) -> Output
+where
+    Output: 'static,
+{
+    let output = Rc::new(RefCell::new(None));
+    foreground_executor
+        .spawn({
+            let output = output.clone();
+            async move {
+                *output.borrow_mut() = Some(task.await);
+            }
+        })
+        .detach();
+
+    foreground_executor
+        .dispatcher()
+        .as_threaded()
+        .expect("BenchAppContext requires a ThreadedDispatcher")
+        .run_until(|| output.borrow_mut().take())
 }
 
 /// A GPUI app context for Criterion benchmarks.

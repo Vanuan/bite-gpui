@@ -367,14 +367,6 @@ impl BenchDispatcher {
         )
     }
 
-    /// Whether no main-thread work is queued, no background or timer
-    /// runnables are queued or running, and no armed timer is due. Timers
-    /// that aren't due yet are ignored, as in [`Self::run_until_idle`].
-    #[cfg(any(test, feature = "bench-support"))]
-    pub(crate) fn is_idle(&self) -> bool {
-        !self.main_queue_has_work() && !self.has_due_timer() && *self.idle.inflight.lock() == 0
-    }
-
     fn has_due_timer(&self) -> bool {
         let state = self.timers.state.lock();
         state
