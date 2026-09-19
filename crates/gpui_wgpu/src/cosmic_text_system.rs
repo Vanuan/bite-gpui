@@ -1033,6 +1033,25 @@ fn check_is_known_emoji_font(postscript_name: &str) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::{cell::RefCell, rc::Rc};
+
+    #[test]
+    fn all_font_names_tracks_available_families() -> Result<()> {
+        let text_system = CosmicTextSystem::new_without_system_fonts("IBM Plex Sans");
+        assert!(text_system.all_font_names().is_empty());
+
+        text_system.add_fonts(vec![Cow::Borrowed(include_bytes!(
+            "../../../assets/fonts/lilex/Lilex-Regular.ttf"
+        ))])?;
+        assert_eq!(text_system.all_font_names(), ["Lilex"]);
+
+        text_system.add_fonts(vec![
+            Cow::Borrowed(IBM_PLEX),
+            Cow::Borrowed(include_bytes!("../../../assets/fonts/lilex/Lilex-Bold.ttf")),
+        ])?;
+        assert_eq!(text_system.all_font_names(), ["IBM Plex Sans", "Lilex"]);
+        Ok(())
+    }
 
     fn fid(i: usize) -> FontId {
         FontId(i)
@@ -1098,6 +1117,97 @@ mod tests {
         assert_eq!(lines.len(), 2);
         assert_eq!(lines[1].len(), "\u{05d0}\u{001c}A".len());
         assert!(lines[1].width() > Pixels::ZERO);
+        Ok(())
+    }
+
+    #[test]
+    fn reports_graphemes_that_exhaust_font_fallback() -> Result<()> {
+        let platform_text_system = Arc::new(text_system()?);
+        let dispatcher = gpui::TestDispatcher::new(0);
+        let cx =
+            gpui::TestAppContext::build_with_text_system(dispatcher, None, platform_text_system);
+        let observed = Rc::new(RefCell::new(Vec::new()));
+        let _subscription = cx.update(|cx| {
+            let observed = observed.clone();
+            cx.on_missing_glyphs(move |missing_glyphs, _| {
+                observed.borrow_mut().extend_from_slice(missing_glyphs);
+            })
+        });
+        let text: SharedString = "界".into();
+
+        cx.update(|cx| {
+            let text_system = gpui::WindowTextSystem::new(cx.text_system().clone());
+            let runs = [gpui::TextRun {
+                len: text.len(),
+                font: gpui::font("IBM Plex Sans"),
+                ..Default::default()
+            }];
+            text_system.shape_line(text, gpui::px(14.0), &runs, None);
+        });
+        cx.run_until_parked();
+
+        let observed = observed.borrow();
+        assert_eq!(observed.len(), 1);
+        assert_eq!(observed[0].grapheme(), "界");
+        assert_eq!(
+            observed[0].font_class(),
+            gpui::FallbackFontClass::Proportional
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn combines_missing_glyphs_from_one_grapheme() -> Result<()> {
+        let text_system = text_system()?;
+        let font_id = text_system.font_id(&gpui::font("IBM Plex Sans"))?;
+        let text = "x\u{0301}";
+        let runs = [FontRun {
+            len: text.len(),
+            font_id,
+        }];
+
+        let missing_glyphs = text_system
+            .0
+            .read()
+            .missing_glyphs(text, &runs, [0, "x".len()]);
+
+        assert_eq!(missing_glyphs.len(), 1);
+        assert_eq!(missing_glyphs[0].grapheme(), text);
+        Ok(())
+    }
+
+    #[test]
+    fn adding_fonts_invalidates_cached_line_layouts() -> Result<()> {
+        let platform_text_system = Arc::new(text_system()?);
+        let text_system = Arc::new(gpui::DefaultTextSystem::new(platform_text_system.clone()));
+        let window_text_system = gpui::WindowTextSystem::new(text_system.clone());
+        let text: SharedString = "cached text".into();
+        let runs = [gpui::TextRun {
+            len: text.len(),
+            font: gpui::font("IBM Plex Sans"),
+            ..Default::default()
+        }];
+
+        let first_layout = window_text_system.shape_line(text.clone(), gpui::px(14.0), &runs, None);
+        let cached_layout =
+            window_text_system.shape_line(text.clone(), gpui::px(14.0), &runs, None);
+        assert!(std::ptr::eq::<LineLayout>(
+            &**first_layout,
+            &**cached_layout
+        ));
+        let loaded_font_count = platform_text_system.0.read().loaded_fonts.len();
+
+        text_system.add_fonts(vec![Cow::Borrowed(LILEX)])?;
+
+        let refreshed_layout = window_text_system.shape_line(text, gpui::px(14.0), &runs, None);
+        assert!(!std::ptr::eq::<LineLayout>(
+            &**first_layout,
+            &**refreshed_layout
+        ));
+        assert_eq!(
+            platform_text_system.0.read().loaded_fonts.len(),
+            loaded_font_count
+        );
         Ok(())
     }
 
