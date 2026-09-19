@@ -21,6 +21,8 @@ runtime_shaders = ["gpui_macos/runtime_shaders"]
 wayland = ["gpui_linux/wayland"]
 x11 = ["gpui_linux/x11"]
 
+bench-support = ["test-support", "gpui_engine/bench-support"]
+profiler = []
 [dependencies]
 accesskit.workspace = true
 anyhow.workspace = true

@@ -18,6 +18,7 @@ runtime_shaders = ["gpui_apple/runtime_shaders"]
 font-kit = ["dep:font-kit"]
 screen-capture = ["gpui_platform/screen-capture"]
 
+bench-support = ["gpui_platform/bench-support", "gpui_apple/bench-support"]
 [dependencies]
 gpui_engine.workspace = true
 gpui_platform.workspace = true
@@ -65,6 +66,7 @@ uuid.workspace = true
 # The macOS test-only window implementation depends on test-only APIs from both
 # GPUI and the extracted renderer. A dependency does not inherit this crate's
 # `cfg(test)`, so dev-dependencies enable those APIs only for test builds.
+objc2-screen-capture-kit.workspace = true
 [target.'cfg(target_os = "macos")'.dev-dependencies]
 gpui = { workspace = true, features = ["test-support"] }
 gpui_apple = { workspace = true, features = ["test-support"] }

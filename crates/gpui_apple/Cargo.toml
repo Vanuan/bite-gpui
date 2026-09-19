@@ -16,6 +16,7 @@ default = []
 test-support = ["gpui/test-support"]
 runtime_shaders = []
 
+bench-support = ["gpui_platform/bench-support"]
 [dependencies]
 gpui_platform.workspace = true
 gpui_engine.workspace = true
@@ -36,6 +37,7 @@ metal.workspace = true
 objc.workspace = true
 parking_lot.workspace = true
 
+objc2.workspace = true
 [target.'cfg(target_os = "macos")'.build-dependencies]
 cbindgen.workspace = true
 gpui.workspace = true

@@ -48,6 +48,14 @@ screen-capture = [
 windows-manifest = ["dep:embed-resource"]
 profiler = ["dep:hdrhistogram"]
 
+bench-support = [
+    "profiler",
+    "dep:criterion",
+    "gpui_engine/bench-support",
+    "gpui_engine_default/bench-support",
+    "gpui_platform/bench-support",
+]
+stacker = ["dep:stacksafe", "gpui_engine_default/stacker"]
 [lib]
 path = "src/gpui_authoring.rs"
 doctest = false
@@ -111,6 +119,8 @@ util_macros.workspace = true
 web-time.workspace = true
 ztracing.workspace = true
 
+chrono.workspace = true
+ttf-parser = "0.25"
 [target.'cfg(target_family = "wasm")'.dependencies]
 console_error_panic_hook.workspace = true
 getrandom = { version = "0.3.4", features = ["wasm_js"] }
@@ -149,6 +159,7 @@ reqwest_client = { workspace = true, features = ["test-support"] }
 wasm-bindgen = { workspace = true }
 gpui_web.workspace = true
 
+web-sys = { version = "0.3", features = ["console"] }
 [build-dependencies]
 embed-resource = { version = "3.0", optional = true }
 
@@ -251,3 +262,17 @@ path = "examples/a11y.rs"
 [[example]]
 name = "view_example"
 path = "examples/view_example/view_example_main.rs"
+
+
+[package.metadata.cargo-shear]
+ignored = [
+    "getrandom",
+    "tracing",
+]
+ignored-paths = ["src/_ownership_and_data_flow.rs"]
+
+[target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dependencies]
+async-channel = { version = "2.5.0", default-features = false }
+
+[target.'cfg(not(all(target_arch = "wasm32", target_os = "unknown")))'.dependencies]
+async-channel.workspace = true
