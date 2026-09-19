@@ -507,11 +507,6 @@ pub trait ImageExt: Sized {
     /// Use the GPUI `remove_asset` API to drop this image, if possible.
     fn remove_asset(self: Arc<Self>, cx: &mut App);
 
-    /// Check whether this image is present in GPUI's asset cache (loading or
-    /// loaded), without fetching it.
-    #[cfg(any(test, feature = "test-support"))]
-    fn is_asset_cached(self: &Arc<Self>, cx: &App) -> bool;
-
     /// Convert the clipboard image to an `ImageData` object.
     fn to_image_data(&self, svg_renderer: SvgRenderer) -> Result<Arc<RenderImage>>;
 }
@@ -539,11 +534,6 @@ impl ImageExt for Image {
 
     fn remove_asset(self: Arc<Self>, cx: &mut App) {
         ImageSource::Image(self).remove_asset(cx);
-    }
-
-    #[cfg(any(test, feature = "test-support"))]
-    fn is_asset_cached(self: &Arc<Self>, cx: &App) -> bool {
-        ImageSource::Image(self.clone()).is_asset_cached(cx)
     }
 
     fn to_image_data(&self, svg_renderer: SvgRenderer) -> Result<Arc<RenderImage>> {

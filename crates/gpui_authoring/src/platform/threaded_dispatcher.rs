@@ -38,7 +38,7 @@ const MIN_THREADS: usize = 2;
 /// single thread with a virtual clock, work dispatched through this dispatcher
 /// executes with production concurrency, so wall-clock measurements reflect
 /// real parallelism.
-pub struct BenchDispatcher {
+pub struct ThreadedDispatcher {
     background_sender: PriorityQueueSender<RunnableVariant>,
     main_sender: PriorityQueueSender<RunnableVariant>,
     main_receiver: Mutex<PriorityQueueReceiver<RunnableVariant>>,
@@ -48,7 +48,7 @@ pub struct BenchDispatcher {
 }
 
 /// Tracks how many background and timer runnables are queued or running so
-/// [`BenchDispatcher::run_until_idle`] knows when to stop waiting.
+/// [`ThreadedDispatcher::run_until_idle`] knows when to stop waiting.
 #[derive(Default)]
 struct IdleTracker {
     inflight: Mutex<usize>,
@@ -124,13 +124,13 @@ impl Ord for TimerEntry {
     }
 }
 
-impl Default for BenchDispatcher {
+impl Default for ThreadedDispatcher {
     fn default() -> Self {
         Self::new()
     }
 }
 
-impl BenchDispatcher {
+impl ThreadedDispatcher {
     /// Creates a dispatcher whose main thread is the calling thread.
     ///
     /// Worker and timer threads live for the lifetime of the process; the
@@ -362,7 +362,7 @@ impl BenchDispatcher {
         let timers = self.timers.state.lock().heap.len();
         let main_queue_has_work = self.main_queue_has_work();
         format!(
-            "BenchDispatcher {{ inflight: {inflight}, pending_timers: {timers}, \
+            "ThreadedDispatcher {{ inflight: {inflight}, pending_timers: {timers}, \
              main_queue_has_work: {main_queue_has_work} }}"
         )
     }
@@ -400,7 +400,7 @@ impl BenchDispatcher {
     }
 }
 
-impl PlatformDispatcher for BenchDispatcher {
+impl PlatformDispatcher for ThreadedDispatcher {
     fn is_main_thread(&self) -> bool {
         thread::current().id() == self.main_thread_id
     }
@@ -456,7 +456,7 @@ mod tests {
 
     #[test]
     fn run_ready_main_tasks_does_not_wait_for_background_handoffs() {
-        let dispatcher = Arc::new(BenchDispatcher::new());
+        let dispatcher = Arc::new(ThreadedDispatcher::new());
         let background = BackgroundExecutor::new(dispatcher.clone());
         let foreground = ForegroundExecutor::new(dispatcher.clone());
 
@@ -488,7 +488,7 @@ mod tests {
 
     #[test]
     fn run_until_idle_completes_background_to_main_handoffs() {
-        let dispatcher = Arc::new(BenchDispatcher::new());
+        let dispatcher = Arc::new(ThreadedDispatcher::new());
         let background = BackgroundExecutor::new(dispatcher.clone());
         let foreground = ForegroundExecutor::new(dispatcher.clone());
 
@@ -517,7 +517,7 @@ mod tests {
 
     #[test]
     fn timers_fire_in_real_time() {
-        let dispatcher = Arc::new(BenchDispatcher::new());
+        let dispatcher = Arc::new(ThreadedDispatcher::new());
         let background = BackgroundExecutor::new(dispatcher);
 
         let fired = Arc::new(AtomicBool::new(false));
@@ -541,7 +541,7 @@ mod tests {
 
     #[test]
     fn cancel_pending_timers_wakes_waiters_without_waiting_for_deadline() {
-        let dispatcher = Arc::new(BenchDispatcher::new());
+        let dispatcher = Arc::new(ThreadedDispatcher::new());
         let background = BackgroundExecutor::new(dispatcher.clone());
 
         let fired = Arc::new(AtomicBool::new(false));
