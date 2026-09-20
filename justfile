@@ -404,7 +404,7 @@ publish dry="false":
     }
 
     # Topological publish order. Vendored support crates first, then core,
-    # then renderers/platform leaves, with gpui_platform LAST (it has
+    # then renderers/platform leaves, with gpui_ce_platform LAST (it has
     # target-conditional deps on every platform crate).
     let crates = [
         "crates/gpui_ce_util/Cargo.toml"
@@ -431,7 +431,7 @@ publish dry="false":
         "crates/gpui_web/Cargo.toml"
         "crates/gpui_elements/Cargo.toml"
 
-        "crates/gpui_platform/Cargo.toml"
+        "crates/gpui_ce_platform/Cargo.toml"
 
     ]
 
