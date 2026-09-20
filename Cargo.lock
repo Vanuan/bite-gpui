@@ -2819,6 +2819,7 @@ dependencies = [
  "gpui_types",
  "image",
  "parking_lot",
+ "rand",
  "schemars",
  "seahash",
  "serde",
