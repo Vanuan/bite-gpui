@@ -5,7 +5,6 @@ use image::{Delay, Frame};
 use std::{
     borrow::Cow,
     fmt,
-    hash::Hash,
     sync::atomic::{AtomicUsize, Ordering::SeqCst},
 };
 
@@ -28,16 +27,9 @@ impl AssetSource for () {
     }
 }
 
-/// A unique identifier for the image cache
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct ImageId(pub usize);
-
-#[derive(PartialEq, Eq, Hash, Clone)]
-#[expect(missing_docs)]
-pub struct RenderImageParams {
-    pub image_id: ImageId,
-    pub frame_index: usize,
-}
+// `ImageId` and `RenderImageParams` moved down into `gpui_engine`; re-export them so
+// this module keeps providing the names it used to define.
+pub use gpui_engine::{ImageId, RenderImageParams};
 
 /// A cached and processed image, in BGRA format
 pub struct RenderImage {
