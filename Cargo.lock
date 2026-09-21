@@ -2811,6 +2811,7 @@ dependencies = [
  "anyhow",
  "async-task",
  "bitflags 2.13.1",
+ "chrono",
  "core-video",
  "futures",
  "gpui_ce_collections",
@@ -2820,6 +2821,9 @@ dependencies = [
  "gpui_engine",
  "gpui_types",
  "image",
+ "log",
+ "num_cpus",
+ "parking",
  "parking_lot",
  "rand",
  "schemars",
@@ -2831,6 +2835,7 @@ dependencies = [
  "strum 0.27.2",
  "thiserror 2.0.20",
  "uuid",
+ "waker-fn",
 ]
 
 [[package]]
