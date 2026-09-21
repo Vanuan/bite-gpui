@@ -2826,6 +2826,7 @@ dependencies = [
  "seahash",
  "serde",
  "serde_json",
+ "slotmap",
  "smallvec",
  "strum 0.27.2",
  "thiserror 2.0.20",
