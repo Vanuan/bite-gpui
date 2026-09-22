@@ -48,7 +48,7 @@ use crate::{
     ArenaBox, Asset, AssetSource, BackgroundExecutor, Bounds, ClipboardItem, ClipboardReadError,
     CursorStyle, DispatchPhase, DisplayId, EventEmitter, ExternalDragPayload, FocusHandle,
     FocusMap, ForegroundExecutor, FramePipeline, Global, HapticFeedbackStyle, KeyBinding,
-    KeyContext, Keymap, Keystroke, LayoutId, Menu, MenuCommandId, MenuItem, OwnedMenu,
+    KeyContext, Keymap, Keystroke, LayoutEngine, LayoutId, Menu, MenuCommandId, MenuItem, OwnedMenu,
     OwnedMenuItem, PathPromptOptions, Pixels, Platform, PlatformDisplay, PlatformKeyboardLayout,
     PlatformKeyboardMapper, Point, Priority, PromptBuilder, PromptButton, PromptHandle, PromptLevel,
     Render, RenderImage, RenderablePromptHandle, Reservation, ScreenCaptureSource, SharedString,
@@ -527,6 +527,10 @@ pub struct App {
     pub(crate) this: Weak<AppCell>,
     pub(crate) platform: Rc<dyn Platform>,
     text_system: Arc<TextSystem>,
+    /// Creates a fresh layout engine for each window. Injected at application
+    /// construction so windows drive layout through the [`LayoutEngine`] trait
+    /// without naming an implementation.
+    layout_engine_factory: Rc<dyn Fn() -> Box<dyn LayoutEngine>>,
     /// Creates a fresh frame pipeline for each window. Injected at application
     /// construction so windows draw through the [`FramePipeline`] trait without
     /// naming an implementation.
@@ -629,6 +633,11 @@ pub struct App {
 }
 
 impl App {
+    /// Creates the layout engine for a newly opened window.
+    pub(crate) fn new_layout_engine(&self) -> Box<dyn LayoutEngine> {
+        (self.layout_engine_factory)()
+    }
+
     /// Creates the frame pipeline for a newly opened window.
     pub(crate) fn new_frame_pipeline(&self, window_id: WindowId) -> Box<dyn FramePipeline> {
         (self.frame_pipeline_factory)(window_id)
@@ -663,6 +672,7 @@ impl App {
                 this: this.clone(),
                 platform: platform.clone(),
                 text_system,
+                layout_engine_factory: Rc::new(gpui_engine_default::default_layout_engine),
                 frame_pipeline_factory: Rc::new(|_| Box::new(StandardImmediatePipeline)),
                 text_rendering_mode: Rc::new(Cell::new(TextRenderingMode::default())),
                 mode: GpuiMode::Production,
@@ -2702,6 +2712,12 @@ impl App {
     pub fn set_asset_source(&mut self, asset_source: Arc<dyn AssetSource>) {
         self.asset_source = asset_source.clone();
         self.svg_renderer = SvgRenderer::new(asset_source);
+    }
+
+    /// Replaces the factory that creates each window's layout engine.
+    #[doc(hidden)]
+    pub fn set_layout_engine_factory(&mut self, factory: Rc<dyn Fn() -> Box<dyn LayoutEngine>>) {
+        self.layout_engine_factory = factory;
     }
 
     /// Replaces the factory that creates each window's frame pipeline.
