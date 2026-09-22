@@ -28,6 +28,10 @@ use crate::{
     new_platform_input_handler, point, prelude::*, px, rems, size, transparent_black,
 };
 
+// `DispatchEventResult` and `WindowControlArea` moved down into `gpui_platform`; re-exported
+// so the `crate::window::…` paths this module used to provide keep resolving.
+pub use gpui_platform::{DispatchEventResult, WindowControlArea};
+
 use crate::engine_layout::to_engine_layout_style;
 use crate::gestures::{GestureTuning, RecognizedTouchGesture, TouchGestureRecognizer};
 use crate::TouchEvent;
@@ -740,19 +744,6 @@ pub(crate) struct CursorStyleRequest {
 pub(crate) struct HitTest {
     pub(crate) ids: SmallVec<[HitboxId; 8]>,
     pub(crate) hover_hitbox_count: usize,
-}
-
-/// A type of window control area that corresponds to the platform window.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum WindowControlArea {
-    /// An area that allows dragging of the platform window.
-    Drag,
-    /// An area that allows closing of the platform window.
-    Close,
-    /// An area that allows maximizing of the platform window.
-    Max,
-    /// An area that allows minimizing of the platform window.
-    Min,
 }
 
 /// An identifier for a [Hitbox] which also includes [HitboxBehavior].
@@ -2024,13 +2015,6 @@ impl Window {
     ) -> (Subscription, impl FnOnce() + use<>) {
         self.focus_listeners.insert((), value)
     }
-}
-
-#[derive(Clone, Debug, Default, PartialEq, Eq)]
-#[expect(missing_docs)]
-pub struct DispatchEventResult {
-    pub propagate: bool,
-    pub default_prevented: bool,
 }
 
 pub use gpui_types::ContentMask;
